@@ -2,8 +2,20 @@
 
 ## [Unreleased]
 
-### Planned
-- PVE-0.2 — Data Model and Demo Data
+### Added
+- PVE-0.2 canonical data model covering fourteen entity groups
+- Synthetic corrugated shipping-case demo dataset with one baseline and three alternatives
+- Invalid and partial-data examples
+- Deterministic Python data-validation module
+- Automated data-validation test suite
+- Expanded PVE CI workflow
+- PVE-0.2 QA report
+
+### Changed
+- Project status, build history, activity, version, recovery, and next-build records advanced to PVE-0.2
+
+### Scope Boundary
+PVE-0.2 includes data structures and validation only. It does not include UI, cost calculations, savings calculations, recommendation scoring, supplier ranking, or technical approval automation.
 
 ## [0.1.0-foundation] — PVE-0.1 Repository Foundation
 
@@ -18,14 +30,9 @@
 - Build-specific QA report
 
 ### Fixed
-- Corrected case-sensitive CI validation for the repository-separation statement
-- Added missing `integration/exports/` and `integration/samples/` repository paths
-- Synchronized post-merge status, version, recovery, activity, build-history, and QA records
+- Corrected case-sensitive CI validation
+- Added integration export and sample paths
+- Synchronized post-merge governance records
 
 ### Completed
-- PR #1 merged using squash merge
-- Merge commit: `3a0ac16d1808311a10d2be1986ca853085f67efe`
-- PVE-0.1 established on stable branch `main`
-
-### Scope Boundary
-No application functionality or calculation logic is included in PVE-0.1.
+- PVE-0.1 and closure merged to stable `main`
