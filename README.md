@@ -1,7 +1,7 @@
 # Packaging Value Engineering & Decision Intelligence
 
 **Current Build:** PVE-0.1 — Repository Foundation  
-**Status:** Foundation in progress  
+**Status:** Ready for review and merge  
 **Canonical Repository:** `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 
 ## Objective
@@ -24,7 +24,7 @@ The project will export versioned decision packages for Procurement Copilot thro
 4. Production Pilot — 1,800–2,200 team hours
 5. Enterprise Scale-Up — additional 1,400–1,800 team hours
 
-## Immediate Sequence
+## Build Sequence
 
 - PVE-0.1 — Repository Foundation
 - PVE-0.2 — Data Model and Demo Data
@@ -33,6 +33,10 @@ The project will export versioned decision packages for Procurement Copilot thro
 - PVE-0.5 — Scenario and Recommendation UI
 - PVE-0.6 — Decision Package Export
 - PVE-0.7 — QA and Interview Release
+
+## Current Gate
+
+Review and merge PR #1 after Foundation CI passes. PVE-0.2 begins only after the foundation is merged into `main`.
 
 ## Operating Standard
 
