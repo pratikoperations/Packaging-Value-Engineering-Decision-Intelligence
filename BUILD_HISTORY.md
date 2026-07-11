@@ -1,10 +1,10 @@
 # Build History
 
 ## PVE-0.1 — Repository Foundation
-**Status:** Completed — ready for review
+**Status:** Completed and merged
 
 ### Objective
-Create a safe, independent, GitHub-first project foundation before any application code is developed.
+Create a safe, independent, GitHub-first project foundation before application code is developed.
 
 ### Completed Scope
 - Repository identity and product boundary
@@ -15,15 +15,22 @@ Create a safe, independent, GitHub-first project foundation before any applicati
 - Initial CI foundation
 - Full branch-diff and file-placement review
 
+### Completion Record
+- Pull request: PR #1
+- Merge method: Squash merge
+- Merge commit: `3a0ac16d1808311a10d2be1986ca853085f67efe`
+- Stable branch: `main`
+- Foundation QA: Pass
+- Original feature branch: Deleted after merge
+
 ### Exit Criteria Result
 - All mandatory foundation files exist: Pass
 - Project and Procurement Copilot boundaries are explicit: Pass
 - Build scopes and numbering are defined: Pass
 - Recovery is possible from GitHub alone: Pass
-- Branch diff is reviewed: Pass
-- QA report is stored: Pass
-- Draft PR is opened: Pass
-- Foundation CI on final commit: Must remain successful before merge
+- Branch diff reviewed: Pass
+- QA report stored: Pass
+- Foundation PR merged: Pass
 
-### Next Build
-PVE-0.2 — Data Model and Demo Data, after PVE-0.1 is merged into `main`.
+### Next Approved Build
+PVE-0.2 — Data Model and Demo Data, after the post-merge closure PR is merged into `main`.
