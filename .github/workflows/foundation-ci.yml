@@ -1,0 +1,39 @@
+name: Foundation CI
+
+on:
+  push:
+    branches: [main, "agent/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify mandatory foundation files
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(
+            README.md
+            PROJECT_STATUS.md
+            BUILD_INSTRUCTIONS.md
+            ACTIVITY_LOG.md
+            BUILD_HISTORY.md
+            CHANGELOG.md
+            DECISION_LOG.md
+            VERSION_MANIFEST.md
+            RECOVERY_MANIFEST.md
+            QUALITY_ASSURANCE_PROTOCOL.md
+            docs/MASTER_ARCHITECTURE.md
+            docs/MASTER_BUILD_PLAN.md
+            integration/contracts/PVE_CONTRACT_V1_DRAFT.md
+          )
+          for file in "${required[@]}"; do
+            test -s "$file" || { echo "Missing or empty: $file"; exit 1; }
+          done
+      - name: Verify project separation statement
+        run: grep -q "separate" DECISION_LOG.md
+      - name: Verify current build identity
+        run: grep -q "PVE-0.1" PROJECT_STATUS.md
