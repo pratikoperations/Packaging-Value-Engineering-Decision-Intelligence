@@ -1,0 +1,99 @@
+{
+  "schema_version": "0.2.0",
+  "title": "PVE Canonical Data Model",
+  "description": "Field dictionary for packaging value-engineering data. No hidden defaults are permitted.",
+  "entities": {
+    "packaging_project": [
+      {"field":"project_id","description":"Unique project identifier","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty; unique","evidence_requirement":"project record"},
+      {"field":"project_name","description":"Human-readable project name","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty","evidence_requirement":"project charter"},
+      {"field":"category","description":"Packaging category","type":"string","required":true,"unit":"unitless","allowed_values":["corrugated_shipping_case"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"category assignment"},
+      {"field":"annual_volume","description":"Planned annual case volume","type":"number","required":true,"unit":"cases_per_year","allowed_values":null,"default_rule":"none","validation_rule":"> 0","evidence_requirement":"approved forecast"},
+      {"field":"currency","description":"Project currency","type":"string","required":true,"unit":"unitless","allowed_values":["INR","USD","EUR"],"default_rule":"none","validation_rule":"allowed value; consistent across costs","evidence_requirement":"commercial basis"},
+      {"field":"status","description":"Project lifecycle status","type":"string","required":true,"unit":"unitless","allowed_values":["draft","active","on_hold","completed"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"project record"}
+    ],
+    "baseline_specification": [
+      {"field":"baseline_id","description":"Unique baseline identifier","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty; unique","evidence_requirement":"approved specification"},
+      {"field":"alternative_id","description":"Alternative represented as baseline","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"must reference an alternative","evidence_requirement":"approved specification"},
+      {"field":"evidence_id","description":"Evidence supporting baseline","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"must reference decision evidence","evidence_requirement":"specification or drawing"}
+    ],
+    "packaging_alternative": [
+      {"field":"alternative_id","description":"Unique alternative identifier","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty; unique","evidence_requirement":"design record"},
+      {"field":"name","description":"Alternative name","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty","evidence_requirement":"design record"},
+      {"field":"status","description":"Alternative lifecycle status","type":"string","required":true,"unit":"unitless","allowed_values":["baseline","proposed","screened_out"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"project record"},
+      {"field":"length_mm","description":"Internal case length","type":"number","required":true,"unit":"mm","allowed_values":null,"default_rule":"none","validation_rule":"> 0","evidence_requirement":"drawing"},
+      {"field":"width_mm","description":"Internal case width","type":"number","required":true,"unit":"mm","allowed_values":null,"default_rule":"none","validation_rule":"> 0","evidence_requirement":"drawing"},
+      {"field":"height_mm","description":"Internal case height","type":"number","required":true,"unit":"mm","allowed_values":null,"default_rule":"none","validation_rule":"> 0","evidence_requirement":"drawing"},
+      {"field":"case_weight_g","description":"Finished empty case weight","type":"number","required":true,"unit":"g","allowed_values":null,"default_rule":"none","validation_rule":"> 0","evidence_requirement":"measured sample or calculation"},
+      {"field":"board_grade","description":"Corrugated board construction","type":"string","required":true,"unit":"unitless","allowed_values":["3PLY_B_FLUTE","5PLY_BC_FLUTE","3PLY_C_FLUTE","5PLY_EB_FLUTE"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"board specification"}
+    ],
+    "material_component": [
+      {"field":"component_id","description":"Unique component identifier","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"unique","evidence_requirement":"bill of materials"},
+      {"field":"alternative_id","description":"Parent alternative","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"valid reference","evidence_requirement":"bill of materials"},
+      {"field":"material_name","description":"Material description","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty","evidence_requirement":"material specification"},
+      {"field":"weight_g","description":"Component weight","type":"number","required":true,"unit":"g","allowed_values":null,"default_rule":"none","validation_rule":"> 0","evidence_requirement":"measurement or calculation"},
+      {"field":"recycled_content_percent","description":"Recycled content","type":"number","required":true,"unit":"percent","allowed_values":null,"default_rule":"none","validation_rule":"0 to 100","evidence_requirement":"supplier declaration"}
+    ],
+    "cost_input": [
+      {"field":"cost_id","description":"Unique cost input identifier","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"unique","evidence_requirement":"quote or assumption"},
+      {"field":"alternative_id","description":"Parent alternative","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"valid reference","evidence_requirement":"commercial record"},
+      {"field":"input_name","description":"Cost-input label","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty","evidence_requirement":"quote or assumption"},
+      {"field":"value","description":"Raw cost input only; not a calculated result","type":"number","required":true,"unit":"currency_per_case","allowed_values":null,"default_rule":"none","validation_rule":">= 0","evidence_requirement":"quote, benchmark, or explicit assumption"},
+      {"field":"currency","description":"Input currency","type":"string","required":true,"unit":"unitless","allowed_values":["INR","USD","EUR"],"default_rule":"none","validation_rule":"must equal project currency","evidence_requirement":"commercial record"},
+      {"field":"evidence_id","description":"Supporting evidence","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"valid evidence reference","evidence_requirement":"mandatory"}
+    ],
+    "logistics_input": [
+      {"field":"logistics_id","description":"Unique logistics input identifier","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"unique","evidence_requirement":"logistics study"},
+      {"field":"alternative_id","description":"Parent alternative","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"valid reference","evidence_requirement":"logistics study"},
+      {"field":"cases_per_pallet","description":"Cases per pallet","type":"integer","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"> 0","evidence_requirement":"pallet pattern"},
+      {"field":"freight_distance_km","description":"Assumed transport distance","type":"number","required":true,"unit":"km","allowed_values":null,"default_rule":"none","validation_rule":">= 0","evidence_requirement":"lane assumption"},
+      {"field":"evidence_id","description":"Supporting evidence","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"valid evidence reference","evidence_requirement":"mandatory"}
+    ],
+    "technical_requirement": [
+      {"field":"requirement_id","description":"Unique technical requirement","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"unique","evidence_requirement":"specification"},
+      {"field":"name","description":"Requirement name","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty","evidence_requirement":"specification"},
+      {"field":"minimum_value","description":"Minimum acceptable value","type":"number","required":true,"unit":"declared_by_requirement","allowed_values":null,"default_rule":"none","validation_rule":">= 0","evidence_requirement":"approved specification"},
+      {"field":"unit","description":"Requirement unit","type":"string","required":true,"unit":"unitless","allowed_values":["N","kgf","unitless"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"approved specification"}
+    ],
+    "technical_qualification_result": [
+      {"field":"qualification_id","description":"Unique qualification record","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"unique","evidence_requirement":"test or review record"},
+      {"field":"alternative_id","description":"Parent alternative","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"valid reference","evidence_requirement":"test or review record"},
+      {"field":"requirement_id","description":"Assessed requirement","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"valid reference","evidence_requirement":"test or review record"},
+      {"field":"status","description":"Qualification status","type":"string","required":true,"unit":"unitless","allowed_values":["not_assessed","qualified","conditionally_qualified","not_qualified","insufficient_data"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"test or review record"},
+      {"field":"evidence_id","description":"Supporting evidence","type":"string","required":false,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"mandatory unless status is not_assessed or insufficient_data","evidence_requirement":"conditional"}
+    ],
+    "risk_record": [
+      {"field":"risk_id","description":"Unique risk identifier","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"unique","evidence_requirement":"risk assessment"},
+      {"field":"alternative_id","description":"Parent alternative","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"valid reference","evidence_requirement":"risk assessment"},
+      {"field":"risk_type","description":"Risk category","type":"string","required":true,"unit":"unitless","allowed_values":["quality","supply","implementation","logistics","compliance","sustainability"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"risk assessment"},
+      {"field":"level","description":"Risk severity","type":"string","required":true,"unit":"unitless","allowed_values":["low","medium","high","critical"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"risk assessment"},
+      {"field":"probability_percent","description":"Estimated probability","type":"number","required":true,"unit":"percent","allowed_values":null,"default_rule":"none","validation_rule":"0 to 100","evidence_requirement":"documented basis"}
+    ],
+    "sustainability_indicator": [
+      {"field":"indicator_id","description":"Unique indicator identifier","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"unique","evidence_requirement":"calculation or declaration"},
+      {"field":"alternative_id","description":"Parent alternative","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"valid reference","evidence_requirement":"calculation or declaration"},
+      {"field":"metric","description":"Sustainability metric","type":"string","required":true,"unit":"unitless","allowed_values":["recycled_content_percent","material_weight_g","renewable_content_percent","estimated_co2e_kg_per_1000_cases"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"calculation or declaration"},
+      {"field":"value","description":"Metric value","type":"number","required":true,"unit":"declared_by_metric","allowed_values":null,"default_rule":"none","validation_rule":">= 0; percentages <= 100","evidence_requirement":"calculation or declaration"}
+    ],
+    "validation_requirement": [
+      {"field":"validation_id","description":"Unique validation activity","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"unique","evidence_requirement":"validation plan"},
+      {"field":"alternative_id","description":"Parent alternative","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"valid reference","evidence_requirement":"validation plan"},
+      {"field":"activity","description":"Required test or trial","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty","evidence_requirement":"validation plan"},
+      {"field":"status","description":"Validation status","type":"string","required":true,"unit":"unitless","allowed_values":["not_started","planned","in_progress","passed","failed","waived"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"validation record"}
+    ],
+    "decision_recommendation": [
+      {"field":"recommendation_id","description":"Unique recommendation identifier","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"unique","evidence_requirement":"decision record"},
+      {"field":"status","description":"Recommendation status","type":"string","required":true,"unit":"unitless","allowed_values":["recommended","conditionally_recommended","not_recommended","insufficient_data"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"decision record"},
+      {"field":"rationale","description":"Explainable rationale placeholder","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty; no scoring required in PVE-0.2","evidence_requirement":"decision record"}
+    ],
+    "decision_evidence": [
+      {"field":"evidence_id","description":"Unique evidence identifier","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"unique","evidence_requirement":"self"},
+      {"field":"evidence_type","description":"Evidence category","type":"string","required":true,"unit":"unitless","allowed_values":["supplier_quote","drawing","specification","test_report","calculation","assumption","benchmark"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"self"},
+      {"field":"reference","description":"Traceable reference","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty","evidence_requirement":"self"}
+    ],
+    "export_metadata": [
+      {"field":"contract_version","description":"Future export-contract version","type":"string","required":true,"unit":"unitless","allowed_values":["PVE-CONTRACT-v1.0-DRAFT"],"default_rule":"none","validation_rule":"allowed value","evidence_requirement":"contract record"},
+      {"field":"source_repository","description":"Canonical source repository","type":"string","required":true,"unit":"unitless","allowed_values":["pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"],"default_rule":"none","validation_rule":"exact match","evidence_requirement":"repository metadata"},
+      {"field":"source_commit","description":"Source commit or explicit demo placeholder","type":"string","required":true,"unit":"unitless","allowed_values":null,"default_rule":"none","validation_rule":"non-empty","evidence_requirement":"repository metadata"}
+    ]
+  }
+}
