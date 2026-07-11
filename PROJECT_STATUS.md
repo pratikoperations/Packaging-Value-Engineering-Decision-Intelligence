@@ -4,10 +4,10 @@
 Packaging Value Engineering & Decision Intelligence
 
 ## Current Build
-PVE-0.1 — Repository Foundation
+PVE-0.2 — Data Model and Demo Data
 
 ## Status
-Completed and merged
+Implementation complete — validation and CI pending
 
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
@@ -15,26 +15,31 @@ Completed and merged
 ## Stable Branch
 `main`
 
-## Merge Record
-- Pull request: PR #1
-- Merge commit: `3a0ac16d1808311a10d2be1986ca853085f67efe`
-- Merge status: Completed
+## Working Branch
+`agent/pve-0.2-data-model-demo-data`
 
-## Completed in PVE-0.1
-- Repository identity and independent product boundary
-- Governance and recovery framework
-- Build and scope architecture
-- Source, data, tests, integration, documentation, and QA structures
-- Draft versioned integration contract
-- Foundation CI workflow
-- Branch-diff and file-placement review
-- Build-specific QA report
+## PVE-0.1 Status
+Completed and merged.
+
+## PVE-0.2 Scope Completed
+- Canonical field dictionary covering 14 required entity groups
+- Explicit units, allowed values, default rules, validation rules, and evidence requirements
+- Synthetic corrugated shipping-case dataset
+- One baseline and three design alternatives
+- Synthetic material, cost, logistics, technical, risk, sustainability, validation, evidence, recommendation-placeholder, and export metadata records
+- Invalid and partial-data examples
+- Deterministic data-validation module
+- Automated data-validation tests
+- CI expanded to validate JSON, repository files, synthetic labelling, and tests
+
+## Scope Boundary
+No application UI, cost calculation, savings calculation, recommendation scoring, supplier ranking, or autonomous technical approval is included.
 
 ## QA Result
-Pass
+Conditional Pass pending final CI and full PR-diff verification.
 
-## Next Approved Build
-PVE-0.2 — Data Model and Demo Data
+## Next Build
+PVE-0.3 — Cost and Material Engine
 
-## Start Condition for PVE-0.2
-PVE-0.2 may begin after this post-merge closure PR is merged into `main` and Foundation CI passes on the closure branch.
+## Start Condition for PVE-0.3
+PVE-0.3 may begin only after PVE-0.2 is reviewed, CI passes, QA is finalized, and the PVE-0.2 PR is merged into `main`.
