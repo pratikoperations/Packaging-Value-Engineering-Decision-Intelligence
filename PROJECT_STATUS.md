@@ -7,13 +7,18 @@ Packaging Value Engineering & Decision Intelligence
 PVE-0.1 — Repository Foundation
 
 ## Status
-Completed — ready for review and merge
+Completed and merged
 
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 
-## Current Objective
-Maintain a fully recoverable GitHub-first foundation before application coding begins.
+## Stable Branch
+`main`
+
+## Merge Record
+- Pull request: PR #1
+- Merge commit: `3a0ac16d1808311a10d2be1986ca853085f67efe`
+- Merge status: Completed
 
 ## Completed in PVE-0.1
 - Repository identity and independent product boundary
@@ -26,13 +31,10 @@ Maintain a fully recoverable GitHub-first foundation before application coding b
 - Build-specific QA report
 
 ## QA Result
-Pass, subject to the latest Foundation CI run remaining successful on the final commit.
+Pass
 
-## Pull Request
-PR #1 is ready for review. Do not merge automatically without explicit instruction.
-
-## Next Build
+## Next Approved Build
 PVE-0.2 — Data Model and Demo Data
 
 ## Start Condition for PVE-0.2
-PVE-0.2 may begin after PR #1 is reviewed and PVE-0.1 is merged into `main`.
+PVE-0.2 may begin after this post-merge closure PR is merged into `main` and Foundation CI passes on the closure branch.
