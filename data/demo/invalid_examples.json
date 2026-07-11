@@ -1,0 +1,14 @@
+{
+  "dataset_type": "synthetic_invalid_examples",
+  "synthetic_notice": "All records are fictional and intentionally invalid for automated tests.",
+  "examples": {
+    "missing_mandatory_field": {"remove_path":"packaging_project.project_id"},
+    "negative_value": {"path":"packaging_alternatives.0.length_mm","value":-1},
+    "duplicate_id": {"collection":"packaging_alternatives","copy_index":0},
+    "unsupported_unit": {"path":"packaging_project.annual_volume_unit","value":"cartons_per_month"},
+    "invalid_enum": {"path":"packaging_alternatives.1.status","value":"approved"},
+    "missing_evidence": {"path":"cost_inputs.0.evidence_id","value":"EV-MISSING"},
+    "invalid_percentage": {"path":"risk_records.0.probability_percent","value":140},
+    "partial_dataset": {"remove_path":"technical_qualification_results"}
+  }
+}
