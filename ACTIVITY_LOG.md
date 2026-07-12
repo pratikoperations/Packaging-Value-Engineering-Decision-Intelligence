@@ -48,7 +48,15 @@ Each entry records date, build ID, branch, objective, files changed, checks, res
 - Export contents: executive summary, scenario assumptions, baseline and alternatives, cost/material results, qualification, risk, recommendations, constraints, validation requirements, metadata, and decision controls.
 - Export formats: deterministic sorted JSON and deterministic Markdown report.
 - Validation: required sections, identity metadata, positive volume, baseline integrity, complete alternative coverage, unique IDs, complete decision sections, and fixed safety controls.
-- Tests added: 10; expected total automated tests: 52.
+- Validated CI:
+  - Workflow: PVE CI
+  - Run number: 217
+  - Run ID: `29183379595`
+  - Validated commit: `21c0fc1586ab60847da71d5f0ce6d8ab94c9aeb9`
+  - Job: `validate-repository`
+  - Conclusion: Success
+  - Tests: 52 run, 52 passed, 0 failed, 0 errors
+- QA result: Pass
 - Scope exclusions: No autonomous approval, supplier allocation, final contract, external integration, or PVE-0.7 release packaging.
-- Result: Implementation complete; CI and final QA pending.
-- Next action: Inspect the full diff, open a draft PR, and validate PVE CI.
+- Result: PVE-0.6 is ready for review and merge after the final QA commit passes CI.
+- Next action: Validate the final commit, mark PR #11 ready for review, and do not merge automatically.
