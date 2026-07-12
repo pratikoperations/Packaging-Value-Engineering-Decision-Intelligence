@@ -3,23 +3,20 @@
 ## Current Version
 - Project version: `0.6.0-decision-package-export`
 - Build: `PVE-0.6`
-- Status: `0.6.0-decision-package-export ready`
+- Status: `0.6.0-decision-package-export completed`
 - Stable branch: `main`
-- Working branch: `agent/pve-0.6-decision-package-export`
-- Base commit: `47ad5730699e49ab64accb41b19e488ebc166ffa`
+- Merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
+- Pull request: PR #11 merged and closed
+- Original feature branch: Deleted
 
 ## Validation Evidence
 - Workflow: PVE CI
-- Run number: 217
-- Run ID: `29183379595`
-- Validated commit: `21c0fc1586ab60847da71d5f0ce6d8ab94c9aeb9`
+- Run number: 227
+- Run ID: `29183476545`
+- Validated PR commit: `55b5294c6c1a4924dca681a47680af70be551b4d`
 - Job: `validate-repository`
 - Conclusion: Success
-- Tests: 52 run, 52 passed, 0 failed, 0 errors
-
-## Completed Foundation
-- PVE-0.5 status: `0.5.0-scenario-recommendation-ui completed`
-- Canonical data-model version: `0.2.0`
+- Tests: 52 passed, 0 failed, 0 errors
 
 ## Current Deliverables
 - Decision-package assembler: `src/exports/decision_package.py`
@@ -41,8 +38,8 @@
 ## Scope Boundary
 No autonomous technical approval, supplier allocation, final integration contract, external system integration, or PVE-0.7 release packaging is included. The integration contract remains draft.
 
-## Next Planned Build
+## Next Approved Build
 - PVE-0.7 — QA and Interview Release
 
 ## Version Rule
-PVE-0.7 begins only after PVE-0.6 passes final CI and PR #11 is merged into `main`.
+PVE-0.7 begins only after the PVE-0.6 post-merge closure PR is merged into `main`.
