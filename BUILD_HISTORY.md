@@ -147,7 +147,7 @@ No upload, JSON or CSV parsing, threshold UI, scenario execution, decision-histo
 ---
 
 ## PVE-1.0.3 — Upload and Validation
-**Status:** In progress — draft PR preparation
+**Status:** Completed and merged through PR #19
 
 ### Objective
 Add controlled user-data ingestion for the active corrugated packaging project.
@@ -173,14 +173,56 @@ Add controlled user-data ingestion for the active corrugated packaging project.
 - Incomplete technical evidence can remain structurally valid but must remain eligible for `insufficient_data`
 - Existing analytical engines and persistence schema remain unchanged
 
+### Completion Record
+- Pull request: PR #19
+- Merge method: Squash merge
+- Merge commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
+- Tests: 126 passed, 0 failed, 0 errors
+- Source branch: Deleted
+
 ### Budget
-- Planned allocation: 16 hours
-- Estimated effort used: 15.5 hours
-- Program budget before build: 64.0 hours
-- Estimated program budget after build: 48.5 hours
+- Effort used: 16.5 hours
+- Program budget after build: 47.5 hours
 
 ### Scope Exclusions
 No configurable thresholds, scenario execution, decision-history UI, authentication, external database, PDF or Excel extraction, OCR, ERP integration, supplier workflow, AI approval, or new packaging category.
+
+---
+
+## PVE-1.0.4 — Configurable Business Thresholds
+**Status:** In progress — draft PR validation pending
+
+### Objective
+Add immutable configurable business threshold profiles without weakening mandatory engineering controls.
+
+### Implemented Scope
+- Controlled global default profile
+- Project-specific immutable profile versions
+- Threshold validation
+- Duplicate-content suppression
+- Active threshold profile selection
+- Business screening helper
+- Mandatory non-disableable engineering controls
+- Threshold template and automated tests
+
+### Design Rules
+- Business thresholds remain separate from engineering controls
+- Engineering validation remains mandatory
+- Autonomous approval remains prohibited
+- Critical risk remains blocking
+- Not-qualified alternatives remain blocked
+- Insufficient data cannot become recommended
+- Threshold changes create immutable versions
+- Identical content does not duplicate history
+
+### Budget
+- Planned allocation: 13 hours
+- Estimated effort used: 12.5 hours
+- Program budget before build: 47.5 hours
+- Estimated program budget after build: 35.0 hours
+
+### Scope Exclusions
+No scenario execution, recommendation-engine modification, decision-history UI, authentication, external database, supplier workflow, ERP integration, AI approval, or new packaging category.
 
 ### Merge Gate
 Full CI and complete diff review must pass before squash merge. Do not merge automatically.
