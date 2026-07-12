@@ -1,6 +1,37 @@
 # Changelog
 
-## [0.7.2-live-demo-streamlit-compatibility] — Pending
+## [1.0.1-foundation-persistence] — Pending
+
+### Added
+- SQLite database connection manager with foreign-key enforcement
+- Schema initialization with version recording
+- Repository modules for projects, datasets, threshold profiles, scenarios, decision snapshots, and export records
+- Immutable database triggers for datasets, threshold profiles, scenarios, and decision snapshots
+- Project lifecycle application service
+- Cross-project integrity validation for scenario and decision links
+- Temporary isolated database support for automated tests
+- Comprehensive persistence, immutability, and project-integrity test coverage
+
+### Preserved
+- Existing deterministic analytical engines
+- Current public Streamlit application behavior
+- Engineering-validation and non-autonomous-approval controls
+- Synthetic-data and non-production disclaimers
+- Draft integration-contract status
+- AI Procurement Copilot repository separation
+
+### Excluded
+- Dashboard UI
+- Upload and CSV parsing
+- Configurable threshold UI
+- Decision-history UI
+- Authentication and external database
+- ERP, supplier, AI approval, PDF, Excel, and new-category capabilities
+
+### Scope Boundary
+PVE-1.0.1 creates infrastructure only. It does not change packaging recommendations, risk logic, exports, or the public demonstration workflow. The current schema utility does not claim sequential migration support.
+
+## [0.7.2-live-demo-streamlit-compatibility] — Completed
 
 ### Added
 - Public Streamlit portfolio URL published in repository documentation
@@ -17,6 +48,11 @@
 - Synthetic-data disclaimer
 - Engineering-validation warning
 - Draft integration-contract status
+
+### Completed
+- PR #16 merged and closed
+- Squash merge commit: `a45cabc37aada9e57febe7687617146d2da65fd0`
+- Tests: 60 passed, 0 failed, 0 errors
 
 ### Scope Boundary
 This maintenance update improves public portfolio discoverability and Streamlit API compatibility. It does not add analytical functionality or represent the application as production-ready.

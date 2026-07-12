@@ -11,7 +11,7 @@ PVE-0.7 — QA and Interview Release
 
 ## Deployment Hardening
 - PVE-0.7.1 — Streamlit Synthetic-Data Disclaimer: Completed and merged through PR #15
-- PVE-0.7.2 — Live Demo and Streamlit Width Compatibility: Draft PR preparation in progress
+- PVE-0.7.2 — Live Demo and Streamlit Width Compatibility: Completed and merged through PR #16
 
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
@@ -45,6 +45,13 @@ PVE-0.7 — QA and Interview Release
 - Merge commit: `c3bc5fb291c7c087c2a4ab054b297841a7b5e73a`
 - Original hotfix branch: Deleted
 
+## Live Demo Compatibility Merge Record
+- Pull request: PR #16
+- PR status: Merged and closed
+- Merge method: Squash merge
+- Merge commit: `a45cabc37aada9e57febe7687617146d2da65fd0`
+- Original feature branch: Deleted
+
 ## Completed Builds
 - PVE-0.1 — Repository Foundation
 - PVE-0.2 — Data Model and Demo Data
@@ -53,6 +60,8 @@ PVE-0.7 — QA and Interview Release
 - PVE-0.5 — Scenario and Recommendation UI
 - PVE-0.6 — Decision Package Export
 - PVE-0.7 — QA and Interview Release
+- PVE-0.7.1 — Streamlit Synthetic-Data Disclaimer
+- PVE-0.7.2 — Live Demo and Streamlit Width Compatibility
 
 ## Final Validated CI
 - Workflow: PVE CI
@@ -84,4 +93,58 @@ PVE-0.7 — QA and Interview Release
 No autonomous technical approval, supplier ranking, supplier allocation, final integration contract, external system integration, or production deployment capability is included. The integration contract remains draft. The public Streamlit deployment is a portfolio demonstration, not production-ready enterprise software.
 
 ## Project State
-All seven planned builds are implemented, validated, merged, and governance-closed. Public Streamlit portfolio deployment and live export verification are complete. PVE-0.7.2 is limited to publishing the live demo URL and replacing a deprecated Streamlit width parameter without changing application behavior.
+All seven original builds and deployment-hardening updates are implemented, validated, merged, and governance-closed. Public Streamlit portfolio deployment and live export verification are complete.
+
+---
+
+## PVE 1.0 Controlled Build
+
+### Program Status
+Approved and in progress
+
+### Current Build
+PVE-1.0.1 — Foundation and Persistence
+
+### Build Status
+Draft PR corrective validation in progress.
+
+### Approved Controls
+- Working budget: 90 hours
+- Hard ceiling: 110 hours
+- JSON remains the canonical future upload format
+- SQLite is demonstration persistence behind repository interfaces
+- Deterministic engines and engineering controls remain unchanged
+- AI Procurement Copilot remains separate
+
+### Feature Branch
+`agent/pve-1.0.1-foundation-persistence`
+
+### Stable Baseline
+`a45cabc37aada9e57febe7687617146d2da65fd0`
+
+### Implemented Scope
+- SQLite connection and transaction management
+- Schema initialization with version recording
+- Foreign-key enforcement
+- Project lifecycle repository and application service
+- Immutable datasets, threshold profiles, scenarios, and decision snapshots
+- Cross-project integrity validation for scenarios and decisions
+- Export-record repository
+- Isolated temporary databases for tests
+
+### Integrity Controls
+- Scenario dataset must belong to the scenario project
+- Project-specific scenario threshold must belong to the scenario project
+- Decision scenario and dataset must belong to the decision project
+- Decision dataset must match the scenario dataset
+- Decision threshold must match the scenario threshold
+
+### Budget
+- Revised estimated effort used: 14.5 hours
+- Estimated remaining 90-hour program budget: 75.5 hours
+
+### Explicit Exclusions
+No dashboard UI, upload UI, CSV parsing, threshold UI, history UI, authentication, external database, PDF or Excel extraction, ERP integration, supplier workflow, AI approval, or new packaging category.
+
+### Next Gate
+Merge only after complete diff review and successful PVE CI on the final branch head.
