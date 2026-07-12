@@ -31,6 +31,11 @@ def main() -> None:
     st.set_page_config(page_title="PVE Decision Intelligence", layout="wide")
     st.title("Packaging Value Engineering Decision Intelligence")
     st.caption("Deterministic scenario comparison, explainable recommendation, and read-only decision export")
+    st.warning(
+        "This application uses synthetic demonstration data only. "
+        "It must not be treated as validated supplier, laboratory, production, "
+        "engineering-trial, or commercial data."
+    )
 
     dataset = load_demo()
     alternatives = dataset["packaging_alternatives"]
