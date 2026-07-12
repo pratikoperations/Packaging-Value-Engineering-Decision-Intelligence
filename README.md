@@ -1,7 +1,8 @@
 # Packaging Value Engineering & Decision Intelligence
 
-**Current Build:** PVE-0.7 — QA and Interview Release  
-**Status:** Release implementation complete — CI and final QA pending  
+**Final Build:** PVE-0.7 — QA and Interview Release  
+**Status:** Completed  
+**Version:** `0.7.0-qa-interview-release`  
 **Canonical Repository:** `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 
 ## What This Project Does
@@ -33,12 +34,6 @@ Synthetic Packaging Dataset
 
 ## Quick Start
 
-### Requirements
-- Python 3.12
-- pip
-
-### Run locally
-
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
@@ -46,7 +41,7 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-### Run automated tests
+Run automated tests:
 
 ```bash
 python -m unittest discover -s tests -p "test_*.py" -v
@@ -76,20 +71,9 @@ python -m unittest discover -s tests -p "test_*.py" -v
 | `src/exports/` | Deterministic JSON and Markdown decision packages |
 | `app.py` | Streamlit interview demonstration UI |
 
-## Recommendation Statuses
-
-- `recommended`
-- `conditionally_recommended`
-- `not_recommended`
-- `insufficient_data`
-
-Recommendation logic is deterministic and transparent. It does not use an opaque weighted score.
-
 ## Interview Demonstration
 
-Use [`docs/INTERVIEW_DEMO_GUIDE.md`](docs/INTERVIEW_DEMO_GUIDE.md) for an 8–12 minute walkthrough covering the business problem, scenario demonstration, recommendation logic, decision-package export, and production limitations.
-
-Use [`docs/FINAL_RELEASE_CHECKLIST.md`](docs/FINAL_RELEASE_CHECKLIST.md) for the release acceptance gate.
+Use [`docs/INTERVIEW_DEMO_GUIDE.md`](docs/INTERVIEW_DEMO_GUIDE.md) for the 8–12 minute walkthrough and [`docs/FINAL_RELEASE_CHECKLIST.md`](docs/FINAL_RELEASE_CHECKLIST.md) for release evidence.
 
 ## Data
 
@@ -102,15 +86,14 @@ This project:
 - requires engineering validation and documented evidence
 - does not approve packaging designs autonomously
 - does not rank or allocate suppliers
-- does not own negotiation or procurement savings realization
 - does not provide external-system integration
 - does not claim production readiness
 
-The AI Procurement Copilot remains a separate repository and owns procurement-specific workflows such as RFQ ranking, supplier allocation, negotiation, Supplier 360, and savings realization.
+The AI Procurement Copilot remains a separate repository and owns procurement-specific workflows.
 
 ## Integration Status
 
-The integration contract remains draft. PVE exports a read-only internal decision package, but no live external integration is included in this release.
+The integration contract remains draft. PVE exports a read-only internal decision package, but no live external integration is included.
 
 ## Project Builds
 
@@ -122,12 +105,16 @@ The integration contract remains draft. PVE exports a read-only internal decisio
 | PVE-0.4 | Technical Qualification and Risk | Completed |
 | PVE-0.5 | Scenario and Recommendation UI | Completed |
 | PVE-0.6 | Decision Package Export | Completed |
-| PVE-0.7 | QA and Interview Release | Active |
+| PVE-0.7 | QA and Interview Release | Completed |
+
+## Final Validation
+
+- Release PR: #13 merged and closed
+- Release merge commit: `fb0962ba611fcf59ae7ab194dd2514970a19909d`
+- Final validated CI: PVE CI #268, run ID `29184423320`
+- Tests: 58 passed, 0 failed, 0 errors
+- QA: Pass
 
 ## Recovery
 
-Read [`RECOVERY_MANIFEST.md`](RECOVERY_MANIFEST.md) to reconstruct project status, validation evidence, file-reading order, test commands, and restart steps from GitHub alone.
-
-## Governance
-
-GitHub is the source of truth. Every meaningful update must be tested, documented, committed, re-verified from GitHub, and supported by project-local QA evidence.
+Read [`RECOVERY_MANIFEST.md`](RECOVERY_MANIFEST.md) to reconstruct the completed project from GitHub alone.
