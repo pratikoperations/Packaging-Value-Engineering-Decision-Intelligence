@@ -3,6 +3,9 @@
 ## Build
 PVE-0.5 — Scenario and Recommendation UI
 
+## Status
+Completed and merged
+
 ## Scope
 Deterministic scenario assumptions, transparent packaging-alternative comparison, explainable recommendation rules, and a lightweight Streamlit demonstration UI.
 
@@ -36,10 +39,10 @@ Deterministic scenario assumptions, transparent packaging-alternative comparison
 
 ## Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 180
-- Run ID: `29182662530`
+- Run number: 190
+- Run ID: `29182740157`
 - Job: `validate-repository`
-- Validated commit: `bae91d28000c8f54a97aaf23190b1e692f09106d`
+- Validated PR commit: `252bf329fcb50c9d3c7c7fb1392309599356eb54`
 - Status: completed
 - Conclusion: success
 - Workflow steps: all passed
@@ -47,6 +50,14 @@ Deterministic scenario assumptions, transparent packaging-alternative comparison
 - Tests passed: 42
 - Failures: 0
 - Errors: 0
+
+## Merge Record
+- Pull request: PR #9
+- PR status: Merged and closed
+- Merge method: Squash merge
+- Merge commit: `930a4e25d3392b7107616ec498501ef48aa72a8e`
+- Stable branch: `main`
+- Original feature branch: Deleted
 
 ## Scope Exclusions
 - No supplier allocation
@@ -57,7 +68,7 @@ Deterministic scenario assumptions, transparent packaging-alternative comparison
 - No PVE-0.6 functionality
 
 ## QA Status
-**Pass** — PVE-0.5 implementation and all 42 automated tests passed PVE CI run #180.
+**Pass** — PVE-0.5 implementation and all 42 automated tests passed PVE CI run #190 and were merged through PR #9.
 
 ## Release Recommendation
-PVE-0.5 is ready for review and merge after the final QA commit passes CI. PVE-0.6 may begin only after PVE-0.5 is merged into `main`.
+PVE-0.5 is complete. PVE-0.6 is the next approved build after this closure PR is merged into `main`.

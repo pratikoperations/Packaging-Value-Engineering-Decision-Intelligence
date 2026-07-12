@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Planned
+- PVE-0.6 — Decision Package Export
+
+## [0.5.0-scenario-recommendation-ui] — PVE-0.5 Scenario and Recommendation UI
+
 ### Added
 - Deterministic scenario engine
 - Explainable recommendation engine
@@ -13,6 +18,15 @@
 - PVE-0.5 QA report
 - CI coverage for PVE-0.5 files and all tests
 
+### Completed
+- PR #9 merged and closed
+- Squash merge commit: `930a4e25d3392b7107616ec498501ef48aa72a8e`
+- Stable branch: `main`
+- Original feature branch: Deleted
+- Final validated CI: PVE CI #190, run ID `29182740157`
+- Tests: 42 passed, 0 failed, 0 errors
+- QA result: Pass
+
 ### Scope Boundary
 PVE-0.5 does not include supplier ranking, supplier allocation, autonomous technical approval, final integration-contract release, decision-package export, or PVE-0.6 functionality.
 
@@ -22,7 +36,6 @@ PVE-0.5 does not include supplier ranking, supplier allocation, autonomous techn
 - PR #7 merged and closed
 - Squash merge commit: `ced6c5542faa700a43101f8f9fc702d15d78f0ca`
 - Post-merge closure commit: `e28299d5ad5bf127aee16cf479ccf3576cf85ea8`
-- Stable branch: `main`
 - Tests: 30 passed, 0 failed, 0 errors
 - QA result: Pass
 
