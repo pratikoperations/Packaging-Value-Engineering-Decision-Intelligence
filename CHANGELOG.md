@@ -1,6 +1,36 @@
 # Changelog
 
-## [1.0.3-upload-validation] — Pending
+## [1.0.4-configurable-thresholds] — Pending
+
+### Added
+- Controlled global default threshold profile
+- Project-specific immutable threshold-profile versions
+- Threshold validation and duplicate-content suppression
+- Active threshold profile selection
+- Business screening helper
+- Mandatory non-disableable engineering controls
+- Threshold profile template and automated tests
+
+### Preserved
+- Existing `app.py`, dashboard, and upload workflows
+- Persistence schema and immutable-history triggers
+- Analytical, risk, scenario, and recommendation engines
+- Engineering-validation and non-autonomous-approval controls
+- Draft integration-contract status
+- AI Procurement Copilot repository separation
+
+### Excluded
+- Scenario execution
+- Recommendation-engine modification
+- Decision-history interface
+- Authentication and external database
+- Supplier workflow and ERP integration
+- AI approval and new packaging categories
+
+### Scope Boundary
+PVE-1.0.4 adds business threshold creation, validation, selection, and versioning only. Business thresholds cannot disable engineering validation, technical qualification, evidence, critical-risk, or approval controls.
+
+## [1.0.3-upload-validation] — Completed
 
 ### Added
 - Canonical UTF-8 JSON upload with a 2 MB limit
@@ -14,7 +44,15 @@
 - Duplicate canonical-content detection across JSON and CSV
 - Archived-project upload prohibition
 - Upload design and QA documentation
-- Twenty-four upload, validation, persistence, and scope tests
+- Upload, validation, persistence, and scope tests
+
+### Completed
+- PR #19 merged and closed
+- Squash merge commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
+- Tests: 126 passed, 0 failed, 0 errors
+- Effort used: 16.5 hours
+- Program budget remaining: 47.5 hours
+- Source branch deleted
 
 ### Preserved
 - Existing deterministic analytical engines
@@ -170,13 +208,13 @@ This hotfix is non-functional deployment hardening only. It does not reopen the 
 
 ### Added
 - Final interview-ready README and local-run guidance
+- Streamlit demonstration UI
+- Deterministic cost, material, qualification, risk, scenario, recommendation, and export modules
+- JSON and Markdown decision-package exports
 - Interview demonstration guide
-- Final release checklist and acceptance criteria
+- Final release checklist
+- Recovery manifest
 - PVE-0.7 QA report
-- Six end-to-end release tests
-- Static Streamlit UI smoke validation
-- CI enforcement for final release documentation and identity
-- Recovery and governance closure records
 
 ### Completed
 - PR #13 merged and closed
