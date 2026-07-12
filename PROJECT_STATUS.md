@@ -9,11 +9,19 @@ Completed
 ## Final Build
 PVE-0.7 — QA and Interview Release
 
+## Deployment Hardening
+PVE-0.7.1 — Streamlit Synthetic-Data Disclaimer
+
+Status: Draft PR preparation in progress. This is a non-functional public-portfolio disclosure hotfix and does not reopen the completed roadmap.
+
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 
 ## Stable Branch
 `main`
+
+## Hotfix Branch
+`agent/pve-0.7.1-streamlit-deployment-disclaimer`
 
 ## Final Merge Record
 - Pull request: PR #13
@@ -40,11 +48,17 @@ PVE-0.7 — QA and Interview Release
 - Result: Success
 - Tests: 58 passed, 0 failed, 0 errors
 
+## PVE-0.7.1 Expected Validation
+- Full regression suite
+- Expected tests after one new static disclaimer test: 59
+- Analytical behavior unchanged
+- Public synthetic-data disclosure visible in Streamlit
+
 ## QA Result
-Pass
+PVE-0.7: Pass
 
 ## Final Scope Boundary
 No autonomous technical approval, supplier ranking, supplier allocation, final integration contract, external system integration, or production deployment capability is included. The integration contract remains draft.
 
 ## Project State
-All seven planned builds are implemented, validated, merged, and governance-closed after this closure PR is merged into `main`.
+All seven planned builds are implemented, validated, merged, and governance-closed. PVE-0.7.1 is limited to a visible synthetic-data disclaimer and its release test.
