@@ -2,18 +2,25 @@
 
 ## Implemented in PVE-0.2
 
-`tests/data_validation/test_validator.py` covers:
+`tests/data_validation/test_validator.py` covers ten canonical-data validation scenarios.
 
-- Valid complete synthetic dataset
-- Missing mandatory fields
-- Negative values
-- Duplicate identifiers
-- Unsupported units
-- Invalid enum values
-- Missing evidence references
-- Invalid percentages
-- Partial-data insufficient-data eligibility
-- Currency consistency
+## Implemented in PVE-0.3
+
+`tests/material_engine/test_engine.py` covers:
+
+- Baseline material totals
+- Alternative material reduction
+- Missing material components
+- Duplicate baseline rejection
+
+`tests/cost_engine/test_engine.py` covers:
+
+- Baseline cost totals
+- Alternative savings
+- Currency mismatch rejection
+- Missing cost inputs
+
+Expected total automated test count: 18.
 
 Run with:
 
@@ -23,9 +30,8 @@ python -m unittest discover -s tests -p "test_*.py" -v
 
 ## Planned Test Groups
 
-- Unit tests for deterministic cost and material calculations
 - Business-rule tests for technical qualification and risk
-- Scenario and edge-case tests
+- Scenario and sensitivity tests
 - Export-contract compatibility tests
 - End-to-end decision-flow tests
 
