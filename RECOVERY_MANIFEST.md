@@ -6,10 +6,19 @@ Enable complete project recovery from GitHub without relying on chat history.
 ## Project Identity
 - Project: Packaging Value Engineering & Decision Intelligence
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
-- Current build: PVE-0.2 — Data Model and Demo Data
+- Current completed build: PVE-0.2 — Data Model and Demo Data
 - Stable branch: `main`
-- Stable base commit: `d4672eadc23f23ba5528a44ff91fba649e6eff68`
-- Working branch: `agent/pve-0.2-data-model-demo-data`
+- Stable merge commit: `33b4319c3b74d8caaad6bc03cb85cb6ebf1727ff`
+- Pull request: PR #3 merged and closed
+- Original feature branch: Deleted
+
+## Validation Reference
+- Workflow: PVE CI
+- Run number: 68
+- Run ID: `29180955427`
+- Validated PR commit: `d02f45fcf0d17904b1cd7efa3577a89dfec7cf98`
+- Tests: 10 passed, 0 failed, 0 errors
+- QA result: Pass
 
 ## Mandatory Reading Order
 1. `PROJECT_STATUS.md`
@@ -30,16 +39,16 @@ Enable complete project recovery from GitHub without relying on chat history.
 16. `tests/data_validation/test_validator.py`
 
 ## Recovery Procedure
-1. Confirm latest `main`, current branch, open PRs, and CI status.
-2. Confirm PVE-0.1 is completed and merged.
-3. Confirm PVE-0.2 scope and review the canonical model and synthetic dataset.
+1. Confirm latest `main`, open pull requests, and CI status.
+2. Confirm PVE-0.1 and PVE-0.2 are completed and merged.
+3. Review the canonical model, synthetic dataset, validator, tests, and PVE-0.2 QA report.
 4. Run `python -m unittest discover -s tests -p "test_*.py" -v`.
-5. Resume only remaining PVE-0.2 validation, QA, or documentation work.
-6. Do not introduce PVE-0.3 cost or material calculations before PVE-0.2 is merged.
+5. Resume only the next approved build unit.
+6. Do not modify the draft integration contract outside its approved build.
 7. After changes, update governance records, commit, push, verify GitHub, and store QA evidence.
 
-## Next Build After Merge
-PVE-0.3 — Cost and Material Engine
+## Next Approved Build
+PVE-0.3 — Cost and Material Engine, after the PVE-0.2 post-merge closure PR is merged into `main`.
 
 ## Separation Rule
 This repository never stores AI Procurement Copilot source files. Cross-project communication uses versioned integration packages only.
