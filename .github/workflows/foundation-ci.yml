@@ -38,6 +38,7 @@ jobs:
             docs/qa/PVE-0.1_QA_REPORT.md
             docs/qa/PVE-0.2_QA_REPORT.md
             docs/qa/PVE-0.3_QA_REPORT.md
+            docs/qa/PVE-0.4_QA_REPORT.md
             integration/README.md
             integration/contracts/PVE_CONTRACT_V1_DRAFT.md
             integration/exports/.gitkeep
@@ -53,6 +54,10 @@ jobs:
             src/cost_engine/engine.py
             src/material_engine/__init__.py
             src/material_engine/engine.py
+            src/technical_qualification/__init__.py
+            src/technical_qualification/engine.py
+            src/risk_engine/__init__.py
+            src/risk_engine/engine.py
             tests/README.md
             tests/data_validation/__init__.py
             tests/data_validation/test_validator.py
@@ -60,6 +65,10 @@ jobs:
             tests/cost_engine/test_engine.py
             tests/material_engine/__init__.py
             tests/material_engine/test_engine.py
+            tests/technical_qualification/__init__.py
+            tests/technical_qualification/test_engine.py
+            tests/risk_engine/__init__.py
+            tests/risk_engine/test_engine.py
           )
           for file in "${required[@]}"; do
             test -e "$file" || { echo "Missing: $file"; exit 1; }
@@ -76,7 +85,7 @@ jobs:
       - name: Verify project separation statement
         run: grep -qi "separate" DECISION_LOG.md
       - name: Verify current build identity
-        run: grep -q "PVE-0.3" PROJECT_STATUS.md
+        run: grep -q "PVE-0.4" PROJECT_STATUS.md
       - name: Verify integration contract is draft
         run: grep -qi "draft" integration/contracts/PVE_CONTRACT_V1_DRAFT.md
       - name: Run all automated tests
