@@ -33,15 +33,23 @@ _NUMERIC_FIELDS = {
 
 
 def _coerce_number(value: Any) -> Any:
-    if not isinstance(value, str):
+    """Normalize equivalent integer, float, and numeric-string values identically."""
+    if isinstance(value, bool):
         return value
-    stripped = value.strip()
-    if stripped == "":
+
+    if isinstance(value, (int, float)):
+        number = float(value)
+    elif isinstance(value, str):
+        stripped = value.strip()
+        if stripped == "":
+            return value
+        try:
+            number = float(stripped)
+        except ValueError:
+            return value
+    else:
         return value
-    try:
-        number = float(stripped)
-    except ValueError:
-        return value
+
     return int(number) if number.is_integer() else number
 
 
@@ -72,7 +80,7 @@ def normalize_user_dataset(raw: dict[str, Any], project: dict[str, Any]) -> dict
     uploaded_project["project_id"] = project["project_id"]
     uploaded_project.setdefault("project_name", project["project_name"])
     uploaded_project.setdefault("category", project["category"])
-    uploaded_project.setdefault("annual_volume", project["annual_volume"])
+    uploaded_project.setdefault("annual_volume", _coerce_number(project["annual_volume"]))
     uploaded_project.setdefault("annual_volume_unit", "cases_per_year")
     uploaded_project.setdefault("currency", project["currency"])
     uploaded_project.setdefault("status", "active")
