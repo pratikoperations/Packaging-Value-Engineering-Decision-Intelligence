@@ -41,3 +41,18 @@ SQLite history on public Streamlit hosting is demonstration persistence and is n
 
 ## DEC-PVE-012 — PVE-1.0.1 Infrastructure Only
 PVE-1.0.1 does not add dashboard UI, uploads, configurable threshold UI, history UI, authentication, external integrations, supplier workflows, AI approval, or new packaging categories.
+
+## DEC-PVE-013 — Dashboard Through Service and Repository Boundaries
+The PVE-1.0.2 Streamlit page uses `ProjectService` and `ProjectRepository`. The page must not issue SQL directly.
+
+## DEC-PVE-014 — Metadata-Only Project Duplication
+Duplicating a project copies only project metadata. It does not copy datasets, threshold profiles, scenarios, decisions, or export records.
+
+## DEC-PVE-015 — Archive Instead of Delete
+The dashboard archives projects rather than deleting them. Archived projects are read-only in PVE-1.0.2 and retain historical evidence.
+
+## DEC-PVE-016 — Portfolio Metrics Are Evidence Counts
+Dashboard metrics describe project records, dataset versions, and saved decision snapshots. They do not claim realized savings, approved packaging changes, or supplier allocation.
+
+## DEC-PVE-017 — PVE-1.0.2 Dashboard Scope
+PVE-1.0.2 adds project portfolio navigation only. Uploads, parsing, thresholds, scenario execution, decision-history UI, authentication, external databases, supplier workflows, AI approval, and new categories remain excluded.
