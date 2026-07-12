@@ -25,22 +25,19 @@ Deterministic technical-qualification aggregation and deterministic quality, sup
 - High and critical risks create explicit mitigation-and-validation actions.
 - Overall risk is the highest effective recorded category; data completeness is reported separately.
 
-## Automated Tests
-Twelve new tests cover:
-1. Demo insufficient-data technical outcome
-2. Fully qualified technical outcome
-3. Conditional qualification
-4. Technical failure precedence
-5. Missing qualification evidence
-6. Duplicate technical result rejection
-7. High demo quality risk
-8. Explicit missing risk categories
-9. Probability escalation
-10. Complete low-risk set
-11. Invalid probability rejection
-12. Highest duplicate-category risk selection
-
-Existing tests remain in scope. Expected total automated test count: 30.
+## Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 138
+- Run ID: `29181964082`
+- Job: `validate-repository`
+- Validated commit: `2e492a6034add0ba5bf6f8a222f38791043bf4e0`
+- Status: completed
+- Conclusion: success
+- Workflow steps: all passed
+- Tests run: 30
+- Tests passed: 30
+- Failures: 0
+- Errors: 0
 
 ## Scope Exclusions
 - No application UI
@@ -52,7 +49,7 @@ Existing tests remain in scope. Expected total automated test count: 30.
 - No PVE-0.5 functionality
 
 ## QA Status
-**Conditional Pass** — implementation and test coverage are complete; final status depends on successful PVE CI and full PR-diff review.
+**Pass** — PVE-0.4 implementation and all 30 automated tests passed PVE CI run #138.
 
 ## Release Recommendation
-Open a draft PR. PVE-0.5 may begin only after PVE-0.4 passes CI and QA and is merged into `main`.
+PVE-0.4 is ready for review and merge after the final QA commit passes CI. PVE-0.5 may begin only after PVE-0.4 is merged into `main`.
