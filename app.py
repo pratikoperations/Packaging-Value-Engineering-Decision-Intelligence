@@ -101,7 +101,7 @@ def main() -> None:
                 "Recommendation": rec.status if rec else "baseline",
             }
         )
-    st.dataframe(comparison_rows, use_container_width=True, hide_index=True)
+    st.dataframe(comparison_rows, width="stretch", hide_index=True)
 
     st.subheader("Preferred Alternative")
     if recommendation.preferred_alternative_id:
@@ -154,7 +154,7 @@ def main() -> None:
             data=json_export,
             file_name="pve_decision_package.json",
             mime="application/json",
-            use_container_width=True,
+            width="stretch",
         )
     with right:
         st.download_button(
@@ -162,7 +162,7 @@ def main() -> None:
             data=markdown_export,
             file_name="pve_decision_report.md",
             mime="text/markdown",
-            use_container_width=True,
+            width="stretch",
         )
 
     st.caption(
