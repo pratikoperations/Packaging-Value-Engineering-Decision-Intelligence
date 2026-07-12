@@ -18,7 +18,7 @@ _ALLOWED = {
     "risk_type": {"quality", "supply", "implementation", "logistics", "compliance", "sustainability"},
     "validation_status": {"not_started", "planned", "in_progress", "passed", "failed", "waived"},
     "board_grade": {"3PLY_B_FLUTE", "5PLY_BC_FLUTE", "3PLY_C_FLUTE", "5PLY_EB_FLUTE"},
-    "currency": {"INR", "USD", "EUR"},
+    "currency": {"INR", "USD", "EUR", "GBP"},
 }
 
 
