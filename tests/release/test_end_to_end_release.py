@@ -99,6 +99,15 @@ class TestFinalRelease(unittest.TestCase):
         for marker in required_markers:
             self.assertIn(marker, app)
 
+    def test_ui_discloses_synthetic_demonstration_data(self):
+        app = APP_PATH.read_text(encoding="utf-8")
+        self.assertIn("This application uses synthetic demonstration data only.", app)
+        self.assertIn(
+            "It must not be treated as validated supplier, laboratory, production,",
+            app,
+        )
+        self.assertIn("engineering-trial, or commercial data.", app)
+
     def test_release_documentation_is_complete(self):
         readme = README_PATH.read_text(encoding="utf-8")
         demo_guide = DEMO_GUIDE_PATH.read_text(encoding="utf-8")
