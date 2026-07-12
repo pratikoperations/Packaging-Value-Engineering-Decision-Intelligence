@@ -3,24 +3,20 @@
 ## Current Version
 - Project version: `0.3.0-cost-material-engine`
 - Build: `PVE-0.3`
-- Status: `0.3.0-cost-material-engine ready`
+- Status: `0.3.0-cost-material-engine completed`
 - Stable branch: `main`
-- Working branch: `agent/pve-0.3-cost-material-engine`
-- Base commit: `6a6f5d080f906f3a6b01b73cd04465db7da356ef`
+- Merge commit: `de9d18a428274bfafd369e7509f88b20bc33db89`
+- Pull request: PR #5 merged and closed
+- Original feature branch: Deleted
 
 ## Validation Evidence
 - Workflow: PVE CI
-- Run number: 98
-- Run ID: `29181336986`
-- Validated commit: `da769f756cd6a5edfd38e61fc8176642c51c41d9`
+- Run number: 108
+- Run ID: `29181583399`
+- Validated PR commit: `847be5db56b413ec49868c50ea58092686555a5c`
 - Job: `validate-repository`
 - Conclusion: Success
-- Tests: 18 run, 18 passed, 0 failed, 0 errors
-
-## Completed Foundation
-- PVE-0.2 status: `0.2.0-data-model completed`
-- Canonical data-model version: `0.2.0`
-- Synthetic demo category: Corrugated shipping cases
+- Tests: 18 passed, 0 failed, 0 errors
 
 ## Current Deliverables
 - Cost engine: `src/cost_engine/engine.py`
@@ -40,7 +36,7 @@
 ## Scope Boundary
 No application UI, technical qualification, risk engine, recommendation scoring, supplier ranking, allocation, scenario engine, autonomous technical approval, or PVE-0.4 functionality is included. The integration contract remains draft.
 
-## Next Planned Build
+## Next Approved Build
 - PVE-0.4 — Technical Qualification and Risk
 
 ## Later Builds
@@ -49,4 +45,4 @@ No application UI, technical qualification, risk engine, recommendation scoring,
 - PVE-0.7 — QA and Interview Release
 
 ## Version Rule
-PVE-0.4 begins only after PVE-0.3 passes final CI and PR #5 is merged into `main`.
+PVE-0.4 begins only after the PVE-0.3 post-merge closure PR is merged into `main`.
