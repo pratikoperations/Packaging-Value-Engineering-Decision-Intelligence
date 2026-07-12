@@ -9,145 +9,57 @@ All prior builds were completed, merged, QA-passed, and governance-closed.
 ## 2026-07-12 — PVE-0.7 QA and Interview Release
 - Objective: Finalize end-to-end QA, UI smoke validation, interview guidance, release acceptance, and recovery readiness.
 - Result: Completed and merged through PR #13.
-- Merge method: Squash merge
 - Merge commit: `fb0962ba611fcf59ae7ab194dd2514970a19909d`
-- Original feature branch: Deleted
-- Final validated CI:
-  - Workflow: PVE CI
-  - Run number: 268
-  - Run ID: `29184423320`
-  - Validated commit: `d6ae2079e332a33edcc71d0011d642f0ae1eb5f9`
-  - Job: `validate-repository`
-  - Conclusion: Success
-  - Tests: 58 passed, 0 failed, 0 errors
-- QA result: Pass
-- Scope boundary: No analytical-engine expansion, supplier ranking or allocation, autonomous approval, final contract, external integration, or AI Procurement Copilot source files.
-
-## 2026-07-12 — Final Project Closure
-- Branch: `agent/pve-0.7-post-merge-closure`
-- Objective: Record final project completion and release evidence.
-- Final project status: Completed
-- Version: `0.7.0-qa-interview-release completed`
-- Next action: Validate and merge the final governance closure PR.
+- Tests: 58 passed, 0 failed, 0 errors
 
 ## 2026-07-12 — Deployment Hardening and Public Demo
-- PVE-0.7.1 disclaimer hotfix merged through PR #15.
-- PVE-0.7.2 live demo and Streamlit compatibility update merged through PR #16.
+- PVE-0.7.1 merged through PR #15.
+- PVE-0.7.2 merged through PR #16.
 - Stable maintenance commit: `a45cabc37aada9e57febe7687617146d2da65fd0`
 - Stable tests: 60 passed, 0 failed, 0 errors
 - Public application: https://packaging-value-engineering-decision-intelligence.streamlit.app/
 
 ## 2026-07-12 — PVE-1.0.1 Foundation and Persistence
-- Objective: Add the controlled SQLite persistence and application-service foundation for the approved PVE 1.0 multi-project platform.
 - Stable base: `a45cabc37aada9e57febe7687617146d2da65fd0`
 - Branch: `agent/pve-1.0.1-foundation-persistence`
-- Approved allocation: 13 hours from the 90-hour program budget
-- Implementation:
-  - database connection and transaction management
-  - schema initialization with version recording
-  - foreign-key enforcement
-  - project lifecycle repository and service
-  - immutable datasets, threshold profiles, scenarios, and decisions
-  - project-consistent scenario and decision links
-  - export records
-  - temporary isolated databases for tests
-- Preserved: all analytical engines, Streamlit behavior, engineering controls, disclaimers, and repository separation.
-- Excluded: dashboard, uploads, CSV parsing, threshold UI, history UI, authentication, external database, supplier workflows, AI approval, and new categories.
-- Result: Corrective implementation prepared; final CI and PR review pending.
-- Next action: Validate final branch CI and complete diff before review readiness.
-
-## 2026-07-12 — PVE-1.0.1 Merge Completion
-- Pull request: PR #17
-- Merge method: Squash merge
+- Result: Completed and merged through PR #17.
 - Merge commit: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
 - Tests: 85 passed, 0 failed, 0 errors
-- Source branch: Deleted
+- Effort used: 14.5 hours
 - Program budget remaining: 75.5 hours
 
 ## 2026-07-12 — PVE-1.0.2 Project Dashboard
-- Objective: Add the controlled multi-project dashboard without expanding into upload, analysis, threshold, or history workflows.
 - Stable base: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
 - Branch: `agent/pve-1.0.2-project-dashboard`
-- Planned allocation: 11 hours
-- Implementation:
-  - portfolio summary metrics
-  - create and select project
-  - duplicate project metadata only
-  - archive project without deleting evidence
-  - active and archived project views
-  - runtime SQLite service initialization
-  - local persistence disclaimer
-- Preserved: deterministic engines, engineering controls, existing `app.py`, disclaimers, integration boundary, and AI Procurement Copilot separation.
-- Excluded: uploads, parsing, thresholds, scenario execution, decision history, authentication, external database, supplier workflows, AI approval, and new categories.
 - Result: Completed and merged through PR #18.
-
-## 2026-07-12 — PVE-1.0.2 Merge Completion
-- Pull request: PR #18
-- Merge method: Squash merge
 - Merge commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
 - Tests: 100 passed, 0 failed, 0 errors
-- Source branch: Deleted
+- Effort used: 11.5 hours
 - Program budget remaining: 64.0 hours
 
 ## 2026-07-12 — PVE-1.0.3 Upload and Validation
-- Objective: Add controlled JSON and template-based CSV ingestion without expanding into thresholds, scenario execution, decision history, authentication, integrations, or AI approval.
 - Stable base: `87f3897c68503cddc2c7e64827d8c395b45065a5`
 - Branch: `agent/pve-1.0.3-upload-validation`
-- Planned allocation: 16 hours
-- Implementation:
-  - canonical UTF-8 JSON upload
-  - limited `project.csv` and `alternatives.csv` parsing
-  - canonical normalization
-  - active-project binding
-  - user-upload validation profile
-  - field-level issue reporting
-  - downloadable templates
-  - immutable valid-dataset storage
-  - canonical duplicate detection across JSON and CSV
-  - archived-project upload prohibition
-- Preserved: deterministic engines, existing dashboard and `app.py`, engineering controls, disclaimers, draft integration contract, and repository separation.
-- Excluded: thresholds, scenario execution, history UI, authentication, external database, PDF, Excel, OCR, ERP, supplier workflows, AI approval, and new categories.
 - Result: Completed and merged through PR #19.
-
-## 2026-07-12 — PVE-1.0.3 Merge Completion
-- Pull request: PR #19
-- Merge method: Squash merge
 - Merge commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
 - Tests: 126 passed, 0 failed, 0 errors
-- Source branch: Deleted
+- Effort used: 16.5 hours
 - Program budget remaining: 47.5 hours
 
 ## 2026-07-12 — PVE-1.0.4 Configurable Business Thresholds
-- Objective: Add immutable business threshold profiles without weakening mandatory engineering controls.
 - Stable base: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
 - Branch: `agent/pve-1.0.4-configurable-thresholds`
-- Planned allocation: 13 hours
-- Implementation:
-  - controlled global default profile
-  - project-specific immutable versions
-  - threshold validation and duplicate suppression
-  - active profile selection
-  - business screening helper
-  - non-disableable engineering control display
-  - JSON threshold template
-- Preserved: persistence schema, analytical engines, recommendation logic, existing app/dashboard/upload flows, disclaimers, draft integration contract, and repository separation.
-- Excluded: scenario execution, recommendation-engine modification, history UI, authentication, external database, supplier workflows, ERP, AI approval, and new categories.
 - Result: Completed and merged through PR #20.
-
-## 2026-07-12 — PVE-1.0.4 Merge Completion
-- Pull request: PR #20
-- Merge method: Squash merge
 - Merge commit: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
 - Tests: 143 passed, 0 failed, 0 errors
-- Source branch: Deleted
+- Effort used: 12.5 hours
 - Program budget remaining: 35.0 hours
 
 ## 2026-07-12 — PVE-1.0.5 Controlled Scenario Execution
 - Objective: Connect immutable dataset and threshold-profile versions to deterministic scenario evaluation and immutable scenario evidence.
 - Stable base: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
 - Branch: `agent/pve-1.0.5-controlled-scenarios`
-- Planned allocation: 18.0 hours
-- Implementation:
+- Implemented:
   - project-scoped dataset-version selection
   - global or project threshold-version selection
   - explicit bounded scenario assumptions
@@ -158,5 +70,19 @@ All prior builds were completed, merged, QA-passed, and governance-closed.
   - cross-project protection
 - Preserved: recommendation engine, persistence schema, existing application flows, disclaimers, draft integration contract, and repository separation.
 - Excluded: decision snapshots, decision-history UI, recommendation-engine modification, authentication, external database, supplier ranking or allocation, ERP, AI approval, and new categories.
-- Result: Implementation prepared; draft PR and CI pending.
-- Next action: Validate complete diff and full test suite.
+- Result: Completed and merged through PR #21.
+
+## 2026-07-12 — PVE-1.0.5 Merge and Governance Closure
+- Pull request: PR #21 merged and closed
+- Merge method: Squash merge
+- Merge commit: `99416d91025b6cfbff40142ce9fbcd462eb1028f`
+- Final validated CI: PVE CI #455
+- Run ID: `29192749111`
+- Validated head commit: `fb3b2421a457081d83631f5952510e7c533c7f8b`
+- Tests: 160 passed, 0 failed, 0 errors
+- Actual effort used: 17.5 hours
+- Program budget remaining: 17.5 hours
+- Source branch: Deleted
+- Governance closure: Completed directly on `main`
+- Application and scenario logic changed during closure: No
+- Next action: No further build starts without separately approved scope.
