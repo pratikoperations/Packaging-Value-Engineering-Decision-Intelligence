@@ -4,7 +4,7 @@
 PVE-0.7.2 — Live Demo and Streamlit Width Compatibility
 
 ## Status
-Draft PR validation pending
+QA Pass — ready for review after final branch CI
 
 ## Objective
 Publish the live Streamlit portfolio URL and replace deprecated `use_container_width=True` arguments with `width="stretch"` without changing application behavior.
@@ -35,19 +35,28 @@ Streamlit 1.59.1 reports that `use_container_width` is deprecated and should be 
 - Application behavior and download functionality remain unchanged.
 - No analytical engines, schemas, demo data, validator, recommendation logic, risk logic, export logic, integration contract, requirements, release, or AI Procurement Copilot files are changed.
 
-## Expected Test Baseline
+## Test Baseline
 - Previous total: 59
 - New Streamlit width compatibility test: 1
-- Expected total: 60
+- Current total: 60
+- Failures: 0
+- Errors: 0
 
-## CI Evidence
-To be completed after PVE CI runs on the final branch head.
+## Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 301
+- Run ID: `29186214898`
+- Validated commit: `4e2f99c5d276072dc97863b18698943967f4d16c`
+- Job: `validate-repository`
+- Status: completed
+- Conclusion: success
+- All workflow steps: passed
 
 ## Analytical Change Assessment
 None. This update is limited to documentation and equivalent Streamlit presentation parameters.
 
 ## QA Result
-Pending final CI.
+**Pass**
 
 ## Merge Rule
-Do not merge until the complete automated test suite and PVE CI pass and the full six-file diff is reviewed.
+Do not merge until the final branch head also passes PVE CI and the complete six-file diff is reviewed.
