@@ -116,7 +116,7 @@ PVE-1.0.1 — Foundation and Persistence
 PVE-1.0.2 — Project Dashboard
 
 ### Build Status
-Draft PR preparation and validation in progress.
+Draft PR corrective validation in progress.
 
 ### Approved Controls
 - Original working budget: 90 hours
@@ -137,7 +137,9 @@ Draft PR preparation and validation in progress.
 - Streamlit portfolio dashboard
 - Total, active, and archived project metrics
 - Dataset-version and saved-decision counts
-- Project creation and active-session selection
+- Project creation
+- Explicit active workspace selection
+- Current active workspace display
 - Metadata-only project duplication
 - Project archiving without historical deletion
 - Active and archived project views
@@ -146,7 +148,9 @@ Draft PR preparation and validation in progress.
 
 ### Dashboard Controls
 - Existing corrugated category only
-- Archived projects are read-only
+- Archived projects are read-only and cannot become the active workspace
+- Archived-tab rendering cannot overwrite active workspace session state
+- Active workspace changes require explicit confirmation
 - Duplicated projects do not inherit evidence
 - Metrics do not represent realized savings
 - Page uses service and repository boundaries rather than direct SQL
@@ -154,11 +158,11 @@ Draft PR preparation and validation in progress.
 
 ### Budget
 - Planned allocation: 11 hours
-- Estimated effort used: 10.5 hours
-- Estimated remaining 90-hour program budget: 65.0 hours
+- Revised estimated effort used: 11.5 hours
+- Estimated remaining 90-hour program budget: 64.0 hours
 
 ### Explicit Exclusions
 No upload, JSON parsing, CSV parsing, configurable threshold UI, scenario execution, decision-history UI, authentication, external database, PDF or Excel extraction, ERP integration, supplier workflow, AI approval, or new packaging category.
 
 ### Next Gate
-Merge only after complete diff review and successful PVE CI on the final branch head.
+Merge only after complete diff review and successful PVE CI on the final corrective branch head.
