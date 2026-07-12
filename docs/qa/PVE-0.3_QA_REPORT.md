@@ -33,18 +33,19 @@ Deterministic material and commercial calculations for the existing synthetic co
 - Baseline unit cost must be greater than zero
 - Calculations are deterministic and use declared inputs only
 
-## Automated Tests
-Eight new tests cover:
-1. Baseline material totals
-2. Alternative material reduction
-3. Missing material components
-4. Duplicate baseline
-5. Baseline cost totals
-6. Alternative savings
-7. Currency mismatch
-8. Missing cost inputs
-
-The existing ten PVE-0.2 data-validation tests remain in scope, for a total expected test count of 18.
+## Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 98
+- Run ID: `29181336986`
+- Job: `validate-repository`
+- Validated commit: `da769f756cd6a5edfd38e61fc8176642c51c41d9`
+- Status: completed
+- Conclusion: success
+- Workflow steps: all passed
+- Tests run: 18
+- Tests passed: 18
+- Failures: 0
+- Errors: 0
 
 ## Scope Exclusions
 - No application UI
@@ -57,7 +58,7 @@ The existing ten PVE-0.2 data-validation tests remain in scope, for a total expe
 - Integration contract remains draft
 
 ## QA Status
-**Conditional Pass** — implementation and test coverage are complete; final status depends on successful PVE CI and full PR-diff review.
+**Pass** — PVE-0.3 implementation and all 18 automated tests passed PVE CI run #98.
 
 ## Release Recommendation
-Open a draft PR. PVE-0.4 may begin only after PVE-0.3 passes CI and QA and is merged into `main`.
+PVE-0.3 is ready for review and merge after the final QA commit passes CI. PVE-0.4 may begin only after PVE-0.3 is merged into `main`.
