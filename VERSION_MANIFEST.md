@@ -3,10 +3,19 @@
 ## Current Version
 - Project version: `0.5.0-scenario-recommendation-ui`
 - Build: `PVE-0.5`
-- Status: Implementation complete — CI and QA pending
+- Status: `0.5.0-scenario-recommendation-ui ready`
 - Stable branch: `main`
 - Working branch: `agent/pve-0.5-scenario-recommendation-ui`
 - Base commit: `e28299d5ad5bf127aee16cf479ccf3576cf85ea8`
+
+## Validation Evidence
+- Workflow: PVE CI
+- Run number: 180
+- Run ID: `29182662530`
+- Validated commit: `bae91d28000c8f54a97aaf23190b1e692f09106d`
+- Job: `validate-repository`
+- Conclusion: Success
+- Tests: 42 run, 42 passed, 0 failed, 0 errors
 
 ## Completed Foundation
 - PVE-0.4 status: `0.4.0-technical-risk completed`
@@ -37,4 +46,4 @@ No supplier ranking, supplier allocation, autonomous technical approval, final i
 - PVE-0.7 — QA and Interview Release
 
 ## Version Rule
-PVE-0.6 begins only after PVE-0.5 passes CI and QA and is merged into `main`.
+PVE-0.6 begins only after PVE-0.5 passes final CI and PR #9 is merged into `main`.
