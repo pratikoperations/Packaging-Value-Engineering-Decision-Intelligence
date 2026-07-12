@@ -1,0 +1,6 @@
+{
+  "minimum_annual_savings": 0.0,
+  "minimum_material_reduction_percent": 0.0,
+  "maximum_business_risk": "high",
+  "require_positive_savings_or_material_reduction": true
+}
