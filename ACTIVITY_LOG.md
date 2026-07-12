@@ -36,27 +36,24 @@ Each entry records date, build ID, branch, objective, files changed, checks, res
 - QA result: Pass
 
 ## 2026-07-12 — PVE-0.6 Decision Package Export
-- Branch: `agent/pve-0.6-decision-package-export`
-- Objective: Add deterministic read-only decision-package assembly and JSON/Markdown exports.
-- Files created:
-  - `src/exports/__init__.py`
-  - `src/exports/decision_package.py`
-  - `tests/exports/__init__.py`
-  - `tests/exports/test_decision_package.py`
-  - `docs/qa/PVE-0.6_QA_REPORT.md`
-- Files updated: `app.py`, CI workflow, test documentation, and governance records.
-- Export contents: executive summary, scenario assumptions, baseline and alternatives, cost/material results, qualification, risk, recommendations, constraints, validation requirements, metadata, and decision controls.
-- Export formats: deterministic sorted JSON and deterministic Markdown report.
-- Validation: required sections, identity metadata, positive volume, baseline integrity, complete alternative coverage, unique IDs, complete decision sections, and fixed safety controls.
+- Result: Completed and merged through PR #11.
+- Merge method: Squash merge
+- Merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
+- Original feature branch: Deleted
 - Validated CI:
   - Workflow: PVE CI
-  - Run number: 217
-  - Run ID: `29183379595`
-  - Validated commit: `21c0fc1586ab60847da71d5f0ce6d8ab94c9aeb9`
+  - Run number: 227
+  - Run ID: `29183476545`
+  - Validated PR commit: `55b5294c6c1a4924dca681a47680af70be551b4d`
   - Job: `validate-repository`
   - Conclusion: Success
-  - Tests: 52 run, 52 passed, 0 failed, 0 errors
+  - Tests: 52 passed, 0 failed, 0 errors
 - QA result: Pass
 - Scope exclusions: No autonomous approval, supplier allocation, final contract, external integration, or PVE-0.7 release packaging.
-- Result: PVE-0.6 is ready for review and merge after the final QA commit passes CI.
-- Next action: Validate the final commit, mark PR #11 ready for review, and do not merge automatically.
+
+## 2026-07-12 — PVE-0.6 Post-Merge Closure
+- Branch: `agent/pve-0.6-post-merge-closure`
+- Objective: Synchronize governance and recovery records after PR #11 merge.
+- Files changed: `PROJECT_STATUS.md`, `VERSION_MANIFEST.md`, `ACTIVITY_LOG.md`, `BUILD_HISTORY.md`, `CHANGELOG.md`, `RECOVERY_MANIFEST.md`, and `docs/qa/PVE-0.6_QA_REPORT.md`.
+- Result: Closure records prepared for review.
+- Next action: Confirm PVE CI, merge the closure PR, then begin PVE-0.7.

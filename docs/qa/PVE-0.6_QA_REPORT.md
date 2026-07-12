@@ -3,6 +3,9 @@
 ## Build
 PVE-0.6 — Decision Package Export
 
+## Status
+Completed and merged
+
 ## Scope
 Deterministic assembly of a read-only packaging decision package with machine-readable JSON and human-readable Markdown report exports.
 
@@ -36,10 +39,10 @@ Deterministic assembly of a read-only packaging decision package with machine-re
 
 ## Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 217
-- Run ID: `29183379595`
+- Run number: 227
+- Run ID: `29183476545`
 - Job: `validate-repository`
-- Validated commit: `21c0fc1586ab60847da71d5f0ce6d8ab94c9aeb9`
+- Validated PR commit: `55b5294c6c1a4924dca681a47680af70be551b4d`
 - Status: completed
 - Conclusion: success
 - Workflow steps: all passed
@@ -47,6 +50,14 @@ Deterministic assembly of a read-only packaging decision package with machine-re
 - Tests passed: 52
 - Failures: 0
 - Errors: 0
+
+## Merge Record
+- Pull request: PR #11
+- PR status: Merged and closed
+- Merge method: Squash merge
+- Merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
+- Stable branch: `main`
+- Original feature branch: Deleted
 
 ## Scope Verification
 - Deterministic internal decision-package assembly only
@@ -60,7 +71,7 @@ Deterministic assembly of a read-only packaging decision package with machine-re
 - No PVE-0.7 release packaging
 
 ## QA Status
-**Pass** — PVE-0.6 implementation and all 52 automated tests passed PVE CI run #217.
+**Pass** — PVE-0.6 implementation and all 52 automated tests passed PVE CI run #227 and were merged through PR #11.
 
 ## Release Recommendation
-PVE-0.6 is ready for review and merge after the final QA commit passes CI. PVE-0.7 may begin only after PVE-0.6 is merged into `main`.
+PVE-0.6 is complete. PVE-0.7 is the next approved build after this closure PR is merged into `main`.

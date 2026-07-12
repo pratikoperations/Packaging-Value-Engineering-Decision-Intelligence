@@ -3,11 +3,11 @@
 ## Project
 Packaging Value Engineering & Decision Intelligence
 
-## Current Build
+## Current Completed Build
 PVE-0.6 — Decision Package Export
 
 ## Status
-PVE-0.6 ready for review and merge
+Completed and merged
 
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
@@ -15,15 +15,12 @@ PVE-0.6 ready for review and merge
 ## Stable Branch
 `main`
 
-## Working Branch
-`agent/pve-0.6-decision-package-export`
-
-## Completed Builds
-- PVE-0.1 — Repository Foundation
-- PVE-0.2 — Data Model and Demo Data
-- PVE-0.3 — Cost and Material Engine
-- PVE-0.4 — Technical Qualification and Risk
-- PVE-0.5 — Scenario and Recommendation UI
+## Merge Record
+- Pull request: PR #11
+- Merge method: Squash merge
+- Merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
+- PR status: Merged and closed
+- Original feature branch: Deleted
 
 ## PVE-0.6 Scope Completed
 - Deterministic decision-package assembly
@@ -39,12 +36,12 @@ PVE-0.6 ready for review and merge
 
 ## Validated CI
 - Workflow: PVE CI
-- Run number: 217
-- Run ID: `29183379595`
-- Validated commit: `21c0fc1586ab60847da71d5f0ce6d8ab94c9aeb9`
+- Run number: 227
+- Run ID: `29183476545`
+- Validated PR commit: `55b5294c6c1a4924dca681a47680af70be551b4d`
 - Job: `validate-repository`
 - Result: Success
-- Tests: 52 run, 52 passed, 0 failed, 0 errors
+- Tests: 52 passed, 0 failed, 0 errors
 
 ## Scope Boundary
 No autonomous technical approval, supplier allocation, final integration contract, external system integration, or PVE-0.7 release packaging is included. The integration contract remains draft.
@@ -52,8 +49,8 @@ No autonomous technical approval, supplier allocation, final integration contrac
 ## QA Result
 Pass
 
-## Next Build
+## Next Approved Build
 PVE-0.7 — QA and Interview Release
 
 ## Start Condition for PVE-0.7
-PVE-0.7 may begin only after PVE-0.6 passes final CI and PR #11 is merged into `main`.
+PVE-0.7 may begin after this post-merge closure PR is merged into `main` and PVE CI passes on the closure branch.

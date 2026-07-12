@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Planned
+- PVE-0.7 — QA and Interview Release
+
+## [0.6.0-decision-package-export] — PVE-0.6 Decision Package Export
+
 ### Added
 - Deterministic decision-package assembler
 - Structured executive summary and project metadata
@@ -14,6 +19,15 @@
 - Ten new export tests
 - PVE-0.6 QA report
 - CI coverage for PVE-0.6 files and all tests
+
+### Completed
+- PR #11 merged and closed
+- Squash merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
+- Stable branch: `main`
+- Original feature branch: Deleted
+- Final validated CI: PVE CI #227, run ID `29183476545`
+- Tests: 52 passed, 0 failed, 0 errors
+- QA result: Pass
 
 ### Scope Boundary
 PVE-0.6 does not include autonomous technical approval, supplier allocation, final integration-contract release, external system integration, or PVE-0.7 release packaging.
