@@ -1,6 +1,40 @@
 # Changelog
 
-## [1.0.4-configurable-thresholds] — Pending
+## [1.0.5-controlled-scenario-execution] — Pending
+
+### Added
+- Immutable dataset-version selection
+- Immutable threshold-profile selection
+- Explicit bounded scenario assumptions
+- Deterministic scenario execution using existing engines
+- Technical qualification and risk evaluation
+- Explainable business-threshold outcomes
+- Mandatory engineering-control outcomes
+- Immutable scenario-record storage
+- Cross-project dataset and threshold protection
+- Controlled scenario Streamlit page
+- Design, QA, governance, and automated tests
+
+### Preserved
+- Existing recommendation engine
+- Existing persistence schema and immutability triggers
+- Existing project, upload, and threshold workflows
+- Engineering-validation and non-autonomous-approval controls
+- Draft integration-contract status
+- AI Procurement Copilot repository separation
+
+### Excluded
+- Decision snapshots and decision-history UI
+- Recommendation-engine modification
+- Authentication and external database
+- Supplier ranking or allocation
+- ERP integration
+- AI approval and new packaging categories
+
+### Scope Boundary
+PVE-1.0.5 stores deterministic scenario evidence only. Scenario statuses are not approvals; engineering validation and human approval remain mandatory.
+
+## [1.0.4-configurable-thresholds] — Completed
 
 ### Added
 - Controlled global default threshold profile
@@ -10,6 +44,14 @@
 - Business screening helper
 - Mandatory non-disableable engineering controls
 - Threshold profile template and automated tests
+
+### Completed
+- PR #20 merged and closed
+- Squash merge commit: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
+- Tests: 143 passed, 0 failed, 0 errors
+- Effort used: 12.5 hours
+- Program budget remaining: 35.0 hours
+- Source branch deleted
 
 ### Preserved
 - Existing `app.py`, dashboard, and upload workflows
