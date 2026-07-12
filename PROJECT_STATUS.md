@@ -118,55 +118,63 @@ Approved and in progress
   - Merge commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
   - Tests: 126 passed, 0 failed, 0 errors
   - Effort used: 16.5 hours
-  - Program budget remaining: 47.5 hours
+- PVE-1.0.4 — Configurable Business Thresholds
+  - PR #20 merged and closed
+  - Merge commit: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
+  - Tests: 143 passed, 0 failed, 0 errors
+  - Effort used: 12.5 hours
+  - Program budget remaining: 35.0 hours
   - Source branch: Deleted
 
 ### Current Build
-PVE-1.0.4 — Configurable Business Thresholds
+PVE-1.0.5 — Controlled Scenario Execution
 
 ### Build Status
-Draft PR validation pending.
+Draft PR preparation and validation in progress.
 
 ### Approved Controls
 - Original working budget: 90 hours
 - Hard ceiling: 110 hours
-- Budget entering build: 47.5 hours
-- Business thresholds remain separate from engineering controls
-- Threshold versions remain immutable
+- Budget entering build: 35.0 hours
+- Dataset and threshold versions remain immutable
+- Scenario assumptions remain explicit and bounded
+- Existing deterministic engines remain authoritative
+- Mandatory engineering controls remain non-disableable
 - SQLite remains demonstration persistence behind repository interfaces
-- Deterministic engines and engineering controls remain unchanged
 - AI Procurement Copilot remains separate
 
 ### Feature Branch
-`agent/pve-1.0.4-configurable-thresholds`
+`agent/pve-1.0.5-controlled-scenarios`
 
 ### Stable Baseline
-`c3e5247510c062fe64ac1da171dcc2f107ff4967`
+`301a0d92d41f46a15e37c5bd059e8673c3f666a6`
 
 ### Implemented Scope
-- Controlled global default profile
-- Project-specific immutable profile versions
-- Threshold validation
-- Duplicate-content suppression
-- Active threshold profile selection
-- Business screening helper
-- Mandatory non-disableable engineering controls
-- Threshold template and automated tests
+- Immutable dataset-version selection
+- Immutable threshold-profile selection
+- Controlled scenario assumptions
+- Deterministic scenario evaluation
+- Technical qualification and risk evaluation
+- Explainable business-threshold results
+- Mandatory engineering-control outcomes
+- Immutable scenario-record storage
+- Cross-project dataset and threshold protection
+- Automated tests and documentation
 
 ### Mandatory Controls
 - Engineering validation remains required
 - Autonomous approval remains prohibited
 - Critical risk remains blocking
 - Not-qualified alternatives remain blocked
-- Insufficient data cannot become recommended
+- Insufficient technical or risk data cannot become eligible
 
 ### Budget
-- Planned allocation: 13 hours
-- Estimated effort used: 12.5 hours
-- Estimated remaining 90-hour program budget: 35.0 hours
+- Planned allocation: 18.0 hours
+- Estimated effort used: 17.5 hours
+- Estimated remaining 90-hour program budget: 17.5 hours
 
 ### Explicit Exclusions
-No scenario execution, recommendation-engine modification, decision-history interface, authentication, external database, supplier workflow, ERP integration, AI approval, or new packaging category.
+No decision snapshot, decision-history interface, recommendation-engine modification, authentication, external database, supplier ranking or allocation, ERP integration, AI approval, or new packaging category.
 
 ### Next Gate
 Merge only after complete diff review and successful PVE CI on the final branch head.
