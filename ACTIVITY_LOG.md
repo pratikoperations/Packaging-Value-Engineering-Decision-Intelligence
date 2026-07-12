@@ -20,29 +20,25 @@ Each entry records date, build ID, branch, objective, files changed, checks, res
 - Stable branch: `main`
 
 ## 2026-07-12 — PVE-0.3 Cost and Material Engine
-- Branch: `agent/pve-0.3-cost-material-engine`
 - Objective: Add deterministic material and commercial calculations using the PVE-0.2 canonical dataset.
-- Files created:
-  - `src/material_engine/__init__.py`
-  - `src/material_engine/engine.py`
-  - `src/cost_engine/__init__.py`
-  - `src/cost_engine/engine.py`
-  - `tests/material_engine/__init__.py`
-  - `tests/material_engine/test_engine.py`
-  - `tests/cost_engine/__init__.py`
-  - `tests/cost_engine/test_engine.py`
-  - `docs/qa/PVE-0.3_QA_REPORT.md`
-- Files updated: CI workflow, testing instructions, and governance records.
-- Calculations implemented: component totals, case-weight variance, annual material mass, material change versus baseline, unit and annual cost, unit and annual savings, and cost change percentage.
+- Result: Completed and merged through PR #5.
+- Merge method: Squash merge
+- Merge commit: `de9d18a428274bfafd369e7509f88b20bc33db89`
+- Original feature branch: Deleted
 - Validated CI:
   - Workflow: PVE CI
-  - Run number: 98
-  - Run ID: `29181336986`
-  - Validated commit: `da769f756cd6a5edfd38e61fc8176642c51c41d9`
+  - Run number: 108
+  - Run ID: `29181583399`
+  - Validated PR commit: `847be5db56b413ec49868c50ea58092686555a5c`
   - Job: `validate-repository`
   - Conclusion: Success
-  - Tests: 18 run, 18 passed, 0 failed, 0 errors
+  - Tests: 18 passed, 0 failed, 0 errors
 - QA result: Pass
 - Scope exclusions: No UI, technical qualification, risk, recommendation scoring, supplier ranking, allocation, scenario engine, or PVE-0.4 logic. Integration contract remains draft.
-- Result: PVE-0.3 is ready for review and merge after the final QA commit passes CI.
-- Next action: Validate the final commit, mark PR #5 ready for review, and do not merge automatically.
+
+## 2026-07-12 — PVE-0.3 Post-Merge Closure
+- Branch: `agent/pve-0.3-post-merge-closure`
+- Objective: Synchronize governance and recovery records after PR #5 merge.
+- Files changed: `PROJECT_STATUS.md`, `VERSION_MANIFEST.md`, `ACTIVITY_LOG.md`, `BUILD_HISTORY.md`, `CHANGELOG.md`, `RECOVERY_MANIFEST.md`, and `docs/qa/PVE-0.3_QA_REPORT.md`.
+- Result: Closure records prepared for review.
+- Next action: Confirm PVE CI, merge the closure PR, then begin PVE-0.4.

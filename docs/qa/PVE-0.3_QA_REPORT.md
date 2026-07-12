@@ -3,6 +3,9 @@
 ## Build
 PVE-0.3 — Cost and Material Engine
 
+## Status
+Completed and merged
+
 ## Scope
 Deterministic material and commercial calculations for the existing synthetic corrugated shipping-case dataset.
 
@@ -35,10 +38,10 @@ Deterministic material and commercial calculations for the existing synthetic co
 
 ## Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 98
-- Run ID: `29181336986`
+- Run number: 108
+- Run ID: `29181583399`
 - Job: `validate-repository`
-- Validated commit: `da769f756cd6a5edfd38e61fc8176642c51c41d9`
+- Validated PR commit: `847be5db56b413ec49868c50ea58092686555a5c`
 - Status: completed
 - Conclusion: success
 - Workflow steps: all passed
@@ -46,6 +49,14 @@ Deterministic material and commercial calculations for the existing synthetic co
 - Tests passed: 18
 - Failures: 0
 - Errors: 0
+
+## Merge Record
+- Pull request: PR #5
+- PR status: Merged and closed
+- Merge method: Squash merge
+- Merge commit: `de9d18a428274bfafd369e7509f88b20bc33db89`
+- Stable branch: `main`
+- Original feature branch: Deleted
 
 ## Scope Exclusions
 - No application UI
@@ -58,7 +69,7 @@ Deterministic material and commercial calculations for the existing synthetic co
 - Integration contract remains draft
 
 ## QA Status
-**Pass** — PVE-0.3 implementation and all 18 automated tests passed PVE CI run #98.
+**Pass** — PVE-0.3 implementation and all 18 automated tests passed PVE CI run #108 and were merged through PR #5.
 
 ## Release Recommendation
-PVE-0.3 is ready for review and merge after the final QA commit passes CI. PVE-0.4 may begin only after PVE-0.3 is merged into `main`.
+PVE-0.3 is complete. PVE-0.4 is the next approved build after this closure PR is merged into `main`.
