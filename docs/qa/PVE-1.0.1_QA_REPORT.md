@@ -4,14 +4,15 @@
 PVE-1.0.1 — Foundation and Persistence
 
 ## Status
-Draft PR validation pending
+Draft PR corrective validation pending
 
 ## Objective
 Create a tested SQLite persistence and project-service foundation without changing current analytical engines or public Streamlit behavior.
 
 ## Architecture
 - `Database` manages SQLite connections, transactions, foreign keys, and WAL mode.
-- `migrations.py` applies an idempotent versioned schema.
+- `migrations.py` provides schema initialization with version recording only.
+- The current implementation does not claim sequential future-migration support.
 - Repository classes isolate SQL from application and analytical layers.
 - `ProjectService` exposes project lifecycle operations.
 - Immutable records are protected by database triggers.
@@ -34,9 +35,21 @@ Database triggers reject update and delete operations on:
 
 Project records remain metadata-editable and archiveable. Historical evidence remains retained through restrictive foreign keys.
 
+## Cross-Project Integrity Controls
+Repository validation rejects:
+- scenarios linked to a dataset from another project
+- scenarios linked to a project-specific threshold profile from another project
+- decisions linked to a scenario from another project
+- decisions linked to a dataset from another project
+- decisions linked to a project-specific threshold profile from another project
+- decisions whose dataset differs from the scenario dataset
+- decisions whose threshold profile differs from the scenario threshold profile
+
+Global threshold profiles remain valid across projects when their `project_id` is `NULL`.
+
 ## Test Coverage Added
 - schema initialization
-- idempotent migrations
+- repeatable schema initialization
 - foreign-key enforcement
 - project create/read/update/archive/list
 - application-service validation
@@ -49,11 +62,21 @@ Project records remain metadata-editable and archiveable. Historical evidence re
 - missing-parent rejection
 - export-to-decision linkage
 - temporary database isolation
+- seven cross-project and scenario-consistency rejection tests
 
 ## Expected Test Baseline
 - Previous total: 60
-- New persistence tests: 18
-- Expected total: 78
+- Initial persistence tests: 18
+- Corrective integrity tests: 7
+- Expected total: 85
+
+## Governance Preservation
+The original contents of the following files were restored before appending PVE-1.0.1 records:
+- `ACTIVITY_LOG.md`
+- `BUILD_HISTORY.md`
+- `VERSION_MANIFEST.md`
+
+Historical branches, commit SHAs, workflow details, job names, acceptance results, scope boundaries, recovery records, and closure evidence remain preserved.
 
 ## Preserved Controls
 - deterministic decision logic
@@ -70,14 +93,14 @@ No dashboard UI, upload, CSV parsing, configurable threshold UI, decision-histor
 
 ## Budget
 - Approved PVE-1.0.1 allocation: 13 hours
-- Estimated implementation effort used: 12.5 hours
-- Estimated remaining program budget: 77.5 hours
+- Revised estimated implementation effort used: 14.5 hours
+- Estimated remaining program budget: 75.5 hours
 
 ## CI Evidence
-To be completed after PVE CI runs on the final branch head.
+To be completed after PVE CI runs on the final corrective branch head.
 
 ## QA Result
 Pending final CI and complete diff review.
 
 ## Merge Rule
-Do not merge automatically. Merge only after full CI success and review of every changed file.
+Keep PR #17 as draft. Do not merge automatically. Merge only after full CI success and review of every changed file.
