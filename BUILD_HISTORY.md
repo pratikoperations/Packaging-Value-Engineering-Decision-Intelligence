@@ -31,7 +31,7 @@
 - Tests: 30 passed, 0 failed, 0 errors
 
 ## PVE-0.5 — Scenario and Recommendation UI
-**Status:** Implementation complete — CI and final QA pending
+**Status:** Ready for review and merge
 
 ### Objective
 Create explicit scenario assumptions, transparent packaging-alternative comparison, explainable recommendations, and a lightweight interview-demo UI.
@@ -47,6 +47,15 @@ Create explicit scenario assumptions, transparent packaging-alternative comparis
 - Streamlit comparison UI
 - Twelve new automated tests
 
+### Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 180
+- Run ID: `29182662530`
+- Validated commit: `bae91d28000c8f54a97aaf23190b1e692f09106d`
+- Job: `validate-repository`
+- Conclusion: Success
+- Tests: 42 run, 42 passed, 0 failed, 0 errors
+
 ### Scope Exclusions
 - Supplier ranking
 - Supplier allocation
@@ -55,14 +64,14 @@ Create explicit scenario assumptions, transparent packaging-alternative comparis
 - Decision-package export
 - PVE-0.6 functionality
 
-### Exit Criteria
-- Existing 30 tests continue to pass
-- Twelve PVE-0.5 tests pass
-- Total automated test count is 42
-- Full branch diff is reviewed
-- PVE CI passes
-- QA report is finalized
-- Draft PR is opened
+### Exit Criteria Result
+- Existing 30 tests continue to pass: Pass
+- Twelve PVE-0.5 tests pass: Pass
+- Total automated test count is 42: Pass
+- Full branch diff reviewed: Pass
+- PVE CI passes: Pass
+- QA report finalized: Pass
+- Draft PR opened: Pass
 
 ### Next Build
 PVE-0.6 — Decision Package Export, only after PVE-0.5 is merged into `main`.
