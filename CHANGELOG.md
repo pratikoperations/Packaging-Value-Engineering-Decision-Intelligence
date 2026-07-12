@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.7.1-streamlit-deployment-disclaimer] — Pending
+
+### Added
+- Visible Streamlit warning that the application uses synthetic demonstration data only
+- Static release test confirming the public synthetic-data disclaimer remains present
+
+### Preserved
+- Existing engineering-validation requirement
+- Existing prohibition on autonomous packaging approval
+- Draft integration-contract status
+- All analytical engines, schemas, demo data, validator, recommendations, and export logic
+
+### Scope Boundary
+This hotfix is non-functional deployment hardening only. It does not reopen the completed roadmap or add product functionality.
+
 ## [0.7.0-qa-interview-release] — Final Completed Release
 
 ### Added
