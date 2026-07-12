@@ -5,13 +5,20 @@
 ### Added
 - Streamlit multi-project dashboard page
 - Portfolio summary metrics for projects, dataset versions, and saved decisions
-- Project creation and active-session selection
+- Project creation
+- Explicit active workspace selection and current-workspace display
 - Metadata-only project duplication
 - Project archiving and separate archived-project view
 - Runtime SQLite service factory
 - Runtime database Git exclusion
 - Project dashboard design and QA documentation
-- Ten dashboard and application-service tests
+- Fifteen dashboard and application-service tests
+
+### Corrected
+- Archived projects can no longer become or overwrite the active workspace.
+- Project selectboxes no longer mutate active workspace session state automatically.
+- Active workspace changes now require the explicit `Select as active workspace` action.
+- Archiving the active project clears the active workspace safely.
 
 ### Preserved
 - Existing deterministic analytical engines
