@@ -23,6 +23,27 @@ class ScenarioRepository:
         identifier = new_id("scenario")
         payload = {"assumptions": assumptions, "results": results}
         with self.database.transaction() as connection:
+            dataset = connection.execute(
+                "SELECT project_id FROM project_datasets WHERE dataset_id = ?",
+                (dataset_id,),
+            ).fetchone()
+            if dataset is None:
+                raise KeyError(dataset_id)
+            if dataset["project_id"] != project_id:
+                raise ValueError("Scenario dataset must belong to the same project.")
+
+            if threshold_profile_id is not None:
+                threshold = connection.execute(
+                    "SELECT project_id FROM threshold_profiles WHERE threshold_profile_id = ?",
+                    (threshold_profile_id,),
+                ).fetchone()
+                if threshold is None:
+                    raise KeyError(threshold_profile_id)
+                if threshold["project_id"] not in (None, project_id):
+                    raise ValueError(
+                        "Scenario threshold profile must be global or belong to the same project."
+                    )
+
             connection.execute(
                 """
                 INSERT INTO scenarios(
