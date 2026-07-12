@@ -113,59 +113,60 @@ Approved and in progress
   - Merge commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
   - Tests: 100 passed, 0 failed, 0 errors
   - Effort used: 11.5 hours
+- PVE-1.0.3 — Upload and Validation
+  - PR #19 merged and closed
+  - Merge commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
+  - Tests: 126 passed, 0 failed, 0 errors
+  - Effort used: 16.5 hours
+  - Program budget remaining: 47.5 hours
+  - Source branch: Deleted
 
 ### Current Build
-PVE-1.0.3 — Upload and Validation
+PVE-1.0.4 — Configurable Business Thresholds
 
 ### Build Status
-Draft PR preparation and validation in progress.
+Draft PR validation pending.
 
 ### Approved Controls
 - Original working budget: 90 hours
 - Hard ceiling: 110 hours
-- Budget entering build: 64.0 hours
-- JSON is the canonical upload format
-- CSV support is limited to documented templates
+- Budget entering build: 47.5 hours
+- Business thresholds remain separate from engineering controls
+- Threshold versions remain immutable
 - SQLite remains demonstration persistence behind repository interfaces
 - Deterministic engines and engineering controls remain unchanged
 - AI Procurement Copilot remains separate
 
 ### Feature Branch
-`agent/pve-1.0.3-upload-validation`
+`agent/pve-1.0.4-configurable-thresholds`
 
 ### Stable Baseline
-`87f3897c68503cddc2c7e64827d8c395b45065a5`
+`c3e5247510c062fe64ac1da171dcc2f107ff4967`
 
 ### Implemented Scope
-- Canonical UTF-8 JSON upload
-- Limited `project.csv` and `alternatives.csv` ingestion
-- Upload size, encoding, file-count, column, and row controls
-- Canonical normalization
-- Active-project binding
-- User-upload validation profile
-- Field-level validation issue reporting
-- Downloadable JSON and CSV templates
-- Save-only-when-valid workflow
-- Immutable dataset-version storage
-- Duplicate canonical-content detection across JSON and CSV
-- Archived-project upload prohibition
+- Controlled global default profile
+- Project-specific immutable profile versions
+- Threshold validation
+- Duplicate-content suppression
+- Active threshold profile selection
+- Business screening helper
+- Mandatory non-disableable engineering controls
+- Threshold template and automated tests
 
-### Upload Controls
-- Exactly one baseline and at least one proposed alternative
-- Category and currency must match the active project
-- Uploaded recommendations cannot pre-approve decisions
-- Evidence remains mandatory for assessed technical qualification
-- Incomplete technical evidence remains eligible for `insufficient_data`
-- Invalid uploads are not persisted
-- Saved dataset versions remain immutable
+### Mandatory Controls
+- Engineering validation remains required
+- Autonomous approval remains prohibited
+- Critical risk remains blocking
+- Not-qualified alternatives remain blocked
+- Insufficient data cannot become recommended
 
 ### Budget
-- Planned allocation: 16 hours
-- Estimated effort used: 15.5 hours
-- Estimated remaining 90-hour program budget: 48.5 hours
+- Planned allocation: 13 hours
+- Estimated effort used: 12.5 hours
+- Estimated remaining 90-hour program budget: 35.0 hours
 
 ### Explicit Exclusions
-No configurable thresholds, scenario execution, decision-history interface, authentication, external database, PDF or Excel extraction, OCR, ERP integration, supplier workflow, AI approval, or new packaging category.
+No scenario execution, recommendation-engine modification, decision-history interface, authentication, external database, supplier workflow, ERP integration, AI approval, or new packaging category.
 
 ### Next Gate
 Merge only after complete diff review and successful PVE CI on the final branch head.

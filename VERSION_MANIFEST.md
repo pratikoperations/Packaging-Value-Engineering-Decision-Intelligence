@@ -63,33 +63,40 @@ This is the completed Lean Interview Project release after the final governance 
 - Effort used: 11.5 hours
 - Program budget remaining after build: 64.0 hours
 
+## PVE-1.0.3 Completion Record
+- Build: `PVE-1.0.3`
+- Pull request: PR #19 merged and closed
+- Merge commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
+- Tests: 126 passed, 0 failed, 0 errors
+- Effort used: 16.5 hours
+- Program budget remaining after build: 47.5 hours
+- Source branch: Deleted
+
 ## PVE 1.0 Working Version
 - Program: `PVE 1.0 Controlled Build`
-- Current build: `PVE-1.0.3`
-- Working version: `1.0.3-upload-validation`
-- Status: draft PR preparation and validation
-- Feature branch: `agent/pve-1.0.3-upload-validation`
-- Stable base commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
+- Current build: `PVE-1.0.4`
+- Working version: `1.0.4-configurable-thresholds`
+- Status: draft PR validation pending
+- Feature branch: `agent/pve-1.0.4-configurable-thresholds`
+- Stable base commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
 
 ## Approved Program Budget
 - Original working budget: 90 hours
 - Hard ceiling: 110 hours
-- Budget entering PVE-1.0.3: 64.0 hours
-- PVE-1.0.3 planned allocation: 16 hours
-- Estimated effort used: 15.5 hours
-- Estimated remaining program budget: 48.5 hours
+- Budget entering PVE-1.0.4: 47.5 hours
+- PVE-1.0.4 planned allocation: 13 hours
+- Estimated effort used: 12.5 hours
+- Estimated remaining program budget: 35.0 hours
 
-## PVE-1.0.3 Deliverables
-- Canonical JSON upload parser
-- Limited `project.csv` and `alternatives.csv` parsers
-- Canonical upload normalizer
-- User-upload validation profile
-- Upload application service
-- Dataset duplicate lookup
-- Downloadable JSON and CSV templates
-- Upload and validation Streamlit page
-- Immutable dataset-version storage workflow
-- Upload design and QA documentation
+## PVE-1.0.4 Deliverables
+- Controlled global default profile
+- Project-specific immutable profile versions
+- Threshold validation
+- Duplicate-content suppression
+- Active threshold profile selection
+- Business screening helper
+- Mandatory non-disableable engineering controls
+- Threshold template and automated tests
 
-## PVE-1.0.3 Scope Boundary
-PVE-1.0.3 excludes configurable thresholds, scenario execution, decision-history UI, authentication, external databases, PDF and Excel extraction, OCR, enterprise integrations, supplier workflows, AI approval, and additional packaging categories.
+## PVE-1.0.4 Scope Boundary
+PVE-1.0.4 excludes scenario execution, recommendation-engine modification, decision-history UI, authentication, external databases, supplier workflows, ERP integration, AI approval, and additional packaging categories.

@@ -56,3 +56,24 @@ Dashboard metrics describe project records, dataset versions, and saved decision
 
 ## DEC-PVE-017 — PVE-1.0.2 Dashboard Scope
 PVE-1.0.2 adds project portfolio navigation only. Uploads, parsing, thresholds, scenario execution, decision-history UI, authentication, external databases, supplier workflows, AI approval, and new categories remain excluded.
+
+## DEC-PVE-018 — JSON Is the Canonical Upload Format
+CSV is a constrained entry method only; all uploaded content normalizes to the canonical JSON structure.
+
+## DEC-PVE-019 — Invalid Uploads Are Not Persisted
+Only validated canonical datasets can create immutable dataset versions.
+
+## DEC-PVE-020 — Configurable Business Thresholds Are Separate From Engineering Controls
+Business thresholds may screen savings, material reduction, and business risk. They cannot alter qualification, evidence, engineering-validation, critical-risk, or approval controls.
+
+## DEC-PVE-021 — Controlled Default Profile Is Read-Only
+A global default profile is available to every project and cannot be edited. Customization requires a project-specific immutable profile version.
+
+## DEC-PVE-022 — Threshold Changes Create New Versions
+Threshold profiles are append-only. Changed content creates a new version; identical content returns the existing version.
+
+## DEC-PVE-023 — Mandatory Controls Are Outside Editable Profile Schema
+Engineering validation, prohibition of autonomous approval, critical-risk blocking, technical-failure blocking, and insufficient-data controls are fixed constants and cannot be submitted as editable threshold fields.
+
+## DEC-PVE-024 — PVE-1.0.4 Scope
+PVE-1.0.4 adds threshold creation, selection, validation, versioning, templates, and business screening only. It does not execute scenarios or modify recommendation-engine logic.
