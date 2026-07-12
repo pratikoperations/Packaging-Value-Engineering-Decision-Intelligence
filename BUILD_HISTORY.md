@@ -25,55 +25,53 @@
 ## PVE-0.4 — Technical Qualification and Risk
 **Status:** Completed and merged
 
+- Merge commit: `ced6c5542faa700a43101f8f9fc702d15d78f0ca`
+- Closure merge commit: `e28299d5ad5bf127aee16cf479ccf3576cf85ea8`
+- QA: Pass
+- Tests: 30 passed, 0 failed, 0 errors
+
+## PVE-0.5 — Scenario and Recommendation UI
+**Status:** Ready for review and merge
+
 ### Objective
-Create deterministic technical qualification and explicit quality, supply, and implementation risk indicators using the canonical dataset.
+Create explicit scenario assumptions, transparent packaging-alternative comparison, explainable recommendations, and a lightweight interview-demo UI.
 
 ### Completed Scope
-- Requirement-by-alternative technical status aggregation
-- Failure precedence
-- Conditional qualification handling
-- Missing-result and missing-evidence handling
-- Validation-required outputs
-- Quality, supply, and implementation risk indicators
-- Probability-based effective severity
-- Explicit risk-data completeness
-- High and critical mitigation requirements
+- Annual-volume scenario input
+- Alternative-level cost and material adjustments
+- Reuse of deterministic cost and material engines
+- Assumption disclosure for every scenario result
+- Qualification- and risk-gated recommendation statuses
+- Transparent preferred-alternative ordering without opaque scoring
+- User-visible rationale, constraints, and validation requirements
+- Streamlit comparison UI
 - Twelve new automated tests
-
-### Completion Record
-- Pull request: PR #7
-- PR status: Merged and closed
-- Merge method: Squash merge
-- Merge commit: `ced6c5542faa700a43101f8f9fc702d15d78f0ca`
-- Stable branch: `main`
-- Original feature branch: Deleted
 
 ### Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 148
-- Run ID: `29182036082`
-- Validated PR commit: `db40eac200e1c9d4a61c29a19e18551014e405f2`
+- Run number: 180
+- Run ID: `29182662530`
+- Validated commit: `bae91d28000c8f54a97aaf23190b1e692f09106d`
 - Job: `validate-repository`
 - Conclusion: Success
-- Tests: 30 passed, 0 failed, 0 errors
+- Tests: 42 run, 42 passed, 0 failed, 0 errors
 
 ### Scope Exclusions
-- Application UI
-- Recommendation scoring
-- Supplier ranking or allocation
-- Scenario and sensitivity analysis
+- Supplier ranking
+- Supplier allocation
 - Autonomous technical approval
 - Final integration contract
-- PVE-0.5 functionality
+- Decision-package export
+- PVE-0.6 functionality
 
 ### Exit Criteria Result
-- Existing 18 tests continue to pass: Pass
-- Twelve PVE-0.4 tests pass: Pass
-- Total automated test count is 30: Pass
+- Existing 30 tests continue to pass: Pass
+- Twelve PVE-0.5 tests pass: Pass
+- Total automated test count is 42: Pass
 - Full branch diff reviewed: Pass
 - PVE CI passes: Pass
 - QA report finalized: Pass
-- PR merged: Pass
+- Draft PR opened: Pass
 
-### Next Approved Build
-PVE-0.5 — Scenario and Recommendation UI, after the post-merge closure PR is merged into `main`.
+### Next Build
+PVE-0.6 — Decision Package Export, only after PVE-0.5 is merged into `main`.

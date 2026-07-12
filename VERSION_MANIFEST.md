@@ -1,47 +1,49 @@
 # Version Manifest
 
 ## Current Version
-- Project version: `0.4.0-technical-risk`
-- Build: `PVE-0.4`
-- Status: `0.4.0-technical-risk completed`
+- Project version: `0.5.0-scenario-recommendation-ui`
+- Build: `PVE-0.5`
+- Status: `0.5.0-scenario-recommendation-ui ready`
 - Stable branch: `main`
-- Merge commit: `ced6c5542faa700a43101f8f9fc702d15d78f0ca`
-- Pull request: PR #7 merged and closed
-- Original feature branch: Deleted
+- Working branch: `agent/pve-0.5-scenario-recommendation-ui`
+- Base commit: `e28299d5ad5bf127aee16cf479ccf3576cf85ea8`
 
 ## Validation Evidence
 - Workflow: PVE CI
-- Run number: 148
-- Run ID: `29182036082`
-- Validated PR commit: `db40eac200e1c9d4a61c29a19e18551014e405f2`
+- Run number: 180
+- Run ID: `29182662530`
+- Validated commit: `bae91d28000c8f54a97aaf23190b1e692f09106d`
 - Job: `validate-repository`
 - Conclusion: Success
-- Tests: 30 passed, 0 failed, 0 errors
+- Tests: 42 run, 42 passed, 0 failed, 0 errors
+
+## Completed Foundation
+- PVE-0.4 status: `0.4.0-technical-risk completed`
+- Canonical data-model version: `0.2.0`
 
 ## Current Deliverables
-- Technical qualification engine: `src/technical_qualification/engine.py`
-- Risk engine: `src/risk_engine/engine.py`
-- Technical tests: `tests/technical_qualification/test_engine.py`
-- Risk tests: `tests/risk_engine/test_engine.py`
-- PVE-0.4 QA report: `docs/qa/PVE-0.4_QA_REPORT.md`
+- Scenario engine: `src/scenario_engine/engine.py`
+- Recommendation engine: `src/recommendation/engine.py`
+- Streamlit UI: `app.py`
+- Scenario tests: `tests/scenario_engine/test_engine.py`
+- Recommendation tests: `tests/recommendation/test_engine.py`
+- PVE-0.5 QA report: `docs/qa/PVE-0.5_QA_REPORT.md`
 
 ## Rule Scope
-- Technical status aggregation with explicit failure precedence
-- Missing-result and missing-evidence handling
-- Validation-required outputs
-- Quality, supply, and implementation risk indicators
-- Probability-based risk escalation
-- Explicit risk-data completeness reporting
+- Explicit annual-volume, cost, and material assumptions
+- Transparent cost and material recalculation
+- Qualification- and risk-gated recommendation statuses
+- Explainable preferred-alternative ordering
+- User-visible constraints, rationale, and validation requirements
 
 ## Scope Boundary
-No application UI, recommendation scoring, supplier ranking, supplier allocation, scenario or sensitivity engine, autonomous technical approval, final integration contract, or PVE-0.5 functionality is included. The integration contract remains draft.
+No supplier ranking, supplier allocation, autonomous technical approval, final integration contract, decision-package export, or PVE-0.6 functionality is included. The integration contract remains draft.
 
-## Next Approved Build
-- PVE-0.5 — Scenario and Recommendation UI
-
-## Later Builds
+## Next Planned Build
 - PVE-0.6 — Decision Package Export
+
+## Later Build
 - PVE-0.7 — QA and Interview Release
 
 ## Version Rule
-PVE-0.5 begins only after the PVE-0.4 post-merge closure PR is merged into `main`.
+PVE-0.6 begins only after PVE-0.5 passes final CI and PR #9 is merged into `main`.

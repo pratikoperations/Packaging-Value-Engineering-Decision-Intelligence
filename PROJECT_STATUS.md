@@ -3,11 +3,11 @@
 ## Project
 Packaging Value Engineering & Decision Intelligence
 
-## Current Completed Build
-PVE-0.4 — Technical Qualification and Risk
+## Current Build
+PVE-0.5 — Scenario and Recommendation UI
 
 ## Status
-Completed and merged
+PVE-0.5 ready for review and merge
 
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
@@ -15,41 +15,42 @@ Completed and merged
 ## Stable Branch
 `main`
 
-## Merge Record
-- Pull request: PR #7
-- Merge method: Squash merge
-- Merge commit: `ced6c5542faa700a43101f8f9fc702d15d78f0ca`
-- PR status: Merged and closed
-- Original feature branch: Deleted
+## Working Branch
+`agent/pve-0.5-scenario-recommendation-ui`
 
-## PVE-0.4 Scope Completed
-- Deterministic technical qualification across all declared requirements
-- Explicit qualified, conditionally qualified, not qualified, and insufficient-data outcomes
-- Failure precedence and missing-evidence handling
-- Validation-required outputs for open activities and evidence gaps
-- Deterministic quality, supply, and implementation risk indicators
-- Probability-based severity escalation
-- Explicit missing-risk-category reporting
-- High and critical risk mitigation requirements
-- Twelve new automated tests
+## Completed Builds
+- PVE-0.1 — Repository Foundation
+- PVE-0.2 — Data Model and Demo Data
+- PVE-0.3 — Cost and Material Engine
+- PVE-0.4 — Technical Qualification and Risk
+
+## PVE-0.5 Scope Completed
+- Deterministic annual-volume scenarios
+- Alternative-level cost and material adjustment assumptions
+- Transparent recalculation through validated cost and material engines
+- Explainable recommendation statuses and rationale
+- Qualification and risk constraints surfaced to users
+- Deterministic preferred-alternative ordering without opaque scoring
+- Lightweight Streamlit application UI
+- Twelve new automated scenario and recommendation tests
 
 ## Validated CI
 - Workflow: PVE CI
-- Run number: 148
-- Run ID: `29182036082`
-- Validated PR commit: `db40eac200e1c9d4a61c29a19e18551014e405f2`
+- Run number: 180
+- Run ID: `29182662530`
+- Validated commit: `bae91d28000c8f54a97aaf23190b1e692f09106d`
 - Job: `validate-repository`
 - Result: Success
-- Tests: 30 passed, 0 failed, 0 errors
+- Tests: 42 run, 42 passed, 0 failed, 0 errors
 
 ## Scope Boundary
-No application UI, recommendation scoring, supplier ranking, supplier allocation, scenario or sensitivity engine, autonomous technical approval, final integration contract, or PVE-0.5 functionality is included. The integration contract remains draft.
+No supplier ranking, supplier allocation, autonomous technical approval, final integration contract, decision-package export, or PVE-0.6 functionality is included. The integration contract remains draft.
 
 ## QA Result
 Pass
 
-## Next Approved Build
-PVE-0.5 — Scenario and Recommendation UI
+## Next Build
+PVE-0.6 — Decision Package Export
 
-## Start Condition for PVE-0.5
-PVE-0.5 may begin after this post-merge closure PR is merged into `main` and PVE CI passes on the closure branch.
+## Start Condition for PVE-0.6
+PVE-0.6 may begin only after PVE-0.5 passes final CI and PR #9 is merged into `main`.
