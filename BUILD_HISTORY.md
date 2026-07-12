@@ -31,7 +31,7 @@
 - Tests: 30 passed, 0 failed, 0 errors
 
 ## PVE-0.5 — Scenario and Recommendation UI
-**Status:** Ready for review and merge
+**Status:** Completed and merged
 
 ### Objective
 Create explicit scenario assumptions, transparent packaging-alternative comparison, explainable recommendations, and a lightweight interview-demo UI.
@@ -47,14 +47,22 @@ Create explicit scenario assumptions, transparent packaging-alternative comparis
 - Streamlit comparison UI
 - Twelve new automated tests
 
+### Completion Record
+- Pull request: PR #9
+- PR status: Merged and closed
+- Merge method: Squash merge
+- Merge commit: `930a4e25d3392b7107616ec498501ef48aa72a8e`
+- Stable branch: `main`
+- Original feature branch: Deleted
+
 ### Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 180
-- Run ID: `29182662530`
-- Validated commit: `bae91d28000c8f54a97aaf23190b1e692f09106d`
+- Run number: 190
+- Run ID: `29182740157`
+- Validated PR commit: `252bf329fcb50c9d3c7c7fb1392309599356eb54`
 - Job: `validate-repository`
 - Conclusion: Success
-- Tests: 42 run, 42 passed, 0 failed, 0 errors
+- Tests: 42 passed, 0 failed, 0 errors
 
 ### Scope Exclusions
 - Supplier ranking
@@ -71,7 +79,7 @@ Create explicit scenario assumptions, transparent packaging-alternative comparis
 - Full branch diff reviewed: Pass
 - PVE CI passes: Pass
 - QA report finalized: Pass
-- Draft PR opened: Pass
+- PR merged: Pass
 
-### Next Build
-PVE-0.6 — Decision Package Export, only after PVE-0.5 is merged into `main`.
+### Next Approved Build
+PVE-0.6 — Decision Package Export, after the post-merge closure PR is merged into `main`.
