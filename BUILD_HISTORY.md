@@ -63,7 +63,7 @@ All seven planned builds are completed and merged. The project becomes fully gov
 ---
 
 ## PVE-1.0.1 — Foundation and Persistence
-**Status:** In progress — draft PR correction and validation
+**Status:** Completed and merged through PR #17
 
 ### Objective
 Create the persistence and application-service foundation for the approved PVE 1.0 controlled multi-project platform.
@@ -90,14 +90,53 @@ Create the persistence and application-service foundation for the approved PVE 1
 - `decision_snapshots`
 - `export_records`
 
+### Completion Record
+- Pull request: PR #17
+- Merge method: Squash merge
+- Merge commit: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
+- Tests: 85 passed, 0 failed, 0 errors
+- Source branch: Deleted
+
 ### Budget
-- Approved build allocation: 13 hours
-- Revised estimated effort used: 14.5 hours
-- Program budget before build: 90 hours
-- Estimated program budget after corrective work: 75.5 hours
+- Revised effort used: 14.5 hours
+- Program budget after build: 75.5 hours
 
 ### Scope Exclusions
 No dashboard UI, uploads, CSV parsing, threshold UI, history UI, authentication, external database, PDF or Excel extraction, ERP integration, supplier workflow, AI approval, or new category.
 
+---
+
+## PVE-1.0.2 — Project Dashboard
+**Status:** In progress — draft PR preparation
+
+### Objective
+Add a controlled project portfolio dashboard using the PVE-1.0.1 persistence foundation.
+
+### Implemented Scope
+- Portfolio summary metrics
+- Project creation
+- Active project selection in Streamlit session state
+- Project metadata duplication
+- Project archiving
+- Active and archived project views
+- Runtime SQLite service initialization
+- Demonstration persistence disclosure
+
+### Design Rules
+- Dashboard uses `ProjectService` and `ProjectRepository`; no page-level SQL
+- Project duplication does not copy datasets, scenarios, decisions, or exports
+- Archived projects remain read-only and retain evidence
+- Dashboard metrics do not represent realized savings
+- Existing `app.py` decision workflow remains unchanged
+
+### Budget
+- Planned allocation: 11 hours
+- Estimated effort used: 10.5 hours
+- Program budget before build: 75.5 hours
+- Estimated program budget after build: 65.0 hours
+
+### Scope Exclusions
+No upload, JSON or CSV parsing, threshold UI, scenario execution, decision-history UI, authentication, external database, supplier workflow, ERP integration, AI approval, or new packaging category.
+
 ### Merge Gate
-Full test suite and complete diff must pass review before squash merge. Do not merge automatically.
+Full CI and complete diff review must pass before squash merge. Do not merge automatically.

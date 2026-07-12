@@ -55,3 +55,29 @@ All prior builds were completed, merged, QA-passed, and governance-closed.
 - Excluded: dashboard, uploads, CSV parsing, threshold UI, history UI, authentication, external database, supplier workflows, AI approval, and new categories.
 - Result: Corrective implementation prepared; final CI and PR review pending.
 - Next action: Validate final branch CI and complete diff before review readiness.
+
+## 2026-07-12 — PVE-1.0.1 Merge Completion
+- Pull request: PR #17
+- Merge method: Squash merge
+- Merge commit: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
+- Tests: 85 passed, 0 failed, 0 errors
+- Source branch: Deleted
+- Program budget remaining: 75.5 hours
+
+## 2026-07-12 — PVE-1.0.2 Project Dashboard
+- Objective: Add the controlled multi-project dashboard without expanding into upload, analysis, threshold, or history workflows.
+- Stable base: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
+- Branch: `agent/pve-1.0.2-project-dashboard`
+- Planned allocation: 11 hours
+- Implementation:
+  - portfolio summary metrics
+  - create and select project
+  - duplicate project metadata only
+  - archive project without deleting evidence
+  - active and archived project views
+  - runtime SQLite service initialization
+  - local persistence disclaimer
+- Preserved: deterministic engines, engineering controls, existing `app.py`, disclaimers, integration boundary, and AI Procurement Copilot separation.
+- Excluded: uploads, parsing, thresholds, scenario execution, decision history, authentication, external database, supplier workflows, AI approval, and new categories.
+- Result: Implementation prepared; draft PR and CI pending.
+- Next action: Validate the complete diff and full test suite before review readiness.
