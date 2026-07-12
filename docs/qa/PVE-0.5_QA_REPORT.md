@@ -34,22 +34,19 @@ Deterministic scenario assumptions, transparent packaging-alternative comparison
 - Expandable rationale, constraints, and validation requirements
 - Explicit engineering-approval disclaimer
 
-## Automated Tests
-Twelve new tests cover:
-1. Base scenario consistency
-2. Annual-volume sensitivity
-3. Cost adjustment
-4. Material adjustment
-5. Unknown alternative rejection
-6. Adjustment-bound validation
-7. Demo insufficient-data recommendation
-8. Qualified low-risk recommendation
-9. Technical-failure rejection
-10. Critical-risk rejection
-11. Conditional qualification handling
-12. Incomplete-risk conditional recommendation
-
-Existing tests remain in scope. Expected total automated test count: 42.
+## Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 180
+- Run ID: `29182662530`
+- Job: `validate-repository`
+- Validated commit: `bae91d28000c8f54a97aaf23190b1e692f09106d`
+- Status: completed
+- Conclusion: success
+- Workflow steps: all passed
+- Tests run: 42
+- Tests passed: 42
+- Failures: 0
+- Errors: 0
 
 ## Scope Exclusions
 - No supplier allocation
@@ -60,7 +57,7 @@ Existing tests remain in scope. Expected total automated test count: 42.
 - No PVE-0.6 functionality
 
 ## QA Status
-**Conditional Pass** — implementation and test coverage are complete; final status depends on successful PVE CI and full PR-diff review.
+**Pass** — PVE-0.5 implementation and all 42 automated tests passed PVE CI run #180.
 
 ## Release Recommendation
-Open a draft PR. PVE-0.6 may begin only after PVE-0.5 passes CI and QA and is merged into `main`.
+PVE-0.5 is ready for review and merge after the final QA commit passes CI. PVE-0.6 may begin only after PVE-0.5 is merged into `main`.
