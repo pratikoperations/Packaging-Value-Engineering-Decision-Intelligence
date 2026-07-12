@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Planned
+- PVE-0.4 — Technical Qualification and Risk
+
+## [0.3.0-cost-material-engine] — PVE-0.3 Cost and Material Engine
+
 ### Added
 - Deterministic material engine
 - Deterministic cost engine
@@ -19,19 +24,19 @@
 - Unit and annual savings versus baseline
 - Cost change percentage versus baseline
 
+### Completed
+- PR #5 merged and closed
+- Squash merge commit: `de9d18a428274bfafd369e7509f88b20bc33db89`
+- Stable branch: `main`
+- Original feature branch: Deleted
+- Final validated CI: PVE CI #108, run ID `29181583399`
+- Tests: 18 passed, 0 failed, 0 errors
+- QA result: Pass
+
 ### Scope Boundary
 PVE-0.3 does not include UI, technical qualification, risk, recommendation scoring, supplier ranking, allocation, scenario analysis, autonomous approval, or PVE-0.4 functionality. The integration contract remains draft.
 
 ## [0.2.0-data-model] — PVE-0.2 Data Model and Demo Data
-
-### Added
-- Canonical data model covering fourteen entity groups
-- Synthetic corrugated shipping-case demo dataset with one baseline and three alternatives
-- Invalid and partial-data examples
-- Deterministic Python data-validation module
-- Automated data-validation test suite
-- Expanded PVE CI workflow
-- PVE-0.2 QA report
 
 ### Completed
 - PR #3 merged and closed
