@@ -4,12 +4,13 @@
 
 ### Added
 - SQLite database connection manager with foreign-key enforcement
-- Idempotent schema initialization and migration version tracking
+- Schema initialization with version recording
 - Repository modules for projects, datasets, threshold profiles, scenarios, decision snapshots, and export records
 - Immutable database triggers for datasets, threshold profiles, scenarios, and decision snapshots
 - Project lifecycle application service
+- Cross-project integrity validation for scenario and decision links
 - Temporary isolated database support for automated tests
-- Comprehensive persistence and immutability test coverage
+- Comprehensive persistence, immutability, and project-integrity test coverage
 
 ### Preserved
 - Existing deterministic analytical engines
@@ -28,7 +29,7 @@
 - ERP, supplier, AI approval, PDF, Excel, and new-category capabilities
 
 ### Scope Boundary
-PVE-1.0.1 creates infrastructure only. It does not change packaging recommendations, risk logic, exports, or the public demonstration workflow.
+PVE-1.0.1 creates infrastructure only. It does not change packaging recommendations, risk logic, exports, or the public demonstration workflow. The current schema utility does not claim sequential migration support.
 
 ## [0.7.2-live-demo-streamlit-compatibility] — Completed
 
