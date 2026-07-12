@@ -4,7 +4,7 @@
 PVE-1.0.1 — Foundation and Persistence
 
 ## Status
-Draft PR corrective validation pending
+QA Pass — ready to be marked ready for review
 
 ## Objective
 Create a tested SQLite persistence and project-service foundation without changing current analytical engines or public Streamlit behavior.
@@ -64,11 +64,14 @@ Global threshold profiles remain valid across projects when their `project_id` i
 - temporary database isolation
 - seven cross-project and scenario-consistency rejection tests
 
-## Expected Test Baseline
+## Test Result
 - Previous total: 60
 - Initial persistence tests: 18
 - Corrective integrity tests: 7
-- Expected total: 85
+- Total: 85
+- Passed: 85
+- Failures: 0
+- Errors: 0
 
 ## Governance Preservation
 The original contents of the following files were restored before appending PVE-1.0.1 records:
@@ -96,11 +99,18 @@ No dashboard UI, upload, CSV parsing, configurable threshold UI, decision-histor
 - Revised estimated implementation effort used: 14.5 hours
 - Estimated remaining program budget: 75.5 hours
 
-## CI Evidence
-To be completed after PVE CI runs on the final corrective branch head.
+## Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 352
+- Run ID: `29187803058`
+- Validated commit: `45df68e769018ddc6aa83cb383fa477ea8504419`
+- Job: `validate-repository`
+- Status: completed
+- Conclusion: success
+- All workflow steps: passed
 
 ## QA Result
-Pending final CI and complete diff review.
+**Pass**
 
 ## Merge Rule
-Keep PR #17 as draft. Do not merge automatically. Merge only after full CI success and review of every changed file.
+Keep PR #17 as draft until review approval. Do not merge automatically. Merge only after review of every changed file.
