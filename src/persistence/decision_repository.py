@@ -32,6 +32,46 @@ class DecisionRepository:
             "preferred_alternative_id": preferred_alternative_id,
         }
         with self.database.transaction() as connection:
+            scenario = connection.execute(
+                """
+                SELECT project_id, dataset_id, threshold_profile_id
+                FROM scenarios WHERE scenario_id = ?
+                """,
+                (scenario_id,),
+            ).fetchone()
+            if scenario is None:
+                raise KeyError(scenario_id)
+            if scenario["project_id"] != project_id:
+                raise ValueError("Decision scenario must belong to the same project.")
+
+            dataset = connection.execute(
+                "SELECT project_id FROM project_datasets WHERE dataset_id = ?",
+                (dataset_id,),
+            ).fetchone()
+            if dataset is None:
+                raise KeyError(dataset_id)
+            if dataset["project_id"] != project_id:
+                raise ValueError("Decision dataset must belong to the same project.")
+            if scenario["dataset_id"] != dataset_id:
+                raise ValueError("Decision dataset must match the scenario dataset.")
+
+            if threshold_profile_id is not None:
+                threshold = connection.execute(
+                    "SELECT project_id FROM threshold_profiles WHERE threshold_profile_id = ?",
+                    (threshold_profile_id,),
+                ).fetchone()
+                if threshold is None:
+                    raise KeyError(threshold_profile_id)
+                if threshold["project_id"] not in (None, project_id):
+                    raise ValueError(
+                        "Decision threshold profile must be global or belong to the same project."
+                    )
+
+            if scenario["threshold_profile_id"] != threshold_profile_id:
+                raise ValueError(
+                    "Decision threshold profile must match the scenario threshold profile."
+                )
+
             connection.execute(
                 """
                 INSERT INTO decision_snapshots(
