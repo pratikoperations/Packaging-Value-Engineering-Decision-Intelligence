@@ -72,3 +72,15 @@ class ScenarioRepository:
         if row is None:
             raise KeyError(scenario_id)
         return dict(row)
+
+    def list_for_project(self, project_id: str) -> list[dict[str, Any]]:
+        with self.database.connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT * FROM scenarios
+                WHERE project_id = ?
+                ORDER BY created_at DESC, scenario_id DESC
+                """,
+                (project_id,),
+            ).fetchall()
+        return [dict(row) for row in rows]
