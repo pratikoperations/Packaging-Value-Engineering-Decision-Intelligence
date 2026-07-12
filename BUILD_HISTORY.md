@@ -190,7 +190,7 @@ No configurable thresholds, scenario execution, decision-history UI, authenticat
 ---
 
 ## PVE-1.0.4 — Configurable Business Thresholds
-**Status:** In progress — draft PR validation pending
+**Status:** Completed and merged through PR #20
 
 ### Objective
 Add immutable configurable business threshold profiles without weakening mandatory engineering controls.
@@ -215,14 +215,58 @@ Add immutable configurable business threshold profiles without weakening mandato
 - Threshold changes create immutable versions
 - Identical content does not duplicate history
 
+### Completion Record
+- Pull request: PR #20
+- Merge method: Squash merge
+- Merge commit: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
+- Tests: 143 passed, 0 failed, 0 errors
+- Source branch: Deleted
+
 ### Budget
-- Planned allocation: 13 hours
-- Estimated effort used: 12.5 hours
-- Program budget before build: 47.5 hours
-- Estimated program budget after build: 35.0 hours
+- Effort used: 12.5 hours
+- Program budget after build: 35.0 hours
 
 ### Scope Exclusions
 No scenario execution, recommendation-engine modification, decision-history UI, authentication, external database, supplier workflow, ERP integration, AI approval, or new packaging category.
+
+---
+
+## PVE-1.0.5 — Controlled Scenario Execution
+**Status:** In progress — draft PR preparation
+
+### Objective
+Run deterministic scenarios from immutable project dataset and threshold-profile versions and save immutable scenario evidence.
+
+### Implemented Scope
+- Project-scoped immutable dataset selection
+- Global or project-specific immutable threshold selection
+- Explicit bounded annual-volume, cost, and material assumptions
+- Existing deterministic scenario-engine execution
+- Existing technical-qualification and risk evaluation
+- Explainable business-threshold evaluation
+- Mandatory engineering-control outcomes
+- Immutable scenario-record storage
+- Cross-project protection in service and repository layers
+- Streamlit execution and review page
+- Automated tests and documentation
+
+### Design Rules
+- Existing deterministic engines remain authoritative
+- Scenario assumptions are explicit and bounded
+- Critical risk and not-qualified status remain blocking
+- Insufficient technical or risk data cannot become eligible
+- Scenario statuses are not approvals
+- Engineering validation and human approval remain mandatory
+- Saved scenarios bind exact immutable dataset and threshold versions
+
+### Budget
+- Planned allocation: 18.0 hours
+- Estimated effort used: 17.5 hours
+- Program budget before build: 35.0 hours
+- Estimated program budget after build: 17.5 hours
+
+### Scope Exclusions
+No decision snapshots, decision-history UI, recommendation-engine modification, authentication, external database, supplier ranking or allocation, ERP integration, AI approval, or new packaging category.
 
 ### Merge Gate
 Full CI and complete diff review must pass before squash merge. Do not merge automatically.
