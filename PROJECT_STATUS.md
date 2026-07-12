@@ -3,11 +3,11 @@
 ## Project
 Packaging Value Engineering & Decision Intelligence
 
-## Current Completed Build
-PVE-0.5 — Scenario and Recommendation UI
+## Current Build
+PVE-0.6 — Decision Package Export
 
 ## Status
-Completed and merged
+Implementation complete — CI and QA pending
 
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
@@ -15,40 +15,36 @@ Completed and merged
 ## Stable Branch
 `main`
 
-## Merge Record
-- Pull request: PR #9
-- Merge method: Squash merge
-- Merge commit: `930a4e25d3392b7107616ec498501ef48aa72a8e`
-- PR status: Merged and closed
-- Original feature branch: Deleted
+## Working Branch
+`agent/pve-0.6-decision-package-export`
 
-## PVE-0.5 Scope Completed
-- Deterministic annual-volume scenarios
-- Alternative-level cost and material adjustment assumptions
-- Transparent recalculation through validated cost and material engines
-- Explainable recommendation statuses and rationale
-- Qualification and risk constraints surfaced to users
-- Deterministic preferred-alternative ordering without opaque scoring
-- Lightweight Streamlit application UI
-- Twelve new automated scenario and recommendation tests
+## Completed Builds
+- PVE-0.1 — Repository Foundation
+- PVE-0.2 — Data Model and Demo Data
+- PVE-0.3 — Cost and Material Engine
+- PVE-0.4 — Technical Qualification and Risk
+- PVE-0.5 — Scenario and Recommendation UI
 
-## Validated CI
-- Workflow: PVE CI
-- Run number: 190
-- Run ID: `29182740157`
-- Validated PR commit: `252bf329fcb50c9d3c7c7fb1392309599356eb54`
-- Job: `validate-repository`
-- Result: Success
-- Tests: 42 passed, 0 failed, 0 errors
+## PVE-0.6 Scope Completed
+- Deterministic decision-package assembly
+- Structured executive summary
+- Scenario assumptions and annual-volume context
+- Cost and material results for baseline and alternatives
+- Technical qualification and risk outcomes
+- Recommendation rationale, constraints, and validation requirements
+- Machine-readable JSON export
+- Human-readable Markdown report export
+- Streamlit download controls
+- Ten new automated export tests
 
 ## Scope Boundary
-No supplier ranking, supplier allocation, autonomous technical approval, final integration contract, decision-package export, or PVE-0.6 functionality is included. The integration contract remains draft.
+No autonomous technical approval, supplier allocation, final integration contract, external system integration, or PVE-0.7 release packaging is included. The integration contract remains draft.
 
 ## QA Result
-Pass
+Conditional Pass pending PVE CI and full PR-diff verification.
 
-## Next Approved Build
-PVE-0.6 — Decision Package Export
+## Next Build
+PVE-0.7 — QA and Interview Release
 
-## Start Condition for PVE-0.6
-PVE-0.6 may begin after this post-merge closure PR is merged into `main` and PVE CI passes on the closure branch.
+## Start Condition for PVE-0.7
+PVE-0.7 may begin only after PVE-0.6 passes CI and QA and is merged into `main`.
