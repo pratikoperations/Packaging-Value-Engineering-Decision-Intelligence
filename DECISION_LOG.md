@@ -49,7 +49,7 @@ The PVE-1.0.2 Streamlit page uses `ProjectService` and `ProjectRepository`. The 
 Duplicating a project copies only project metadata. It does not copy datasets, threshold profiles, scenarios, decisions, or export records.
 
 ## DEC-PVE-015 — Archive Instead of Delete
-The dashboard archives projects rather than deleting them. Archived projects are read-only in PVE-1.0.2 and retain historical evidence.
+The dashboard archives projects rather than deleting them. Archived projects are read-only and retain historical evidence.
 
 ## DEC-PVE-016 — Portfolio Metrics Are Evidence Counts
 Dashboard metrics describe project records, dataset versions, and saved decision snapshots. They do not claim realized savings, approved packaging changes, or supplier allocation.
@@ -92,3 +92,6 @@ Not-qualified technical status and critical risk remain blocking. Insufficient t
 
 ## DEC-PVE-029 — PVE-1.0.5 Scope
 PVE-1.0.5 adds controlled scenario execution and immutable scenario evidence only. It does not create decision snapshots, decision-history UI, or modify the recommendation engine.
+
+## DEC-PVE-030 — PVE-1.0.5 Post-Merge Closure Is Governance-Only
+The post-merge closure records PR #21, final CI, test evidence, actual effort, remaining budget, branch deletion, and recovery state directly on `main`. It does not change application logic, scenario logic, thresholds, persistence schema, recommendation logic, or approved scope boundaries.
