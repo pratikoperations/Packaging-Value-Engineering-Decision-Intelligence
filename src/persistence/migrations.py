@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+"""Initial schema creation with version recording.
+
+This module intentionally does not claim ordered sequential migration support.
+Future schema changes require a separately approved migration design.
+"""
+
 from src.persistence.database import Database
 
 SCHEMA_VERSION = 1
@@ -132,7 +138,7 @@ END;
 
 
 def initialize_database(database: Database) -> int:
-    """Apply the current schema safely and return the schema version."""
+    """Create the current schema idempotently and record its version."""
     with database.transaction() as connection:
         connection.executescript(_SCHEMA)
         connection.execute(
