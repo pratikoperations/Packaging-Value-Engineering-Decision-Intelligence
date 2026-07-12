@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import sqlite3
 import tempfile
 import unittest
@@ -19,6 +20,15 @@ from src.persistence.migrations import initialize_database
 
 ROOT = Path(__file__).resolve().parents[2]
 DASHBOARD_PATH = ROOT / "pages" / "01_Project_Dashboard.py"
+
+
+def load_dashboard_module():
+    spec = importlib.util.spec_from_file_location("pve_project_dashboard", DASHBOARD_PATH)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Unable to load project dashboard module.")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class ProjectDashboardTestCase(unittest.TestCase):
@@ -178,6 +188,8 @@ class ProjectDashboardTestCase(unittest.TestCase):
             "Create Project",
             "Active Projects",
             "Archived Projects",
+            "Select as active workspace",
+            "Current active workspace",
             "Duplicate project metadata",
             "Archive selected project",
             "local SQLite demonstration persistence",
@@ -188,6 +200,56 @@ class ProjectDashboardTestCase(unittest.TestCase):
         dashboard = DASHBOARD_PATH.read_text(encoding="utf-8")
         self.assertIn("do not represent realized savings", dashboard)
         self.assertNotIn("Realized Savings", dashboard)
+
+    def test_active_project_can_be_selected_explicitly(self):
+        dashboard = load_dashboard_module()
+        session_state: dict[str, object] = {}
+        selected = dashboard.select_active_workspace(
+            session_state,
+            "project-active",
+            archived=False,
+        )
+        self.assertTrue(selected)
+        self.assertEqual(session_state["active_project_id"], "project-active")
+
+    def test_archived_project_cannot_become_active_workspace(self):
+        dashboard = load_dashboard_module()
+        session_state: dict[str, object] = {}
+        selected = dashboard.select_active_workspace(
+            session_state,
+            "project-archived",
+            archived=True,
+        )
+        self.assertFalse(selected)
+        self.assertNotIn("active_project_id", session_state)
+
+    def test_archived_selection_does_not_overwrite_existing_active_workspace(self):
+        dashboard = load_dashboard_module()
+        session_state: dict[str, object] = {"active_project_id": "project-active"}
+        selected = dashboard.select_active_workspace(
+            session_state,
+            "project-archived",
+            archived=True,
+        )
+        self.assertFalse(selected)
+        self.assertEqual(session_state["active_project_id"], "project-active")
+
+    def test_archived_projects_remain_read_only_in_source_contract(self):
+        dashboard = DASHBOARD_PATH.read_text(encoding="utf-8")
+        archived_guard = dashboard.index("if archived:")
+        workspace_button = dashboard.index('"Select as active workspace"')
+        self.assertLess(archived_guard, workspace_button)
+        self.assertIn("cannot become the active workspace", dashboard)
+
+    def test_dashboard_scope_excludes_future_workflows(self):
+        dashboard = DASHBOARD_PATH.read_text(encoding="utf-8")
+        for prohibited in (
+            "st.file_uploader",
+            "Run scenario",
+            "Configure thresholds",
+            "Decision history",
+        ):
+            self.assertNotIn(prohibited, dashboard)
 
 
 if __name__ == "__main__":
