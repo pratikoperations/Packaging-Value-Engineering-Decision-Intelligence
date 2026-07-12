@@ -4,7 +4,7 @@
 PVE-0.7.1 — Streamlit Deployment Disclaimer
 
 ## Status
-Draft PR validation pending
+QA Pass — ready for review after final branch CI
 
 ## Objective
 Add one visible synthetic-data disclaimer to the public Streamlit interface without changing analytical behavior or product scope.
@@ -25,16 +25,28 @@ Add one visible synthetic-data disclaimer to the public Streamlit interface with
 - One static release test verifies the disclaimer text in `app.py`.
 - No analytical engines, schemas, demo data, validator, recommendation logic, export logic, integration contract, or AI Procurement Copilot files are changed.
 
-## Expected Test Baseline
+## Test Baseline
 - Previous total: 58
 - New static disclaimer test: 1
-- Expected total: 59
+- Current total: 59
+- Failures: 0
+- Errors: 0
 
-## QA Evidence
-To be completed after PVE CI runs on the final branch head.
+## Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 288
+- Run ID: `29185676475`
+- Validated commit: `2e56d5616bfbd35b177d80bad374a24f63802c11`
+- Job: `validate-repository`
+- Status: completed
+- Conclusion: success
+- All workflow steps: passed
 
 ## Scope Result
-Non-functional deployment hardening only.
+Non-functional deployment hardening only. Analytical behavior and project boundaries are unchanged.
+
+## QA Result
+**Pass**
 
 ## Merge Rule
-Do not merge until the complete automated test suite and PVE CI pass and the full five-file diff is reviewed.
+Do not merge until the final branch head also passes PVE CI and the full five-file diff is reviewed.
