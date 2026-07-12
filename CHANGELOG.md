@@ -2,35 +2,27 @@
 
 ## [Unreleased]
 
-### Planned
-- PVE-0.7 — QA and Interview Release
+### Added
+- Final interview-ready README and local-run guidance
+- Interview demonstration guide
+- Final release checklist and acceptance criteria
+- PVE-0.7 QA report
+- Six end-to-end release tests
+- Static Streamlit UI smoke validation
+- CI enforcement for final release documentation and PVE-0.7 identity
+- Recovery and governance updates for release preparation
+
+### Scope Boundary
+PVE-0.7 adds no analytical engine, supplier ranking, supplier allocation, autonomous technical approval, finalized integration contract, external system integration, or production deployment capability.
 
 ## [0.6.0-decision-package-export] — PVE-0.6 Decision Package Export
-
-### Added
-- Deterministic decision-package assembler
-- Structured executive summary and project metadata
-- Scenario assumptions and alternative comparison
-- Cost, material, qualification, risk, and recommendation sections
-- Constraints and validation requirements
-- Machine-readable sorted JSON export
-- Human-readable Markdown executive report
-- Streamlit download controls
-- Ten new export tests
-- PVE-0.6 QA report
-- CI coverage for PVE-0.6 files and all tests
 
 ### Completed
 - PR #11 merged and closed
 - Squash merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
-- Stable branch: `main`
-- Original feature branch: Deleted
-- Final validated CI: PVE CI #227, run ID `29183476545`
+- Post-merge closure commit: `1b3a6f0250f3645df08e908b3be30d75b99294e7`
 - Tests: 52 passed, 0 failed, 0 errors
 - QA result: Pass
-
-### Scope Boundary
-PVE-0.6 does not include autonomous technical approval, supplier allocation, final integration-contract release, external system integration, or PVE-0.7 release packaging.
 
 ## [0.5.0-scenario-recommendation-ui] — PVE-0.5 Scenario and Recommendation UI
 

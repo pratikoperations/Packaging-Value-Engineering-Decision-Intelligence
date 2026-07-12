@@ -41,63 +41,61 @@
 ## PVE-0.6 — Decision Package Export
 **Status:** Completed and merged
 
+- Merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
+- Closure merge commit: `1b3a6f0250f3645df08e908b3be30d75b99294e7`
+- QA: Pass
+- Tests: 52 passed, 0 failed, 0 errors
+
+## PVE-0.7 — QA and Interview Release
+**Status:** Ready for review and merge
+
 ### Objective
-Create a deterministic, read-only executive decision package with machine-readable and human-readable exports.
+Convert the completed analytical application into a recoverable, interview-ready release with end-to-end evidence and clear operating boundaries.
 
 ### Completed Scope
-- Structured executive summary
-- Explicit project and scenario metadata
-- Baseline and proposed-alternative comparison
-- Cost and material results
-- Technical qualification outcomes and evidence gaps
-- Quality, supply, and implementation risk outcomes
-- Recommendation rationale, constraints, and validation requirements
-- Deterministic JSON export
-- Deterministic Markdown executive report
-- Streamlit download controls
-- Ten new automated tests
+- Final README and local-run guidance
+- End-to-end dataset-to-export QA
+- Static Streamlit UI smoke validation
+- Interview demonstration guide
+- Final release checklist and acceptance criteria
+- Recovery-readiness updates
+- Six final-release automated tests
+- CI enforcement for release documentation and PVE-0.7 identity
 
-### Validation Controls
-- Mandatory top-level sections
-- Required identity and provenance metadata
-- Positive annual volume
-- Single valid baseline
-- Complete scenario, qualification, risk, and recommendation coverage
-- Unique exported alternative identifiers
-- Fixed read-only, no-approval, no-allocation, no-integration controls
-
-### Completion Record
-- Pull request: PR #11
-- PR status: Merged and closed
-- Merge method: Squash merge
-- Merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
-- Stable branch: `main`
-- Original feature branch: Deleted
+### Acceptance Criteria Result
+- Canonical synthetic data validation: Pass
+- Complete alternative cost, material, qualification, and risk coverage: Pass
+- Complete proposed-alternative recommendation coverage: Pass
+- Deterministic and readable JSON/Markdown exports: Pass
+- Human approval and product-boundary controls: Pass
+- Static UI smoke contract: Pass
+- README, demo guide, checklist, and recovery guidance: Pass
+- Draft integration contract preservation: Pass
 
 ### Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 227
-- Run ID: `29183476545`
-- Validated PR commit: `55b5294c6c1a4924dca681a47680af70be551b4d`
+- Run number: 256
+- Run ID: `29184311901`
+- Validated commit: `9e42a605598f364604ec6b418ee0b2a0c37f747f`
 - Job: `validate-repository`
 - Conclusion: Success
-- Tests: 52 passed, 0 failed, 0 errors
+- Tests: 58 run, 58 passed, 0 failed, 0 errors
 
 ### Scope Exclusions
+- New analytical engines
+- Application behavior expansion
+- Supplier ranking or allocation
 - Autonomous technical approval
-- Supplier allocation
 - Final integration contract
 - External system integration
-- PVE-0.7 release packaging
+- AI Procurement Copilot source files
+- Production security, workflow, or deployment implementation
 
 ### Exit Criteria Result
-- Existing 42 tests continue to pass: Pass
-- Ten PVE-0.6 tests pass: Pass
-- Total automated test count is 52: Pass
-- Full branch diff reviewed: Pass
+- All 58 tests pass: Pass
+- Full PR diff reviewed: Pass
 - PVE CI passes: Pass
 - QA report finalized: Pass
-- PR merged: Pass
-
-### Next Approved Build
-PVE-0.7 — QA and Interview Release, after the post-merge closure PR is merged into `main`.
+- Draft PR opened: Pass
+- Final QA commit CI: Pending
+- PR merge and post-merge closure: Pending
