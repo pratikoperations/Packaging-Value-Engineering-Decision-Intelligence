@@ -18,7 +18,10 @@
 ## Implemented in PVE-0.6
 - `tests/exports/test_decision_package.py`: ten export assembly, rendering, completeness, determinism, and validation scenarios
 
-Expected total automated test count: 52.
+## Implemented in PVE-0.7
+- `tests/release/test_end_to_end_release.py`: six end-to-end, export, UI smoke, documentation, control, and draft-contract release scenarios
+
+Expected total automated test count: 58.
 
 Run with:
 
@@ -26,9 +29,13 @@ Run with:
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-## Planned Test Groups
-- Final release end-to-end tests
-- UI smoke tests
-- Interview-demo acceptance tests
+## Release Test Coverage
+- Canonical synthetic-data validation
+- Full dataset-to-decision-package flow
+- Deterministic JSON and Markdown exports
+- Human approval and product-boundary controls
+- Static Streamlit UI smoke contract
+- Final README, demo guide, and checklist completeness
+- Draft integration-contract preservation
 
 Every logic change must include or update relevant tests.
