@@ -37,6 +37,7 @@ jobs:
             docs/MASTER_BUILD_PLAN.md
             docs/qa/PVE-0.1_QA_REPORT.md
             docs/qa/PVE-0.2_QA_REPORT.md
+            docs/qa/PVE-0.3_QA_REPORT.md
             integration/README.md
             integration/contracts/PVE_CONTRACT_V1_DRAFT.md
             integration/exports/.gitkeep
@@ -48,9 +49,17 @@ jobs:
             src/__init__.py
             src/data_models/__init__.py
             src/data_models/validator.py
+            src/cost_engine/__init__.py
+            src/cost_engine/engine.py
+            src/material_engine/__init__.py
+            src/material_engine/engine.py
             tests/README.md
             tests/data_validation/__init__.py
             tests/data_validation/test_validator.py
+            tests/cost_engine/__init__.py
+            tests/cost_engine/test_engine.py
+            tests/material_engine/__init__.py
+            tests/material_engine/test_engine.py
           )
           for file in "${required[@]}"; do
             test -e "$file" || { echo "Missing: $file"; exit 1; }
@@ -67,8 +76,8 @@ jobs:
       - name: Verify project separation statement
         run: grep -qi "separate" DECISION_LOG.md
       - name: Verify current build identity
-        run: grep -q "PVE-0.2" PROJECT_STATUS.md
+        run: grep -q "PVE-0.3" PROJECT_STATUS.md
       - name: Verify integration contract is draft
         run: grep -qi "draft" integration/contracts/PVE_CONTRACT_V1_DRAFT.md
-      - name: Run data-validation tests
+      - name: Run all automated tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
