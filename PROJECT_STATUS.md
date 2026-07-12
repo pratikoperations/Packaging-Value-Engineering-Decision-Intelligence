@@ -7,7 +7,7 @@ Packaging Value Engineering & Decision Intelligence
 PVE-0.2 — Data Model and Demo Data
 
 ## Status
-Implementation complete — validation and CI pending
+PVE-0.2 ready for review and merge
 
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
@@ -32,14 +32,23 @@ Completed and merged.
 - Automated data-validation tests
 - CI expanded to validate JSON, repository files, synthetic labelling, and tests
 
+## Validated CI
+- Workflow: PVE CI
+- Run number: 58
+- Run ID: `29180838040`
+- Validated commit: `436820a54ff066b2c2265403bda628c78107962d`
+- Job: `validate-repository`
+- Result: success
+- Tests: 10 run, 10 passed, 0 failed, 0 errors
+
 ## Scope Boundary
-No application UI, cost calculation, savings calculation, recommendation scoring, supplier ranking, or autonomous technical approval is included.
+No application UI, cost calculation, savings calculation, material-optimization engine, recommendation scoring, supplier ranking, allocation, or autonomous technical approval is included. The integration contract remains draft.
 
 ## QA Result
-Conditional Pass pending final CI and full PR-diff verification.
+Pass
 
 ## Next Build
 PVE-0.3 — Cost and Material Engine
 
 ## Start Condition for PVE-0.3
-PVE-0.3 may begin only after PVE-0.2 is reviewed, CI passes, QA is finalized, and the PVE-0.2 PR is merged into `main`.
+PVE-0.3 may begin only after PR #3 is reviewed, the final documentation commit passes CI, and PVE-0.2 is merged into `main`.
