@@ -102,67 +102,70 @@ All seven original builds and deployment-hardening updates are implemented, vali
 ### Program Status
 Approved and in progress
 
-### Completed Build
-PVE-1.0.1 — Foundation and Persistence
-
-### PVE-1.0.1 Completion
-- Pull request: PR #17 merged and closed
-- Merge commit: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
-- Tests: 85 passed, 0 failed, 0 errors
-- Source branch: Deleted
-- Effort used: 14.5 hours
+### Completed Builds
+- PVE-1.0.1 — Foundation and Persistence
+  - PR #17 merged and closed
+  - Merge commit: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
+  - Tests: 85 passed, 0 failed, 0 errors
+  - Effort used: 14.5 hours
+- PVE-1.0.2 — Project Dashboard
+  - PR #18 merged and closed
+  - Merge commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
+  - Tests: 100 passed, 0 failed, 0 errors
+  - Effort used: 11.5 hours
 
 ### Current Build
-PVE-1.0.2 — Project Dashboard
+PVE-1.0.3 — Upload and Validation
 
 ### Build Status
-Draft PR corrective validation in progress.
+Draft PR preparation and validation in progress.
 
 ### Approved Controls
 - Original working budget: 90 hours
 - Hard ceiling: 110 hours
-- Budget entering build: 75.5 hours
-- JSON remains the canonical future upload format
-- SQLite is demonstration persistence behind repository interfaces
+- Budget entering build: 64.0 hours
+- JSON is the canonical upload format
+- CSV support is limited to documented templates
+- SQLite remains demonstration persistence behind repository interfaces
 - Deterministic engines and engineering controls remain unchanged
 - AI Procurement Copilot remains separate
 
 ### Feature Branch
-`agent/pve-1.0.2-project-dashboard`
+`agent/pve-1.0.3-upload-validation`
 
 ### Stable Baseline
-`3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
+`87f3897c68503cddc2c7e64827d8c395b45065a5`
 
 ### Implemented Scope
-- Streamlit portfolio dashboard
-- Total, active, and archived project metrics
-- Dataset-version and saved-decision counts
-- Project creation
-- Explicit active workspace selection
-- Current active workspace display
-- Metadata-only project duplication
-- Project archiving without historical deletion
-- Active and archived project views
-- Runtime SQLite service initialization
-- Runtime database files excluded from Git
+- Canonical UTF-8 JSON upload
+- Limited `project.csv` and `alternatives.csv` ingestion
+- Upload size, encoding, file-count, column, and row controls
+- Canonical normalization
+- Active-project binding
+- User-upload validation profile
+- Field-level validation issue reporting
+- Downloadable JSON and CSV templates
+- Save-only-when-valid workflow
+- Immutable dataset-version storage
+- Duplicate canonical-content detection across JSON and CSV
+- Archived-project upload prohibition
 
-### Dashboard Controls
-- Existing corrugated category only
-- Archived projects are read-only and cannot become the active workspace
-- Archived-tab rendering cannot overwrite active workspace session state
-- Active workspace changes require explicit confirmation
-- Duplicated projects do not inherit evidence
-- Metrics do not represent realized savings
-- Page uses service and repository boundaries rather than direct SQL
-- Existing `app.py` decision workflow remains unchanged
+### Upload Controls
+- Exactly one baseline and at least one proposed alternative
+- Category and currency must match the active project
+- Uploaded recommendations cannot pre-approve decisions
+- Evidence remains mandatory for assessed technical qualification
+- Incomplete technical evidence remains eligible for `insufficient_data`
+- Invalid uploads are not persisted
+- Saved dataset versions remain immutable
 
 ### Budget
-- Planned allocation: 11 hours
-- Revised estimated effort used: 11.5 hours
-- Estimated remaining 90-hour program budget: 64.0 hours
+- Planned allocation: 16 hours
+- Estimated effort used: 15.5 hours
+- Estimated remaining 90-hour program budget: 48.5 hours
 
 ### Explicit Exclusions
-No upload, JSON parsing, CSV parsing, configurable threshold UI, scenario execution, decision-history UI, authentication, external database, PDF or Excel extraction, ERP integration, supplier workflow, AI approval, or new packaging category.
+No configurable thresholds, scenario execution, decision-history interface, authentication, external database, PDF or Excel extraction, OCR, ERP integration, supplier workflow, AI approval, or new packaging category.
 
 ### Next Gate
-Merge only after complete diff review and successful PVE CI on the final corrective branch head.
+Merge only after complete diff review and successful PVE CI on the final branch head.
