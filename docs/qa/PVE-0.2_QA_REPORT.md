@@ -14,7 +14,7 @@ Canonical field dictionary, synthetic corrugated shipping-case data, invalid-dat
 - Required, numeric, unit, enum, currency, ID, evidence, dimension, weight, percentage, and reference validation exists
 - Partial technical data can trigger insufficient-data eligibility
 - Data model aligns with the draft PVE integration contract
-- No UI, cost calculation, savings calculation, or recommendation scoring is introduced
+- No UI, cost calculation, savings calculation, material optimization, recommendation scoring, supplier ranking, or allocation is introduced
 
 ## Implemented Checks
 - Required-field validation
@@ -43,19 +43,31 @@ Ten standard-library `unittest` cases cover:
 9. Partial dataset and insufficient-data eligibility
 10. Currency consistency
 
-## CI
-PVE CI validates mandatory files, JSON syntax, synthetic labelling, build identity, draft-contract status, and all tests.
+## Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 58
+- Run ID: `29180838040`
+- Job: `validate-repository`
+- Validated commit: `436820a54ff066b2c2265403bda628c78107962d`
+- Status: completed
+- Conclusion: success
+- Workflow steps: all passed
+- Tests run: 10
+- Tests passed: 10
+- Failures: 0
+- Errors: 0
 
 ## Known Limitations
 - Cost values are inputs only; no cost calculation is performed
 - Material weights are inputs only; no optimization calculation is performed
 - Recommendation is a non-scored placeholder
 - Technical results are synthetic and incomplete by design
-- No UI, database, API, or production-data integration exists
+- No application UI, database, API, or production-data integration exists
+- No savings calculation, recommendation scoring, supplier ranking, or allocation exists
 - Contract remains draft until PVE-0.6
 
 ## QA Status
-**Conditional Pass** — implementation is complete; final status depends on complete diff inspection and successful CI on the final branch commit.
+**Pass** — PVE-0.2 implementation, validation logic, synthetic data, and automated tests passed PVE CI run #58.
 
 ## Release Recommendation
-Open a draft PR after final verification. PVE-0.3 begins only after PVE-0.2 passes QA and is merged.
+PVE-0.2 is ready for review and merge after the final documentation commit passes CI. PVE-0.3 begins only after PR #3 is merged into `main`.
