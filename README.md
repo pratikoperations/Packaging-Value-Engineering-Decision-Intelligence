@@ -5,6 +5,12 @@
 **Version:** `0.7.0-qa-interview-release`  
 **Canonical Repository:** `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 
+## Live Portfolio Demo
+
+[Open the live Streamlit application](https://packaging-value-engineering-decision-intelligence.streamlit.app/)
+
+The public application uses synthetic demonstration data only. Its recommendations are decision-support outputs and remain subject to engineering validation and documented evidence. It is not represented as production-ready enterprise software.
+
 ## What This Project Does
 
 This is an interview-ready packaging value-engineering decision-support application. It compares a packaging baseline with proposed design alternatives across cost, material use, technical qualification, quality risk, supply risk, implementation risk, and scenario assumptions.

@@ -108,11 +108,20 @@ class TestFinalRelease(unittest.TestCase):
         )
         self.assertIn("engineering-trial, or commercial data.", app)
 
+    def test_ui_uses_current_streamlit_width_api(self):
+        app = APP_PATH.read_text(encoding="utf-8")
+        self.assertIn('width="stretch"', app)
+        self.assertNotIn("use_container_width", app)
+        self.assertIn("does not approve packaging designs autonomously", app)
+        self.assertIn("integration contract remains draft", app)
+
     def test_release_documentation_is_complete(self):
         readme = README_PATH.read_text(encoding="utf-8")
         demo_guide = DEMO_GUIDE_PATH.read_text(encoding="utf-8")
         checklist = CHECKLIST_PATH.read_text(encoding="utf-8")
         for marker in (
+            "## Live Portfolio Demo",
+            "https://packaging-value-engineering-decision-intelligence.streamlit.app/",
             "## Quick Start",
             "## Decision Flow",
             "## Interview Demonstration",

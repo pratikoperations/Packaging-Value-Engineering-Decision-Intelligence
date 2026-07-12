@@ -10,9 +10,8 @@ Completed
 PVE-0.7 — QA and Interview Release
 
 ## Deployment Hardening
-PVE-0.7.1 — Streamlit Synthetic-Data Disclaimer
-
-Status: Draft PR open and QA passed. This is a non-functional public-portfolio disclosure hotfix and does not reopen the completed roadmap.
+- PVE-0.7.1 — Streamlit Synthetic-Data Disclaimer: Completed and merged through PR #15
+- PVE-0.7.2 — Live Demo and Streamlit Width Compatibility: Draft PR preparation in progress
 
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
@@ -20,11 +19,17 @@ Status: Draft PR open and QA passed. This is a non-functional public-portfolio d
 ## Stable Branch
 `main`
 
-## Hotfix Branch
-`agent/pve-0.7.1-streamlit-deployment-disclaimer`
-
-## Hotfix Pull Request
-PR #15 — Draft, not merged
+## Live Portfolio Deployment
+- Status: Complete
+- URL: https://packaging-value-engineering-decision-intelligence.streamlit.app/
+- Runtime: Python 3.12
+- Live UI verification: Pass
+- Synthetic-data disclaimer: Visible
+- Scenario comparison: Loaded successfully
+- Recommendation controls: Loaded successfully
+- JSON export: Verified
+- Markdown export: Verified
+- Public portfolio availability: Complete
 
 ## Final Merge Record
 - Pull request: PR #13
@@ -32,6 +37,13 @@ PR #15 — Draft, not merged
 - Merge method: Squash merge
 - Merge commit: `fb0962ba611fcf59ae7ab194dd2514970a19909d`
 - Original feature branch: Deleted
+
+## Deployment Disclaimer Merge Record
+- Pull request: PR #15
+- PR status: Merged and closed
+- Merge method: Squash merge
+- Merge commit: `c3bc5fb291c7c087c2a4ab054b297841a7b5e73a`
+- Original hotfix branch: Deleted
 
 ## Completed Builds
 - PVE-0.1 — Repository Foundation
@@ -53,9 +65,9 @@ PR #15 — Draft, not merged
 
 ## PVE-0.7.1 Validation
 - Workflow: PVE CI
-- Run number: 288
-- Run ID: `29185676475`
-- Validated commit: `2e56d5616bfbd35b177d80bad374a24f63802c11`
+- Run number: 292
+- Run ID: `29185719828`
+- Validated commit: `c8c8078a1da29dbb8db94f5409f7752ef97b1c0b`
 - Job: `validate-repository`
 - Result: Success
 - Tests: 59 passed, 0 failed, 0 errors
@@ -65,9 +77,11 @@ PR #15 — Draft, not merged
 ## QA Result
 - PVE-0.7: Pass
 - PVE-0.7.1: Pass
+- Live deployment verification: Pass
+- Export verification: Pass
 
 ## Final Scope Boundary
-No autonomous technical approval, supplier ranking, supplier allocation, final integration contract, external system integration, or production deployment capability is included. The integration contract remains draft.
+No autonomous technical approval, supplier ranking, supplier allocation, final integration contract, external system integration, or production deployment capability is included. The integration contract remains draft. The public Streamlit deployment is a portfolio demonstration, not production-ready enterprise software.
 
 ## Project State
-All seven planned builds are implemented, validated, merged, and governance-closed. PVE-0.7.1 is limited to a visible synthetic-data disclaimer and its release test.
+All seven planned builds are implemented, validated, merged, and governance-closed. Public Streamlit portfolio deployment and live export verification are complete. PVE-0.7.2 is limited to publishing the live demo URL and replacing a deprecated Streamlit width parameter without changing application behavior.
