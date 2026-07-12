@@ -26,7 +26,7 @@
 **Status:** Completed and merged
 
 - Merge commit: `ced6c5542faa700a43101f8f9fc702d15d78f0ca`
-- Closure merge commit: `e28299d5ad5bf127aee16cf479ccf3576cf85ea8`
+- Closure merge commit: `e28299d5adf57c8972e12bf12ca5535fad22b2f`
 - QA: Pass
 - Tests: 30 passed, 0 failed, 0 errors
 
@@ -39,7 +39,7 @@
 - Tests: 42 passed, 0 failed, 0 errors
 
 ## PVE-0.6 — Decision Package Export
-**Status:** Ready for review and merge
+**Status:** Completed and merged
 
 ### Objective
 Create a deterministic, read-only executive decision package with machine-readable and human-readable exports.
@@ -66,14 +66,22 @@ Create a deterministic, read-only executive decision package with machine-readab
 - Unique exported alternative identifiers
 - Fixed read-only, no-approval, no-allocation, no-integration controls
 
+### Completion Record
+- Pull request: PR #11
+- PR status: Merged and closed
+- Merge method: Squash merge
+- Merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
+- Stable branch: `main`
+- Original feature branch: Deleted
+
 ### Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 217
-- Run ID: `29183379595`
-- Validated commit: `21c0fc1586ab60847da71d5f0ce6d8ab94c9aeb9`
+- Run number: 227
+- Run ID: `29183476545`
+- Validated PR commit: `55b5294c6c1a4924dca681a47680af70be551b4d`
 - Job: `validate-repository`
 - Conclusion: Success
-- Tests: 52 run, 52 passed, 0 failed, 0 errors
+- Tests: 52 passed, 0 failed, 0 errors
 
 ### Scope Exclusions
 - Autonomous technical approval
@@ -89,7 +97,7 @@ Create a deterministic, read-only executive decision package with machine-readab
 - Full branch diff reviewed: Pass
 - PVE CI passes: Pass
 - QA report finalized: Pass
-- Draft PR opened: Pass
+- PR merged: Pass
 
-### Next Build
-PVE-0.7 — QA and Interview Release, only after PVE-0.6 is merged into `main`.
+### Next Approved Build
+PVE-0.7 — QA and Interview Release, after the post-merge closure PR is merged into `main`.
