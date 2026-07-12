@@ -1,10 +1,16 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 import streamlit as st
 
+from src.exports import (
+    assemble_decision_package,
+    render_decision_package_json,
+    render_decision_package_markdown,
+)
 from src.recommendation import recommend_alternatives
 from src.risk_engine import evaluate_risks
 from src.scenario_engine import ScenarioInputs, evaluate_scenario
@@ -13,6 +19,7 @@ from src.technical_qualification import evaluate_technical_qualification
 
 ROOT = Path(__file__).resolve().parent
 DEMO_PATH = ROOT / "data" / "demo" / "corrugated_shipping_cases.json"
+SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
 
 
 @st.cache_data
@@ -23,7 +30,7 @@ def load_demo() -> dict:
 def main() -> None:
     st.set_page_config(page_title="PVE Decision Intelligence", layout="wide")
     st.title("Packaging Value Engineering Decision Intelligence")
-    st.caption("Deterministic scenario comparison and explainable recommendation demo")
+    st.caption("Deterministic scenario comparison, explainable recommendation, and read-only decision export")
 
     dataset = load_demo()
     alternatives = dataset["packaging_alternatives"]
@@ -116,8 +123,48 @@ def main() -> None:
             else:
                 st.write("- None")
 
+    st.subheader("Decision Package Export")
+    source_commit = st.text_input(
+        "Source commit or version reference",
+        value="LOCAL-DEMO",
+        help="Provide the Git commit or version reference represented by this export.",
+    )
+    generated_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    package = assemble_decision_package(
+        dataset,
+        scenario,
+        qualifications,
+        risks,
+        recommendation,
+        source_commit=source_commit,
+        generated_at=generated_at,
+    )
+    json_export = render_decision_package_json(package)
+    markdown_export = render_decision_package_markdown(package)
+
+    left, right = st.columns(2)
+    with left:
+        st.download_button(
+            "Download machine-readable JSON",
+            data=json_export,
+            file_name="pve_decision_package.json",
+            mime="application/json",
+            use_container_width=True,
+        )
+    with right:
+        st.download_button(
+            "Download human-readable report",
+            data=markdown_export,
+            file_name="pve_decision_report.md",
+            mime="text/markdown",
+            use_container_width=True,
+        )
+
+    st.caption(
+        f"Read-only internal export from {SOURCE_REPOSITORY}. The final integration contract remains draft."
+    )
     st.info(
-        "This tool does not approve packaging designs autonomously. Recommendations remain subject to engineering validation and documented evidence."
+        "This tool does not approve packaging designs autonomously. Recommendations and exports remain subject to engineering validation and documented evidence."
     )
 
 

@@ -2,33 +2,30 @@
 
 ## [Unreleased]
 
-### Planned
-- PVE-0.6 — Decision Package Export
+### Added
+- Deterministic decision-package assembler
+- Structured executive summary and project metadata
+- Scenario assumptions and alternative comparison
+- Cost, material, qualification, risk, and recommendation sections
+- Constraints and validation requirements
+- Machine-readable sorted JSON export
+- Human-readable Markdown executive report
+- Streamlit download controls
+- Ten new export tests
+- PVE-0.6 QA report
+- CI coverage for PVE-0.6 files and all tests
+
+### Scope Boundary
+PVE-0.6 does not include autonomous technical approval, supplier allocation, final integration-contract release, external system integration, or PVE-0.7 release packaging.
 
 ## [0.5.0-scenario-recommendation-ui] — PVE-0.5 Scenario and Recommendation UI
-
-### Added
-- Deterministic scenario engine
-- Explainable recommendation engine
-- Explicit annual-volume, cost, and material assumptions
-- Qualification- and risk-gated recommendation rules
-- Transparent preferred-alternative ordering without opaque scoring
-- Lightweight Streamlit application UI
-- Twelve new scenario and recommendation tests
-- PVE-0.5 QA report
-- CI coverage for PVE-0.5 files and all tests
 
 ### Completed
 - PR #9 merged and closed
 - Squash merge commit: `930a4e25d3392b7107616ec498501ef48aa72a8e`
-- Stable branch: `main`
-- Original feature branch: Deleted
-- Final validated CI: PVE CI #190, run ID `29182740157`
+- Post-merge closure commit: `47ad5730699e49ab64accb41b19e488ebc166ffa`
 - Tests: 42 passed, 0 failed, 0 errors
 - QA result: Pass
-
-### Scope Boundary
-PVE-0.5 does not include supplier ranking, supplier allocation, autonomous technical approval, final integration-contract release, decision-package export, or PVE-0.6 functionality.
 
 ## [0.4.0-technical-risk] — PVE-0.4 Technical Qualification and Risk
 

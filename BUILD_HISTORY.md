@@ -33,53 +33,63 @@
 ## PVE-0.5 — Scenario and Recommendation UI
 **Status:** Completed and merged
 
+- Merge commit: `930a4e25d3392b7107616ec498501ef48aa72a8e`
+- Closure merge commit: `47ad5730699e49ab64accb41b19e488ebc166ffa`
+- QA: Pass
+- Tests: 42 passed, 0 failed, 0 errors
+
+## PVE-0.6 — Decision Package Export
+**Status:** Ready for review and merge
+
 ### Objective
-Create explicit scenario assumptions, transparent packaging-alternative comparison, explainable recommendations, and a lightweight interview-demo UI.
+Create a deterministic, read-only executive decision package with machine-readable and human-readable exports.
 
 ### Completed Scope
-- Annual-volume scenario input
-- Alternative-level cost and material adjustments
-- Reuse of deterministic cost and material engines
-- Assumption disclosure for every scenario result
-- Qualification- and risk-gated recommendation statuses
-- Transparent preferred-alternative ordering without opaque scoring
-- User-visible rationale, constraints, and validation requirements
-- Streamlit comparison UI
-- Twelve new automated tests
+- Structured executive summary
+- Explicit project and scenario metadata
+- Baseline and proposed-alternative comparison
+- Cost and material results
+- Technical qualification outcomes and evidence gaps
+- Quality, supply, and implementation risk outcomes
+- Recommendation rationale, constraints, and validation requirements
+- Deterministic JSON export
+- Deterministic Markdown executive report
+- Streamlit download controls
+- Ten new automated tests
 
-### Completion Record
-- Pull request: PR #9
-- PR status: Merged and closed
-- Merge method: Squash merge
-- Merge commit: `930a4e25d3392b7107616ec498501ef48aa72a8e`
-- Stable branch: `main`
-- Original feature branch: Deleted
+### Validation Controls
+- Mandatory top-level sections
+- Required identity and provenance metadata
+- Positive annual volume
+- Single valid baseline
+- Complete scenario, qualification, risk, and recommendation coverage
+- Unique exported alternative identifiers
+- Fixed read-only, no-approval, no-allocation, no-integration controls
 
 ### Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 190
-- Run ID: `29182740157`
-- Validated PR commit: `252bf329fcb50c9d3c7c7fb1392309599356eb54`
+- Run number: 217
+- Run ID: `29183379595`
+- Validated commit: `21c0fc1586ab60847da71d5f0ce6d8ab94c9aeb9`
 - Job: `validate-repository`
 - Conclusion: Success
-- Tests: 42 passed, 0 failed, 0 errors
+- Tests: 52 run, 52 passed, 0 failed, 0 errors
 
 ### Scope Exclusions
-- Supplier ranking
-- Supplier allocation
 - Autonomous technical approval
+- Supplier allocation
 - Final integration contract
-- Decision-package export
-- PVE-0.6 functionality
+- External system integration
+- PVE-0.7 release packaging
 
 ### Exit Criteria Result
-- Existing 30 tests continue to pass: Pass
-- Twelve PVE-0.5 tests pass: Pass
-- Total automated test count is 42: Pass
+- Existing 42 tests continue to pass: Pass
+- Ten PVE-0.6 tests pass: Pass
+- Total automated test count is 52: Pass
 - Full branch diff reviewed: Pass
 - PVE CI passes: Pass
 - QA report finalized: Pass
-- PR merged: Pass
+- Draft PR opened: Pass
 
-### Next Approved Build
-PVE-0.6 — Decision Package Export, after the post-merge closure PR is merged into `main`.
+### Next Build
+PVE-0.7 — QA and Interview Release, only after PVE-0.6 is merged into `main`.
