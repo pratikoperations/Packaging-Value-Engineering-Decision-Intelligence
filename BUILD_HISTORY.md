@@ -39,7 +39,7 @@
 - Tests: 42 passed, 0 failed, 0 errors
 
 ## PVE-0.6 — Decision Package Export
-**Status:** Implementation complete — CI and final QA pending
+**Status:** Ready for review and merge
 
 ### Objective
 Create a deterministic, read-only executive decision package with machine-readable and human-readable exports.
@@ -66,6 +66,15 @@ Create a deterministic, read-only executive decision package with machine-readab
 - Unique exported alternative identifiers
 - Fixed read-only, no-approval, no-allocation, no-integration controls
 
+### Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 217
+- Run ID: `29183379595`
+- Validated commit: `21c0fc1586ab60847da71d5f0ce6d8ab94c9aeb9`
+- Job: `validate-repository`
+- Conclusion: Success
+- Tests: 52 run, 52 passed, 0 failed, 0 errors
+
 ### Scope Exclusions
 - Autonomous technical approval
 - Supplier allocation
@@ -73,14 +82,14 @@ Create a deterministic, read-only executive decision package with machine-readab
 - External system integration
 - PVE-0.7 release packaging
 
-### Exit Criteria
-- Existing 42 tests continue to pass
-- Ten PVE-0.6 tests pass
-- Total automated test count is 52
-- Full branch diff is reviewed
-- PVE CI passes
-- QA report is finalized
-- Draft PR is opened
+### Exit Criteria Result
+- Existing 42 tests continue to pass: Pass
+- Ten PVE-0.6 tests pass: Pass
+- Total automated test count is 52: Pass
+- Full branch diff reviewed: Pass
+- PVE CI passes: Pass
+- QA report finalized: Pass
+- Draft PR opened: Pass
 
 ### Next Build
 PVE-0.7 — QA and Interview Release, only after PVE-0.6 is merged into `main`.
