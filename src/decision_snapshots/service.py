@@ -4,6 +4,7 @@ import json
 from typing import Any
 
 from src.decision_snapshots.models import DecisionSnapshotError, PreparedDecisionSnapshot
+from src.persistence.dataset_repository import DatasetRepository
 from src.persistence.decision_repository import DecisionRepository
 from src.persistence.scenario_repository import ScenarioRepository
 
@@ -22,9 +23,11 @@ _ELIGIBLE = {
 class DecisionSnapshotService:
     def __init__(
         self,
+        datasets: DatasetRepository,
         scenarios: ScenarioRepository,
         decisions: DecisionRepository,
     ) -> None:
+        self.datasets = datasets
         self.scenarios = scenarios
         self.decisions = decisions
 
@@ -36,6 +39,24 @@ class DecisionSnapshotService:
         if scenario["project_id"] != project_id:
             raise DecisionSnapshotError("Scenario must belong to the active project.")
 
+        dataset_record = self.datasets.get(scenario["dataset_id"])
+        if dataset_record["project_id"] != project_id:
+            raise DecisionSnapshotError("Scenario dataset must belong to the active project.")
+        dataset = json.loads(dataset_record["canonical_json"])
+        baseline = dataset.get("baseline_specification")
+        baseline_id = baseline.get("alternative_id") if isinstance(baseline, dict) else None
+        if not baseline_id:
+            baseline_id = next(
+                (
+                    record.get("alternative_id")
+                    for record in dataset.get("packaging_alternatives", [])
+                    if isinstance(record, dict) and record.get("status") == "baseline"
+                ),
+                None,
+            )
+        if not baseline_id:
+            raise DecisionSnapshotError("Dataset does not identify a baseline alternative.")
+
         results = json.loads(scenario["results_json"])
         alternatives = results.get("alternatives")
         if not isinstance(alternatives, dict) or not alternatives:
@@ -44,7 +65,7 @@ class DecisionSnapshotService:
         proposed = [
             (alternative_id, record)
             for alternative_id, record in alternatives.items()
-            if isinstance(record, dict) and alternative_id != "ALT-BASE"
+            if isinstance(record, dict) and alternative_id != baseline_id
         ]
         if not proposed:
             raise DecisionSnapshotError("Scenario does not contain a proposed alternative.")
@@ -96,6 +117,7 @@ class DecisionSnapshotService:
         gate_results = {
             "scenario_name": scenario["scenario_name"],
             "scenario_created_at": scenario["created_at"],
+            "baseline_alternative_id": baseline_id,
             "threshold_profile": results.get("threshold_profile", {}),
             "mandatory_engineering_controls": results.get(
                 "mandatory_engineering_controls", {}
