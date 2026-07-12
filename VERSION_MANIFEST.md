@@ -1,45 +1,41 @@
 # Version Manifest
 
 ## Current Version
-- Project version: `0.6.0-decision-package-export`
-- Build: `PVE-0.6`
-- Status: `0.6.0-decision-package-export completed`
+- Project version: `0.7.0-qa-interview-release`
+- Build: `PVE-0.7`
+- Status: Release implementation complete — CI and QA pending
 - Stable branch: `main`
-- Merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
-- Pull request: PR #11 merged and closed
-- Original feature branch: Deleted
+- Working branch: `agent/pve-0.7-qa-interview-release`
+- Base commit: `1b3a6f0250f3645df08e908b3be30d75b99294e7`
 
-## Validation Evidence
-- Workflow: PVE CI
-- Run number: 227
-- Run ID: `29183476545`
-- Validated PR commit: `55b5294c6c1a4924dca681a47680af70be551b4d`
-- Job: `validate-repository`
-- Conclusion: Success
-- Tests: 52 passed, 0 failed, 0 errors
+## Completed Foundation
+- PVE-0.6 status: `0.6.0-decision-package-export completed`
+- Canonical data-model version: `0.2.0`
+- Automated test baseline before PVE-0.7: 52
 
 ## Current Deliverables
-- Decision-package assembler: `src/exports/decision_package.py`
-- Export package API: `src/exports/__init__.py`
-- Machine-readable JSON renderer
-- Human-readable Markdown renderer
-- Streamlit download controls: `app.py`
-- Export tests: `tests/exports/test_decision_package.py`
-- PVE-0.6 QA report: `docs/qa/PVE-0.6_QA_REPORT.md`
+- Final README: `README.md`
+- Interview demo guide: `docs/INTERVIEW_DEMO_GUIDE.md`
+- Final release checklist: `docs/FINAL_RELEASE_CHECKLIST.md`
+- Release QA report: `docs/qa/PVE-0.7_QA_REPORT.md`
+- End-to-end release tests: `tests/release/test_end_to_end_release.py`
+- Recovery manifest: `RECOVERY_MANIFEST.md`
 
-## Export Scope
-- Structured executive summary
-- Scenario assumptions
-- Baseline and alternative cost/material results
-- Technical qualification and risk outcomes
-- Recommendation rationale, constraints, and validation requirements
-- Explicit read-only and engineering-approval controls
+## Release Scope
+- End-to-end deterministic QA
+- Static UI smoke validation
+- Interview-demo workflow
+- Final user guidance
+- Release and recovery acceptance criteria
+- CI enforcement for final release files
+
+## Expected Test Baseline
+- Existing tests: 52
+- New PVE-0.7 release tests: 6
+- Expected total: 58
 
 ## Scope Boundary
-No autonomous technical approval, supplier allocation, final integration contract, external system integration, or PVE-0.7 release packaging is included. The integration contract remains draft.
+No new analytical engine, supplier ranking, supplier allocation, autonomous technical approval, final integration contract, external system integration, or production deployment capability is included. The integration contract remains draft.
 
-## Next Approved Build
-- PVE-0.7 — QA and Interview Release
-
-## Version Rule
-PVE-0.7 begins only after the PVE-0.6 post-merge closure PR is merged into `main`.
+## Release Rule
+Version `0.7.0-qa-interview-release` becomes completed only after all 58 tests pass, PVE CI succeeds, the release PR is reviewed and merged, and post-merge governance closure is recorded.
