@@ -3,10 +3,19 @@
 ## Current Version
 - Project version: `0.4.0-technical-risk`
 - Build: `PVE-0.4`
-- Status: Implementation complete — CI and QA pending
+- Status: `0.4.0-technical-risk ready`
 - Stable branch: `main`
 - Working branch: `agent/pve-0.4-technical-qualification-risk`
 - Base commit: `eb32194e2eaf57c8972e12bf12ca5535fad22b2f`
+
+## Validation Evidence
+- Workflow: PVE CI
+- Run number: 138
+- Run ID: `29181964082`
+- Validated commit: `2e492a6034add0ba5bf6f8a222f38791043bf4e0`
+- Job: `validate-repository`
+- Conclusion: Success
+- Tests: 30 run, 30 passed, 0 failed, 0 errors
 
 ## Completed Foundation
 - PVE-0.3 status: `0.3.0-cost-material-engine completed`
@@ -38,4 +47,4 @@ No application UI, recommendation scoring, supplier ranking, supplier allocation
 - PVE-0.7 — QA and Interview Release
 
 ## Version Rule
-PVE-0.5 begins only after PVE-0.4 passes CI and QA and is merged into `main`.
+PVE-0.5 begins only after PVE-0.4 passes final CI and PR #7 is merged into `main`.
