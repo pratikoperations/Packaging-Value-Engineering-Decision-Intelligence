@@ -7,7 +7,9 @@ from src.persistence.database import Database
 from src.persistence.dataset_repository import DatasetRepository
 from src.persistence.migrations import initialize_database
 from src.persistence.project_repository import ProjectRepository
+from src.persistence.scenario_repository import ScenarioRepository
 from src.persistence.threshold_repository import ThresholdRepository
+from src.scenario_execution.service import ControlledScenarioService
 from src.thresholds.service import ThresholdService
 from src.uploads.service import UploadService
 
@@ -36,3 +38,13 @@ def build_threshold_service(database_path: str | Path) -> ThresholdService:
     """Create an initialized threshold service using immutable profile versions."""
     database = _initialized_database(database_path)
     return ThresholdService(ThresholdRepository(database))
+
+
+def build_controlled_scenario_service(database_path: str | Path) -> ControlledScenarioService:
+    """Create the deterministic scenario service over immutable repository records."""
+    database = _initialized_database(database_path)
+    return ControlledScenarioService(
+        DatasetRepository(database),
+        ThresholdRepository(database),
+        ScenarioRepository(database),
+    )

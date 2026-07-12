@@ -72,31 +72,42 @@ This is the completed Lean Interview Project release after the final governance 
 - Program budget remaining after build: 47.5 hours
 - Source branch: Deleted
 
+## PVE-1.0.4 Completion Record
+- Build: `PVE-1.0.4`
+- Pull request: PR #20 merged and closed
+- Merge commit: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
+- Tests: 143 passed, 0 failed, 0 errors
+- Effort used: 12.5 hours
+- Program budget remaining after build: 35.0 hours
+- Source branch: Deleted
+
 ## PVE 1.0 Working Version
 - Program: `PVE 1.0 Controlled Build`
-- Current build: `PVE-1.0.4`
-- Working version: `1.0.4-configurable-thresholds`
-- Status: draft PR validation pending
-- Feature branch: `agent/pve-1.0.4-configurable-thresholds`
-- Stable base commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
+- Current build: `PVE-1.0.5`
+- Working version: `1.0.5-controlled-scenario-execution`
+- Status: draft PR preparation and validation
+- Feature branch: `agent/pve-1.0.5-controlled-scenarios`
+- Stable base commit: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
 
 ## Approved Program Budget
 - Original working budget: 90 hours
 - Hard ceiling: 110 hours
-- Budget entering PVE-1.0.4: 47.5 hours
-- PVE-1.0.4 planned allocation: 13 hours
-- Estimated effort used: 12.5 hours
-- Estimated remaining program budget: 35.0 hours
+- Budget entering PVE-1.0.5: 35.0 hours
+- PVE-1.0.5 planned allocation: 18.0 hours
+- Estimated effort used: 17.5 hours
+- Estimated remaining program budget: 17.5 hours
 
-## PVE-1.0.4 Deliverables
-- Controlled global default profile
-- Project-specific immutable profile versions
-- Threshold validation
-- Duplicate-content suppression
-- Active threshold profile selection
-- Business screening helper
-- Mandatory non-disableable engineering controls
-- Threshold template and automated tests
+## PVE-1.0.5 Deliverables
+- Immutable dataset-version selection
+- Immutable threshold-profile selection
+- Controlled scenario assumptions
+- Deterministic scenario execution
+- Technical qualification and risk evaluation
+- Explainable business-threshold results
+- Mandatory engineering-control outcomes
+- Immutable scenario-record storage
+- Cross-project protection
+- Automated tests and documentation
 
-## PVE-1.0.4 Scope Boundary
-PVE-1.0.4 excludes scenario execution, recommendation-engine modification, decision-history UI, authentication, external databases, supplier workflows, ERP integration, AI approval, and additional packaging categories.
+## PVE-1.0.5 Scope Boundary
+PVE-1.0.5 excludes decision snapshots, decision-history UI, recommendation-engine modification, authentication, external databases, supplier ranking or allocation, ERP integration, AI approval, and additional packaging categories.

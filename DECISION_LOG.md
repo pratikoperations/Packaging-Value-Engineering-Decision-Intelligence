@@ -77,3 +77,18 @@ Engineering validation, prohibition of autonomous approval, critical-risk blocki
 
 ## DEC-PVE-024 — PVE-1.0.4 Scope
 PVE-1.0.4 adds threshold creation, selection, validation, versioning, templates, and business screening only. It does not execute scenarios or modify recommendation-engine logic.
+
+## DEC-PVE-025 — Scenarios Bind Exact Immutable Versions
+Every controlled scenario references one immutable dataset version and one immutable threshold-profile version. Cross-project references are rejected in both service and repository layers.
+
+## DEC-PVE-026 — Scenario Assumptions Are Explicit and Bounded
+Annual volume and alternative-level cost and material adjustments are entered explicitly. Hidden defaults, forecasts, optimization, and AI-generated assumptions remain excluded.
+
+## DEC-PVE-027 — Scenario Outcomes Are Not Approvals
+Scenario control statuses indicate evidence readiness only. Engineering validation and human approval remain mandatory, and autonomous approval remains prohibited.
+
+## DEC-PVE-028 — Mandatory Controls Precede Business Thresholds
+Not-qualified technical status and critical risk remain blocking. Insufficient technical or risk data cannot become eligible even when business thresholds pass.
+
+## DEC-PVE-029 — PVE-1.0.5 Scope
+PVE-1.0.5 adds controlled scenario execution and immutable scenario evidence only. It does not create decision snapshots, decision-history UI, or modify the recommendation engine.

@@ -132,5 +132,31 @@ All prior builds were completed, merged, QA-passed, and governance-closed.
   - JSON threshold template
 - Preserved: persistence schema, analytical engines, recommendation logic, existing app/dashboard/upload flows, disclaimers, draft integration contract, and repository separation.
 - Excluded: scenario execution, recommendation-engine modification, history UI, authentication, external database, supplier workflows, ERP, AI approval, and new categories.
+- Result: Completed and merged through PR #20.
+
+## 2026-07-12 — PVE-1.0.4 Merge Completion
+- Pull request: PR #20
+- Merge method: Squash merge
+- Merge commit: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
+- Tests: 143 passed, 0 failed, 0 errors
+- Source branch: Deleted
+- Program budget remaining: 35.0 hours
+
+## 2026-07-12 — PVE-1.0.5 Controlled Scenario Execution
+- Objective: Connect immutable dataset and threshold-profile versions to deterministic scenario evaluation and immutable scenario evidence.
+- Stable base: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
+- Branch: `agent/pve-1.0.5-controlled-scenarios`
+- Planned allocation: 18.0 hours
+- Implementation:
+  - project-scoped dataset-version selection
+  - global or project threshold-version selection
+  - explicit bounded scenario assumptions
+  - existing deterministic scenario, qualification, and risk engines
+  - explainable business-threshold outcomes
+  - mandatory engineering-control outcomes
+  - immutable scenario-record storage
+  - cross-project protection
+- Preserved: recommendation engine, persistence schema, existing application flows, disclaimers, draft integration contract, and repository separation.
+- Excluded: decision snapshots, decision-history UI, recommendation-engine modification, authentication, external database, supplier ranking or allocation, ERP, AI approval, and new categories.
 - Result: Implementation prepared; draft PR and CI pending.
 - Next action: Validate complete diff and full test suite.
