@@ -107,5 +107,30 @@ All prior builds were completed, merged, QA-passed, and governance-closed.
   - archived-project upload prohibition
 - Preserved: deterministic engines, existing dashboard and `app.py`, engineering controls, disclaimers, draft integration contract, and repository separation.
 - Excluded: thresholds, scenario execution, history UI, authentication, external database, PDF, Excel, OCR, ERP, supplier workflows, AI approval, and new categories.
+- Result: Completed and merged through PR #19.
+
+## 2026-07-12 — PVE-1.0.3 Merge Completion
+- Pull request: PR #19
+- Merge method: Squash merge
+- Merge commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
+- Tests: 126 passed, 0 failed, 0 errors
+- Source branch: Deleted
+- Program budget remaining: 47.5 hours
+
+## 2026-07-12 — PVE-1.0.4 Configurable Business Thresholds
+- Objective: Add immutable business threshold profiles without weakening mandatory engineering controls.
+- Stable base: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
+- Branch: `agent/pve-1.0.4-configurable-thresholds`
+- Planned allocation: 13 hours
+- Implementation:
+  - controlled global default profile
+  - project-specific immutable versions
+  - threshold validation and duplicate suppression
+  - active profile selection
+  - business screening helper
+  - non-disableable engineering control display
+  - JSON threshold template
+- Preserved: persistence schema, analytical engines, recommendation logic, existing app/dashboard/upload flows, disclaimers, draft integration contract, and repository separation.
+- Excluded: scenario execution, recommendation-engine modification, history UI, authentication, external database, supplier workflows, ERP, AI approval, and new categories.
 - Result: Implementation prepared; draft PR and CI pending.
-- Next action: Validate the complete diff and full test suite before review readiness.
+- Next action: Validate complete diff and full test suite.
