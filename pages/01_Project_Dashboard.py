@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
+from typing import MutableMapping
 
 import streamlit as st
 
@@ -15,6 +16,19 @@ DATABASE_PATH = ROOT / "runtime" / "pve_portfolio.sqlite3"
 @st.cache_resource
 def project_service():
     return build_project_service(DATABASE_PATH)
+
+
+def select_active_workspace(
+    session_state: MutableMapping[str, object],
+    project_id: str,
+    *,
+    archived: bool,
+) -> bool:
+    """Select an active project explicitly; archived projects can never become active."""
+    if archived:
+        return False
+    session_state["active_project_id"] = project_id
+    return True
 
 
 def project_table_rows(projects: list[dict]) -> list[dict]:
@@ -36,6 +50,27 @@ def project_table_rows(projects: list[dict]) -> list[dict]:
     ]
 
 
+def render_current_workspace(service) -> None:
+    active_project_id = st.session_state.get("active_project_id")
+    if not active_project_id:
+        st.info("No active workspace is selected.")
+        return
+    try:
+        active_project = service.get_project(str(active_project_id))
+    except KeyError:
+        st.session_state.pop("active_project_id", None)
+        st.warning("The previously selected workspace is no longer available.")
+        return
+    if active_project["archived_at"] is not None:
+        st.session_state.pop("active_project_id", None)
+        st.warning("The previously selected workspace is archived and was cleared.")
+        return
+    st.success(
+        f"Current active workspace: {active_project['project_code']} — "
+        f"{active_project['project_name']}"
+    )
+
+
 def render_project_actions(service, projects: list[dict], *, archived: bool) -> None:
     if not projects:
         label = "archived" if archived else "active"
@@ -53,15 +88,28 @@ def render_project_actions(service, projects: list[dict], *, archived: bool) -> 
     )
     selected = options[selected_label]
 
-    st.session_state["active_project_id"] = selected["project_id"]
+    if archived:
+        st.warning("Archived projects are read-only in this build and cannot become the active workspace.")
+        return
+
     st.caption(
-        "Selected project is stored in the current session as the active workspace. "
+        "Choose an active project, then confirm it explicitly as the current workspace. "
         "Dataset upload and analysis workflows are delivered in later approved builds."
     )
-
-    if archived:
-        st.warning("Archived projects are read-only in this build.")
-        return
+    if st.button(
+        "Select as active workspace",
+        key=f"select-workspace-{selected['project_id']}",
+        width="stretch",
+    ):
+        select_active_workspace(
+            st.session_state,
+            selected["project_id"],
+            archived=False,
+        )
+        st.success(
+            f"Active workspace selected: {selected['project_code']} — {selected['project_name']}"
+        )
+        st.rerun()
 
     action_left, action_right = st.columns(2)
     with action_left:
@@ -99,6 +147,8 @@ def render_project_actions(service, projects: list[dict], *, archived: bool) -> 
             width="stretch",
         ):
             service.archive_project(selected["project_id"])
+            if st.session_state.get("active_project_id") == selected["project_id"]:
+                st.session_state.pop("active_project_id", None)
             st.success("Project archived without deleting history.")
             st.rerun()
 
@@ -121,6 +171,8 @@ def main() -> None:
     metric_columns[2].metric("Archived Projects", summary["archived_projects"])
     metric_columns[3].metric("Dataset Versions", summary["dataset_versions"])
     metric_columns[4].metric("Saved Decisions", summary["decision_snapshots"])
+
+    render_current_workspace(service)
 
     st.subheader("Create Project")
     with st.form("create-project-form", clear_on_submit=True):
@@ -151,7 +203,11 @@ def main() -> None:
                 currency=currency,
                 annual_volume=annual_volume,
             )
-            st.session_state["active_project_id"] = created["project_id"]
+            select_active_workspace(
+                st.session_state,
+                created["project_id"],
+                archived=False,
+            )
             st.success(f"Project {created['project_code']} created and selected.")
             st.rerun()
         except (ValueError, sqlite3.IntegrityError) as error:
