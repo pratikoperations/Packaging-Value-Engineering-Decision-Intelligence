@@ -3,6 +3,9 @@
 ## Build
 PVE-0.4 — Technical Qualification and Risk
 
+## Status
+Completed and merged
+
 ## Scope
 Deterministic technical-qualification aggregation and deterministic quality, supply, and implementation risk indicators using the existing canonical synthetic dataset.
 
@@ -27,10 +30,10 @@ Deterministic technical-qualification aggregation and deterministic quality, sup
 
 ## Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 138
-- Run ID: `29181964082`
+- Run number: 148
+- Run ID: `29182036082`
 - Job: `validate-repository`
-- Validated commit: `2e492a6034add0ba5bf6f8a222f38791043bf4e0`
+- Validated PR commit: `db40eac200e1c9d4a61c29a19e18551014e405f2`
 - Status: completed
 - Conclusion: success
 - Workflow steps: all passed
@@ -38,6 +41,14 @@ Deterministic technical-qualification aggregation and deterministic quality, sup
 - Tests passed: 30
 - Failures: 0
 - Errors: 0
+
+## Merge Record
+- Pull request: PR #7
+- PR status: Merged and closed
+- Merge method: Squash merge
+- Merge commit: `ced6c5542faa700a43101f8f9fc702d15d78f0ca`
+- Stable branch: `main`
+- Original feature branch: Deleted
 
 ## Scope Exclusions
 - No application UI
@@ -49,7 +60,7 @@ Deterministic technical-qualification aggregation and deterministic quality, sup
 - No PVE-0.5 functionality
 
 ## QA Status
-**Pass** — PVE-0.4 implementation and all 30 automated tests passed PVE CI run #138.
+**Pass** — PVE-0.4 implementation and all 30 automated tests passed PVE CI run #148 and were merged through PR #7.
 
 ## Release Recommendation
-PVE-0.4 is ready for review and merge after the final QA commit passes CI. PVE-0.5 may begin only after PVE-0.4 is merged into `main`.
+PVE-0.4 is complete. PVE-0.5 is the next approved build after this closure PR is merged into `main`.
