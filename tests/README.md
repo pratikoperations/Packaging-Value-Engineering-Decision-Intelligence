@@ -15,7 +15,10 @@
 - `tests/scenario_engine/test_engine.py`: six deterministic scenario scenarios
 - `tests/recommendation/test_engine.py`: six explainable recommendation scenarios
 
-Expected total automated test count: 42.
+## Implemented in PVE-0.6
+- `tests/exports/test_decision_package.py`: ten export assembly, rendering, completeness, determinism, and validation scenarios
+
+Expected total automated test count: 52.
 
 Run with:
 
@@ -24,8 +27,8 @@ python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
 ## Planned Test Groups
-- Export-contract compatibility tests
-- End-to-end decision-flow tests
+- Final release end-to-end tests
 - UI smoke tests
+- Interview-demo acceptance tests
 
 Every logic change must include or update relevant tests.
