@@ -4,7 +4,7 @@
 PVE-1.0.2 — Project Dashboard
 
 ## Status
-Draft PR validation pending
+Corrective branch validation pending
 
 ## Objective
 Add a controlled multi-project Streamlit dashboard without introducing upload, threshold, analysis, history, authentication, supplier, or AI approval workflows.
@@ -12,7 +12,8 @@ Add a controlled multi-project Streamlit dashboard without introducing upload, t
 ## Changed Capability
 - Portfolio summary metrics
 - Project creation
-- Active project selection in Streamlit session state
+- Explicit active workspace selection
+- Current active workspace display
 - Project metadata duplication
 - Project archiving
 - Active and archived project lists
@@ -27,6 +28,14 @@ Add a controlled multi-project Streamlit dashboard without introducing upload, t
 - Demonstration database: `runtime/pve_portfolio.sqlite3`
 
 The page does not execute SQL directly.
+
+## Active Workspace Correction
+- A selectbox no longer changes `active_project_id` automatically.
+- Active projects require an explicit `Select as active workspace` button.
+- Archived projects cannot write to `active_project_id`.
+- Rendering the archived tab cannot overwrite an existing active workspace.
+- The currently active workspace is shown clearly.
+- Archiving the active project clears the active workspace safely.
 
 ## Scope Controls
 - Existing corrugated category only
@@ -48,17 +57,22 @@ The page does not execute SQL directly.
 - runtime database initialization
 - static dashboard contract
 - realized-savings claim prohibition
+- active project explicit selection
+- archived project selection rejection
+- archived selection does not overwrite active workspace
+- archived project read-only source contract
+- future workflow scope exclusion
 
 ## Expected Test Baseline
 - Previous total: 85
-- New dashboard tests: 10
-- Expected total: 95
+- Dashboard tests: 15
+- Expected total: 100
 
 ## Budget
 - Program budget before build: 75.5 hours
 - PVE-1.0.2 planned allocation: 11 hours
-- Estimated effort used: 10.5 hours
-- Estimated remaining program budget: 65.0 hours
+- Revised estimated effort used: 11.5 hours
+- Estimated remaining program budget: 64.0 hours
 
 ## Preserved Controls
 - deterministic analytical engines
@@ -74,7 +88,7 @@ The page does not execute SQL directly.
 No upload, JSON parsing, CSV parsing, configurable thresholds, scenario execution, decision-history interface, authentication, external database, supplier workflow, ERP integration, AI approval, or new packaging category.
 
 ## CI Evidence
-To be completed after the final branch-head CI run.
+To be completed after the final corrective branch-head CI run.
 
 ## QA Result
 Pending CI and complete diff review.
