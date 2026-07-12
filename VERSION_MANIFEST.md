@@ -1,48 +1,50 @@
 # Version Manifest
 
 ## Current Version
-- Project version: `0.3.0-cost-material-engine`
-- Build: `PVE-0.3`
-- Status: `0.3.0-cost-material-engine completed`
+- Project version: `0.4.0-technical-risk`
+- Build: `PVE-0.4`
+- Status: `0.4.0-technical-risk ready`
 - Stable branch: `main`
-- Merge commit: `de9d18a428274bfafd369e7509f88b20bc33db89`
-- Pull request: PR #5 merged and closed
-- Original feature branch: Deleted
+- Working branch: `agent/pve-0.4-technical-qualification-risk`
+- Base commit: `eb32194e2eaf57c8972e12bf12ca5535fad22b2f`
 
 ## Validation Evidence
 - Workflow: PVE CI
-- Run number: 108
-- Run ID: `29181583399`
-- Validated PR commit: `847be5db56b413ec49868c50ea58092686555a5c`
+- Run number: 138
+- Run ID: `29181964082`
+- Validated commit: `2e492a6034add0ba5bf6f8a222f38791043bf4e0`
 - Job: `validate-repository`
 - Conclusion: Success
-- Tests: 18 passed, 0 failed, 0 errors
+- Tests: 30 run, 30 passed, 0 failed, 0 errors
+
+## Completed Foundation
+- PVE-0.3 status: `0.3.0-cost-material-engine completed`
+- Canonical data-model version: `0.2.0`
 
 ## Current Deliverables
-- Cost engine: `src/cost_engine/engine.py`
-- Material engine: `src/material_engine/engine.py`
-- Cost tests: `tests/cost_engine/test_engine.py`
-- Material tests: `tests/material_engine/test_engine.py`
-- PVE-0.3 QA report: `docs/qa/PVE-0.3_QA_REPORT.md`
+- Technical qualification engine: `src/technical_qualification/engine.py`
+- Risk engine: `src/risk_engine/engine.py`
+- Technical tests: `tests/technical_qualification/test_engine.py`
+- Risk tests: `tests/risk_engine/test_engine.py`
+- PVE-0.4 QA report: `docs/qa/PVE-0.4_QA_REPORT.md`
 
-## Calculation Scope
-- Unit and annual cost by alternative
-- Unit and annual savings versus baseline
-- Cost change percentage versus baseline
-- Component and case material weights
-- Annual material mass
-- Material change in grams and percentage versus baseline
+## Rule Scope
+- Technical status aggregation with explicit failure precedence
+- Missing-result and missing-evidence handling
+- Validation-required outputs
+- Quality, supply, and implementation risk indicators
+- Probability-based risk escalation
+- Explicit risk-data completeness reporting
 
 ## Scope Boundary
-No application UI, technical qualification, risk engine, recommendation scoring, supplier ranking, allocation, scenario engine, autonomous technical approval, or PVE-0.4 functionality is included. The integration contract remains draft.
+No application UI, recommendation scoring, supplier ranking, supplier allocation, scenario or sensitivity engine, autonomous technical approval, final integration contract, or PVE-0.5 functionality is included. The integration contract remains draft.
 
-## Next Approved Build
-- PVE-0.4 — Technical Qualification and Risk
+## Next Planned Build
+- PVE-0.5 — Scenario and Recommendation UI
 
 ## Later Builds
-- PVE-0.5 — Scenario and Recommendation UI
 - PVE-0.6 — Decision Package Export
 - PVE-0.7 — QA and Interview Release
 
 ## Version Rule
-PVE-0.4 begins only after the PVE-0.3 post-merge closure PR is merged into `main`.
+PVE-0.5 begins only after PVE-0.4 passes final CI and PR #7 is merged into `main`.

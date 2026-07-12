@@ -6,21 +6,30 @@
 
 ## Implemented in PVE-0.3
 
-`tests/material_engine/test_engine.py` covers:
+- `tests/material_engine/test_engine.py`: four material-engine scenarios
+- `tests/cost_engine/test_engine.py`: four cost-engine scenarios
 
-- Baseline material totals
-- Alternative material reduction
-- Missing material components
-- Duplicate baseline rejection
+## Implemented in PVE-0.4
 
-`tests/cost_engine/test_engine.py` covers:
+`tests/technical_qualification/test_engine.py` covers:
 
-- Baseline cost totals
-- Alternative savings
-- Currency mismatch rejection
-- Missing cost inputs
+- Demo insufficient-data outcome
+- Fully qualified outcome
+- Conditional qualification
+- Failure precedence
+- Missing evidence
+- Duplicate result rejection
 
-Expected total automated test count: 18.
+`tests/risk_engine/test_engine.py` covers:
+
+- High demo quality risk
+- Explicit missing categories
+- Probability escalation
+- Complete low-risk set
+- Invalid probability rejection
+- Highest duplicate-category risk selection
+
+Expected total automated test count: 30.
 
 Run with:
 
@@ -30,7 +39,6 @@ python -m unittest discover -s tests -p "test_*.py" -v
 
 ## Planned Test Groups
 
-- Business-rule tests for technical qualification and risk
 - Scenario and sensitivity tests
 - Export-contract compatibility tests
 - End-to-end decision-flow tests

@@ -17,56 +17,55 @@
 ## PVE-0.3 — Cost and Material Engine
 **Status:** Completed and merged
 
+- Merge commit: `de9d18a428274bfafd369e7509f88b20bc33db89`
+- Closure merge commit: `eb32194e2eaf57c8972e12bf12ca5535fad22b2f`
+- QA: Pass
+- Tests: 18 passed, 0 failed, 0 errors
+
+## PVE-0.4 — Technical Qualification and Risk
+**Status:** Ready for review and merge
+
 ### Objective
-Create deterministic, transparent cost and material calculations using the canonical PVE-0.2 dataset.
+Create deterministic technical qualification and explicit quality, supply, and implementation risk indicators using the canonical dataset.
 
 ### Completed Scope
-- Material-component aggregation by alternative
-- Component-to-case weight variance
-- Annual material mass calculation
-- Material change in grams and percentage versus baseline
-- Unit-cost aggregation by alternative
-- Annual cost calculation
-- Unit and annual savings versus baseline
-- Cost change percentage versus baseline
-- Input guards for baseline, identifiers, units, currencies, volumes, weights, and missing records
-- Eight new automated tests
-
-### Completion Record
-- Pull request: PR #5
-- PR status: Merged and closed
-- Merge method: Squash merge
-- Merge commit: `de9d18a428274bfafd369e7509f88b20bc33db89`
-- Stable branch: `main`
-- Original feature branch: Deleted
+- Requirement-by-alternative technical status aggregation
+- Failure precedence
+- Conditional qualification handling
+- Missing-result and missing-evidence handling
+- Validation-required outputs
+- Quality, supply, and implementation risk indicators
+- Probability-based effective severity
+- Explicit risk-data completeness
+- High and critical mitigation requirements
+- Twelve new automated tests
 
 ### Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 108
-- Run ID: `29181583399`
-- Validated PR commit: `847be5db56b413ec49868c50ea58092686555a5c`
+- Run number: 138
+- Run ID: `29181964082`
+- Validated commit: `2e492a6034add0ba5bf6f8a222f38791043bf4e0`
 - Job: `validate-repository`
 - Conclusion: Success
-- Tests: 18 passed, 0 failed, 0 errors
+- Tests: 30 run, 30 passed, 0 failed, 0 errors
 
 ### Scope Exclusions
 - Application UI
-- Technical qualification and risk
-- Logistics optimization
-- Scenario and sensitivity analysis
 - Recommendation scoring
 - Supplier ranking or allocation
+- Scenario and sensitivity analysis
 - Autonomous technical approval
-- Integration-contract finalization
+- Final integration contract
+- PVE-0.5 functionality
 
 ### Exit Criteria Result
-- Existing PVE-0.2 tests continue to pass: Pass
-- Eight PVE-0.3 engine tests pass: Pass
-- Total automated test count is 18: Pass
+- Existing 18 tests continue to pass: Pass
+- Twelve PVE-0.4 tests pass: Pass
+- Total automated test count is 30: Pass
 - Full branch diff reviewed: Pass
 - PVE CI passes: Pass
 - QA report finalized: Pass
-- PR merged: Pass
+- Draft PR opened: Pass
 
-### Next Approved Build
-PVE-0.4 — Technical Qualification and Risk, after the post-merge closure PR is merged into `main`.
+### Next Build
+PVE-0.5 — Scenario and Recommendation UI, only after PVE-0.4 is merged into `main`.

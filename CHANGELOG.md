@@ -2,39 +2,29 @@
 
 ## [Unreleased]
 
-### Planned
-- PVE-0.4 — Technical Qualification and Risk
+### Added
+- Deterministic technical qualification engine
+- Deterministic quality, supply, and implementation risk engine
+- Explicit technical failure, conditional-pass, and insufficient-data reasons
+- Evidence and missing-data handling
+- Validation-required outputs
+- Probability-based risk escalation
+- Twelve new automated tests
+- PVE-0.4 QA report
+- CI coverage for PVE-0.4 files and all tests
+
+### Scope Boundary
+PVE-0.4 does not include UI, recommendation scoring, supplier ranking, allocation, scenario analysis, autonomous approval, final integration-contract release, or PVE-0.5 functionality.
 
 ## [0.3.0-cost-material-engine] — PVE-0.3 Cost and Material Engine
-
-### Added
-- Deterministic material engine
-- Deterministic cost engine
-- Material and cost analysis dataclasses
-- Eight new engine tests
-- PVE-0.3 QA report
-- CI coverage for PVE-0.3 files and all tests
-
-### Calculations
-- Component-weight aggregation
-- Component-to-case weight variance
-- Annual material mass
-- Material change versus baseline
-- Unit and annual cost
-- Unit and annual savings versus baseline
-- Cost change percentage versus baseline
 
 ### Completed
 - PR #5 merged and closed
 - Squash merge commit: `de9d18a428274bfafd369e7509f88b20bc33db89`
+- Post-merge closure commit: `eb32194e2eaf57c8972e12bf12ca5535fad22b2f`
 - Stable branch: `main`
-- Original feature branch: Deleted
-- Final validated CI: PVE CI #108, run ID `29181583399`
 - Tests: 18 passed, 0 failed, 0 errors
 - QA result: Pass
-
-### Scope Boundary
-PVE-0.3 does not include UI, technical qualification, risk, recommendation scoring, supplier ranking, allocation, scenario analysis, autonomous approval, or PVE-0.4 functionality. The integration contract remains draft.
 
 ## [0.2.0-data-model] — PVE-0.2 Data Model and Demo Data
 
@@ -42,7 +32,6 @@ PVE-0.3 does not include UI, technical qualification, risk, recommendation scori
 - PR #3 merged and closed
 - Squash merge commit: `33b4319c3b74d8caaad6bc03cb85cb6ebf1727ff`
 - Post-merge closure commit: `6a6f5d080f906f3a6b01b73cd04465db7da356ef`
-- Stable branch: `main`
 - Tests: 10 passed, 0 failed, 0 errors
 - QA result: Pass
 
@@ -56,4 +45,3 @@ PVE-0.3 does not include UI, technical qualification, risk, recommendation scori
 - Integration-contract draft and dedicated integration paths
 - Source, data, test, documentation, and QA foundations
 - Foundation CI workflow
-- Build-specific QA report
