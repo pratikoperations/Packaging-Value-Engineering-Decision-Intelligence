@@ -15,7 +15,7 @@
 - Tests: 10 passed, 0 failed, 0 errors
 
 ## PVE-0.3 — Cost and Material Engine
-**Status:** Implementation complete — CI and final QA pending
+**Status:** Ready for review and merge
 
 ### Objective
 Create deterministic, transparent cost and material calculations using the canonical PVE-0.2 dataset.
@@ -32,6 +32,15 @@ Create deterministic, transparent cost and material calculations using the canon
 - Input guards for baseline, identifiers, units, currencies, volumes, weights, and missing records
 - Eight new automated tests
 
+### Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 98
+- Run ID: `29181336986`
+- Validated commit: `da769f756cd6a5edfd38e61fc8176642c51c41d9`
+- Job: `validate-repository`
+- Conclusion: Success
+- Tests: 18 run, 18 passed, 0 failed, 0 errors
+
 ### Scope Exclusions
 - Application UI
 - Technical qualification and risk
@@ -42,14 +51,14 @@ Create deterministic, transparent cost and material calculations using the canon
 - Autonomous technical approval
 - Integration-contract finalization
 
-### Exit Criteria
-- Existing PVE-0.2 tests continue to pass
-- Eight PVE-0.3 engine tests pass
-- Total automated test count is 18
-- Full branch diff is reviewed
-- PVE CI passes
-- QA report is finalized
-- Draft PR is opened
+### Exit Criteria Result
+- Existing PVE-0.2 tests continue to pass: Pass
+- Eight PVE-0.3 engine tests pass: Pass
+- Total automated test count is 18: Pass
+- Full branch diff reviewed: Pass
+- PVE CI passes: Pass
+- QA report finalized: Pass
+- Draft PR opened: Pass
 
 ### Next Build
 PVE-0.4 — Technical Qualification and Risk, only after PVE-0.3 is merged into `main`.
