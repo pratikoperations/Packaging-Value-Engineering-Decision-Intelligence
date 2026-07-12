@@ -7,7 +7,7 @@ Packaging Value Engineering & Decision Intelligence
 PVE-0.5 — Scenario and Recommendation UI
 
 ## Status
-Implementation complete — CI and QA pending
+PVE-0.5 ready for review and merge
 
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
@@ -34,14 +34,23 @@ Implementation complete — CI and QA pending
 - Lightweight Streamlit application UI
 - Twelve new automated scenario and recommendation tests
 
+## Validated CI
+- Workflow: PVE CI
+- Run number: 180
+- Run ID: `29182662530`
+- Validated commit: `bae91d28000c8f54a97aaf23190b1e692f09106d`
+- Job: `validate-repository`
+- Result: Success
+- Tests: 42 run, 42 passed, 0 failed, 0 errors
+
 ## Scope Boundary
 No supplier ranking, supplier allocation, autonomous technical approval, final integration contract, decision-package export, or PVE-0.6 functionality is included. The integration contract remains draft.
 
 ## QA Result
-Conditional Pass pending PVE CI and full PR-diff verification.
+Pass
 
 ## Next Build
 PVE-0.6 — Decision Package Export
 
 ## Start Condition for PVE-0.6
-PVE-0.6 may begin only after PVE-0.5 passes CI and QA and is merged into `main`.
+PVE-0.6 may begin only after PVE-0.5 passes final CI and PR #9 is merged into `main`.
