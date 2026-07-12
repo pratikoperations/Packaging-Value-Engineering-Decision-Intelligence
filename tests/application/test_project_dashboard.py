@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-import importlib.util
+import ast
 import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
+from typing import MutableMapping
 
 from src.application import ProjectService
 from src.application.runtime import build_project_service
@@ -22,13 +23,19 @@ ROOT = Path(__file__).resolve().parents[2]
 DASHBOARD_PATH = ROOT / "pages" / "01_Project_Dashboard.py"
 
 
-def load_dashboard_module():
-    spec = importlib.util.spec_from_file_location("pve_project_dashboard", DASHBOARD_PATH)
-    if spec is None or spec.loader is None:
-        raise RuntimeError("Unable to load project dashboard module.")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+def load_workspace_selector():
+    """Load only the pure workspace selector without importing Streamlit page code."""
+    source = DASHBOARD_PATH.read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    function = next(
+        node
+        for node in tree.body
+        if isinstance(node, ast.FunctionDef) and node.name == "select_active_workspace"
+    )
+    module = ast.Module(body=[function], type_ignores=[])
+    namespace = {"MutableMapping": MutableMapping}
+    exec(compile(module, str(DASHBOARD_PATH), "exec"), namespace)
+    return namespace["select_active_workspace"]
 
 
 class ProjectDashboardTestCase(unittest.TestCase):
@@ -202,9 +209,9 @@ class ProjectDashboardTestCase(unittest.TestCase):
         self.assertNotIn("Realized Savings", dashboard)
 
     def test_active_project_can_be_selected_explicitly(self):
-        dashboard = load_dashboard_module()
+        select_active_workspace = load_workspace_selector()
         session_state: dict[str, object] = {}
-        selected = dashboard.select_active_workspace(
+        selected = select_active_workspace(
             session_state,
             "project-active",
             archived=False,
@@ -213,9 +220,9 @@ class ProjectDashboardTestCase(unittest.TestCase):
         self.assertEqual(session_state["active_project_id"], "project-active")
 
     def test_archived_project_cannot_become_active_workspace(self):
-        dashboard = load_dashboard_module()
+        select_active_workspace = load_workspace_selector()
         session_state: dict[str, object] = {}
-        selected = dashboard.select_active_workspace(
+        selected = select_active_workspace(
             session_state,
             "project-archived",
             archived=True,
@@ -224,9 +231,9 @@ class ProjectDashboardTestCase(unittest.TestCase):
         self.assertNotIn("active_project_id", session_state)
 
     def test_archived_selection_does_not_overwrite_existing_active_workspace(self):
-        dashboard = load_dashboard_module()
+        select_active_workspace = load_workspace_selector()
         session_state: dict[str, object] = {"active_project_id": "project-active"}
-        selected = dashboard.select_active_workspace(
+        selected = select_active_workspace(
             session_state,
             "project-archived",
             archived=True,
