@@ -106,7 +106,7 @@ Approved and in progress
 PVE-1.0.1 — Foundation and Persistence
 
 ### Build Status
-Draft PR preparation and validation in progress.
+Draft PR corrective validation in progress.
 
 ### Approved Controls
 - Working budget: 90 hours
@@ -124,12 +124,24 @@ Draft PR preparation and validation in progress.
 
 ### Implemented Scope
 - SQLite connection and transaction management
-- Idempotent schema initialization and migration tracking
+- Schema initialization with version recording
 - Foreign-key enforcement
 - Project lifecycle repository and application service
 - Immutable datasets, threshold profiles, scenarios, and decision snapshots
+- Cross-project integrity validation for scenarios and decisions
 - Export-record repository
 - Isolated temporary databases for tests
+
+### Integrity Controls
+- Scenario dataset must belong to the scenario project
+- Project-specific scenario threshold must belong to the scenario project
+- Decision scenario and dataset must belong to the decision project
+- Decision dataset must match the scenario dataset
+- Decision threshold must match the scenario threshold
+
+### Budget
+- Revised estimated effort used: 14.5 hours
+- Estimated remaining 90-hour program budget: 75.5 hours
 
 ### Explicit Exclusions
 No dashboard UI, upload UI, CSV parsing, threshold UI, history UI, authentication, external database, PDF or Excel extraction, ERP integration, supplier workflow, AI approval, or new packaging category.
