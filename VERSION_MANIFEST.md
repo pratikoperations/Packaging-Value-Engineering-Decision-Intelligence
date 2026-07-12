@@ -3,10 +3,19 @@
 ## Current Version
 - Project version: `0.6.0-decision-package-export`
 - Build: `PVE-0.6`
-- Status: Implementation complete — CI and QA pending
+- Status: `0.6.0-decision-package-export ready`
 - Stable branch: `main`
 - Working branch: `agent/pve-0.6-decision-package-export`
 - Base commit: `47ad5730699e49ab64accb41b19e488ebc166ffa`
+
+## Validation Evidence
+- Workflow: PVE CI
+- Run number: 217
+- Run ID: `29183379595`
+- Validated commit: `21c0fc1586ab60847da71d5f0ce6d8ab94c9aeb9`
+- Job: `validate-repository`
+- Conclusion: Success
+- Tests: 52 run, 52 passed, 0 failed, 0 errors
 
 ## Completed Foundation
 - PVE-0.5 status: `0.5.0-scenario-recommendation-ui completed`
@@ -36,4 +45,4 @@ No autonomous technical approval, supplier allocation, final integration contrac
 - PVE-0.7 — QA and Interview Release
 
 ## Version Rule
-PVE-0.7 begins only after PVE-0.6 passes CI and QA and is merged into `main`.
+PVE-0.7 begins only after PVE-0.6 passes final CI and PR #11 is merged into `main`.
