@@ -34,30 +34,33 @@ Deterministic assembly of a read-only packaging decision package with machine-re
 - Every proposed alternative must include cost/material, qualification, risk, and recommendation sections.
 - Decision controls must remain read-only and must explicitly reject autonomous technical approval, supplier allocation, external integration, and final integration-contract status.
 
-## Automated Tests
-Ten new tests cover:
-1. Required package sections
-2. Deterministic assembly and JSON rendering
-3. Complete decision basis
-4. Safety and ownership controls
-5. Machine-readable JSON
-6. Human-readable Markdown
-7. Missing-section validation
-8. Decision-control tampering rejection
-9. Missing scenario-alternative rejection
-10. Required source-commit metadata
+## Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 217
+- Run ID: `29183379595`
+- Job: `validate-repository`
+- Validated commit: `21c0fc1586ab60847da71d5f0ce6d8ab94c9aeb9`
+- Status: completed
+- Conclusion: success
+- Workflow steps: all passed
+- Tests run: 52
+- Tests passed: 52
+- Failures: 0
+- Errors: 0
 
-Existing tests remain in scope. Expected total automated test count: 52.
-
-## Scope Exclusions
+## Scope Verification
+- Deterministic internal decision-package assembly only
+- JSON and Markdown exports only
+- Streamlit download controls only
 - No autonomous technical approval
 - No supplier allocation
 - No final integration contract
 - No external system integration
+- No AI Procurement Copilot source files
 - No PVE-0.7 release packaging
 
 ## QA Status
-**Conditional Pass** — implementation and test coverage are complete; final status depends on successful PVE CI and full PR-diff review.
+**Pass** — PVE-0.6 implementation and all 52 automated tests passed PVE CI run #217.
 
 ## Release Recommendation
-Open a draft PR. PVE-0.7 may begin only after PVE-0.6 passes CI and QA and is merged into `main`.
+PVE-0.6 is ready for review and merge after the final QA commit passes CI. PVE-0.7 may begin only after PVE-0.6 is merged into `main`.
