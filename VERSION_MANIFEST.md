@@ -3,10 +3,19 @@
 ## Current Version
 - Project version: `0.3.0-cost-material-engine`
 - Build: `PVE-0.3`
-- Status: Implementation complete — CI and QA pending
+- Status: `0.3.0-cost-material-engine ready`
 - Stable branch: `main`
 - Working branch: `agent/pve-0.3-cost-material-engine`
 - Base commit: `6a6f5d080f906f3a6b01b73cd04465db7da356ef`
+
+## Validation Evidence
+- Workflow: PVE CI
+- Run number: 98
+- Run ID: `29181336986`
+- Validated commit: `da769f756cd6a5edfd38e61fc8176642c51c41d9`
+- Job: `validate-repository`
+- Conclusion: Success
+- Tests: 18 run, 18 passed, 0 failed, 0 errors
 
 ## Completed Foundation
 - PVE-0.2 status: `0.2.0-data-model completed`
@@ -40,4 +49,4 @@ No application UI, technical qualification, risk engine, recommendation scoring,
 - PVE-0.7 — QA and Interview Release
 
 ## Version Rule
-PVE-0.4 begins only after PVE-0.3 passes CI and QA and is merged into `main`.
+PVE-0.4 begins only after PVE-0.3 passes final CI and PR #5 is merged into `main`.
