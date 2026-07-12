@@ -1,17 +1,24 @@
-name: Foundation CI
+name: PVE CI
 
 on:
+  workflow_dispatch:
   push:
-    branches: [main, "agent/**"]
+    branches:
+      - main
+      - "agent/**"
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  validate-foundation:
+  validate-repository:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify mandatory foundation files
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify mandatory files
         shell: bash
         run: |
           set -euo pipefail
@@ -29,23 +36,39 @@ jobs:
             docs/MASTER_ARCHITECTURE.md
             docs/MASTER_BUILD_PLAN.md
             docs/qa/PVE-0.1_QA_REPORT.md
+            docs/qa/PVE-0.2_QA_REPORT.md
             integration/README.md
             integration/contracts/PVE_CONTRACT_V1_DRAFT.md
             integration/exports/.gitkeep
             integration/samples/.gitkeep
-            src/README.md
-            data/README.md
+            data/schemas/canonical_data_model.json
+            data/reference/allowed_values.json
+            data/demo/corrugated_shipping_cases.json
+            data/demo/invalid_examples.json
+            src/__init__.py
+            src/data_models/__init__.py
+            src/data_models/validator.py
             tests/README.md
+            tests/data_validation/__init__.py
+            tests/data_validation/test_validator.py
           )
           for file in "${required[@]}"; do
             test -e "$file" || { echo "Missing: $file"; exit 1; }
           done
+      - name: Validate JSON syntax
+        run: |
+          python -m json.tool data/schemas/canonical_data_model.json > /dev/null
+          python -m json.tool data/reference/allowed_values.json > /dev/null
+          python -m json.tool data/demo/corrugated_shipping_cases.json > /dev/null
+          python -m json.tool data/demo/invalid_examples.json > /dev/null
+      - name: Verify synthetic demo label
+        run: |
+          grep -q '"dataset_type": "synthetic_demo"' data/demo/corrugated_shipping_cases.json
       - name: Verify project separation statement
-        shell: bash
         run: grep -qi "separate" DECISION_LOG.md
       - name: Verify current build identity
-        run: grep -q "PVE-0.1" PROJECT_STATUS.md
-      - name: Verify next build identity
         run: grep -q "PVE-0.2" PROJECT_STATUS.md
       - name: Verify integration contract is draft
         run: grep -qi "draft" integration/contracts/PVE_CONTRACT_V1_DRAFT.md
+      - name: Run data-validation tests
+        run: python -m unittest discover -s tests -p "test_*.py" -v

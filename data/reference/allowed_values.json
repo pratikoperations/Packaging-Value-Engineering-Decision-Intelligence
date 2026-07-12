@@ -1,0 +1,21 @@
+{
+  "schema_version": "0.2.0",
+  "units": {
+    "length": ["mm"],
+    "mass": ["g", "kg"],
+    "currency": ["INR", "USD", "EUR"],
+    "volume": ["units_per_year", "cases_per_year"],
+    "percentage": ["percent"],
+    "unitless": ["unitless"]
+  },
+  "project_status": ["draft", "active", "on_hold", "completed"],
+  "alternative_status": ["baseline", "proposed", "screened_out"],
+  "technical_status": ["not_assessed", "qualified", "conditionally_qualified", "not_qualified", "insufficient_data"],
+  "risk_level": ["low", "medium", "high", "critical"],
+  "risk_type": ["quality", "supply", "implementation", "logistics", "compliance", "sustainability"],
+  "evidence_type": ["supplier_quote", "drawing", "specification", "test_report", "calculation", "assumption", "benchmark"],
+  "recommendation_status": ["recommended", "conditionally_recommended", "not_recommended", "insufficient_data"],
+  "validation_status": ["not_started", "planned", "in_progress", "passed", "failed", "waived"],
+  "sustainability_metric": ["recycled_content_percent", "material_weight_g", "renewable_content_percent", "estimated_co2e_kg_per_1000_cases"],
+  "board_grades": ["3PLY_B_FLUTE", "5PLY_BC_FLUTE", "3PLY_C_FLUTE", "5PLY_EB_FLUTE"]
+}

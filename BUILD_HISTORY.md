@@ -3,34 +3,53 @@
 ## PVE-0.1 — Repository Foundation
 **Status:** Completed and merged
 
+- Stable closure merge commit: `d4672eadc23f23ba5528a44ff91fba649e6eff68`
+- Foundation QA: Pass
+
+## PVE-0.2 — Data Model and Demo Data
+**Status:** Ready for review and merge
+
 ### Objective
-Create a safe, independent, GitHub-first project foundation before application code is developed.
+Create a canonical, explicit, testable data foundation for packaging value engineering before implementing calculation or recommendation engines.
 
 ### Completed Scope
-- Repository identity and product boundary
-- Governance and recovery files
-- Master architecture and build plan
-- QA protocol and build-specific QA report
-- Integration contract structure and placeholders
-- Initial CI foundation
-- Full branch-diff and file-placement review
+- Fourteen canonical entity groups
+- Explicit field dictionary with units, allowed values, default rules, validation rules, and evidence requirements
+- Synthetic corrugated shipping-case dataset with one baseline and three alternatives
+- Synthetic cost, logistics, technical, risk, sustainability, validation, evidence, and export records
+- Invalid and partial-data fixtures
+- Standard-library Python validation module
+- Automated validation tests
+- CI validation for JSON syntax, synthetic labelling, mandatory files, and tests
 
-### Completion Record
-- Pull request: PR #1
-- Merge method: Squash merge
-- Merge commit: `3a0ac16d1808311a10d2be1986ca853085f67efe`
-- Stable branch: `main`
-- Foundation QA: Pass
-- Original feature branch: Deleted after merge
+### Validated CI Evidence
+- Workflow: PVE CI
+- Run number: 58
+- Run ID: `29180838040`
+- Validated commit: `436820a54ff066b2c2265403bda628c78107962d`
+- Job: `validate-repository`
+- Conclusion: success
+- Tests: 10 run, 10 passed, 0 failed, 0 errors
+
+### Scope Exclusions
+- Cost and material calculations
+- Savings calculations
+- Recommendation scoring
+- Application UI
+- Supplier ranking or allocation
+- Autonomous technical approval
+- Final integration contract; it remains draft
 
 ### Exit Criteria Result
-- All mandatory foundation files exist: Pass
-- Project and Procurement Copilot boundaries are explicit: Pass
-- Build scopes and numbering are defined: Pass
-- Recovery is possible from GitHub alone: Pass
-- Branch diff reviewed: Pass
-- QA report stored: Pass
-- Foundation PR merged: Pass
+- Valid demo dataset passes validation: Pass
+- Required negative tests pass: Pass
+- All demo data is explicitly synthetic: Pass
+- Every schema field declares a unit or unitless state: Pass
+- No hidden defaults exist: Pass
+- Full diff reviewed: Pass
+- CI passes: Pass
+- QA report finalized: Pass
+- Draft PR opened: Pass
 
-### Next Approved Build
-PVE-0.2 — Data Model and Demo Data, after the post-merge closure PR is merged into `main`.
+### Next Build
+PVE-0.3 — Cost and Material Engine, only after PVE-0.2 is merged into `main`.
