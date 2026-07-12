@@ -6,11 +6,19 @@ Enable complete project recovery from GitHub without relying on chat history.
 ## Project Identity
 - Project: Packaging Value Engineering & Decision Intelligence
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
-- Current build: PVE-0.4 — Technical Qualification and Risk
+- Current completed build: PVE-0.4 — Technical Qualification and Risk
 - Stable branch: `main`
-- Stable base commit: `eb32194e2eaf57c8972e12bf12ca5535fad22b2f`
-- Working branch: `agent/pve-0.4-technical-qualification-risk`
-- Last completed build: PVE-0.3 — Cost and Material Engine
+- Stable merge commit: `ced6c5542faa700a43101f8f9fc702d15d78f0ca`
+- Pull request: PR #7 merged and closed
+- Original feature branch: Deleted
+
+## Validation Reference
+- Workflow: PVE CI
+- Run number: 148
+- Run ID: `29182036082`
+- Validated PR commit: `db40eac200e1c9d4a61c29a19e18551014e405f2`
+- Tests: 30 passed, 0 failed, 0 errors
+- QA result: Pass
 
 ## Mandatory Reading Order
 1. `PROJECT_STATUS.md`
@@ -35,17 +43,16 @@ Enable complete project recovery from GitHub without relying on chat history.
 20. `tests/risk_engine/test_engine.py`
 
 ## Recovery Procedure
-1. Confirm latest `main`, current branch, open PRs, and CI status.
-2. Confirm PVE-0.1 through PVE-0.3 are completed and merged.
-3. Confirm PVE-0.4 excludes UI, recommendations, supplier ranking, allocation, scenarios, autonomous approval, final contract, and PVE-0.5 logic.
+1. Confirm latest `main`, open pull requests, and CI status.
+2. Confirm PVE-0.1 through PVE-0.4 are completed and merged.
+3. Review the canonical model, deterministic engines, tests, and PVE-0.4 QA report.
 4. Run `python -m unittest discover -s tests -p "test_*.py" -v`.
-5. Review technical outcomes, evidence gaps, risk indicators, and validation-required outputs.
-6. Resume only remaining PVE-0.4 validation, QA, or documentation work.
-7. Do not modify the draft integration contract outside its approved build.
-8. After changes, update governance records, commit, push, verify GitHub, and store QA evidence.
+5. Resume only the next approved build unit.
+6. Do not modify the draft integration contract outside its approved build.
+7. After changes, update governance records, commit, push, verify GitHub, and store QA evidence.
 
-## Next Build After Merge
-PVE-0.5 — Scenario and Recommendation UI
+## Next Approved Build
+PVE-0.5 — Scenario and Recommendation UI, after the PVE-0.4 post-merge closure PR is merged into `main`.
 
 ## Separation Rule
 This repository never stores AI Procurement Copilot source files. Cross-project communication uses versioned integration packages only.

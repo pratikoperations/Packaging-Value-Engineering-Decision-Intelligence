@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Planned
+- PVE-0.5 — Scenario and Recommendation UI
+
+## [0.4.0-technical-risk] — PVE-0.4 Technical Qualification and Risk
+
 ### Added
 - Deterministic technical qualification engine
 - Deterministic quality, supply, and implementation risk engine
@@ -12,6 +17,15 @@
 - Twelve new automated tests
 - PVE-0.4 QA report
 - CI coverage for PVE-0.4 files and all tests
+
+### Completed
+- PR #7 merged and closed
+- Squash merge commit: `ced6c5542faa700a43101f8f9fc702d15d78f0ca`
+- Stable branch: `main`
+- Original feature branch: Deleted
+- Final validated CI: PVE CI #148, run ID `29182036082`
+- Tests: 30 passed, 0 failed, 0 errors
+- QA result: Pass
 
 ### Scope Boundary
 PVE-0.4 does not include UI, recommendation scoring, supplier ranking, allocation, scenario analysis, autonomous approval, final integration-contract release, or PVE-0.5 functionality.
