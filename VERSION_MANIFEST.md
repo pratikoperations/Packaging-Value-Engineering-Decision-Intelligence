@@ -55,32 +55,41 @@ This is the completed Lean Interview Project release after the final governance 
 - Effort used: 14.5 hours
 - Program budget remaining after build: 75.5 hours
 
+## PVE-1.0.2 Completion Record
+- Build: `PVE-1.0.2`
+- Pull request: PR #18 merged and closed
+- Merge commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
+- Tests: 100 passed, 0 failed, 0 errors
+- Effort used: 11.5 hours
+- Program budget remaining after build: 64.0 hours
+
 ## PVE 1.0 Working Version
 - Program: `PVE 1.0 Controlled Build`
-- Current build: `PVE-1.0.2`
-- Working version: `1.0.2-project-dashboard`
+- Current build: `PVE-1.0.3`
+- Working version: `1.0.3-upload-validation`
 - Status: draft PR preparation and validation
-- Feature branch: `agent/pve-1.0.2-project-dashboard`
-- Stable base commit: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
+- Feature branch: `agent/pve-1.0.3-upload-validation`
+- Stable base commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
 
 ## Approved Program Budget
 - Original working budget: 90 hours
 - Hard ceiling: 110 hours
-- Budget entering PVE-1.0.2: 75.5 hours
-- PVE-1.0.2 planned allocation: 11 hours
-- Estimated effort used: 10.5 hours
-- Estimated remaining program budget: 65.0 hours
+- Budget entering PVE-1.0.3: 64.0 hours
+- PVE-1.0.3 planned allocation: 16 hours
+- Estimated effort used: 15.5 hours
+- Estimated remaining program budget: 48.5 hours
 
-## PVE-1.0.2 Deliverables
-- Streamlit project dashboard page
-- Portfolio summary metrics
-- Project creation and active selection
-- Metadata-only project duplication
-- Project archiving
-- Active and archived project lists
-- Runtime SQLite service factory
-- Runtime database exclusion from Git
-- Dashboard design and QA documentation
+## PVE-1.0.3 Deliverables
+- Canonical JSON upload parser
+- Limited `project.csv` and `alternatives.csv` parsers
+- Canonical upload normalizer
+- User-upload validation profile
+- Upload application service
+- Dataset duplicate lookup
+- Downloadable JSON and CSV templates
+- Upload and validation Streamlit page
+- Immutable dataset-version storage workflow
+- Upload design and QA documentation
 
-## PVE-1.0.2 Scope Boundary
-PVE-1.0.2 excludes uploads, JSON and CSV parsing, configurable thresholds, scenario execution, decision-history UI, authentication, external databases, enterprise integrations, supplier workflows, AI approval, document extraction, and additional packaging categories.
+## PVE-1.0.3 Scope Boundary
+PVE-1.0.3 excludes configurable thresholds, scenario execution, decision-history UI, authentication, external databases, PDF and Excel extraction, OCR, enterprise integrations, supplier workflows, AI approval, and additional packaging categories.

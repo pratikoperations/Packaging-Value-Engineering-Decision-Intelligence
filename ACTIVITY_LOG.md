@@ -79,5 +79,33 @@ All prior builds were completed, merged, QA-passed, and governance-closed.
   - local persistence disclaimer
 - Preserved: deterministic engines, engineering controls, existing `app.py`, disclaimers, integration boundary, and AI Procurement Copilot separation.
 - Excluded: uploads, parsing, thresholds, scenario execution, decision history, authentication, external database, supplier workflows, AI approval, and new categories.
+- Result: Completed and merged through PR #18.
+
+## 2026-07-12 — PVE-1.0.2 Merge Completion
+- Pull request: PR #18
+- Merge method: Squash merge
+- Merge commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
+- Tests: 100 passed, 0 failed, 0 errors
+- Source branch: Deleted
+- Program budget remaining: 64.0 hours
+
+## 2026-07-12 — PVE-1.0.3 Upload and Validation
+- Objective: Add controlled JSON and template-based CSV ingestion without expanding into thresholds, scenario execution, decision history, authentication, integrations, or AI approval.
+- Stable base: `87f3897c68503cddc2c7e64827d8c395b45065a5`
+- Branch: `agent/pve-1.0.3-upload-validation`
+- Planned allocation: 16 hours
+- Implementation:
+  - canonical UTF-8 JSON upload
+  - limited `project.csv` and `alternatives.csv` parsing
+  - canonical normalization
+  - active-project binding
+  - user-upload validation profile
+  - field-level issue reporting
+  - downloadable templates
+  - immutable valid-dataset storage
+  - canonical duplicate detection across JSON and CSV
+  - archived-project upload prohibition
+- Preserved: deterministic engines, existing dashboard and `app.py`, engineering controls, disclaimers, draft integration contract, and repository separation.
+- Excluded: thresholds, scenario execution, history UI, authentication, external database, PDF, Excel, OCR, ERP, supplier workflows, AI approval, and new categories.
 - Result: Implementation prepared; draft PR and CI pending.
 - Next action: Validate the complete diff and full test suite before review readiness.

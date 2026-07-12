@@ -58,6 +58,22 @@ class DatasetRepository:
             raise KeyError(dataset_id)
         return dict(row)
 
+    def find_by_content(
+        self,
+        project_id: str,
+        canonical_data: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        digest = content_hash(canonical_data)
+        with self.database.connect() as connection:
+            row = connection.execute(
+                """
+                SELECT * FROM project_datasets
+                WHERE project_id = ? AND content_hash = ?
+                """,
+                (project_id, digest),
+            ).fetchone()
+        return dict(row) if row is not None else None
+
     def list_for_project(self, project_id: str) -> list[dict[str, Any]]:
         with self.database.connect() as connection:
             return [

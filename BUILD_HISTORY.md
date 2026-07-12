@@ -107,7 +107,7 @@ No dashboard UI, uploads, CSV parsing, threshold UI, history UI, authentication,
 ---
 
 ## PVE-1.0.2 — Project Dashboard
-**Status:** In progress — draft PR preparation
+**Status:** Completed and merged through PR #18
 
 ### Objective
 Add a controlled project portfolio dashboard using the PVE-1.0.1 persistence foundation.
@@ -115,8 +115,9 @@ Add a controlled project portfolio dashboard using the PVE-1.0.1 persistence fou
 ### Implemented Scope
 - Portfolio summary metrics
 - Project creation
-- Active project selection in Streamlit session state
-- Project metadata duplication
+- Explicit active workspace selection
+- Current active workspace display
+- Metadata-only project duplication
 - Project archiving
 - Active and archived project views
 - Runtime SQLite service initialization
@@ -129,14 +130,57 @@ Add a controlled project portfolio dashboard using the PVE-1.0.1 persistence fou
 - Dashboard metrics do not represent realized savings
 - Existing `app.py` decision workflow remains unchanged
 
+### Completion Record
+- Pull request: PR #18
+- Merge method: Squash merge
+- Merge commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
+- Tests: 100 passed, 0 failed, 0 errors
+- Source branch: Deleted
+
 ### Budget
-- Planned allocation: 11 hours
-- Estimated effort used: 10.5 hours
-- Program budget before build: 75.5 hours
-- Estimated program budget after build: 65.0 hours
+- Revised effort used: 11.5 hours
+- Program budget after build: 64.0 hours
 
 ### Scope Exclusions
 No upload, JSON or CSV parsing, threshold UI, scenario execution, decision-history UI, authentication, external database, supplier workflow, ERP integration, AI approval, or new packaging category.
+
+---
+
+## PVE-1.0.3 — Upload and Validation
+**Status:** In progress — draft PR preparation
+
+### Objective
+Add controlled user-data ingestion for the active corrugated packaging project.
+
+### Implemented Scope
+- Canonical JSON upload with encoding and size controls
+- Limited `project.csv` and `alternatives.csv` parsing
+- Canonical normalization
+- Active-project binding
+- User-upload validation profile
+- Field-level issue reporting
+- Downloadable templates
+- Save-only-when-valid workflow
+- Immutable dataset-version storage
+- Canonical duplicate detection across JSON and CSV
+- Archived-project upload prohibition
+
+### Design Rules
+- JSON remains canonical
+- CSV is limited to exactly two documented templates
+- Invalid uploads are never stored
+- Uploaded recommendations cannot pre-approve a decision
+- Incomplete technical evidence can remain structurally valid but must remain eligible for `insufficient_data`
+- Existing analytical engines and persistence schema remain unchanged
+
+### Budget
+- Planned allocation: 16 hours
+- Estimated effort used: 15.5 hours
+- Program budget before build: 64.0 hours
+- Estimated program budget after build: 48.5 hours
+
+### Scope Exclusions
+No configurable thresholds, scenario execution, decision-history UI, authentication, external database, PDF or Excel extraction, OCR, ERP integration, supplier workflow, AI approval, or new packaging category.
 
 ### Merge Gate
 Full CI and complete diff review must pass before squash merge. Do not merge automatically.

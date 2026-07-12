@@ -1,6 +1,42 @@
 # Changelog
 
-## [1.0.2-project-dashboard] — Pending
+## [1.0.3-upload-validation] — Pending
+
+### Added
+- Canonical UTF-8 JSON upload with a 2 MB limit
+- Limited template-based CSV upload using exactly `project.csv` and `alternatives.csv`
+- Canonical normalization for JSON and CSV inputs
+- Active-project binding and user-upload validation profile
+- Field-level validation issue reporting
+- Dynamically generated JSON and CSV templates
+- Save-only-when-valid workflow
+- Immutable dataset-version storage
+- Duplicate canonical-content detection across JSON and CSV
+- Archived-project upload prohibition
+- Upload design and QA documentation
+- Twenty-four upload, validation, persistence, and scope tests
+
+### Preserved
+- Existing deterministic analytical engines
+- Existing `app.py` workflow and project dashboard
+- Engineering-validation and non-autonomous-approval controls
+- Synthetic-data and non-production disclaimers
+- Draft integration-contract status
+- AI Procurement Copilot repository separation
+- Existing database schema and immutable-history triggers
+
+### Excluded
+- Configurable thresholds
+- Scenario execution
+- Decision-history interface
+- Authentication and external database
+- PDF, Excel, OCR, and unstructured-document extraction
+- ERP, supplier workflow, AI approval, and new-category capabilities
+
+### Scope Boundary
+PVE-1.0.3 adds controlled ingestion only. Uploaded data cannot pre-approve a packaging decision, invalid uploads are not stored, and incomplete technical evidence remains eligible for an `insufficient_data` outcome.
+
+## [1.0.2-project-dashboard] — Completed
 
 ### Added
 - Streamlit multi-project dashboard page
@@ -19,6 +55,12 @@
 - Project selectboxes no longer mutate active workspace session state automatically.
 - Active workspace changes now require the explicit `Select as active workspace` action.
 - Archiving the active project clears the active workspace safely.
+
+### Completed
+- PR #18 merged and closed
+- Squash merge commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
+- Tests: 100 passed, 0 failed, 0 errors
+- Source branch deleted
 
 ### Preserved
 - Existing deterministic analytical engines
