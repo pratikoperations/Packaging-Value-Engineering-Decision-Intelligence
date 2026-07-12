@@ -3,11 +3,11 @@
 ## Project
 Packaging Value Engineering & Decision Intelligence
 
-## Current Completed Build
-PVE-0.3 — Cost and Material Engine
+## Current Build
+PVE-0.4 — Technical Qualification and Risk
 
 ## Status
-Completed and merged
+Implementation complete — CI and QA pending
 
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
@@ -15,42 +15,33 @@ Completed and merged
 ## Stable Branch
 `main`
 
-## Merge Record
-- Pull request: PR #5
-- Merge method: Squash merge
-- Merge commit: `de9d18a428274bfafd369e7509f88b20bc33db89`
-- PR status: Merged and closed
-- Original feature branch: Deleted
+## Working Branch
+`agent/pve-0.4-technical-qualification-risk`
 
-## PVE-0.3 Scope Completed
-- Deterministic material analysis by alternative
-- Component-weight aggregation and variance checks
-- Annual material mass calculation
-- Material change in grams and percentage versus baseline
-- Deterministic unit-cost aggregation
-- Annual cost calculation
-- Unit and annual savings versus baseline
-- Cost change percentage versus baseline
-- Explicit validation errors for missing or inconsistent inputs
-- Eight new automated engine tests
+## Completed Builds
+- PVE-0.1 — Repository Foundation
+- PVE-0.2 — Data Model and Demo Data
+- PVE-0.3 — Cost and Material Engine
 
-## Validated CI
-- Workflow: PVE CI
-- Run number: 108
-- Run ID: `29181583399`
-- Validated PR commit: `847be5db56b413ec49868c50ea58092686555a5c`
-- Job: `validate-repository`
-- Result: Success
-- Tests: 18 passed, 0 failed, 0 errors
+## PVE-0.4 Scope Completed
+- Deterministic technical qualification across all declared requirements
+- Explicit qualified, conditionally qualified, not qualified, and insufficient-data outcomes
+- Failure precedence and missing-evidence handling
+- Validation-required outputs for open activities and evidence gaps
+- Deterministic quality, supply, and implementation risk indicators
+- Probability-based severity escalation
+- Explicit missing-risk-category reporting
+- High and critical risk mitigation requirements
+- Twelve new automated tests
 
 ## Scope Boundary
-No application UI, technical qualification, risk engine, recommendation scoring, supplier ranking, allocation, scenario engine, autonomous technical approval, or PVE-0.4 functionality is included. The integration contract remains draft.
+No application UI, recommendation scoring, supplier ranking, supplier allocation, scenario or sensitivity engine, autonomous technical approval, final integration contract, or PVE-0.5 functionality is included. The integration contract remains draft.
 
 ## QA Result
-Pass
+Conditional Pass pending PVE CI and full PR-diff verification.
 
-## Next Approved Build
-PVE-0.4 — Technical Qualification and Risk
+## Next Build
+PVE-0.5 — Scenario and Recommendation UI
 
-## Start Condition for PVE-0.4
-PVE-0.4 may begin after this post-merge closure PR is merged into `main` and PVE CI passes on the closure branch.
+## Start Condition for PVE-0.5
+PVE-0.5 may begin only after PVE-0.4 passes CI and QA and is merged into `main`.
