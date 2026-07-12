@@ -3,19 +3,20 @@
 ## Current Version
 - Project version: `0.2.0-data-model`
 - Build: `PVE-0.2`
-- Status: `0.2.0-data-model ready`
+- Status: `0.2.0-data-model completed`
 - Stable branch: `main`
-- Working branch: `agent/pve-0.2-data-model-demo-data`
-- Base commit: `d4672eadc23f23ba5528a44ff91fba649e6eff68`
+- Merge commit: `33b4319c3b74d8caaad6bc03cb85cb6ebf1727ff`
+- Pull request: PR #3 merged and closed
+- Original feature branch: Deleted
 
 ## Validation Evidence
 - Workflow: PVE CI
-- Run number: 58
-- Run ID: `29180838040`
-- Validated commit: `436820a54ff066b2c2265403bda628c78107962d`
+- Run number: 68
+- Run ID: `29180955427`
+- Validated PR commit: `d02f45fcf0d17904b1cd7efa3577a89dfec7cf98`
 - Job: `validate-repository`
-- Conclusion: success
-- Tests: 10 run, 10 passed, 0 failed, 0 errors
+- Conclusion: Success
+- Tests: 10 passed, 0 failed, 0 errors
 
 ## Current Deliverables
 - Canonical data-model version: `0.2.0`
@@ -26,7 +27,7 @@
 ## Scope Boundary
 No application UI, cost calculation, savings calculation, material-optimization engine, recommendation scoring, supplier ranking, or allocation is included. The integration contract remains draft.
 
-## Next Planned Build
+## Next Approved Build
 - PVE-0.3 — Cost and Material Engine
 
 ## Later Builds
@@ -41,4 +42,4 @@ No application UI, cost calculation, savings calculation, material-optimization 
 - Planned Procurement Copilot adapter: `PC-PVE-ADAPTER-v1.0`
 
 ## Version Rule
-PVE-0.3 begins only after PVE-0.2 passes final documentation CI and PR #3 is merged into `main`.
+PVE-0.3 begins only after the PVE-0.2 post-merge closure PR is merged into `main`.

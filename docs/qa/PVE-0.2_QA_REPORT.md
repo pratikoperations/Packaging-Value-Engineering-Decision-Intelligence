@@ -3,6 +3,9 @@
 ## Build
 PVE-0.2 — Data Model and Demo Data
 
+## Status
+Completed and merged
+
 ## Scope
 Canonical field dictionary, synthetic corrugated shipping-case data, invalid-data fixtures, deterministic validation, automated tests, and CI expansion.
 
@@ -16,39 +19,12 @@ Canonical field dictionary, synthetic corrugated shipping-case data, invalid-dat
 - Data model aligns with the draft PVE integration contract
 - No UI, cost calculation, savings calculation, material optimization, recommendation scoring, supplier ranking, or allocation is introduced
 
-## Implemented Checks
-- Required-field validation
-- Positive and non-negative numeric validation
-- Supported units and currency consistency
-- Allowed status and category values
-- Duplicate identifiers
-- Cross-record references
-- Evidence references
-- Dimensions, weights, and percentages
-- Exact baseline count
-- Synthetic dataset labelling
-- Draft integration-contract marker
-- Insufficient-data eligibility
-
-## Automated Tests
-Ten standard-library `unittest` cases cover:
-1. Valid complete dataset
-2. Missing mandatory field
-3. Negative value
-4. Duplicate ID
-5. Unsupported unit
-6. Invalid enum value
-7. Missing evidence
-8. Invalid percentage
-9. Partial dataset and insufficient-data eligibility
-10. Currency consistency
-
 ## Validated CI Evidence
 - Workflow: PVE CI
-- Run number: 58
-- Run ID: `29180838040`
+- Run number: 68
+- Run ID: `29180955427`
 - Job: `validate-repository`
-- Validated commit: `436820a54ff066b2c2265403bda628c78107962d`
+- Validated PR commit: `d02f45fcf0d17904b1cd7efa3577a89dfec7cf98`
 - Status: completed
 - Conclusion: success
 - Workflow steps: all passed
@@ -56,6 +32,14 @@ Ten standard-library `unittest` cases cover:
 - Tests passed: 10
 - Failures: 0
 - Errors: 0
+
+## Merge Record
+- Pull request: PR #3
+- PR status: Merged and closed
+- Merge method: Squash merge
+- Merge commit: `33b4319c3b74d8caaad6bc03cb85cb6ebf1727ff`
+- Stable branch: `main`
+- Original feature branch: Deleted
 
 ## Known Limitations
 - Cost values are inputs only; no cost calculation is performed
@@ -67,7 +51,7 @@ Ten standard-library `unittest` cases cover:
 - Contract remains draft until PVE-0.6
 
 ## QA Status
-**Pass** — PVE-0.2 implementation, validation logic, synthetic data, and automated tests passed PVE CI run #58.
+**Pass** — PVE-0.2 implementation, validation logic, synthetic data, and automated tests passed PVE CI run #68 and were merged through PR #3.
 
 ## Release Recommendation
-PVE-0.2 is ready for review and merge after the final documentation commit passes CI. PVE-0.3 begins only after PR #3 is merged into `main`.
+PVE-0.2 is complete. PVE-0.3 is the next approved build after this closure PR is merged into `main`.
