@@ -43,26 +43,45 @@ class PersistenceTestCase(unittest.TestCase):
             annual_volume=1_200_000,
         )
 
-    def build_chain(self) -> tuple[dict, dict, dict, dict, dict]:
-        project = self.create_project()
-        dataset = self.datasets.create_version(
-            project_id=project["project_id"],
+    def create_dataset(self, project_id: str, value: int) -> dict:
+        return self.datasets.create_version(
+            project_id=project_id,
             source_type="json",
-            canonical_data={"dataset_type": "user_upload", "value": 1},
+            canonical_data={"dataset_type": "user_upload", "value": value},
             validation_status="valid",
         )
-        threshold = self.thresholds.create_version(
-            project_id=project["project_id"],
+
+    def create_threshold(self, project_id: str, value: int) -> dict:
+        return self.thresholds.create_version(
+            project_id=project_id,
             profile_name="Default",
-            profile={"minimum_annual_savings": 0},
+            profile={"minimum_annual_savings": value},
         )
-        scenario = self.scenarios.create(
-            project_id=project["project_id"],
-            dataset_id=dataset["dataset_id"],
-            threshold_profile_id=threshold["threshold_profile_id"],
-            scenario_name="Base scenario",
+
+    def create_scenario(
+        self,
+        project_id: str,
+        dataset_id: str,
+        threshold_profile_id: str | None,
+        name: str = "Base scenario",
+    ) -> dict:
+        return self.scenarios.create(
+            project_id=project_id,
+            dataset_id=dataset_id,
+            threshold_profile_id=threshold_profile_id,
+            scenario_name=name,
             assumptions={"annual_volume": 1_200_000},
             results={"annual_savings": 1000},
+        )
+
+    def build_chain(self) -> tuple[dict, dict, dict, dict, dict]:
+        project = self.create_project()
+        dataset = self.create_dataset(project["project_id"], 1)
+        threshold = self.create_threshold(project["project_id"], 0)
+        scenario = self.create_scenario(
+            project["project_id"],
+            dataset["dataset_id"],
+            threshold["threshold_profile_id"],
         )
         decision = self.decisions.create_snapshot(
             project_id=project["project_id"],
@@ -77,6 +96,27 @@ class PersistenceTestCase(unittest.TestCase):
             source_commit="TEST",
         )
         return project, dataset, threshold, scenario, decision
+
+    def decision_kwargs(
+        self,
+        *,
+        project_id: str,
+        scenario_id: str,
+        dataset_id: str,
+        threshold_profile_id: str | None,
+    ) -> dict:
+        return {
+            "project_id": project_id,
+            "scenario_id": scenario_id,
+            "dataset_id": dataset_id,
+            "threshold_profile_id": threshold_profile_id,
+            "status": "conditionally_recommended",
+            "preferred_alternative_id": "ALT-A",
+            "recommendation": {"status": "conditionally_recommended"},
+            "gate_results": {"engineering_validation_required": True},
+            "engine_version": "1.0.1",
+            "source_commit": "TEST",
+        }
 
     def test_schema_initialization(self):
         self.assertEqual(current_schema_version(self.database), SCHEMA_VERSION)
@@ -226,6 +266,123 @@ class PersistenceTestCase(unittest.TestCase):
         )
         self.assertEqual(len(self.projects.list(archived=None)), 0)
         self.assertEqual(len(ProjectRepository(other).list(archived=None)), 1)
+
+    def test_scenario_rejects_dataset_from_another_project(self):
+        project_a = self.create_project("PVE-A")
+        project_b = self.create_project("PVE-B")
+        dataset_b = self.create_dataset(project_b["project_id"], 101)
+        with self.assertRaisesRegex(ValueError, "same project"):
+            self.create_scenario(project_a["project_id"], dataset_b["dataset_id"], None)
+
+    def test_scenario_rejects_threshold_from_another_project(self):
+        project_a = self.create_project("PVE-A")
+        project_b = self.create_project("PVE-B")
+        dataset_a = self.create_dataset(project_a["project_id"], 102)
+        threshold_b = self.create_threshold(project_b["project_id"], 102)
+        with self.assertRaisesRegex(ValueError, "same project"):
+            self.create_scenario(
+                project_a["project_id"],
+                dataset_a["dataset_id"],
+                threshold_b["threshold_profile_id"],
+            )
+
+    def test_decision_rejects_scenario_from_another_project(self):
+        project_a = self.create_project("PVE-A")
+        project_b = self.create_project("PVE-B")
+        dataset_b = self.create_dataset(project_b["project_id"], 103)
+        threshold_b = self.create_threshold(project_b["project_id"], 103)
+        scenario_b = self.create_scenario(
+            project_b["project_id"], dataset_b["dataset_id"], threshold_b["threshold_profile_id"]
+        )
+        with self.assertRaisesRegex(ValueError, "scenario must belong"):
+            self.decisions.create_snapshot(
+                **self.decision_kwargs(
+                    project_id=project_a["project_id"],
+                    scenario_id=scenario_b["scenario_id"],
+                    dataset_id=dataset_b["dataset_id"],
+                    threshold_profile_id=threshold_b["threshold_profile_id"],
+                )
+            )
+
+    def test_decision_rejects_dataset_from_another_project(self):
+        project_a = self.create_project("PVE-A")
+        project_b = self.create_project("PVE-B")
+        dataset_a = self.create_dataset(project_a["project_id"], 104)
+        threshold_a = self.create_threshold(project_a["project_id"], 104)
+        scenario_a = self.create_scenario(
+            project_a["project_id"], dataset_a["dataset_id"], threshold_a["threshold_profile_id"]
+        )
+        dataset_b = self.create_dataset(project_b["project_id"], 105)
+        with self.assertRaisesRegex(ValueError, "dataset must belong"):
+            self.decisions.create_snapshot(
+                **self.decision_kwargs(
+                    project_id=project_a["project_id"],
+                    scenario_id=scenario_a["scenario_id"],
+                    dataset_id=dataset_b["dataset_id"],
+                    threshold_profile_id=threshold_a["threshold_profile_id"],
+                )
+            )
+
+    def test_decision_rejects_threshold_from_another_project(self):
+        project_a = self.create_project("PVE-A")
+        project_b = self.create_project("PVE-B")
+        dataset_a = self.create_dataset(project_a["project_id"], 106)
+        threshold_a = self.create_threshold(project_a["project_id"], 106)
+        scenario_a = self.create_scenario(
+            project_a["project_id"], dataset_a["dataset_id"], threshold_a["threshold_profile_id"]
+        )
+        threshold_b = self.create_threshold(project_b["project_id"], 107)
+        with self.assertRaisesRegex(ValueError, "threshold profile must be global"):
+            self.decisions.create_snapshot(
+                **self.decision_kwargs(
+                    project_id=project_a["project_id"],
+                    scenario_id=scenario_a["scenario_id"],
+                    dataset_id=dataset_a["dataset_id"],
+                    threshold_profile_id=threshold_b["threshold_profile_id"],
+                )
+            )
+
+    def test_decision_rejects_dataset_different_from_scenario_dataset(self):
+        project = self.create_project("PVE-A")
+        dataset_one = self.create_dataset(project["project_id"], 108)
+        dataset_two = self.create_dataset(project["project_id"], 109)
+        threshold = self.create_threshold(project["project_id"], 108)
+        scenario = self.create_scenario(
+            project["project_id"], dataset_one["dataset_id"], threshold["threshold_profile_id"]
+        )
+        with self.assertRaisesRegex(ValueError, "match the scenario dataset"):
+            self.decisions.create_snapshot(
+                **self.decision_kwargs(
+                    project_id=project["project_id"],
+                    scenario_id=scenario["scenario_id"],
+                    dataset_id=dataset_two["dataset_id"],
+                    threshold_profile_id=threshold["threshold_profile_id"],
+                )
+            )
+
+    def test_decision_rejects_threshold_different_from_scenario_threshold(self):
+        project = self.create_project("PVE-A")
+        dataset = self.create_dataset(project["project_id"], 110)
+        threshold_one = self.create_threshold(project["project_id"], 110)
+        threshold_two = self.thresholds.create_version(
+            project_id=project["project_id"],
+            profile_name="Alternate",
+            profile={"minimum_annual_savings": 111},
+        )
+        scenario = self.create_scenario(
+            project["project_id"],
+            dataset["dataset_id"],
+            threshold_one["threshold_profile_id"],
+        )
+        with self.assertRaisesRegex(ValueError, "match the scenario threshold"):
+            self.decisions.create_snapshot(
+                **self.decision_kwargs(
+                    project_id=project["project_id"],
+                    scenario_id=scenario["scenario_id"],
+                    dataset_id=dataset["dataset_id"],
+                    threshold_profile_id=threshold_two["threshold_profile_id"],
+                )
+            )
 
 
 if __name__ == "__main__":
