@@ -41,63 +41,53 @@
 ## PVE-0.6 — Decision Package Export
 **Status:** Completed and merged
 
-### Objective
-Create a deterministic, read-only executive decision package with machine-readable and human-readable exports.
-
-### Completed Scope
-- Structured executive summary
-- Explicit project and scenario metadata
-- Baseline and proposed-alternative comparison
-- Cost and material results
-- Technical qualification outcomes and evidence gaps
-- Quality, supply, and implementation risk outcomes
-- Recommendation rationale, constraints, and validation requirements
-- Deterministic JSON export
-- Deterministic Markdown executive report
-- Streamlit download controls
-- Ten new automated tests
-
-### Validation Controls
-- Mandatory top-level sections
-- Required identity and provenance metadata
-- Positive annual volume
-- Single valid baseline
-- Complete scenario, qualification, risk, and recommendation coverage
-- Unique exported alternative identifiers
-- Fixed read-only, no-approval, no-allocation, no-integration controls
-
-### Completion Record
-- Pull request: PR #11
-- PR status: Merged and closed
-- Merge method: Squash merge
 - Merge commit: `70dd9dcbf60ab0896e4e38aedf8e20dc65c40985`
-- Stable branch: `main`
-- Original feature branch: Deleted
-
-### Validated CI Evidence
-- Workflow: PVE CI
-- Run number: 227
-- Run ID: `29183476545`
-- Validated PR commit: `55b5294c6c1a4924dca681a47680af70be551b4d`
-- Job: `validate-repository`
-- Conclusion: Success
+- Closure merge commit: `1b3a6f0250f3645df08e908b3be30d75b99294e7`
+- QA: Pass
 - Tests: 52 passed, 0 failed, 0 errors
 
+## PVE-0.7 — QA and Interview Release
+**Status:** Release implementation complete — CI and final QA pending
+
+### Objective
+Convert the completed analytical application into a recoverable, interview-ready release with end-to-end evidence and clear operating boundaries.
+
+### Completed Scope
+- Final README and local-run guidance
+- End-to-end dataset-to-export QA
+- Static Streamlit UI smoke validation
+- Interview demonstration guide
+- Final release checklist and acceptance criteria
+- Recovery-readiness updates
+- Six final-release automated tests
+- CI enforcement for release documentation and PVE-0.7 identity
+
+### Acceptance Criteria
+- Canonical synthetic data validates.
+- All alternatives receive cost, material, qualification, and risk outputs.
+- All proposed alternatives receive recommendation outputs.
+- JSON and Markdown exports are deterministic and readable.
+- Human approval and project-boundary controls remain fixed.
+- UI source includes scenario, comparison, recommendation, export, and disclaimer controls.
+- README, demo guide, checklist, and recovery instructions are complete.
+- Integration contract remains draft.
+
+### Expected Test Result
+- Existing tests: 52
+- New PVE-0.7 release tests: 6
+- Expected total: 58
+
 ### Scope Exclusions
+- New analytical engines
+- Supplier ranking or allocation
 - Autonomous technical approval
-- Supplier allocation
 - Final integration contract
 - External system integration
-- PVE-0.7 release packaging
+- Production security, workflow, or deployment implementation
 
-### Exit Criteria Result
-- Existing 42 tests continue to pass: Pass
-- Ten PVE-0.6 tests pass: Pass
-- Total automated test count is 52: Pass
-- Full branch diff reviewed: Pass
-- PVE CI passes: Pass
-- QA report finalized: Pass
-- PR merged: Pass
-
-### Next Approved Build
-PVE-0.7 — QA and Interview Release, after the post-merge closure PR is merged into `main`.
+### Exit Criteria
+- All 58 tests pass
+- Full PR diff is reviewed
+- PVE CI passes
+- QA report is finalized
+- Draft PR is opened and later marked ready only after final CI
