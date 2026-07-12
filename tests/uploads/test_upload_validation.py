@@ -7,6 +7,7 @@ from pathlib import Path
 
 from src.application import ProjectService
 from src.persistence import Database, DatasetRepository, ProjectRepository
+from src.persistence._utils import content_hash
 from src.persistence.migrations import initialize_database
 from src.uploads import DuplicateDatasetError, UploadParseError, UploadService
 from src.uploads.csv_parser import parse_csv_uploads
@@ -109,6 +110,30 @@ class UploadValidationTestCase(unittest.TestCase):
         canonical = normalize_user_dataset(raw, self.project)
         self.assertIsInstance(canonical["packaging_project"]["annual_volume"], int)
         self.assertIsInstance(canonical["packaging_alternatives"][0]["length_mm"], int)
+
+    def test_normalizer_preserves_non_integral_decimals(self):
+        raw = {
+            "packaging_project": {
+                "annual_volume": "100000.25",
+            },
+            "packaging_alternatives": [],
+        }
+        canonical = normalize_user_dataset(raw, self.project)
+        value = canonical["packaging_project"]["annual_volume"]
+        self.assertIsInstance(value, float)
+        self.assertEqual(value, 100000.25)
+
+    def test_normalizer_preserves_booleans_in_numeric_fields(self):
+        raw = {
+            "packaging_project": {
+                "annual_volume": True,
+            },
+            "packaging_alternatives": [],
+        }
+        canonical = normalize_user_dataset(raw, self.project)
+        value = canonical["packaging_project"]["annual_volume"]
+        self.assertIs(value, True)
+        self.assertIsInstance(value, bool)
 
     def test_json_template_validates_for_active_project(self):
         prepared = self.upload_service.prepare_json(
@@ -221,7 +246,17 @@ class UploadValidationTestCase(unittest.TestCase):
             files=self.csv_files(),
             project=self.project,
         )
+
+        json_volume = json_prepared.canonical_data["packaging_project"]["annual_volume"]
+        csv_volume = csv_prepared.canonical_data["packaging_project"]["annual_volume"]
+        self.assertEqual(type(json_volume), type(csv_volume))
+        self.assertEqual(json_volume, csv_volume)
         self.assertEqual(json_prepared.canonical_data, csv_prepared.canonical_data)
+        self.assertEqual(
+            content_hash(json_prepared.canonical_data),
+            content_hash(csv_prepared.canonical_data),
+        )
+
         self.upload_service.save_valid_dataset(
             project_id=self.project["project_id"],
             prepared=json_prepared,
