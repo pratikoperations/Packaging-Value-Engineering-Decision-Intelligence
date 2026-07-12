@@ -29,25 +29,26 @@ Each entry records date, build ID, branch, objective, files changed, checks, res
 - QA result: Pass
 
 ## 2026-07-12 — PVE-0.5 Scenario and Recommendation UI
-- Objective: Add explicit scenarios, transparent alternative comparison, explainable recommendations, and a lightweight UI.
 - Result: Completed and merged through PR #9.
-- Merge method: Squash merge
 - Merge commit: `930a4e25d3392b7107616ec498501ef48aa72a8e`
-- Original feature branch: Deleted
-- Validated CI:
-  - Workflow: PVE CI
-  - Run number: 190
-  - Run ID: `29182740157`
-  - Validated PR commit: `252bf329fcb50c9d3c7c7fb1392309599356eb54`
-  - Job: `validate-repository`
-  - Conclusion: Success
-  - Tests: 42 passed, 0 failed, 0 errors
+- Closure merge commit: `47ad5730699e49ab64accb41b19e488ebc166ffa`
+- Tests: 42 passed, 0 failed, 0 errors
 - QA result: Pass
-- Scope exclusions: No supplier ranking, allocation, autonomous approval, final contract, decision export, or PVE-0.6 logic.
 
-## 2026-07-12 — PVE-0.5 Post-Merge Closure
-- Branch: `agent/pve-0.5-post-merge-closure`
-- Objective: Synchronize governance and recovery records after PR #9 merge.
-- Files changed: `PROJECT_STATUS.md`, `VERSION_MANIFEST.md`, `ACTIVITY_LOG.md`, `BUILD_HISTORY.md`, `CHANGELOG.md`, `RECOVERY_MANIFEST.md`, and `docs/qa/PVE-0.5_QA_REPORT.md`.
-- Result: Closure records prepared for review.
-- Next action: Confirm PVE CI, merge the closure PR, then begin PVE-0.6.
+## 2026-07-12 — PVE-0.6 Decision Package Export
+- Branch: `agent/pve-0.6-decision-package-export`
+- Objective: Add deterministic read-only decision-package assembly and JSON/Markdown exports.
+- Files created:
+  - `src/exports/__init__.py`
+  - `src/exports/decision_package.py`
+  - `tests/exports/__init__.py`
+  - `tests/exports/test_decision_package.py`
+  - `docs/qa/PVE-0.6_QA_REPORT.md`
+- Files updated: `app.py`, CI workflow, test documentation, and governance records.
+- Export contents: executive summary, scenario assumptions, baseline and alternatives, cost/material results, qualification, risk, recommendations, constraints, validation requirements, metadata, and decision controls.
+- Export formats: deterministic sorted JSON and deterministic Markdown report.
+- Validation: required sections, identity metadata, positive volume, baseline integrity, complete alternative coverage, unique IDs, complete decision sections, and fixed safety controls.
+- Tests added: 10; expected total automated tests: 52.
+- Scope exclusions: No autonomous approval, supplier allocation, final contract, external integration, or PVE-0.7 release packaging.
+- Result: Implementation complete; CI and final QA pending.
+- Next action: Inspect the full diff, open a draft PR, and validate PVE CI.
