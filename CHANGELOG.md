@@ -1,6 +1,39 @@
 # Changelog
 
-## [1.0.1-foundation-persistence] — Pending
+## [1.0.2-project-dashboard] — Pending
+
+### Added
+- Streamlit multi-project dashboard page
+- Portfolio summary metrics for projects, dataset versions, and saved decisions
+- Project creation and active-session selection
+- Metadata-only project duplication
+- Project archiving and separate archived-project view
+- Runtime SQLite service factory
+- Runtime database Git exclusion
+- Project dashboard design and QA documentation
+- Ten dashboard and application-service tests
+
+### Preserved
+- Existing deterministic analytical engines
+- Existing `app.py` decision workflow
+- Engineering-validation and non-autonomous-approval controls
+- Synthetic-data and non-production disclaimers
+- Draft integration-contract status
+- AI Procurement Copilot repository separation
+- Immutable historical evidence
+
+### Excluded
+- Upload and parsing workflows
+- Configurable threshold UI
+- Scenario execution from the dashboard
+- Decision-history UI
+- Authentication and external database
+- ERP, supplier, AI approval, PDF, Excel, and new-category capabilities
+
+### Scope Boundary
+PVE-1.0.2 adds project portfolio navigation only. Dashboard metrics do not represent realized savings, approved packaging changes, or supplier allocation. SQLite remains demonstration persistence.
+
+## [1.0.1-foundation-persistence] — Completed
 
 ### Added
 - SQLite database connection manager with foreign-key enforcement
@@ -11,6 +44,12 @@
 - Cross-project integrity validation for scenario and decision links
 - Temporary isolated database support for automated tests
 - Comprehensive persistence, immutability, and project-integrity test coverage
+
+### Completed
+- PR #17 merged and closed
+- Squash merge commit: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
+- Tests: 85 passed, 0 failed, 0 errors
+- Source branch deleted
 
 ### Preserved
 - Existing deterministic analytical engines
