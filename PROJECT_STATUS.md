@@ -19,52 +19,23 @@ Packaging Value Engineering & Decision Intelligence
 ## PVE 1.0 Controlled Build
 
 ### Program Status
-Final build implemented and validated; PR #22 final review pending.
+Completed, validated, merged, and governance-closed.
 
 ### Completed Builds
-- PVE-1.0.1 — Foundation and Persistence
-  - PR #17 merged and closed
-  - Merge commit: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
-  - Tests: 85 passed, 0 failed, 0 errors
-  - Effort used: 14.5 hours
-- PVE-1.0.2 — Project Dashboard
-  - PR #18 merged and closed
-  - Merge commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
-  - Tests: 100 passed, 0 failed, 0 errors
-  - Effort used: 11.5 hours
-- PVE-1.0.3 — Upload and Validation
-  - PR #19 merged and closed
-  - Merge commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
-  - Tests: 126 passed, 0 failed, 0 errors
-  - Effort used: 16.5 hours
-- PVE-1.0.4 — Configurable Business Thresholds
-  - PR #20 merged and closed
-  - Merge commit: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
-  - Tests: 143 passed, 0 failed, 0 errors
-  - Effort used: 12.5 hours
-- PVE-1.0.5 — Controlled Scenario Execution
-  - PR #21 merged and closed
-  - Merge commit: `99416d91025b6cfbff40142ce9fbcd462eb1028f`
-  - Tests: 160 passed, 0 failed, 0 errors
-  - Effort used: 17.5 hours
-  - Program budget remaining: 17.5 hours
-  - Source branch: Deleted
+- PVE-1.0.1 — Foundation and Persistence; PR #17; merge `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`; 85 tests; 14.5 hours.
+- PVE-1.0.2 — Project Dashboard; PR #18; merge `87f3897c68503cddc2c7e64827d8c395b45065a5`; 100 tests; 11.5 hours.
+- PVE-1.0.3 — Upload and Validation; PR #19; merge `c3e5247510c062fe64ac1da171dcc2f107ff4967`; 126 tests; 16.5 hours.
+- PVE-1.0.4 — Configurable Business Thresholds; PR #20; merge `301a0d92d41f46a15e37c5bd059e8673c3f666a6`; 143 tests; 12.5 hours.
+- PVE-1.0.5 — Controlled Scenario Execution; PR #21; merge `99416d91025b6cfbff40142ce9fbcd462eb1028f`; 160 passed, 0 failed, 0 errors; 17.5 hours; source branch deleted.
+- PVE-1.0.6 — Decision Snapshot and Final Release Closure; PR #22; squash merge `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`; 179 passed, 0 failed, 0 errors; 17.0 hours; source branch deleted.
 
-### Current Final Build
+### Final Build
 PVE-1.0.6 — Decision Snapshot and Final Release Closure
 
-### Pull Request
-PR #22 — final review pending
-
-### Feature Branch
-`agent/pve-1.0.6-decision-release-closure`
-
-### Stable Baseline
-`d04c648bbf1fb074903166bc33ac5d73de643222`
-
-### Validation
-- Final validated CI: PVE CI #507
-- Run ID: `29221779591`
+### Final Validation
+- Workflow: PVE CI
+- Run number: 520
+- Run ID: `29223657516`
 - Tests: 179 passed, 0 failed, 0 errors
 
 ### Implemented Scope
@@ -97,5 +68,5 @@ PR #22 — final review pending
 ### Explicit Exclusions
 No authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, analytical-engine modification, recommendation-engine modification, or new packaging category.
 
-### Next Gate
-Complete final review, squash merge PR #22, delete the source branch, and perform post-merge governance closure. No additional build is started.
+### Final State
+PVE 1.0 is fully completed and governance-closed. No next build has been started.
