@@ -21,6 +21,7 @@
 - [x] Engineering validation remains mandatory
 - [x] Human approval remains mandatory
 - [x] Autonomous approval is prohibited
+- [x] No autonomous approval is permitted.
 - [x] Critical risk remains blocking
 - [x] Not-qualified alternatives remain blocked
 - [x] Insufficient data cannot become recommended
