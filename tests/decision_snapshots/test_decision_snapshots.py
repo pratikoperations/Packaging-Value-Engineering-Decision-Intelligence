@@ -36,7 +36,11 @@ class DecisionSnapshotTestCase(unittest.TestCase):
         self.thresholds = ThresholdRepository(self.database)
         self.scenarios = ScenarioRepository(self.database)
         self.decisions = DecisionRepository(self.database)
-        self.service = DecisionSnapshotService(self.scenarios, self.decisions)
+        self.service = DecisionSnapshotService(
+            self.datasets,
+            self.scenarios,
+            self.decisions,
+        )
         self.project = self.project_service.create_project(
             project_code="PVE-DECISION-001",
             project_name="Decision project",
@@ -47,7 +51,14 @@ class DecisionSnapshotTestCase(unittest.TestCase):
         self.dataset = self.datasets.create_version(
             project_id=self.project["project_id"],
             source_type="json",
-            canonical_data={"dataset_type": "user_upload", "packaging_alternatives": []},
+            canonical_data={
+                "dataset_type": "user_upload",
+                "baseline_specification": {"alternative_id": "ALT-BASE"},
+                "packaging_alternatives": [
+                    {"alternative_id": "ALT-BASE", "status": "baseline"},
+                    {"alternative_id": "ALT-A", "status": "proposed"},
+                ],
+            },
             validation_status="valid",
         )
         self.threshold = self.thresholds.create_version(
