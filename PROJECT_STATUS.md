@@ -34,41 +34,38 @@ PVE 1.0.6 is complete and governance-closed on `main`.
 - Build 6 — Readiness and Blocking Engine: complete; 9 hours.
 - Build 7 — Commercial and ROI Extension: complete; 5 hours.
 
-### Build 7 Delivered
-- Saving per unit.
-- Annual gross saving.
-- Expected realized saving.
-- First-year net benefit after testing, tooling, implementation, and qualification costs.
-- Payback period in months when monthly realized saving is positive.
-- Material reduction per unit and annually.
-- Percentage cost reduction and percentage material reduction.
-- Explicit estimate labels and retained user assumptions.
-- Non-negative input and realization-percentage validation.
-- Readiness blockers and approval governance preserved.
+### Current Build
+- Build 8 — Guided Streamlit Workflow and Updated Reports
+- Authorized effort: 8 hours
+- Implementation status: complete
+- Closure status: pending final-head CI
 
-### Latest Validation
-- Workflow: PVE CI #649
-- Run ID: `29256159775`
-- Result: success
-- Automated-test step: success
-- Expected suite composition: 213 tests
-- Failures: 0
-- Errors: 0
-
-### Outstanding Acceptance Criteria
-- Build 8: guided Streamlit workflow and updated reports.
-- Build 9: final regression QA, samples, demonstrations, QA report, release checklist, and release review.
+### Build 8 Delivered
+- Guided all-category workflow using the configuration-driven registry.
+- Category, objective, and change-type context.
+- Category-specific Excel template download and controlled Excel validation.
+- Existing JSON and CSV workflows retained.
+- Field-level validation issue display.
+- Readiness stage, percentage, weighted components, blockers, warnings, evidence, and source traceability.
+- Commercial and ROI outputs only when required inputs are present.
+- Explicit unavailable-output reasons.
+- Category testing checklist and document register display.
+- Machine-readable JSON and human-readable Markdown executive summaries.
+- Estimate labels, assumptions, engineering validation, human approval, and autonomous-approval prohibition retained.
 
 ### Budget
 - Fixed hard cap: 80 hours
 - Builds 1–7 consumed: 61 hours
-- Remaining allocation: 19 hours
+- Build 8 consumed: 8 hours
+- Total consumed: 69 hours
+- Remaining allocation: 11 hours
 
-### Current Blocker
-None. Build 8 requires separate authorization.
+### Outstanding Acceptance Criteria
+- Final Build 8 complete-suite CI pass with zero failures and errors.
+- Build 9 — Testing and Release QA — requires separate authorization.
 
 ### Scope Exclusions
 Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking or allocation, cloud database, machine learning, and autonomous approval remain excluded.
 
 ### Current State
-Builds 1–7 are complete and validated. PR #25 remains draft and must not be merged. Build 8 has not started.
+Build 8 implementation is complete and awaiting final-head CI. PR #25 remains draft and must not be merged. Build 9 has not started.
