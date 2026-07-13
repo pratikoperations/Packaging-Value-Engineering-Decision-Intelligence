@@ -3,26 +3,38 @@
 ## Principle
 Power BI is a read-only executive reporting layer. It must not bypass PVE operational controls or create approval authority.
 
-## Proposed Roles
+## Roles
 - **PVE Operator** — uses Streamlit operational workflows.
 - **Packaging Reviewer** — reviews technical and risk evidence.
 - **Procurement Viewer** — views permitted Power BI reports.
 - **Executive Viewer** — views portfolio and summary pages.
-- **Reporting Administrator** — manages refresh and semantic model, without decision approval authority.
+- **Reporting Administrator** — manages PostgreSQL reporting loads and Power BI refresh without decision approval authority.
 
-## Access Controls
-- Microsoft Entra ID is the preferred identity provider for future departmental deployment.
-- Power BI workspace access is separated from PVE operational permissions.
-- SQL reporting access uses least privilege and approved read-only views.
-- Row-level security should restrict projects or business units when real departmental data is used.
-- Synthetic portfolio data must remain clearly labelled.
+## Access Boundaries
+- Streamlit operational access remains separate from Power BI reporting access.
+- SQLite remains private to the operational application.
+- PostgreSQL reporting access follows least privilege.
+- Power BI uses approved read-only PostgreSQL views only.
+- Reporting access never grants operational write access.
+- Microsoft Entra ID is preferred if Power BI Service sharing is later enabled.
+- Row-level security is required only when real multi-user departmental data is introduced; portfolio use may use clearly labelled synthetic data without RLS.
 
-## Mandatory Boundaries
+## Mandatory Controls
 - engineering validation remains mandatory
 - human approval remains mandatory
 - autonomous approval remains prohibited
-- reporting access does not grant operational write access
-- project isolation and immutable evidence remain enforced by the authoritative application
+- project isolation remains preserved
+- immutable evidence remains enforced by the authoritative application
+- dataset, scenario, threshold, and source identifiers remain visible for traceability
 
-## Planning Dependencies
-Confirm Microsoft tenant, Power BI licence, workspace availability, SQL hosting, data classification, user population, and sharing method before implementation.
+## Portfolio Sharing Decision
+- Streamlit remains publicly shareable under its current link.
+- Power BI Desktop is the minimum guaranteed demonstration method.
+- Power BI Service sharing is optional and depends on account, tenant, workspace, and licence availability.
+- Publish-to-web must not be used for confidential, personal, supplier, or company data.
+
+## Dependencies Before Implementation
+Confirm PostgreSQL hosting, network reachability, Power BI account, tenant, licence, workspace, intended sharing audience, and whether a gateway is required.
+
+## Deferred
+Enterprise identity design, production RLS administration, formal data classification, penetration testing, enterprise deployment, and operational persistence migration.
