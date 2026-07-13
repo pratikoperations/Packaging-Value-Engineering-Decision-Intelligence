@@ -1,27 +1,33 @@
 # PVE 1.1 Build 8 QA Report
 
 ## Scope
-Guided Streamlit workflow and updated human-readable and machine-readable reports only.
+Guided Streamlit workflow and updated JSON and Markdown reports.
 
-## Implemented
-- Category/objective/change-type project context.
+## Delivered
+- Category, objective, and change-type project context.
 - Category-specific Excel template download.
 - Controlled Excel, JSON, and CSV upload paths.
-- Field-level validation issue display.
-- Readiness stage, percentage, weighted components, blockers, output availability, and source traceability.
+- Field-level validation issues.
+- Readiness stage, score, blockers, output availability, and source traceability.
 - Commercial and ROI outputs only when required inputs are present.
-- Explicit unavailable-output reasons.
-- Category testing and document evidence views.
-- JSON and Markdown executive readiness reports.
-- Estimate labels, user assumptions, engineering validation, human approval, and autonomous-approval prohibition retained.
+- Explicit reasons for unavailable outputs.
+- Testing and document evidence views.
+- JSON and Markdown executive summaries.
+- Estimate labels, assumptions, engineering validation, and human approval controls retained.
 
-## Focused Validation
-- Report tests cover unavailable-output reasons, estimate labels, approval limitations, and missing commercial inputs.
-- Existing upload and commercial engines are reused without changing JSON/CSV contracts or immutable dataset persistence.
-- Workflow reads the latest saved immutable dataset for the selected active project.
+## Validation
+- PVE CI #699.
+- Run ID: `29278878816`.
+- Focused Build 8 tests: 4 passed.
+- Complete automated suite: 213 passed.
+- Total test executions: 217.
+- Failures: 0.
+- Errors: 0.
+- Existing Builds 1–7 behavior remained intact.
+- The upload-page duplicate-content disclosure required by the existing static contract was restored.
 
-## Scope Exclusion Check
-No Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking/allocation, cloud database, machine learning, or autonomous approval was introduced.
+## Scope Check
+No excluded integration, deployment, authentication, document-reading, machine-learning, or supplier-allocation work was introduced.
 
-## Closure Gate
-Build 8 closes only after the complete automated test suite passes with zero failures and errors on the final branch head. Build 9 remains separately authorized.
+## Closure
+Build 8 is complete and validated. PR #25 remains draft and unmerged. Build 9 requires separate authorization.
