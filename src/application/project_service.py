@@ -29,11 +29,12 @@ class ProjectService:
     ) -> dict[str, Any]:
         code = project_code.strip().upper()
         name = project_name.strip()
-        normalized_category = LEGACY_CATEGORY_ALIASES.get(category.strip(), category.strip())
+        stored_category = category.strip()
+        registry_key = LEGACY_CATEGORY_ALIASES.get(stored_category, stored_category)
         normalized_currency = currency.strip().upper()
         if not code or not name:
             raise ValueError("Project code and name are required.")
-        definition = self.categories.get(normalized_category)
+        definition = self.categories.get(registry_key)
         if objective is not None and not definition.supports_objective(objective):
             raise ValueError("Unsupported project objective for this release.")
         if change_type is not None and not definition.supports_change_type(change_type):
@@ -53,7 +54,7 @@ class ProjectService:
         return self.projects.create(
             project_code=code,
             project_name=name,
-            category=normalized_category,
+            category=stored_category,
             currency=normalized_currency,
             annual_volume=annual_volume,
             objective=objective,
