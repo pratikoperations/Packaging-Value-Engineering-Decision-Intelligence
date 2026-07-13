@@ -67,7 +67,7 @@ jobs:
           grep -q "## Demo Flow" docs/INTERVIEW_DEMO_GUIDE.md
           grep -q "## Acceptance Criteria" docs/FINAL_RELEASE_CHECKLIST.md
       - name: Run Build 8 focused report tests
-        run: python -m unittest tests.reports.build8_executive_summary -v
+        run: python tests/build8_executive_summary.py
       - name: Run all automated tests
         shell: bash
         run: |
