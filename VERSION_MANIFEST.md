@@ -42,15 +42,15 @@
 - Program budget remaining: 17.5 hours
 - Source branch: Deleted
 
-## Current Final Working Version
+### PVE-1.0.6
 - Build: PVE-1.0.6 — Decision Snapshot and Final Release Closure
 - Version: `1.0.6-decision-snapshot-final-release`
-- Status: Final review pending
-- Pull request: PR #22
-- Feature branch: `agent/pve-1.0.6-decision-release-closure`
-- Stable base commit: `d04c648bbf1fb074903166bc33ac5d73de643222`
-- Final validated CI: PVE CI #507
-- Run ID: `29221779591`
+- Status: Completed, validated, merged, and governance-closed
+- Pull request: PR #22 merged and closed
+- Squash merge commit: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`
+- Source branch: Deleted
+- Final CI: PVE CI #520
+- Run ID: `29223657516`
 - Tests: 179 passed, 0 failed, 0 errors
 
 ## PVE-1.0.6 Deliverables
@@ -82,3 +82,6 @@
 
 ## Scope Boundary
 No authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, analytical-engine modification, recommendation-engine modification, or new packaging category.
+
+## Final State
+PVE 1.0 is fully completed and governance-closed. No next build has been started.
