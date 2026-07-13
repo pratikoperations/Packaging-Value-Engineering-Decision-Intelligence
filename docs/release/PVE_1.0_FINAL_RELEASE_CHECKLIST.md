@@ -37,11 +37,11 @@
 - [x] Integration contract remains draft
 
 ## Quality Acceptance
-- [x] Full automated test suite passes — 177 passed, 0 failed, 0 errors at corrective validation
+- [x] Full automated test suite passes — 177 passed, 0 failed, 0 errors
 - [x] Corrective CI passes — PVE CI #483, run ID `29220919849`
-- [ ] Final branch-head CI passes after QA and checklist evidence commits
+- [x] Final implementation-and-evidence CI passes — PVE CI #499, run ID `29221086243`
 - [ ] Complete changed-file review passes
-- [x] No unresolved review threads at corrective validation
+- [x] No unresolved review threads at validation
 - [x] Governance files identify PVE-1.0.6 and final closure correctly
 - [x] Interview demonstration guide is current
 - [ ] Source branch is deleted after squash merge
