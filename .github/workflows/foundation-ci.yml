@@ -115,4 +115,16 @@ jobs:
           grep -q "## Demo Flow" docs/INTERVIEW_DEMO_GUIDE.md
           grep -q "## Acceptance Criteria" docs/FINAL_RELEASE_CHECKLIST.md
       - name: Run all automated tests
-        run: python -m unittest discover -s tests -p "test_*.py" -v
+        shell: bash
+        run: |
+          set +e
+          python -m unittest discover -s tests -p "test_*.py" -v > unittest.log 2>&1
+          status=$?
+          if [ "$status" -ne 0 ]; then
+            echo "=== UNITTEST FAILURE SUMMARY ==="
+            grep -E "^(ERROR|FAIL):|^FAILED \(|^Ran [0-9]+ tests|^FAILED$|^Traceback|^[A-Za-z0-9_\.]+ \(.*\) \.\.\. (ERROR|FAIL)" unittest.log || true
+            echo "=== UNITTEST FAILURE TAIL ==="
+            tail -n 160 unittest.log
+            exit "$status"
+          fi
+          cat unittest.log
