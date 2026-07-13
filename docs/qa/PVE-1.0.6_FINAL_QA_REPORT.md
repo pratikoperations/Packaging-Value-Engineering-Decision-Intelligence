@@ -4,7 +4,7 @@
 PVE-1.0.6 — Decision Snapshot and Final Release Closure
 
 ## Status
-Draft PR implementation validated; final review pending
+Draft PR implementation repaired and validated; final branch-head review pending
 
 ## Objective
 Complete the PVE 1.0 controlled workflow with immutable decision snapshots, project-scoped decision history, final end-to-end QA, interview guidance, and release governance.
@@ -48,7 +48,7 @@ None of these statuses constitutes engineering approval, commercial authorizatio
 - Corrective run ID: `29220919849`
 - Corrective validated head: `0383df205fe082831a3a0f47a15188d38ba723d0`
 - Corrective result: Success
-- Final branch-head validation: pending after QA and checklist evidence updates
+- Final branch-head validation: pending after final QA/checklist evidence commits
 
 ## Corrective Scope
 - Added `DatasetRepository` to the runtime service wiring
@@ -77,7 +77,7 @@ None of these statuses constitutes engineering approval, commercial authorizatio
 No authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, recommendation-engine modification, or new packaging category.
 
 ## Final QA Result
-Pass at corrective validation; complete final-head CI and final diff review remain pending.
+Pass at corrective validation; final branch-head CI and complete final diff review remain pending.
 
 ## Merge Rule
 Keep the pull request as draft. Do not merge automatically. Final release closure occurs only after successful final-head CI, complete review, squash merge, and source-branch deletion.
