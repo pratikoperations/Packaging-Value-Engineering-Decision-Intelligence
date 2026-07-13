@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.6-decision-snapshot-final-release] — Final Review Pending
+## [1.0.6-decision-snapshot-final-release] — Completed
 
 ### Added
 - Immutable decision snapshots from saved scenarios
@@ -11,13 +11,18 @@
 - Archived-project repository write protection
 - Final interview guide, QA report, and release checklist
 
-### Validation
-- PR #22
-- Final CI: PVE CI #507
-- Run ID: `29221779591`
+### Completed
+- PR #22 merged and closed
+- Squash merge commit: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`
+- Source branch deleted
+- Final CI: PVE CI #520
+- Run ID: `29223657516`
 - Tests: 179 passed, 0 failed, 0 errors
 - Actual effort: 17.0 hours
+- Cumulative effort: 89.5 hours
 - Remaining program budget: 0.5 hours
+- Post-merge governance closure completed
+- No next build started
 
 ### Mandatory Controls Preserved
 - Engineering validation required
