@@ -25,4 +25,7 @@ PVE-1.0.6 adds immutable decision snapshots, decision history, final interview g
 PVE-1.0.6 uses 17.0 hours. Cumulative PVE 1.0 effort is 89.5 hours, leaving 0.5 hours of the 90-hour program budget.
 
 ## DEC-PVE-037 — Final Review Gate
-PR #22 remains draft until final branch-head CI, complete diff review, and governance alignment pass. Final closure occurs only after squash merge and source-branch deletion.
+PR #22 remained draft until final branch-head CI, complete diff review, and governance alignment passed.
+
+## DEC-PVE-038 — PVE 1.0 Final Governance Closure
+PR #22 was squash merged and closed at `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`; PVE CI #520, run ID `29223657516`, passed 179 tests with 0 failures and 0 errors; the source branch was deleted; PVE 1.0 is fully completed and governance-closed. No next build has been started.
