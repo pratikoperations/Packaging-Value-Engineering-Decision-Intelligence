@@ -34,7 +34,7 @@ PVE 1.0.6 is completed, validated, merged, and governance-closed on `main`.
 - Build 4 — Excel Template Generation
 - Authorized ceiling: 10 hours
 - Implementation status: complete
-- Validation status: pending CI execution on the current head
+- Validation status: CI validation triggered on current branch head
 
 ### Build 4 Delivered
 - Macro-free `.xlsx` generation using `openpyxl`.
@@ -63,7 +63,7 @@ PVE 1.0.6 is completed, validated, merged, and governance-closed on `main`.
 - Remaining after Build 4 closure: 43 hours
 
 ### Current Blocker
-CI has not yet produced a run for the latest Build 4 head. Build 4 cannot be closed until full regression CI succeeds.
+Build 4 cannot be closed until full regression CI succeeds on the current head.
 
 ### Scope Exclusions
 Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking or allocation, cloud database, machine learning, and autonomous approval remain excluded.
