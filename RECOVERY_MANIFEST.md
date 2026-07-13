@@ -1,77 +1,61 @@
 # Recovery Manifest
 
 ## Purpose
-Enable complete recovery of the current stable project state from GitHub without relying on chat history.
+Recover the current PVE 1.0 final-release candidate from GitHub without relying on chat history.
 
 ## Project Identity
 - Project: Packaging Value Engineering & Decision Intelligence
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 - Stable branch: `main`
-- Original interview release: PVE-0.7 — QA and Interview Release
-- Current stable controlled build: PVE-1.0.5 — Controlled Scenario Execution
-- Current stable version: `1.0.5-controlled-scenario-execution`
-- Current status: Completed, validated, merged, and governance-closed
+- Current final build: PVE-1.0.6 — Decision Snapshot and Final Release Closure
+- Pull request: PR #22
+- Status: Final review pending
+- Feature branch: `agent/pve-1.0.6-decision-release-closure`
+- Stable base: `d04c648bbf1fb074903166bc33ac5d73de643222`
 
-## Current Stable Merge Reference
-- Pull request: PR #21 merged and closed
-- Merge method: Squash merge
+## Previous Stable Build
+- PVE-1.0.5 — Controlled Scenario Execution
+- PR #21 merged and closed
 - Merge commit: `99416d91025b6cfbff40142ce9fbcd462eb1028f`
-- Source branch: `agent/pve-1.0.5-controlled-scenarios`
-- Source branch status: Deleted
-
-## Final PVE-1.0.5 Validation Reference
-- Workflow: PVE CI
-- Run number: 455
-- Run ID: `29192749111`
-- Validated head commit: `fb3b2421a457081d83631f5952510e7c533c7f8b`
-- Job: `validate-repository`
-- Conclusion: Success
 - Tests: 160 passed, 0 failed, 0 errors
-- QA result: Pass
+- Effort: 17.5 hours
+- Source branch: Deleted
 
-## Budget Reference
-- Original PVE 1.0 working budget: 90 hours
-- Hard ceiling: 110 hours
-- Cumulative effort used through PVE-1.0.5: 72.5 hours
-- PVE-1.0.5 actual effort used: 17.5 hours
-- Confirmed remaining working budget: 17.5 hours
+## PVE-1.0.6 Validation
+- Final CI: PVE CI #507
+- Run ID: `29221779591`
+- Tests: 179 passed, 0 failed, 0 errors
+- Actual effort: 17.0 hours
+- Remaining program budget: 0.5 hours
 
 ## Mandatory Reading Order
-1. `README.md`
-2. `PROJECT_STATUS.md`
-3. `VERSION_MANIFEST.md`
-4. `ACTIVITY_LOG.md`
-5. `BUILD_HISTORY.md`
-6. `CHANGELOG.md`
-7. `DECISION_LOG.md`
-8. `docs/qa/PVE-1.0.5_QA_REPORT.md`
-9. `docs/design/PVE-1.0.5_CONTROLLED_SCENARIO_EXECUTION_DESIGN.md`
-10. `pages/01_Project_Dashboard.py`
-11. `pages/02_Upload_Validate.py`
-12. `pages/03_Business_Thresholds.py`
-13. `pages/04_Controlled_Scenarios.py`
-14. `src/application/runtime.py`
-15. `src/scenario_execution/service.py`
-16. `src/persistence/scenario_repository.py`
-17. `src/recommendation/engine.py`
-18. `tests/scenario_execution/test_controlled_scenarios.py`
-19. `data/schemas/canonical_data_model.json`
-20. `data/demo/corrugated_shipping_cases.json`
-21. `app.py`
+1. `PROJECT_STATUS.md`
+2. `VERSION_MANIFEST.md`
+3. `CHANGELOG.md`
+4. `BUILD_HISTORY.md`
+5. `ACTIVITY_LOG.md`
+6. `DECISION_LOG.md`
+7. `docs/design/PVE-1.0.6_DECISION_SNAPSHOT_RELEASE_DESIGN.md`
+8. `docs/qa/PVE-1.0.6_FINAL_QA_REPORT.md`
+9. `docs/release/PVE_1.0_FINAL_RELEASE_CHECKLIST.md`
+10. `docs/interview/PVE_1.0_FINAL_INTERVIEW_DEMO.md`
+11. `pages/05_Decision_History.py`
+12. `src/decision_snapshots/service.py`
+13. `src/persistence/decision_repository.py`
+14. `tests/decision_snapshots/test_decision_snapshots.py`
 
 ## Recovery Procedure
-1. Confirm `main` contains merge commit `99416d91025b6cfbff40142ce9fbcd462eb1028f` and the subsequent PVE-1.0.5 governance-closure commit.
-2. Run `python -m unittest discover -s tests -p "test_*.py" -v` and confirm 160 tests pass.
-3. Install `requirements.txt` and run `streamlit run app.py`.
-4. Use the Project Dashboard to select an active project.
-5. Validate canonical JSON or limited CSV input and save an immutable dataset version.
-6. Select an immutable threshold profile.
-7. Run a controlled scenario using explicit bounded assumptions.
-8. Confirm scenario results preserve engineering validation, critical-risk, not-qualified, insufficient-data, and autonomous-approval controls.
-9. Keep the integration contract draft unless separately approved.
+1. Check out `agent/pve-1.0.6-decision-release-closure` while PR #22 remains open, or `main` after merge.
+2. Run `python -m unittest discover -s tests -p "test_*.py" -v` and confirm 179 tests pass.
+3. Run the Streamlit application and select a project with a saved controlled scenario.
+4. Prepare and save a decision snapshot.
+5. Confirm exact project, scenario, dataset, and threshold references.
+6. Confirm the dataset-defined baseline is excluded.
+7. Confirm engineering validation and human approval remain mandatory and autonomous approval is prohibited.
+8. Archive a project and verify prior history is readable while new snapshot creation is rejected.
 
 ## Stable Scope Boundary
-PVE-1.0.5 excludes decision snapshots, decision-history UI, recommendation-engine modification, authentication, external database, supplier ranking or allocation, ERP integration, AI approval, and additional packaging categories.
+No authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, analytical-engine modification, recommendation-engine modification, or additional packaging category.
 
 ## Separation Rule
-This repository never stores AI Procurement Copilot source files. Cross-project communication uses governed integration packages only.
+This repository does not store AI Procurement Copilot source files. Cross-project communication uses governed integration packages only.

@@ -32,6 +32,15 @@ class DecisionRepository:
             "preferred_alternative_id": preferred_alternative_id,
         }
         with self.database.transaction() as connection:
+            project = connection.execute(
+                "SELECT archived_at FROM projects WHERE project_id = ?",
+                (project_id,),
+            ).fetchone()
+            if project is None:
+                raise KeyError(project_id)
+            if project["archived_at"] is not None:
+                raise ValueError("Archived projects cannot create decision snapshots.")
+
             scenario = connection.execute(
                 """
                 SELECT project_id, dataset_id, threshold_profile_id

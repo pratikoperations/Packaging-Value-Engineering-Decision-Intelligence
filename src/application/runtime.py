@@ -3,8 +3,10 @@ from __future__ import annotations
 from pathlib import Path
 
 from src.application.project_service import ProjectService
+from src.decision_snapshots.service import DecisionSnapshotService
 from src.persistence.database import Database
 from src.persistence.dataset_repository import DatasetRepository
+from src.persistence.decision_repository import DecisionRepository
 from src.persistence.migrations import initialize_database
 from src.persistence.project_repository import ProjectRepository
 from src.persistence.scenario_repository import ScenarioRepository
@@ -47,4 +49,14 @@ def build_controlled_scenario_service(database_path: str | Path) -> ControlledSc
         DatasetRepository(database),
         ThresholdRepository(database),
         ScenarioRepository(database),
+    )
+
+
+def build_decision_snapshot_service(database_path: str | Path) -> DecisionSnapshotService:
+    """Create the final decision snapshot and history service."""
+    database = _initialized_database(database_path)
+    return DecisionSnapshotService(
+        DatasetRepository(database),
+        ScenarioRepository(database),
+        DecisionRepository(database),
     )

@@ -1,97 +1,88 @@
 # Changelog
 
-## [1.0.5-controlled-scenario-execution] — Completed
+## [1.0.6-decision-snapshot-final-release] — Final Review Pending
 
 ### Added
-- Immutable dataset-version selection
-- Immutable threshold-profile selection
-- Explicit bounded scenario assumptions
-- Deterministic scenario execution using existing engines
-- Technical qualification and risk evaluation
-- Explainable business-threshold outcomes
-- Mandatory engineering-control outcomes
-- Immutable scenario-record storage
-- Cross-project dataset and threshold protection
-- Controlled scenario Streamlit page
-- Design, QA, governance, and automated tests
+- Immutable decision snapshots from saved scenarios
+- Exact project, scenario, dataset, and threshold references
+- Dataset-defined baseline exclusion
+- Recommendation-for-review statuses without autonomous approval
+- Project-scoped read-only decision history
+- Archived-project repository write protection
+- Final interview guide, QA report, and release checklist
 
-### Completed
-- PR #21 merged and closed
-- Squash merge commit: `99416d91025b6cfbff40142ce9fbcd462eb1028f`
-- Final CI: PVE CI #455, run ID `29192749111`
-- Validated head commit: `fb3b2421a457081d83631f5952510e7c533c7f8b`
-- Tests: 160 passed, 0 failed, 0 errors
-- Actual effort used: 17.5 hours
-- Program budget remaining: 17.5 hours
-- Source branch deleted
-- Post-merge governance closure completed directly on `main`
+### Validation
+- PR #22
+- Final CI: PVE CI #507
+- Run ID: `29221779591`
+- Tests: 179 passed, 0 failed, 0 errors
+- Actual effort: 17.0 hours
+- Remaining program budget: 0.5 hours
 
-### Preserved
-- Existing recommendation engine
-- Existing persistence schema and immutability triggers
-- Existing project, upload, and threshold workflows
-- Engineering-validation and non-autonomous-approval controls
-- Draft integration-contract status
-- AI Procurement Copilot repository separation
+### Mandatory Controls Preserved
+- Engineering validation required
+- Human approval required
+- Autonomous approval prohibited
+- Critical risk and not-qualified outcomes blocked
+- Insufficient data cannot become recommended
+- Snapshots immutable
+- Project isolation enforced
 
 ### Excluded
-- Decision snapshots and decision-history UI
-- Recommendation-engine modification
-- Authentication and external database
-- Supplier ranking or allocation
+- Authentication
+- External database
 - ERP integration
-- AI approval and new packaging categories
+- Supplier ranking or allocation
+- Autonomous approval
+- Analytical-engine modification
+- Recommendation-engine modification
+- New packaging category
 
-### Scope Boundary
-PVE-1.0.5 stores deterministic scenario evidence only. Scenario statuses are not approvals; engineering validation and human approval remain mandatory.
+## [1.0.5-controlled-scenario-execution] — Completed
+- PR #21 merged and closed
+- Merge commit: `99416d91025b6cfbff40142ce9fbcd462eb1028f`
+- Tests: 160 passed, 0 failed, 0 errors
+- Effort used: 17.5 hours
+- Program budget remaining: 17.5 hours
+- Source branch deleted
+- Added controlled deterministic scenario execution, immutable scenario records, exact dataset and threshold binding, business-threshold explanations, and mandatory engineering controls.
 
 ## [1.0.4-configurable-thresholds] — Completed
 - PR #20 merged and closed
 - Merge commit: `301a0d92d41f46a15e37c5bd059e8673c3f666a6`
 - Tests: 143 passed, 0 failed, 0 errors
 - Effort used: 12.5 hours
-- Program budget remaining: 35.0 hours
-- Added controlled global and project-specific immutable threshold profiles, validation, duplicate suppression, active selection, business screening, and non-disableable engineering controls.
 
 ## [1.0.3-upload-validation] — Completed
 - PR #19 merged and closed
 - Merge commit: `c3e5247510c062fe64ac1da171dcc2f107ff4967`
 - Tests: 126 passed, 0 failed, 0 errors
 - Effort used: 16.5 hours
-- Program budget remaining: 47.5 hours
-- Added canonical JSON and limited CSV ingestion, normalization, validation, immutable dataset versions, and duplicate detection.
 
 ## [1.0.2-project-dashboard] — Completed
 - PR #18 merged and closed
 - Merge commit: `87f3897c68503cddc2c7e64827d8c395b45065a5`
 - Tests: 100 passed, 0 failed, 0 errors
-- Added the multi-project dashboard, explicit active workspace selection, metadata-only duplication, archiving, and portfolio metrics.
 
 ## [1.0.1-foundation-persistence] — Completed
 - PR #17 merged and closed
 - Merge commit: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
 - Tests: 85 passed, 0 failed, 0 errors
-- Added SQLite repository infrastructure, immutable evidence records, foreign-key enforcement, project lifecycle services, and cross-project integrity controls.
 
 ## [0.7.2-live-demo-streamlit-compatibility] — Completed
 - PR #16 merged and closed
 - Merge commit: `a45cabc37aada9e57febe7687617146d2da65fd0`
 - Tests: 60 passed, 0 failed, 0 errors
-- Added public portfolio discoverability and Streamlit width compatibility.
 
 ## [0.7.1-streamlit-deployment-disclaimer] — Completed
 - PR #15 merged and closed
 - Merge commit: `c3bc5fb291c7c087c2a4ab054b297841a7b5e73a`
 - Tests: 59 passed, 0 failed, 0 errors
-- Added the visible public synthetic-data disclaimer.
 
-## [0.7.0-qa-interview-release] — Final Completed Release
+## [0.7.0-qa-interview-release] — Completed
 - PR #13 merged and closed
 - Merge commit: `fb0962ba611fcf59ae7ab194dd2514970a19909d`
-- Final validated CI: PVE CI #268, run ID `29184423320`
 - Tests: 58 passed, 0 failed, 0 errors
-- QA result: Pass
-- Final project status: Completed
 
 ## Prior Releases
 - `0.6.0-decision-package-export` — Completed
