@@ -27,12 +27,14 @@ PVE-0.1 through PVE-0.7.2 and PVE-1.0.1 through PVE-1.0.6 were completed, valida
 - Added category Excel intake while retaining JSON and CSV workflows
 - Added readiness, blockers, warnings, output availability, source traceability, commercial estimates, testing evidence, and report views
 - Added machine-readable JSON and human-readable Markdown executive summaries
-- Added focused report tests and Build 8 QA record
 - Existing SQLite persistence and immutable dataset versioning retained
-- Engineering validation and human approval retained; autonomous approval remains prohibited
-- Excluded scope unchanged
+- Engineering validation and human approval retained
+- Focused Build 8 tests: 4 passed
+- Complete automated suite: 213 passed
+- Total test executions: 217
+- Validation: PVE CI #699, run `29278878816`, success
 - Build 8 effort consumed: 8 hours
 - Total PVE 1.1 effort consumed: 69 hours
 - Remaining program budget: 11 hours
-- Status: implementation complete; final-head CI required
-- Next action: stop at Build 9 authorization gate after successful final validation
+- Status: complete and validated
+- Next action: stop at Build 9 authorization gate
