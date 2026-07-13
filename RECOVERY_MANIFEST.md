@@ -1,58 +1,61 @@
 # Recovery Manifest
 
 ## Purpose
-Enable complete recovery of the finished project from GitHub without relying on chat history.
+Recover the current PVE 1.0 final-release candidate from GitHub without relying on chat history.
 
-## Final Project Identity
+## Project Identity
 - Project: Packaging Value Engineering & Decision Intelligence
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
-- Final build: PVE-0.7 — QA and Interview Release
-- Final version: `0.7.0-qa-interview-release completed`
-- Final status: Completed
 - Stable branch: `main`
-- Release PR: PR #13 merged and closed
-- Release merge commit: `fb0962ba611fcf59ae7ab194dd2514970a19909d`
+- Current final build: PVE-1.0.6 — Decision Snapshot and Final Release Closure
+- Pull request: PR #22
+- Status: Final review pending
+- Feature branch: `agent/pve-1.0.6-decision-release-closure`
+- Stable base: `d04c648bbf1fb074903166bc33ac5d73de643222`
 
-## Final Validation Reference
-- Workflow: PVE CI
-- Run number: 268
-- Run ID: `29184423320`
-- Validated commit: `d6ae2079e332a33edcc71d0011d642f0ae1eb5f9`
-- Tests: 58 passed, 0 failed, 0 errors
-- QA result: Pass
+## Previous Stable Build
+- PVE-1.0.5 — Controlled Scenario Execution
+- PR #21 merged and closed
+- Merge commit: `99416d91025b6cfbff40142ce9fbcd462eb1028f`
+- Tests: 160 passed, 0 failed, 0 errors
+- Effort: 17.5 hours
+- Source branch: Deleted
+
+## PVE-1.0.6 Validation
+- Final CI: PVE CI #507
+- Run ID: `29221779591`
+- Tests: 179 passed, 0 failed, 0 errors
+- Actual effort: 17.0 hours
+- Remaining program budget: 0.5 hours
 
 ## Mandatory Reading Order
-1. `README.md`
-2. `PROJECT_STATUS.md`
-3. `VERSION_MANIFEST.md`
-4. `ACTIVITY_LOG.md`
-5. `BUILD_HISTORY.md`
-6. `CHANGELOG.md`
-7. `docs/INTERVIEW_DEMO_GUIDE.md`
-8. `docs/FINAL_RELEASE_CHECKLIST.md`
-9. `docs/qa/PVE-0.7_QA_REPORT.md`
-10. `docs/MASTER_ARCHITECTURE.md`
-11. `docs/MASTER_BUILD_PLAN.md`
-12. `data/schemas/canonical_data_model.json`
-13. `data/demo/corrugated_shipping_cases.json`
-14. `src/data_models/validator.py`
-15. `src/cost_engine/engine.py`
-16. `src/material_engine/engine.py`
-17. `src/technical_qualification/engine.py`
-18. `src/risk_engine/engine.py`
-19. `src/scenario_engine/engine.py`
-20. `src/recommendation/engine.py`
-21. `src/exports/decision_package.py`
-22. `app.py`
-23. `tests/release/test_end_to_end_release.py`
+1. `PROJECT_STATUS.md`
+2. `VERSION_MANIFEST.md`
+3. `CHANGELOG.md`
+4. `BUILD_HISTORY.md`
+5. `ACTIVITY_LOG.md`
+6. `DECISION_LOG.md`
+7. `docs/design/PVE-1.0.6_DECISION_SNAPSHOT_RELEASE_DESIGN.md`
+8. `docs/qa/PVE-1.0.6_FINAL_QA_REPORT.md`
+9. `docs/release/PVE_1.0_FINAL_RELEASE_CHECKLIST.md`
+10. `docs/interview/PVE_1.0_FINAL_INTERVIEW_DEMO.md`
+11. `pages/05_Decision_History.py`
+12. `src/decision_snapshots/service.py`
+13. `src/persistence/decision_repository.py`
+14. `tests/decision_snapshots/test_decision_snapshots.py`
 
 ## Recovery Procedure
-1. Confirm `main` contains merge commit `fb0962ba611fcf59ae7ab194dd2514970a19909d` and the final closure commit after this PR merges.
-2. Run `python -m unittest discover -s tests -p "test_*.py" -v` and confirm 58 tests pass.
-3. Install `requirements.txt` and run `streamlit run app.py`.
-4. Follow the interview demonstration guide.
-5. Confirm JSON and Markdown exports retain fixed human-approval controls.
-6. Keep the integration contract draft unless separately approved.
+1. Check out `agent/pve-1.0.6-decision-release-closure` while PR #22 remains open, or `main` after merge.
+2. Run `python -m unittest discover -s tests -p "test_*.py" -v` and confirm 179 tests pass.
+3. Run the Streamlit application and select a project with a saved controlled scenario.
+4. Prepare and save a decision snapshot.
+5. Confirm exact project, scenario, dataset, and threshold references.
+6. Confirm the dataset-defined baseline is excluded.
+7. Confirm engineering validation and human approval remain mandatory and autonomous approval is prohibited.
+8. Archive a project and verify prior history is readable while new snapshot creation is rejected.
+
+## Stable Scope Boundary
+No authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, analytical-engine modification, recommendation-engine modification, or additional packaging category.
 
 ## Separation Rule
-This repository never stores AI Procurement Copilot source files. Cross-project communication uses governed integration packages only.
+This repository does not store AI Procurement Copilot source files. Cross-project communication uses governed integration packages only.
