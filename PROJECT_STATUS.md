@@ -32,12 +32,7 @@ PVE 1.0.6 is complete and governance-closed on `main`.
 - Build 4 — Excel Template Generation: complete; 10 hours.
 - Build 5 — Excel Upload and Normalization: complete; 10 hours.
 - Build 6 — Readiness and Blocking Engine: complete; 9 hours.
-
-### Current Build
-- Build 7 — Commercial and ROI Extension
-- Authorized ceiling: 5 hours
-- Implementation status: complete
-- Validation status: pending CI on current head
+- Build 7 — Commercial and ROI Extension: complete; 5 hours.
 
 ### Build 7 Delivered
 - Saving per unit.
@@ -49,34 +44,31 @@ PVE 1.0.6 is complete and governance-closed on `main`.
 - Percentage cost reduction and percentage material reduction.
 - Explicit estimate labels and retained user assumptions.
 - Non-negative input and realization-percentage validation.
-- No change to readiness blockers or approval governance.
+- Readiness blockers and approval governance preserved.
 
-### Latest Validated Baseline
-- Workflow: PVE CI #637
-- Run ID: `29255451823`
+### Latest Validation
+- Workflow: PVE CI #649
+- Run ID: `29256159775`
 - Result: success
 - Automated-test step: success
-- Expected suite composition through Build 6: 208 tests
+- Expected suite composition: 213 tests
 - Failures: 0
 - Errors: 0
 
 ### Outstanding Acceptance Criteria
-- Confirm Build 7 CI and full regression result.
 - Build 8: guided Streamlit workflow and updated reports.
 - Build 9: final regression QA, samples, demonstrations, QA report, release checklist, and release review.
 
 ### Budget
 - Fixed hard cap: 80 hours
-- Builds 1–6 consumed: 56 hours
-- Build 7 authorized allocation: 5 hours
-- Total allocated through Build 7: 61 hours
-- Remaining after Build 7 closure: 19 hours
+- Builds 1–7 consumed: 61 hours
+- Remaining allocation: 19 hours
 
 ### Current Blocker
-Build 7 cannot be closed until full regression CI succeeds on the current head.
+None. Build 8 requires separate authorization.
 
 ### Scope Exclusions
 Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking or allocation, cloud database, machine learning, and autonomous approval remain excluded.
 
 ### Current State
-Build 7 implementation is present but not yet closed. PR #25 remains draft and must not be merged. Build 8 has not started.
+Builds 1–7 are complete and validated. PR #25 remains draft and must not be merged. Build 8 has not started.
