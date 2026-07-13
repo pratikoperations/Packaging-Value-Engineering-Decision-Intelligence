@@ -48,7 +48,7 @@ None of these statuses constitutes engineering approval, commercial authorizatio
 - Corrective run ID: `29220919849`
 - Corrective validated head: `0383df205fe082831a3a0f47a15188d38ba723d0`
 - Corrective result: Success
-- Final branch-head validation: pending after final QA/checklist evidence commits
+- Final branch-head validation: pending after final QA and checklist evidence commits
 
 ## Corrective Scope
 - Added `DatasetRepository` to the runtime service wiring
