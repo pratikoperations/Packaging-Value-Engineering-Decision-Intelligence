@@ -263,6 +263,31 @@ class DecisionSnapshotTestCase(unittest.TestCase):
         self.assertIsInstance(records[0]["recommendation"], dict)
         self.assertIsInstance(records[0]["gate_results"], dict)
 
+    def test_archived_project_cannot_save_new_decision_snapshot(self):
+        prepared = self.service.prepare(
+            project_id=self.project["project_id"],
+            scenario_id=self.create_scenario()["scenario_id"],
+        )
+        self.project_service.archive_project(self.project["project_id"])
+        with self.assertRaisesRegex(
+            ValueError,
+            "Archived projects cannot create decision snapshots",
+        ):
+            self.service.save(prepared)
+        self.assertEqual(self.service.history(self.project["project_id"]), [])
+
+    def test_history_saved_before_archival_remains_readable(self):
+        prepared = self.service.prepare(
+            project_id=self.project["project_id"],
+            scenario_id=self.create_scenario()["scenario_id"],
+        )
+        saved = self.service.save(prepared)
+        self.project_service.archive_project(self.project["project_id"])
+        records = self.service.history(self.project["project_id"])
+        self.assertEqual(len(records), 1)
+        self.assertEqual(records[0]["decision_snapshot_id"], saved["decision_snapshot_id"])
+        self.assertEqual(records[0]["project_id"], self.project["project_id"])
+
     def test_snapshot_records_no_autonomous_approval(self):
         prepared = self.service.prepare(
             project_id=self.project["project_id"],
