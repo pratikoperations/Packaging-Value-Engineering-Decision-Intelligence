@@ -1,0 +1,25 @@
+name: PVE Build 2 Diagnostic
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          show-progress: false
+      - name: Diagnose unittest failures
+        shell: bash
+        run: |
+          set +e
+          python -m unittest discover -s tests -p "test_*.py" -v > unittest.log 2>&1
+          status=$?
+          echo "=== FAILURE SUMMARY ==="
+          grep -E "^(ERROR|FAIL):|^Ran [0-9]+ tests|^FAILED \(|^[A-Za-z0-9_\.]+ \(.*\) \.\.\. (ERROR|FAIL)" unittest.log || true
+          echo "=== FAILURE TAIL ==="
+          tail -n 120 unittest.log
+          exit "$status"
