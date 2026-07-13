@@ -7,6 +7,35 @@ from src.persistence._utils import new_id
 from src.persistence.database import Database
 
 
+_PROJECT_METADATA_FIELDS = {
+    "project_name",
+    "category",
+    "objective",
+    "change_type",
+    "product_sku",
+    "business_unit_plant",
+    "project_owner",
+    "status",
+    "currency",
+    "annual_volume",
+    "volume_unit",
+    "current_unit_cost",
+    "proposed_unit_cost",
+    "current_supplier",
+    "proposed_supplier",
+    "target_saving",
+    "target_completion_date",
+    "implementation_cost",
+    "testing_cost",
+    "tooling_cost",
+    "qualification_cost",
+    "expected_realization_percent",
+    "project_description",
+    "business_justification",
+    "sustainability_objective",
+}
+
+
 class ProjectRepository:
     def __init__(self, database: Database) -> None:
         self.database = database
@@ -21,25 +50,28 @@ class ProjectRepository:
         annual_volume: float,
         status: str = "draft",
         project_id: str | None = None,
+        **metadata: Any,
     ) -> dict[str, Any]:
+        invalid = set(metadata) - (_PROJECT_METADATA_FIELDS - {"project_name", "category", "status", "currency", "annual_volume"})
+        if invalid:
+            raise ValueError(f"Unsupported project fields: {sorted(invalid)}")
         identifier = project_id or new_id("project")
+        values = {
+            "project_id": identifier,
+            "project_code": project_code,
+            "project_name": project_name,
+            "category": category,
+            "status": status,
+            "currency": currency,
+            "annual_volume": annual_volume,
+            **metadata,
+        }
+        columns = list(values)
+        placeholders = ", ".join("?" for _ in columns)
         with self.database.transaction() as connection:
             connection.execute(
-                """
-                INSERT INTO projects(
-                    project_id, project_code, project_name, category,
-                    status, currency, annual_volume
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    identifier,
-                    project_code,
-                    project_name,
-                    category,
-                    status,
-                    currency,
-                    annual_volume,
-                ),
+                f"INSERT INTO projects({', '.join(columns)}) VALUES ({placeholders})",
+                tuple(values[column] for column in columns),
             )
         return self.get(identifier)
 
@@ -62,8 +94,7 @@ class ProjectRepository:
         return dict(row)
 
     def update_metadata(self, project_id: str, **changes: Any) -> dict[str, Any]:
-        allowed = {"project_name", "category", "status", "currency", "annual_volume"}
-        invalid = set(changes) - allowed
+        invalid = set(changes) - _PROJECT_METADATA_FIELDS
         if invalid:
             raise ValueError(f"Unsupported project fields: {sorted(invalid)}")
         if not changes:
@@ -73,11 +104,16 @@ class ProjectRepository:
         timestamp = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
         with self.database.transaction() as connection:
             cursor = connection.execute(
-                f"UPDATE projects SET {assignments}, updated_at = ? WHERE project_id = ?",
+                f"UPDATE projects SET {assignments}, updated_at = ? WHERE project_id = ? AND archived_at IS NULL",
                 (*values, timestamp, project_id),
             )
             if cursor.rowcount != 1:
-                raise KeyError(project_id)
+                existing = connection.execute(
+                    "SELECT archived_at FROM projects WHERE project_id = ?", (project_id,)
+                ).fetchone()
+                if existing is None:
+                    raise KeyError(project_id)
+                raise ValueError("Archived projects are read-only.")
         return self.get(project_id)
 
     def archive(self, project_id: str) -> dict[str, Any]:
@@ -122,12 +158,8 @@ class ProjectRepository:
                 FROM projects
                 """
             ).fetchone()
-            dataset_count = connection.execute(
-                "SELECT COUNT(*) FROM project_datasets"
-            ).fetchone()[0]
-            decision_count = connection.execute(
-                "SELECT COUNT(*) FROM decision_snapshots"
-            ).fetchone()[0]
+            dataset_count = connection.execute("SELECT COUNT(*) FROM project_datasets").fetchone()[0]
+            decision_count = connection.execute("SELECT COUNT(*) FROM decision_snapshots").fetchone()[0]
         return {
             "total_projects": int(project_counts["total_projects"] or 0),
             "active_projects": int(project_counts["active_projects"] or 0),
@@ -140,15 +172,7 @@ class ProjectRepository:
         archive_operator = "IS NOT NULL" if archived else "IS NULL"
         query = f"""
             SELECT
-                p.project_id,
-                p.project_code,
-                p.project_name,
-                p.category,
-                p.status,
-                p.currency,
-                p.annual_volume,
-                p.updated_at,
-                p.archived_at,
+                p.*,
                 (SELECT COUNT(*) FROM project_datasets d WHERE d.project_id = p.project_id) AS dataset_versions,
                 (SELECT COUNT(*) FROM scenarios s WHERE s.project_id = p.project_id) AS scenarios,
                 (SELECT COUNT(*) FROM decision_snapshots ds WHERE ds.project_id = p.project_id) AS decisions,
