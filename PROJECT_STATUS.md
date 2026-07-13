@@ -33,12 +33,7 @@ PVE 1.0.6 is complete and governance-closed on `main`.
 - Build 5 — Excel Upload and Normalization: complete; 10 hours.
 - Build 6 — Readiness and Blocking Engine: complete; 9 hours.
 - Build 7 — Commercial and ROI Extension: complete; 5 hours.
-
-### Current Build
-- Build 8 — Guided Streamlit Workflow and Updated Reports
-- Authorized effort: 8 hours
-- Implementation status: complete
-- Closure status: pending final-head CI
+- Build 8 — Guided Streamlit Workflow and Updated Reports: complete; 8 hours.
 
 ### Build 8 Delivered
 - Guided all-category workflow using the configuration-driven registry.
@@ -53,6 +48,16 @@ PVE 1.0.6 is complete and governance-closed on `main`.
 - Machine-readable JSON and human-readable Markdown executive summaries.
 - Estimate labels, assumptions, engineering validation, human approval, and autonomous-approval prohibition retained.
 
+### Build 8 Validation
+- Workflow: PVE CI #699
+- Run ID: `29278878816`
+- Result: success
+- Focused Build 8 report tests: 4 passed
+- Complete automated suite: 213 passed
+- Total test executions: 217
+- Failures: 0
+- Errors: 0
+
 ### Budget
 - Fixed hard cap: 80 hours
 - Builds 1–7 consumed: 61 hours
@@ -61,11 +66,10 @@ PVE 1.0.6 is complete and governance-closed on `main`.
 - Remaining allocation: 11 hours
 
 ### Outstanding Acceptance Criteria
-- Final Build 8 complete-suite CI pass with zero failures and errors.
 - Build 9 — Testing and Release QA — requires separate authorization.
 
 ### Scope Exclusions
 Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking or allocation, cloud database, machine learning, and autonomous approval remain excluded.
 
 ### Current State
-Build 8 implementation is complete and awaiting final-head CI. PR #25 remains draft and must not be merged. Build 9 has not started.
+Builds 1–8 are complete and validated. PR #25 remains draft and must not be merged. Build 9 has not started.
