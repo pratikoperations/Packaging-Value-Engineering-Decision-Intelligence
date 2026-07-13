@@ -46,10 +46,9 @@ None of these statuses constitutes engineering approval, commercial authorizatio
 - Root cause: `DecisionSnapshotService` gained a required `DatasetRepository` dependency for dataset-defined baseline protection, but the runtime factory and decision-snapshot test fixture still used the previous two-argument constructor.
 - Corrective validation workflow: PVE CI #483
 - Corrective run ID: `29220919849`
-- Validated head commit before QA evidence update: `0383df205fe082831a3a0f47a15188d38ba723d0`
-- Job: `validate-repository`
-- Conclusion: Success
-- All workflow and automated-test steps passed
+- Corrective validated head: `0383df205fe082831a3a0f47a15188d38ba723d0`
+- Corrective result: Success
+- Final branch-head validation: pending after QA and checklist evidence updates
 
 ## Corrective Scope
 - Added `DatasetRepository` to the runtime service wiring
@@ -78,7 +77,7 @@ None of these statuses constitutes engineering approval, commercial authorizatio
 No authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, recommendation-engine modification, or new packaging category.
 
 ## Final QA Result
-Pass — implementation and full automated suite validated; complete final diff review and merge remain pending.
+Pass at corrective validation; complete final-head CI and final diff review remain pending.
 
 ## Merge Rule
 Keep the pull request as draft. Do not merge automatically. Final release closure occurs only after successful final-head CI, complete review, squash merge, and source-branch deletion.
