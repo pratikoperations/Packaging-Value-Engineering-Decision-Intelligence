@@ -14,9 +14,15 @@ PVE-0.1 through PVE-0.7.2 and PVE-1.0.1 through PVE-1.0.4 were completed, valida
 
 ## 2026-07-13 — PVE-1.0.6 Decision Snapshot and Final Release Closure
 - Stable base: `d04c648bbf1fb074903166bc33ac5d73de643222`
-- Branch: `agent/pve-1.0.6-decision-release-closure`
-- Pull request: PR #22
-- Status: Final review pending
+- Pull request: PR #22 merged and closed
+- Squash merge commit: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`
+- Source branch: Deleted
+- Final CI: PVE CI #520
+- Run ID: `29223657516`
+- Tests: 179 passed, 0 failed, 0 errors
+- Actual effort: 17.0 hours
+- Cumulative effort: 89.5 hours
+- Remaining program budget: 0.5 hours
 - Implemented:
   - immutable decision snapshots from saved scenarios
   - exact project, scenario, dataset, and threshold references
@@ -34,10 +40,6 @@ PVE-0.1 through PVE-0.7.2 and PVE-1.0.1 through PVE-1.0.4 were completed, valida
   - insufficient data cannot become recommended
   - snapshots immutable
   - project isolation enforced
-- Final CI: PVE CI #507
-- Run ID: `29221779591`
-- Tests: 179 passed, 0 failed, 0 errors
-- Actual effort: 17.0 hours
-- Remaining program budget: 0.5 hours
 - Excluded: authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, analytical-engine changes, recommendation-engine changes, and new packaging categories
-- Next action: Complete final review and merge; do not start another build automatically.
+- Result: Completed, validated, merged, and governance-closed
+- Next action: None. No next build started.
