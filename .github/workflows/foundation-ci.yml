@@ -69,4 +69,10 @@ jobs:
       - name: Run Build 8 focused report tests
         run: python -m unittest tests.reports.test_executive_summary -v
       - name: Run all automated tests
-        run: python -m unittest discover -s tests -p "test_*.py" -v
+        shell: bash
+        run: |
+          set +e
+          python -m unittest discover -s tests -p "test_*.py" > test-output.txt 2>&1
+          status=$?
+          cat test-output.txt
+          exit $status
