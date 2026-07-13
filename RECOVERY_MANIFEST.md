@@ -13,12 +13,12 @@
 - Pull request: PR #25
 - PR state: open, draft, unmerged
 - Build 8 starting head: `4de563c08178ca2c0e406fce2fa4e7347938119b`
-- Build 8 implementation: complete
-- Final-head validation: pending
+- Build 8 implementation: complete and validated
+- Validation: PVE CI #699, run `29278878816`, success
 
 ## Build state
 - Builds 1 through 7: complete and validated, 61 hours consumed.
-- Build 8: implementation complete, 8 hours consumed, final CI required.
+- Build 8: complete and validated, 8 hours consumed.
 - Total consumed: 69 hours.
 - Remaining under the 80-hour cap: 11 hours.
 
@@ -26,10 +26,12 @@
 - Guided category Excel, JSON, and CSV intake workflow.
 - Readiness, blockers, output availability, source traceability, commercial estimates, testing evidence, and report export.
 - JSON and Markdown executive summaries include unavailable-output reasons and approval limitations.
-- Focused report tests and Build 8 QA record added.
+- Focused report tests: 4 passed.
+- Complete automated suite: 213 passed.
+- Total test executions: 217; zero failures and errors.
 
 ## Next increment
-Build 9 is not authorized. Stop after Build 8 final validation and report the authorization gate.
+Build 9 is not authorized. Stop at the Build 9 authorization gate.
 
 ## Recovery rule
 Resume only from the active branch and PR. Keep PR #25 draft and unmerged. Do not begin Build 9 without explicit authorization.
