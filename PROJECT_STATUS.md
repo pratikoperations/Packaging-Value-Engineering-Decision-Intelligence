@@ -6,67 +6,70 @@ Packaging Value Engineering & Decision Intelligence
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 
-## Stable Branch
-`main`
+## Stable Release
+PVE 1.0.6 is completed, validated, merged, and governance-closed on `main`.
 
-## Original Interview Release
-- Final build: PVE-0.7 — QA and Interview Release
-- Status: Completed
-- Release PR: PR #13 merged and closed
-- Release merge commit: `fb0962ba611fcf59ae7ab194dd2514970a19909d`
-- Public application: https://packaging-value-engineering-decision-intelligence.streamlit.app/
+- Final PR: #22
+- Merge commit: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`
+- Final CI: PVE CI #520, run `29223657516`
+- Tests: 179 passed, 0 failed, 0 errors
+- Cumulative PVE 1.0 effort: 89.5 hours
 
-## PVE 1.0 Controlled Build
+## PVE 1.1 — All-Category Project Intake and Validation Readiness
 
-### Program Status
-Completed, validated, merged, and governance-closed.
+### Control State
+- Branch: `feature/pve-1.1-all-category-intake`
+- Pull request: PR #25
+- PR state: open, draft, unmerged
+- Latest validated implementation head before status synchronization: `4bf93a6ad7d8e6ba153857383a3b44e5386198e2`
 
 ### Completed Builds
-- PVE-1.0.1 — Foundation and Persistence; PR #17; merge `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`; 85 tests; 14.5 hours.
-- PVE-1.0.2 — Project Dashboard; PR #18; merge `87f3897c68503cddc2c7e64827d8c395b45065a5`; 100 tests; 11.5 hours.
-- PVE-1.0.3 — Upload and Validation; PR #19; merge `c3e5247510c062fe64ac1da171dcc2f107ff4967`; 126 tests; 16.5 hours.
-- PVE-1.0.4 — Configurable Business Thresholds; PR #20; merge `301a0d92d41f46a15e37c5bd059e8673c3f666a6`; 143 tests; 12.5 hours.
-- PVE-1.0.5 — Controlled Scenario Execution; PR #21; merge `99416d91025b6cfbff40142ce9fbcd462eb1028f`; 160 passed, 0 failed, 0 errors; 17.5 hours; source branch deleted.
-- PVE-1.0.6 — Decision Snapshot and Final Release Closure; PR #22; squash merge `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`; 179 passed, 0 failed, 0 errors; 17.0 hours; source branch deleted.
+- Build 1 — Architecture and Scope Lock: complete; 6-hour recorded allocation.
+- Build 2 — Project Creation Expansion: complete; 7-hour recorded allocation.
+- Build 3 — Category Input Definitions: complete; 14-hour recorded allocation.
 
-### Final Build
-PVE-1.0.6 — Decision Snapshot and Final Release Closure
+### Current Build
+- Build 4 — Excel Template Generation
+- Authorized ceiling: 10 hours
+- Status: authorized, not started
 
-### Final Validation
-- Workflow: PVE CI
-- Run number: 520
-- Run ID: `29223657516`
-- Tests: 179 passed, 0 failed, 0 errors
+### Latest Validation
+- PVE CI #577
+- Run ID: `29235897461`
+- Conclusion: success
+- Automated-test step: success
+- Recorded suite composition through Build 3: 192 expected tests, 0 failures, 0 errors
 
-### Implemented Scope
-- Immutable decision snapshots from saved scenarios
-- Exact project, scenario, dataset, and threshold references
-- Dataset-defined baseline exclusion
-- Recommendation-for-review statuses
-- Project-scoped read-only decision history
-- Archived-project repository write protection
-- Final interview guide
-- Final QA and release checklist
+### Completed Acceptance Criteria
+- Eight-category configuration-driven registry.
+- Common objectives and category-specific change types.
+- Additive schema version 2 for project metadata.
+- All eight categories can create projects.
+- Legacy corrugated compatibility.
+- Archived-project write protection.
+- Mandatory, recommended, and optional category fields and documents.
+- Category-specific units, value types, ranges, criticality, tests, blockers, warnings, available analyses, and unavailable analyses.
+- Existing persistence, uploads, governance, project isolation, archive protection, and historical immutability preserved.
 
-### Mandatory Controls
-- Engineering validation remains required
-- Human approval remains required
-- Autonomous approval remains prohibited
-- Critical risk remains blocking
-- Not-qualified alternatives remain blocked
-- Insufficient data cannot become recommended
-- Decision snapshots remain immutable
-- Project isolation remains enforced
+### Outstanding Acceptance Criteria
+- Build 4: category-specific Excel templates.
+- Build 5: Excel parsing, normalization, and upload validation.
+- Build 6: readiness scoring, blockers, stage status, and output availability.
+- Build 7: commercial savings, ROI, payback, and material reduction.
+- Build 8: guided Streamlit workflow and updated reports.
+- Build 9: final regression QA, samples, demonstrations, QA report, release checklist, and release review.
 
 ### Budget
-- Original working budget: 90 hours
-- Hard ceiling: 110 hours
-- PVE-1.0.6 actual effort used: 17.0 hours
-- Cumulative effort used: 89.5 hours
-- Remaining program budget: 0.5 hours
+- Fixed hard cap: 80 hours
+- Recorded consumed allocation: 27 hours
+- Remaining allocation: 53 hours
 
-### Explicit Exclusions
-No authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, analytical-engine modification, recommendation-engine modification, or new packaging category.
+### Current Blockers
+- No technical blocker.
+- Build 4 must preserve existing uploads and canonical datasets.
 
-### Final State
-PVE 1.0 is fully completed and governance-closed. No next build has been started.
+### Scope Exclusions
+Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking or allocation, cloud database, machine learning, and autonomous approval remain excluded.
+
+### Current State
+PVE 1.1 Builds 1–3 are complete and validated. Build 4 is the next authorized increment and has not started. PR #25 remains draft and must not be merged.
