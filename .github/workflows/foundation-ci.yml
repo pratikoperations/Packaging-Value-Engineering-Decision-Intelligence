@@ -69,6 +69,7 @@ jobs:
       - name: Run Build 8 focused report tests
         run: PYTHONPATH=. python tests/build8_executive_summary.py
       - name: Run all automated tests
+        id: full-tests
         shell: bash
         run: |
           set +e
@@ -76,3 +77,9 @@ jobs:
           status=$?
           cat test-output.txt
           exit $status
+      - name: Upload full-suite diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pve-full-test-output
+          path: test-output.txt
