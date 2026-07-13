@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -69,7 +68,7 @@ def test_legacy_corrugated_category_remains_compatible(tmp_path: Path):
         currency="INR",
         annual_volume=100,
     )
-    assert project["category"] == "corrugated"
+    assert project["category"] == "corrugated_shipping_case"
     assert project["objective"] is None
 
 
