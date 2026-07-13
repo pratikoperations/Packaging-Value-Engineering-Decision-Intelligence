@@ -1,16 +1,18 @@
 from __future__ import annotations
 
-"""Initial schema creation with version recording.
+"""Ordered, additive SQLite schema migrations for PVE.
 
-This module intentionally does not claim ordered sequential migration support.
-Future schema changes require a separately approved migration design.
+PVE 1.1 introduces schema version 2 without rewriting historical projects,
+datasets, thresholds, scenarios, or decision snapshots.
 """
+
+from sqlite3 import Connection
 
 from src.persistence.database import Database
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
-_SCHEMA = """
+_BASE_SCHEMA = """
 CREATE TABLE IF NOT EXISTS schema_migrations (
     version INTEGER PRIMARY KEY,
     applied_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -136,15 +138,53 @@ BEFORE DELETE ON decision_snapshots BEGIN
 END;
 """
 
+_PROJECT_V2_COLUMNS: dict[str, str] = {
+    "objective": "TEXT",
+    "change_type": "TEXT",
+    "product_sku": "TEXT",
+    "business_unit_plant": "TEXT",
+    "project_owner": "TEXT",
+    "volume_unit": "TEXT",
+    "current_unit_cost": "REAL",
+    "proposed_unit_cost": "REAL",
+    "current_supplier": "TEXT",
+    "proposed_supplier": "TEXT",
+    "target_saving": "REAL",
+    "target_completion_date": "TEXT",
+    "implementation_cost": "REAL",
+    "testing_cost": "REAL",
+    "tooling_cost": "REAL",
+    "qualification_cost": "REAL",
+    "expected_realization_percent": "REAL",
+    "project_description": "TEXT",
+    "business_justification": "TEXT",
+    "sustainability_objective": "TEXT",
+}
+
+
+def _column_names(connection: Connection, table: str) -> set[str]:
+    return {str(row[1]) for row in connection.execute(f"PRAGMA table_info({table})")}
+
+
+def _apply_v2(connection: Connection) -> None:
+    existing = _column_names(connection, "projects")
+    for name, declaration in _PROJECT_V2_COLUMNS.items():
+        if name not in existing:
+            connection.execute(f"ALTER TABLE projects ADD COLUMN {name} {declaration}")
+    connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (2)")
+
 
 def initialize_database(database: Database) -> int:
-    """Create the current schema idempotently and record its version."""
+    """Create schema v1 then apply every missing additive migration in order."""
     with database.transaction() as connection:
-        connection.executescript(_SCHEMA)
-        connection.execute(
-            "INSERT OR IGNORE INTO schema_migrations(version) VALUES (?)",
-            (SCHEMA_VERSION,),
-        )
+        connection.executescript(_BASE_SCHEMA)
+        connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (1)")
+        applied = {
+            int(row[0])
+            for row in connection.execute("SELECT version FROM schema_migrations").fetchall()
+        }
+        if 2 not in applied:
+            _apply_v2(connection)
     return SCHEMA_VERSION
 
 
