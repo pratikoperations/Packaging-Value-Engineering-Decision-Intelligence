@@ -1,17 +1,17 @@
 # Recovery Manifest
 
 ## Purpose
-Recover the current PVE 1.0 final-release candidate from GitHub without relying on chat history.
+Recover the completed PVE 1.0 release from GitHub without relying on chat history.
 
 ## Project Identity
 - Project: Packaging Value Engineering & Decision Intelligence
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 - Stable branch: `main`
-- Current final build: PVE-1.0.6 — Decision Snapshot and Final Release Closure
-- Pull request: PR #22
-- Status: Final review pending
-- Feature branch: `agent/pve-1.0.6-decision-release-closure`
-- Stable base: `d04c648bbf1fb074903166bc33ac5d73de643222`
+- Final build: PVE-1.0.6 — Decision Snapshot and Final Release Closure
+- Status: Completed, validated, merged, and governance-closed
+- Pull request: PR #22 merged and closed
+- Squash merge commit: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`
+- Source branch: Deleted
 
 ## Previous Stable Build
 - PVE-1.0.5 — Controlled Scenario Execution
@@ -22,10 +22,11 @@ Recover the current PVE 1.0 final-release candidate from GitHub without relying 
 - Source branch: Deleted
 
 ## PVE-1.0.6 Validation
-- Final CI: PVE CI #507
-- Run ID: `29221779591`
+- Final CI: PVE CI #520
+- Run ID: `29223657516`
 - Tests: 179 passed, 0 failed, 0 errors
 - Actual effort: 17.0 hours
+- Cumulative effort: 89.5 hours
 - Remaining program budget: 0.5 hours
 
 ## Mandatory Reading Order
@@ -45,7 +46,7 @@ Recover the current PVE 1.0 final-release candidate from GitHub without relying 
 14. `tests/decision_snapshots/test_decision_snapshots.py`
 
 ## Recovery Procedure
-1. Check out `agent/pve-1.0.6-decision-release-closure` while PR #22 remains open, or `main` after merge.
+1. Check out `main` at or after merge commit `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`.
 2. Run `python -m unittest discover -s tests -p "test_*.py" -v` and confirm 179 tests pass.
 3. Run the Streamlit application and select a project with a saved controlled scenario.
 4. Prepare and save a decision snapshot.
@@ -59,3 +60,6 @@ No authentication, external database, ERP integration, supplier ranking or alloc
 
 ## Separation Rule
 This repository does not store AI Procurement Copilot source files. Cross-project communication uses governed integration packages only.
+
+## Final State
+PVE 1.0 is fully completed and governance-closed. No next build has been started.
