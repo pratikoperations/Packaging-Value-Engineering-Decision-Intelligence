@@ -12,38 +12,27 @@
 - Branch: `feature/pve-1.1-all-category-intake`
 - Pull request: PR #25
 - PR state: open, draft, unmerged
-- Latest validated implementation head before recovery update: `f5733de3890c51b25f0574694aa03cceb0895dc0`
-- Latest CI: PVE CI #635
-- Run ID: `29255248902`
-- Result: success
-- Expected tests: 208
+- Build 8 starting head: `4de563c08178ca2c0e406fce2fa4e7347938119b`
+- Build 8 implementation: complete
+- Final-head validation: pending
 
-## Completed builds
-- Build 1: complete, 6 hours
-- Build 2: complete, 7 hours
-- Build 3: complete, 14 hours
-- Build 4: complete, 10 hours
-- Build 5: complete, 10 hours
-- Build 6: complete, 9 hours
+## Build state
+- Builds 1 through 7: complete and validated, 61 hours consumed.
+- Build 8: implementation complete, 8 hours consumed, final CI required.
+- Total consumed: 69 hours.
+- Remaining under the 80-hour cap: 11 hours.
 
-Total consumed: 56 hours.
-Remaining under the 80-hour cap: 24 hours.
-
-## Build 6 recovery evidence
-- weighted readiness scoring
-- blockers override percentage
-- readiness stages
-- output availability with reasons
-- source traceability
-- append-only readiness snapshots
-- archived-project and project-isolation controls
-- no automatic approval
+## Build 8 recovery evidence
+- Guided category Excel, JSON, and CSV intake workflow.
+- Readiness, blockers, output availability, source traceability, commercial estimates, testing evidence, and report export.
+- JSON and Markdown executive summaries include unavailable-output reasons and approval limitations.
+- Focused report tests and Build 8 QA record added.
 
 ## Next increment
-Build 7 — Commercial and ROI Extension — requires separate authorization. Builds 8 and 9 are not authorized.
+Build 9 is not authorized. Stop after Build 8 final validation and report the authorization gate.
 
 ## Recovery rule
-Resume from the active branch and PR. Treat Builds 1–6 as complete. Keep PR #25 draft and unmerged. Do not begin Build 7 without explicit authorization.
+Resume only from the active branch and PR. Keep PR #25 draft and unmerged. Do not begin Build 9 without explicit authorization.
 
 ## Scope boundary
 Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking or allocation, cloud database, machine learning, live pricing, and autonomous approval remain excluded.
