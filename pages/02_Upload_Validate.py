@@ -99,7 +99,7 @@ def main():
         st.dataframe([{"Version": item["version_number"], "Source": item["source_type"], "Original File": item["original_filename"], "Validation": item["validation_status"], "Created": item["created_at"]} for item in versions], width="stretch", hide_index=True)
     else:
         st.info("No dataset versions have been saved for this project.")
-    st.info("Only validated canonical datasets are stored. Saved versions remain immutable and project-isolated.")
+    st.info("Only validated canonical datasets are stored. Duplicate canonical content is rejected, and saved versions remain immutable and project-isolated.")
 
 if __name__ == "__main__":
     main()
