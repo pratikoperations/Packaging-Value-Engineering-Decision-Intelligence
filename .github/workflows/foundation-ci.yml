@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - "agent/**"
+      - "feature/**"
   pull_request:
     branches:
       - main
