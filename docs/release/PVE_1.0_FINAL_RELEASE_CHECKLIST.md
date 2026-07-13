@@ -37,8 +37,9 @@
 - [x] Integration contract remains draft
 
 ## Quality Acceptance
-- [x] Full automated test suite passes — 177 passed, 0 failed, 0 errors
-- [x] CI passes after corrective repair — PVE CI #483, run ID `29220919849`
+- [x] Full automated test suite passes — 177 passed, 0 failed, 0 errors at corrective validation
+- [x] Corrective CI passes — PVE CI #483, run ID `29220919849`
+- [ ] Final branch-head CI passes after QA and checklist updates
 - [ ] Complete changed-file review passes
 - [x] No unresolved review threads at corrective validation
 - [x] Governance files identify PVE-1.0.6 and final closure correctly
