@@ -56,6 +56,7 @@ def build_decision_snapshot_service(database_path: str | Path) -> DecisionSnapsh
     """Create the final decision snapshot and history service."""
     database = _initialized_database(database_path)
     return DecisionSnapshotService(
+        DatasetRepository(database),
         ScenarioRepository(database),
         DecisionRepository(database),
     )
