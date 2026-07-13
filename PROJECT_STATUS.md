@@ -10,7 +10,7 @@ Packaging Value Engineering & Decision Intelligence
 PVE-0.7 remains the original interview-release identity required by repository CI.
 
 ## Stable Release
-PVE 1.0.6 is completed, validated, merged, and governance-closed on `main`.
+PVE 1.0.6 is complete and governance-closed on `main`.
 
 - Final PR: #22
 - Merge commit: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`
@@ -30,47 +30,44 @@ PVE 1.0.6 is completed, validated, merged, and governance-closed on `main`.
 - Build 2 — Project Creation Expansion: complete; 7 hours.
 - Build 3 — Category Input Definitions: complete; 14 hours.
 - Build 4 — Excel Template Generation: complete; 10 hours.
-- Build 5 — Excel Upload and Normalization: implemented and validated; 10 hours.
+- Build 5 — Excel Upload and Normalization: complete; 10 hours.
+- Build 6 — Readiness and Blocking Engine: complete; 9 hours.
 
-### Build 5 Delivered
-- Safe `.xlsx` parser using `openpyxl`.
-- Required eight-sheet validation.
-- Required-column validation.
-- Project, baseline, proposed, commercial, logistics, quality-test, and document-register normalization.
-- Category, objective, and change-type validation.
-- Mandatory-value validation.
-- Populated baseline and proposal enforcement.
-- Numeric, range, unit, and source-classification validation.
-- Invalid uploads blocked from persistence.
-- Existing JSON/CSV preparation paths preserved.
-- Existing immutable dataset repository and canonical behavior preserved.
-- No autonomous approval or full technical-feasibility conclusion.
+### Build 6 Delivered
+- Transparent seven-component weighted readiness score.
+- Mandatory blockers override percentage and force Insufficient Data.
+- Readiness stages from Draft through Ready for Approval Review.
+- Output availability with explicit reasons.
+- Source-classification traceability retained.
+- Readiness does not grant approval.
+- Schema version 3 with append-only readiness snapshots.
+- Cross-project dataset checks and archived-project write protection.
+- Existing data, upload paths, and historical controls preserved.
 
 ### Latest Validation
-- Workflow: PVE CI #607
-- Run ID: `29251780723`
+- Workflow: PVE CI #633
+- Run ID: `29255072545`
 - Result: success
 - Automated-test step: success
-- Expected suite composition: 202 tests (197 through Build 4 plus 5 Build 5 Excel-upload tests)
+- Expected suite composition: 208 tests
 - Failures: 0
 - Errors: 0
 
 ### Outstanding Acceptance Criteria
-- Build 6: readiness scoring, blockers, stage status, output availability, and assessment persistence.
 - Build 7: commercial savings, ROI, payback, and material reduction.
 - Build 8: guided Streamlit workflow and updated reports.
 - Build 9: final regression QA, samples, demonstrations, QA report, release checklist, and release review.
 
 ### Budget
 - Fixed hard cap: 80 hours
-- Builds 1–5 consumed: 47 hours
-- Remaining allocation: 33 hours
+- Builds 1–6 consumed: 56 hours
+- Remaining allocation: 24 hours
 
 ### Current Blocker
-None. Build 6 requires separate authorization.
+None. Build 7 requires separate authorization.
 
 ### Scope Exclusions
 Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking or allocation, cloud database, machine learning, and autonomous approval remain excluded.
 
 ### Current State
-Builds 1–5 are complete and validated. PR #25 remains draft and must not be merged. Build 6 has not started.
+Builds 1–6 are complete and validated. PR #25 remains draft and must not be merged. Build 7 has not started.
