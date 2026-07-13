@@ -26,73 +26,22 @@ jobs:
         run: |
           set -euo pipefail
           required=(
-            README.md
-            PROJECT_STATUS.md
-            BUILD_INSTRUCTIONS.md
-            ACTIVITY_LOG.md
-            BUILD_HISTORY.md
-            CHANGELOG.md
-            DECISION_LOG.md
-            VERSION_MANIFEST.md
-            RECOVERY_MANIFEST.md
-            QUALITY_ASSURANCE_PROTOCOL.md
-            requirements.txt
-            app.py
-            docs/MASTER_ARCHITECTURE.md
-            docs/MASTER_BUILD_PLAN.md
-            docs/INTERVIEW_DEMO_GUIDE.md
-            docs/FINAL_RELEASE_CHECKLIST.md
-            docs/qa/PVE-0.1_QA_REPORT.md
-            docs/qa/PVE-0.2_QA_REPORT.md
-            docs/qa/PVE-0.3_QA_REPORT.md
-            docs/qa/PVE-0.4_QA_REPORT.md
-            docs/qa/PVE-0.5_QA_REPORT.md
-            docs/qa/PVE-0.6_QA_REPORT.md
-            docs/qa/PVE-0.7_QA_REPORT.md
-            integration/README.md
-            integration/contracts/PVE_CONTRACT_V1_DRAFT.md
-            integration/exports/.gitkeep
-            integration/samples/.gitkeep
-            data/schemas/canonical_data_model.json
-            data/reference/allowed_values.json
-            data/demo/corrugated_shipping_cases.json
-            data/demo/invalid_examples.json
-            src/__init__.py
-            src/data_models/__init__.py
-            src/data_models/validator.py
-            src/cost_engine/__init__.py
-            src/cost_engine/engine.py
-            src/material_engine/__init__.py
-            src/material_engine/engine.py
-            src/technical_qualification/__init__.py
-            src/technical_qualification/engine.py
-            src/risk_engine/__init__.py
-            src/risk_engine/engine.py
-            src/scenario_engine/__init__.py
-            src/scenario_engine/engine.py
-            src/recommendation/__init__.py
-            src/recommendation/engine.py
-            src/exports/__init__.py
-            src/exports/decision_package.py
-            tests/README.md
-            tests/data_validation/__init__.py
-            tests/data_validation/test_validator.py
-            tests/cost_engine/__init__.py
-            tests/cost_engine/test_engine.py
-            tests/material_engine/__init__.py
-            tests/material_engine/test_engine.py
-            tests/technical_qualification/__init__.py
-            tests/technical_qualification/test_engine.py
-            tests/risk_engine/__init__.py
-            tests/risk_engine/test_engine.py
-            tests/scenario_engine/__init__.py
-            tests/scenario_engine/test_engine.py
-            tests/recommendation/__init__.py
-            tests/recommendation/test_engine.py
-            tests/exports/__init__.py
-            tests/exports/test_decision_package.py
-            tests/release/__init__.py
-            tests/release/test_end_to_end_release.py
+            README.md PROJECT_STATUS.md BUILD_INSTRUCTIONS.md ACTIVITY_LOG.md BUILD_HISTORY.md CHANGELOG.md
+            DECISION_LOG.md VERSION_MANIFEST.md RECOVERY_MANIFEST.md QUALITY_ASSURANCE_PROTOCOL.md requirements.txt app.py
+            docs/MASTER_ARCHITECTURE.md docs/MASTER_BUILD_PLAN.md docs/INTERVIEW_DEMO_GUIDE.md docs/FINAL_RELEASE_CHECKLIST.md
+            docs/qa/PVE-0.1_QA_REPORT.md docs/qa/PVE-0.2_QA_REPORT.md docs/qa/PVE-0.3_QA_REPORT.md
+            docs/qa/PVE-0.4_QA_REPORT.md docs/qa/PVE-0.5_QA_REPORT.md docs/qa/PVE-0.6_QA_REPORT.md docs/qa/PVE-0.7_QA_REPORT.md
+            integration/README.md integration/contracts/PVE_CONTRACT_V1_DRAFT.md integration/exports/.gitkeep integration/samples/.gitkeep
+            data/schemas/canonical_data_model.json data/reference/allowed_values.json data/demo/corrugated_shipping_cases.json data/demo/invalid_examples.json
+            src/__init__.py src/data_models/__init__.py src/data_models/validator.py src/cost_engine/__init__.py src/cost_engine/engine.py
+            src/material_engine/__init__.py src/material_engine/engine.py src/technical_qualification/__init__.py src/technical_qualification/engine.py
+            src/risk_engine/__init__.py src/risk_engine/engine.py src/scenario_engine/__init__.py src/scenario_engine/engine.py
+            src/recommendation/__init__.py src/recommendation/engine.py src/exports/__init__.py src/exports/decision_package.py
+            tests/README.md tests/data_validation/__init__.py tests/data_validation/test_validator.py tests/cost_engine/__init__.py tests/cost_engine/test_engine.py
+            tests/material_engine/__init__.py tests/material_engine/test_engine.py tests/technical_qualification/__init__.py tests/technical_qualification/test_engine.py
+            tests/risk_engine/__init__.py tests/risk_engine/test_engine.py tests/scenario_engine/__init__.py tests/scenario_engine/test_engine.py
+            tests/recommendation/__init__.py tests/recommendation/test_engine.py tests/exports/__init__.py tests/exports/test_decision_package.py
+            tests/release/__init__.py tests/release/test_end_to_end_release.py
           )
           for file in "${required[@]}"; do
             test -e "$file" || { echo "Missing: $file"; exit 1; }
@@ -117,5 +66,7 @@ jobs:
           grep -q "## Quick Start" README.md
           grep -q "## Demo Flow" docs/INTERVIEW_DEMO_GUIDE.md
           grep -q "## Acceptance Criteria" docs/FINAL_RELEASE_CHECKLIST.md
+      - name: Run Build 8 focused report tests
+        run: python -m unittest tests.reports.test_executive_summary -v
       - name: Run all automated tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
