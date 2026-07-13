@@ -30,11 +30,13 @@ class ProjectService:
         code = project_code.strip().upper()
         name = project_name.strip()
         stored_category = category.strip()
-        registry_key = LEGACY_CATEGORY_ALIASES.get(stored_category, stored_category)
+        registry_category = LEGACY_CATEGORY_ALIASES.get(stored_category, stored_category)
         normalized_currency = currency.strip().upper()
         if not code or not name:
             raise ValueError("Project code and name are required.")
-        definition = self.categories.get(registry_key)
+        if not stored_category:
+            raise ValueError("Packaging category is required.")
+        definition = self.categories.get(registry_category)
         if objective is not None and not definition.supports_objective(objective):
             raise ValueError("Unsupported project objective for this release.")
         if change_type is not None and not definition.supports_change_type(change_type):
@@ -45,7 +47,15 @@ class ProjectService:
             raise ValueError("Currency is required.")
         if annual_volume <= 0:
             raise ValueError("Annual volume must be greater than zero.")
-        for field in ("current_unit_cost", "proposed_unit_cost", "implementation_cost", "testing_cost", "tooling_cost", "qualification_cost", "target_saving"):
+        for field in (
+            "current_unit_cost",
+            "proposed_unit_cost",
+            "implementation_cost",
+            "testing_cost",
+            "tooling_cost",
+            "qualification_cost",
+            "target_saving",
+        ):
             if metadata.get(field) is not None and float(metadata[field]) < 0:
                 raise ValueError(f"{field} cannot be negative.")
         realization = metadata.get("expected_realization_percent")
@@ -77,15 +87,40 @@ class ProjectService:
     def archive_project(self, project_id: str) -> dict[str, Any]:
         return self.projects.archive(project_id)
 
-    def duplicate_project(self, project_id: str, *, new_project_code: str, new_project_name: str | None = None) -> dict[str, Any]:
+    def duplicate_project(
+        self,
+        project_id: str,
+        *,
+        new_project_code: str,
+        new_project_name: str | None = None,
+    ) -> dict[str, Any]:
         source = self.projects.get(project_id)
         name = new_project_name.strip() if new_project_name else f"{source['project_name']} Copy"
-        copied = {key: source.get(key) for key in (
-            "objective", "change_type", "product_sku", "business_unit_plant", "project_owner", "volume_unit",
-            "current_unit_cost", "proposed_unit_cost", "current_supplier", "proposed_supplier", "target_saving",
-            "target_completion_date", "implementation_cost", "testing_cost", "tooling_cost", "qualification_cost",
-            "expected_realization_percent", "project_description", "business_justification", "sustainability_objective",
-        )}
+        copied = {
+            key: source.get(key)
+            for key in (
+                "objective",
+                "change_type",
+                "product_sku",
+                "business_unit_plant",
+                "project_owner",
+                "volume_unit",
+                "current_unit_cost",
+                "proposed_unit_cost",
+                "current_supplier",
+                "proposed_supplier",
+                "target_saving",
+                "target_completion_date",
+                "implementation_cost",
+                "testing_cost",
+                "tooling_cost",
+                "qualification_cost",
+                "expected_realization_percent",
+                "project_description",
+                "business_justification",
+                "sustainability_objective",
+            )
+        }
         return self.create_project(
             project_code=new_project_code,
             project_name=name,
