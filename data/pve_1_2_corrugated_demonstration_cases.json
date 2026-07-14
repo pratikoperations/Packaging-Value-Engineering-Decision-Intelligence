@@ -36,14 +36,14 @@
       "case_id": "PVE12-DEMO-05",
       "name": "Damage-cost reversal",
       "synthetic": true,
-      "expected_outcome": "engineering review required",
+      "expected_outcome": "criteria met for engineering review",
       "scenario": {"screening_outcome": "criteria met", "evidence_confidence": "Moderate evidence confidence", "technical_blockers": [], "required_trials": [], "gross_annual_benefit": 250000, "incremental_failure_cost": 325000, "risk_adjusted_annual_benefit": -75000}
     },
     {
       "case_id": "PVE12-DEMO-06",
       "name": "MOQ transition-stock and obsolescence impact",
       "synthetic": true,
-      "expected_outcome": "engineering review required",
+      "expected_outcome": "criteria met for engineering review",
       "scenario": {"screening_outcome": "criteria met", "evidence_confidence": "Moderate evidence confidence", "technical_blockers": [], "required_trials": [], "incremental_working_capital": 44109.59, "obsolete_stock_write_off": 7750, "first_year_net_benefit": 98000}
     },
     {
@@ -57,7 +57,7 @@
       "case_id": "PVE12-DEMO-08",
       "name": "Humid export case requiring additional validation",
       "synthetic": true,
-      "expected_outcome": "laboratory validation required",
+      "expected_outcome": "transport trial required",
       "scenario": {"screening_outcome": "validation required", "evidence_confidence": "Low evidence confidence", "technical_blockers": [], "required_trials": ["Laboratory validation required", "Transport trial required"], "humidity_percent": 85, "distribution_mode": "export"}
     }
   ]
