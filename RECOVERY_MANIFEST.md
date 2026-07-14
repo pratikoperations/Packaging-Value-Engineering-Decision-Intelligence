@@ -1,39 +1,45 @@
 # Recovery Manifest
 
-## Stable release
+## Repository
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 - Stable branch: `main`
-- Stable release: PVE 1.0.6
-- Stable merge: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`
-- Stable CI: PVE CI #520, run `29223657516`
-- Stable tests: 179 passed
 
-## Active PVE 1.1 recovery point
-- Branch: `feature/pve-1.1-all-category-intake`
-- Pull request: PR #25
-- PR state: open, draft, unmerged
-- Hold removed: 2026-07-14
-- Builds 1 through 9: complete
-- Total consumed: 80 hours
-- Remaining allocation: 0 hours
+## Stable Release Recovery Points
 
-## Final validation evidence
-- Build 9 implementation validation: PVE CI #725
-- Run ID: `29302736072`
-- Validated implementation head: `f2cd981fdb2d8173569b138c8bedd399e7bb1c0d`
-- Complete suite: 221 passed
-- Focused report tests: 4 passed
-- Total executions: 225
-- Failures: 0
-- Errors: 0
+### PVE 1.0.6
+- Status: complete and governance-closed.
+- Merge commit: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`.
+- Final CI: PVE CI #520, run `29223657516`.
+- Tests: 179 passed.
 
-## Release evidence
+### PVE 1.1
+- Release: All-Category Project Intake and Validation Readiness.
+- Status: complete, validated, squash-merged, and governance-closed.
+- Pull request: PR #25, merged and closed.
+- Final feature head: `dc85db49afee46bde3118684761c0a176dd32194`.
+- Squash merge commit: `37f4ae58e0d57c4531293371e423d771ada7ae50`.
+- Final pre-merge CI: PVE CI #735.
+- Run ID: `29302903427`.
+- Complete unittest suite: 221 passed.
+- Focused report tests: 4 passed.
+- Total executions: 225.
+- Failures: 0.
+- Errors: 0.
+- Total consumed: 80 hours.
+- Remaining allocation: 0 hours.
+
+## Release Evidence
 - Eight synthetic category samples are stored in `data/demo/pve_1_1_release_cases.json`.
 - Three detailed demonstration cases cover ready, blocked, and critical-data-missing outcomes.
-- Final QA plan, QA report, release checklist, and interview demo are present.
+- Final QA plan, QA report, release checklist, and interview demonstration are present.
+- Engineering validation and human approval remain mandatory.
+- Autonomous approval remains prohibited.
+- Historical evidence and decision snapshots remain immutable.
+- Archived projects remain read-only.
+- Project isolation remains enforced.
 
-## Recovery rule
-Resume only for final-head validation, merge review, or governance closure after explicit authorization. Do not start another PVE 1.1 development increment because the 80-hour cap is fully consumed.
+## Recovery Rule
+Resume from `main` at or after merge commit `37f4ae58e0d57c4531293371e423d771ada7ae50`. PVE 1.1 is closed; do not resume feature development on PR #25. Any PVE 1.2 work requires a new explicit authorization, scope, budget, branch, and pull request.
 
-## Scope boundary
+## Scope Boundary
 Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking or allocation, cloud database, machine learning, live pricing, and autonomous approval remain excluded.
