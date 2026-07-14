@@ -1,14 +1,16 @@
 # PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
 
 ## Release status
-PVE 1.2 Builds 1–8 are complete on draft PR #26.
+PVE 1.2 Builds 1–8 are complete, squash-merged through PR #26, post-merge validated on `main`, and governance-closed as a decision-support release.
 
 - Planned and completed effort: 74 hours.
 - Completion: 100%.
 - Pending planned work: 0 hours, 0%.
 - Controlled contingency used: 0 of 2 hours.
-- Functional Build 8 validation: PVE CI #849, run `29309701227`, 300 tests passed, 0 failures, 0 errors.
-- Merge, deployment, activation, and production use remain separately authorized actions.
+- Final feature head: `20b60393eb21c75e56676ec119fb2c1818d33db0`.
+- Squash-merge commit: `8c5511e096b4526a85630e38ef939db371b307b1`.
+- Post-merge validation: PVE CI #896, run `29317676780`, job `87035353112`, 300 tests passed, 0 failures, 0 errors.
+- Deployment, activation, pilot, and production use remain separately unauthorized.
 
 ## Release objective
 PVE 1.2 extends the completed PVE 1.1 intake-readiness foundation into corrugated-only technical screening, engineering-review recommendation, and append-only technical-assessment persistence. It compares baseline and proposed corrugated cases across specification, evidence, compression and stacking requirements, converting and packing-line compatibility, pallet and logistics implications, implementation economics, physical sustainability indicators, and validation requirements.
@@ -116,5 +118,5 @@ Build 8 adds:
 - JSON, CSV-compatible normalization, and Excel-template regressions;
 - release notes, QA report, and release checklist.
 
-## Release control
-The architecture is complete for the authorized PVE 1.2 scope. PR #26 remains draft and unmerged. Completion does not imply enterprise production readiness or authorize marking the PR ready, merging, deployment, pilot, activation, or production use.
+## Governance closure
+PR #26 was squash-merged to `main` as commit `8c5511e096b4526a85630e38ef939db371b307b1`. PVE CI #896, run `29317676780`, validated that commit on `main` with 300 tests, 0 failures, and 0 errors. The architecture is frozen for PVE 1.2. Any new scope belongs to a separately authorized future release. PVE 1.3 has not started.
