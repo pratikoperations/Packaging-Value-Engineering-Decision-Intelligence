@@ -1,5 +1,48 @@
 # Changelog
 
+## [1.1-all-category-intake-validation-readiness] — Completed
+
+### Added
+- Project intake for corrugated, folding carton, rigid plastic, flexible packaging, labels, closures, glass, and metal packaging.
+- Category-specific objectives, change types, fields, documents, units, warnings, blockers, analyses, and testing requirements.
+- Macro-free category Excel templates with structured source classification and evidence fields.
+- Excel upload parsing, normalization, structural validation, completeness validation, and persistence blocking for invalid uploads.
+- Transparent weighted readiness scoring, blocker override, readiness stages, and reasoned output availability.
+- Common commercial savings, realized savings, first-year net benefit, payback, and material-reduction calculations.
+- Guided Streamlit workflow plus JSON and Markdown executive reports.
+- Eight synthetic category samples and three detailed demonstration cases.
+
+### Completed
+- Builds 1–9 completed within the fixed 80-hour cap.
+- PR #25 merged and closed.
+- Final feature head: `dc85db49afee46bde3118684761c0a176dd32194`.
+- Squash merge commit: `37f4ae58e0d57c4531293371e423d771ada7ae50`.
+- Final CI: PVE CI #735.
+- Run ID: `29302903427`.
+- Tests: 221 unittest tests plus 4 focused report tests; 225 total executions; 0 failures; 0 errors.
+- Total effort: 80 hours.
+- Remaining budget: 0 hours.
+- Release marked complete, validated, merged, and governance-closed.
+
+### Mandatory Controls Preserved
+- Engineering validation required.
+- Human approval required.
+- Autonomous approval prohibited.
+- Readiness percentage cannot approve a project.
+- Critical blockers override percentage and commercial attractiveness.
+- Supplier-declared and predicted values are not shown as laboratory-tested.
+- Historical datasets, thresholds, scenarios, and decision snapshots remain immutable.
+- Archived projects remain read-only.
+- Project isolation remains enforced.
+
+### Excluded
+- PVE 1.2 development.
+- Power BI and PostgreSQL reporting integration.
+- Deployment, activation, pilot, and production.
+- ERP integration, OCR, and AI document reading.
+- Authentication, cloud database, supplier ranking or allocation, machine learning, live pricing, and autonomous approval.
+- Full technical feasibility across all packaging categories.
+
 ## [1.0.6-decision-snapshot-final-release] — Completed
 
 ### Added
