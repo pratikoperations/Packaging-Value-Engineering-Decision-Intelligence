@@ -17,7 +17,7 @@ PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
 | 2 | Corrugated specification, style and tolerance model | 11 | 19 | 25.7% | Complete and validated |
 | 3 | Technical requirements, evidence and supplier capability | 10 | 29 | 39.2% | Complete and validated |
 | 4 | Compression, stacking, environment and line screening | 12 | 41 | 55.4% | Complete and validated |
-| 5 | Material, pallet, logistics and sustainability analysis | 11 | 52 | 70.3% | Not started |
+| 5 | Material, pallet, logistics and sustainability analysis | 11 | 52 | 70.3% | Complete and validated |
 | 6 | Should-cost, failure cost and implementation economics | 9 | 61 | 82.4% | Not started |
 | 7 | Recommendation, confidence and immutable persistence | 7 | 68 | 91.9% | Not started |
 | 8 | Demonstration cases, regression testing and release QA | 6 | 74 | 100% | Not started |
@@ -32,26 +32,28 @@ Implemented configuration-driven corrugated baseline/proposed specifications, st
 Implemented governed technical requirements, evidence matching and validity, source separation, supplier compatibility-only assessment, evidence confidence, and additive upload normalization.
 
 ## Completed Build 4
-Implemented:
-- supplied BCT and ECT comparison against explicit project-defined requirements;
-- no BCT prediction, ECT-to-BCT conversion, McKee coefficients, or hidden engineering constants;
-- governed safety and environmental factors requiring source, version, applicability, and valid status;
-- stack layers, pallet load, storage duration, static/dynamic stacking, humidity, temperature, refrigerated, and humid-context checks;
-- floor/rack storage, pallet overhang/underhang, handling touches, mixed loads, and stretch-wrap compression checks;
-- packing-line dimensional limits, erector, sealing, flap, barcode, speed, squareness, warp, and mandatory-trial checks;
-- blocker precedence over commercial attractiveness;
-- explainable outcomes: criteria met, criteria not met, validation required, evidence conflict, or insufficient technical data;
-- additive normalization for factors, warehouse profiles, and packing-line profiles.
+Implemented supplied BCT/ECT comparison, governed safety and derating factors, stacking/environment/warehouse screening, packing-line compatibility, blocker precedence, non-approval outcomes, and additive normalization. No prediction coefficients or universal engineering constants were added.
 
-Build 4 validation:
-- Functional head: `3abaf7d4053af17fbfb6b6dba1cdedefda9c3a45`.
-- PVE CI #793, run `29308512768`, success.
-- 257 tests passed, 0 failures, 0 errors.
+## Completed Build 5
+Implemented:
+- board area from supplied blank dimensions only, with no inferred geometry;
+- supplied baseline/proposed case-weight, annual-material-consumption, and material-change comparisons;
+- simple standard rectangular pallet orientations: length × width and width × length;
+- cases per layer, validated layers, cases per pallet, footprint utilisation, pallet height, gross weight, and annual pallet movements;
+- explicit-input logistics comparisons for pallet movements, freight cube, warehouse positions, and vehicle spaces;
+- physical indicators for annual paper use/reduction, packaging weight, packaging-to-product ratio, recycled and virgin fibre, pallets avoided, and transport movements avoided;
+- unavailable-output behavior for missing inputs and carbon emissions;
+- technical-blocker precedence over material, logistics, and sustainability benefits;
+- additive normalization for material, pallet, logistics, and physical-sustainability profiles.
+
+Build 5 validation:
+- Functional head: `0e31f3369ad1dccb9592f7b4b30f30bfa58f925c`.
+- PVE CI #805, run `29308755665`, success.
+- 271 tests passed, 0 failures, 0 errors.
+
+Build 5 does not implement mixed-SKU palletisation, truck-load optimisation, three-dimensional optimisation, inferred box geometry, carbon calculation, damage cost, MOQ, working capital, implementation economics, or Build 6 functionality.
 
 ## Later-build intent
-
-### Build 5 — Material, pallet, logistics and sustainability analysis
-Add deterministic material, simple pallet orientation, pallet movement, logistics, and physical sustainability indicators. No mixed-SKU optimisation or carbon claims without governed factors.
 
 ### Build 6 — Should-cost, failure cost and implementation economics
 Add explicit damage, MOQ, working capital, transition stock, obsolescence, tooling, artwork, trial, benefit, and payback scenarios.
@@ -68,7 +70,7 @@ Add synthetic cases, full regression, release evidence, documentation, and closu
 3. Thresholds remain sourced, versioned, applicable, and traceable.
 4. Assumptions remain explicit.
 5. Source classifications remain distinct.
-6. Technical/compliance blockers override commercial attractiveness.
+6. Technical/compliance blockers override commercial, material, logistics, and sustainability benefits.
 7. Engineering validation and human approval remain mandatory.
 8. Autonomous approval remains prohibited.
 9. Historical records remain immutable and project-scoped.
@@ -76,4 +78,4 @@ Add synthetic cases, full regression, release evidence, documentation, and closu
 11. PR #26 remains draft and unmerged until separate authorization.
 
 ## Build authorization rule
-Completion of Build 4 does not authorize Build 5. Build 5 is not started or authorized.
+Completion of Build 5 does not authorize Build 6. Build 6 is not started or authorized.
