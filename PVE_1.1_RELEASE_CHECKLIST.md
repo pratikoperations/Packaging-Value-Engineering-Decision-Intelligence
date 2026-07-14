@@ -23,13 +23,27 @@
 - [x] Archived projects remain read-only.
 - [x] Dataset versions and historical decision snapshots remain immutable.
 - [x] Project isolation remains enforced.
+- [x] No unsupported all-category technical-feasibility claim is made.
 
 ## QA acceptance
 - [x] One synthetic sample exists for each category.
 - [x] Three detailed release cases exist.
 - [x] New release QA tests are included.
-- [x] Build 9 CI #725 succeeded with 221 complete-suite tests plus 4 focused report tests; zero failures and errors.
-- [ ] PR #25 receives separate merge authorization.
+- [x] Final PVE CI #735 succeeded; run `29302903427`.
+- [x] Complete unittest suite: 221 passed.
+- [x] Focused report tests: 4 passed.
+- [x] Total executions: 225.
+- [x] Failures: 0.
+- [x] Errors: 0.
+
+## Merge and budget acceptance
+- [x] PR #25 received separate merge authorization.
+- [x] PR #25 was squash-merged and closed.
+- [x] Final feature head: `dc85db49afee46bde3118684761c0a176dd32194`.
+- [x] Merge commit: `37f4ae58e0d57c4531293371e423d771ada7ae50`.
+- [x] Fixed 80-hour cap was met.
+- [x] Total consumed: 80 hours.
+- [x] Remaining: 0 hours.
 
 ## Release state
-PVE 1.1 is release-ready for merge review. Build completion does not authorize deployment, pilot, production use, or merge.
+PVE 1.1 is completed, validated, merged, and governance-closed. This closure does not authorize any later release, reporting integration, deployment, pilot, production, ERP, OCR, or AI document-reading work.
