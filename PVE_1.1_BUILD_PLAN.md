@@ -12,7 +12,7 @@ Hard cap: 80 hours.
 | 6 | Readiness and blocking engine | 9 | Complete |
 | 7 | Commercial and ROI extension | 5 | Complete |
 | 8 | Streamlit UI and reports | 8 | Complete and validated |
-| 9 | Testing and release QA | 11 | Authorized and in progress |
+| 9 | Testing and release QA | 11 | Complete and validated |
 | **Total** |  | **80** | |
 
 ## Build 9 Acceptance Gate
@@ -24,4 +24,4 @@ Hard cap: 80 hours.
 - PR #25 remains draft and unmerged until separate merge authorization.
 
 ## Control
-The user removed the hold and authorized Build 9 on 2026-07-14. Build 9 consumes the final 11 hours of the fixed 80-hour cap. No later development increment is authorized within PVE 1.1.
+The user removed the hold and authorized Build 9 on 2026-07-14. Build 9 consumed the final 11 hours of the fixed 80-hour cap. No later development increment is authorized within PVE 1.1.
