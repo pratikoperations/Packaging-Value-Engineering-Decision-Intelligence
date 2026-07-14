@@ -8,6 +8,7 @@ from .export_repository import ExportRepository
 from .project_repository import ProjectRepository
 from .readiness_repository import ReadinessRepository
 from .scenario_repository import ScenarioRepository
+from .supplier_qualification_repository import SupplierQualificationRepository
 from .technical_assessment_repository import TechnicalAssessmentRepository
 from .threshold_repository import ThresholdRepository
 from .trial_execution_repository import TrialExecutionRepository
@@ -26,6 +27,7 @@ __all__ = [
     "ReadinessRepository",
     "ScenarioRepository",
     "SpecificationChangeRepository",
+    "SupplierQualificationRepository",
     "TechnicalAssessmentRepository",
     "ThresholdRepository",
     "TrialExecutionRepository",
