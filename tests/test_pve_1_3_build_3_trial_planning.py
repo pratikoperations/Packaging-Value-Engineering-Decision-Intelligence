@@ -77,9 +77,8 @@ class TrialPlanningBuild3Tests(unittest.TestCase):
         values.update(overrides)
         return self.repository.create(**values)
 
-    def test_schema_v6_is_applied(self) -> None:
-        self.assertEqual(SCHEMA_VERSION, 6)
-        self.assertEqual(current_schema_version(self.database), 6)
+    def test_governed_schema_version_is_applied(self) -> None:
+        self.assertEqual(current_schema_version(self.database), SCHEMA_VERSION)
 
     def test_create_and_read_project_scoped_plan(self) -> None:
         plan = self.create_plan()
