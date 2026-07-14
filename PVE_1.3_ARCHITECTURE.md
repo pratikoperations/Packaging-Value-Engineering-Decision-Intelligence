@@ -3,13 +3,23 @@
 ## Release
 PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governance
 
-## Planning state
-This is a planning-only architecture baseline. PVE 1.3 is 0% complete with 0 of 69 planned hours consumed and 69 hours pending. No implementation has begun. Build 1 requires separate authorization.
+## Current state
+Build 1 architecture and governance boundaries are implemented on the controlled branch. PVE 1.3 is 8.7% complete with 6 of 69 planned hours consumed and 63 hours pending. Builds 2A–8 have not started and remain unauthorized.
 
 ## Objective
 Extend the frozen PVE 1.2 decision-intelligence foundation into governed drawing control, lightweight document preview, validation execution, defect intelligence, specification change control and supplier qualification evidence management.
 
 The release remains a decision-support and governance system. It does not become a CAD-authoring platform, autonomous engineering authority or sourcing-award engine.
+
+## Frozen dependency
+PVE 1.3 must preserve the validated PVE 1.2 foundation:
+- project-scoped records and cross-project isolation;
+- archived-project write protection;
+- deterministic outputs;
+- explicit source classifications;
+- immutable or append-only history;
+- technical and evidence blockers overriding commercial benefit;
+- explicit human engineering validation and approval.
 
 ## Architectural flow
 
@@ -38,7 +48,7 @@ Planned responsibilities:
 - retain checksum, supersession and immutable revision history;
 - identify the exact drawing revision applicable to each trial or change.
 
-DXF and DWG remain governed file references only. The architecture does not parse geometry or infer dimensions.
+DXF and DWG remain governed file references only. Geometry and dimensions are not interpreted automatically.
 
 ### 2. Preview service
 Planned responsibilities:
@@ -46,7 +56,7 @@ Planned responsibilities:
 - show metadata and baseline/proposed context;
 - provide controlled fallback for unsupported formats;
 - preserve the original file reference and checksum;
-- clearly state that preview does not constitute engineering validation.
+- state visibly that preview does not constitute engineering validation.
 
 The preview layer must not extract or approve dimensions, geometry, tooling or structural performance.
 
@@ -90,14 +100,14 @@ Planned responsibilities:
 
 ### 8. Release QA
 Planned responsibilities:
-- synthetic demonstration data;
+- governed synthetic demonstration data;
 - end-to-end regression;
 - immutability and project-isolation tests;
 - migration validation where schema changes are separately authorized;
 - release notes, checklist, QA report and governance reconciliation.
 
 ## Record and persistence principles
-Planned implementation must preserve:
+Future implementation must preserve:
 - project-scoped records;
 - explicit identifiers and version references;
 - append-only history for trials, deviations, changes and qualification evidence;
@@ -108,21 +118,22 @@ Planned implementation must preserve:
 - explicit source classifications;
 - traceable human decisions.
 
-No schema or migration is created by this planning baseline.
+The controlling detail is defined in `PVE_1.3_BUILD_1_RECORD_AND_AUTHORITY_MODEL.md`.
 
 ## Decision hierarchy
-1. Safety, compliance, evidence and technical blockers.
-2. Drawing and specification revision consistency.
-3. Trial and validation completeness.
-4. Supplier-site capability evidence.
-5. Operational, commercial, logistics and sustainability benefits.
-6. Explicit human engineering and business approval.
+1. Safety and compliance blockers.
+2. Technical and evidence blockers.
+3. Drawing and specification revision consistency.
+4. Trial and validation completeness.
+5. Supplier-site capability evidence.
+6. Operational, commercial, logistics and sustainability benefits.
+7. Explicit human engineering and business approval.
 
 Commercial or sustainability attractiveness cannot override a technical, evidence, revision or trial blocker.
 
 ## File and preview support boundary
 
-### Planned governed references
+### Governed references planned
 - PDF;
 - DXF;
 - DWG;
@@ -131,13 +142,13 @@ Commercial or sustainability attractiveness cannot override a technical, evidenc
 - JPEG;
 - artwork and tooling references.
 
-### Planned previews
+### Preview formats planned
 - PDF;
 - SVG;
 - PNG;
 - JPEG.
 
-### Not planned
+### Excluded
 - automatic DXF or DWG interpretation;
 - automatic dimension extraction;
 - geometry comparison;
@@ -149,25 +160,21 @@ Commercial or sustainability attractiveness cannot override a technical, evidenc
 - manufacturing-ready drawing approval.
 
 ## Human authority boundary
-The system may identify missing evidence, revision conflicts, failed criteria, deviations and required validation. It may prepare an engineering-review package. It must never autonomously approve:
-- a drawing;
-- a dieline;
-- tooling;
-- a trial result;
-- a packaging specification;
-- supplier qualification;
-- implementation of a packaging change.
+The system may identify missing evidence, revision conflicts, failed criteria, deviations and required validation. It may prepare an engineering-review package. It must never autonomously approve a drawing, dieline, tooling, trial result, packaging specification, supplier qualification or packaging-change implementation.
 
-## Integration boundary
-PVE 1.3 may define internal references and exportable evidence packages. Live PLM, ERP, CAD-platform, supplier-portal or workflow integrations remain outside scope unless separately governed and authorized.
+## Integration and deployment boundary
+PVE 1.3 may define internal references and exportable evidence packages. Live PLM, ERP, CAD-platform, supplier-portal or workflow integrations remain outside scope unless separately governed. Deployment, pilot, activation and production use remain separately unauthorized.
+
+## Acceptance control
+Universal and build-specific gates are defined in `PVE_1.3_BUILD_1_ACCEPTANCE_GATES.md`. Each build must pass focused tests where code exists, the complete regression suite, review controls and post-merge validation of the exact `main` commit.
 
 ## Release budget
 - Planned effort: 69 hours.
 - Controlled contingency: 2 hours.
 - Absolute release cap: 71 hours.
-- Completed: 0 hours.
-- Pending: 69 hours.
-- Completion: 0%.
+- Completed: 6 hours.
+- Pending: 63 hours.
+- Completion: 8.7%.
 
 ## Authorization control
-This architecture is a proposal baseline only. It does not authorize implementation, schema creation, migrations, tests, file-processing code or UI development. Build 1 begins only after separate explicit authorization.
+Build 1 alone is authorized and implemented on the controlled branch. No schema, migration, product data model, file-processing code, preview renderer or UI capability is introduced by Build 1. Builds 2A–8 require separate explicit authorization.

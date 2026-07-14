@@ -3,26 +3,26 @@
 ## Release
 PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governance
 
-## Planning status
-- Status: planning baseline only.
-- Implementation started: no.
-- Build 1 started: no.
-- Release completion: 0%.
-- Completed planned effort: 0 of 69 hours.
-- Pending planned effort: 69 hours, 100%.
+## Current implementation status
+- Status: Build 1 implemented on the controlled branch; validation and merge remain pending.
+- Implementation started: yes, limited to Build 1.
+- Build 1 status: implementation complete, pending CI and governance closure.
+- Builds 2A–8: not started and not authorized.
+- Release completion: 8.7%.
+- Completed planned effort: 6 of 69 hours.
+- Pending planned effort: 63 hours, 91.3%.
 - Controlled contingency used: 0 of 2 hours.
 - Controlled contingency remaining: 2 hours.
 - Absolute release cap: 71 hours.
-- No implementation code, schema, migration, test, data-model or product-functionality change is authorized by this document.
 
 ## Budget control
-The 69 planned hours are fixed across the controlled build sequence below. The two-hour contingency may be used only for unexpected regression, CI-only failure, migration compatibility repair, cross-module integration defects or release-evidence reconciliation. It cannot fund new functionality, additional categories, deployment or scope expansion.
+The 69 planned hours remain fixed. The two-hour contingency may be used only for unexpected regression, CI-only failure, migration compatibility repair, cross-module integration defects or release-evidence reconciliation. It cannot fund new functionality, additional categories, deployment or scope expansion.
 
 ## Controlled build sequence
 
 | Build | Scope | Hours | Cumulative hours | Planned completion | Status |
 |---|---|---:|---:|---:|---|
-| 1 | Architecture, governance and release boundary | 6 | 6 | 8.7% | Not started |
+| 1 | Architecture, governance and release boundary | 6 | 6 | 8.7% | Implemented; validation pending |
 | 2A | Drawing, Artwork, Dieline and CAD Evidence Control | 10 | 16 | 23.2% | Not started |
 | 2B | Lightweight PDF, SVG and image preview support | 5 | 21 | 30.4% | Not started |
 | 3 | Trial planning and validation requirements | 9 | 30 | 43.5% | Not started |
@@ -33,14 +33,17 @@ The 69 planned hours are fixed across the controlled build sequence below. The t
 | 8 | Demonstration cases, regression and release QA | 7 | 69 | 100% | Not started |
 
 ## Build 1 — Architecture, governance and release boundary — 6 hours
-Planned outcomes:
-- lock PVE 1.3 scope and exclusions;
-- define module boundaries and dependencies on the frozen PVE 1.2 release;
-- define record ownership, immutability, project isolation and human-approval boundaries;
-- define acceptance gates and release-evidence requirements;
-- preserve deterministic, evidence-governed decision support.
 
-Separate authorization is required before Build 1 begins.
+### Delivered
+- scope and exclusions locked in `PVE_1.3_BUILD_1_RELEASE_BOUNDARY.md`;
+- dependencies on frozen PVE 1.2 defined;
+- module and record ownership, immutability, project isolation and human authority defined in `PVE_1.3_BUILD_1_RECORD_AND_AUTHORITY_MODEL.md`;
+- universal and build-specific acceptance gates defined in `PVE_1.3_BUILD_1_ACCEPTANCE_GATES.md`;
+- deterministic, evidence-governed decision-support boundary preserved;
+- canonical architecture and governance records reconciled.
+
+### Prohibited in Build 1
+Build 1 introduces no schema, migration, data model, persistence code, file processor, preview renderer, UI feature, product functionality or new test. Builds 2A–8 remain separately controlled.
 
 ## Build 2A — Drawing, Artwork, Dieline and CAD Evidence Control — 10 hours
 Planned outcomes:
@@ -50,74 +53,40 @@ Planned outcomes:
 - project, SKU, supplier, manufacturing-site and specification-version linkage;
 - references for PDF, DXF, DWG, SVG and artwork files;
 - dieline, artwork and tooling relationships;
-- source classification, approval status and validation status;
+- source classification, approval and validation status;
 - superseded and replacement relationships;
-- trial applicability;
-- file checksum and immutable revision history;
-- explicit human engineering validation and approval requirements.
+- trial applicability, checksum and immutable revision history;
+- human engineering validation and approval requirements.
 
-DXF and DWG files are governed references only. Their geometry is not automatically interpreted.
+DXF and DWG remain governed references only; geometry is not automatically interpreted.
 
 ## Build 2B — Lightweight PDF, SVG and image preview support — 5 hours
 Planned outcomes:
-- PDF preview;
-- SVG preview;
-- PNG and JPEG preview;
+- PDF, SVG, PNG and JPEG preview;
 - drawing metadata panel;
-- baseline and proposed document viewing;
-- controlled file access or source-reference access;
+- baseline/proposed document viewing;
+- controlled file or source-reference access;
 - unsupported-file fallback;
 - explicit preview limitations;
 - no dimensional, geometric or engineering interpretation.
 
 ## Build 3 — Trial planning and validation requirements — 9 hours
-Planned outcomes:
-- laboratory, compression, conditioning, stacking, packing-line, transport and first-production trial plans;
-- objective, protocol, owner, location, required evidence and acceptance criteria;
-- drawing, specification, supplier, site and material revision linkage;
-- prerequisites, blockers and planned dates;
-- explicit human authorization before execution.
+Planned outcomes include governed trial objectives, protocols, owners, sites, evidence, acceptance criteria, revision linkage, prerequisites, blockers and explicit human authorization.
 
 ## Build 4 — Trial execution, results and deviations — 9 hours
-Planned outcomes:
-- append-only trial execution records;
-- observed results, measurements, attachments and source classifications;
-- deviations, nonconformances, retest requirements and unresolved blockers;
-- separation of observed facts, supplier declarations, predictions and assumptions;
-- human-only trial disposition and approval.
+Planned outcomes include append-only execution records, observed results, measurements, attachments, deviations, nonconformances, retest requirements and human-only disposition.
 
 ## Build 5 — Packaging defect and complaint taxonomy — 8 hours
-Planned outcomes:
-- governed defect families and severity;
-- crushing, bulging, glue failure, stitch failure, print defects, barcode failure, moisture damage, pallet collapse, line jams and transport damage;
-- defect evidence, frequency, location, affected specification and supplier context;
-- links to trial, change and technical-assessment records;
-- no unsupported causal inference.
+Planned outcomes include governed defect families, severity, evidence, affected context and descriptive analysis without unsupported causal inference.
 
 ## Build 6 — Specification and implementation change control — 8 hours
-Planned outcomes:
-- append-only packaging change requests;
-- affected SKU, supplier, site, drawing, artwork, tooling and specification references;
-- validation requirements, implementation dates and inventory treatment;
-- transition stock and obsolescence controls;
-- status history and explicit human approval references;
-- no autonomous implementation authorization.
+Planned outcomes include append-only change requests, affected references, validation requirements, inventory transition, status history and explicit human approval.
 
 ## Build 7 — Supplier qualification evidence register — 7 hours
-Planned outcomes:
-- supplier-site capability evidence;
-- corrugator, printing, converting, inspection and laboratory capability records;
-- subcontracting and external-process disclosure;
-- qualification validity, expiry and requalification requirements;
-- evidence matching without supplier scoring, ranking, allocation or award decisions.
+Planned outcomes include supplier-site capability evidence, validity, expiry, requalification and evidence matching without ranking, allocation or award decisions.
 
 ## Build 8 — Demonstration cases, regression and release QA — 7 hours
-Planned outcomes:
-- governed synthetic demonstration cases;
-- end-to-end regression across drawing control, previews, trials, defects, changes and supplier qualification evidence;
-- migration and immutability validation where applicable;
-- archived-project protection and cross-project isolation;
-- release checklist, QA report, release notes and governance reconciliation.
+Planned outcomes include governed synthetic cases, end-to-end regression, immutability and isolation validation, release checklist, QA report, notes and governance reconciliation.
 
 ## Explicit exclusions
 PVE 1.3 will not include:
@@ -134,4 +103,4 @@ PVE 1.3 will not include:
 - deployment, pilot, activation or production-readiness claims without separate authorization.
 
 ## Authorization boundary
-This document approves planning only. It does not authorize Build 1 or any implementation activity. A separate explicit instruction is required to begin PVE 1.3 implementation.
+Build 1 alone is authorized. Builds 2A–8 must not begin without separate explicit authorization. Build 1 must pass CI, review and merge controls before it is treated as governance-closed on `main`.

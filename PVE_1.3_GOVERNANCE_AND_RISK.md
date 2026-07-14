@@ -3,23 +3,27 @@
 ## Release
 PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governance
 
-## Planning status
-- Planning baseline only.
-- Implementation started: no.
-- Build 1 started: no.
-- Completion: 0%.
-- Completed effort: 0 of 69 planned hours.
-- Pending effort: 69 hours, 100%.
+## Current implementation status
+- Build 1 governance implementation: complete on the controlled branch; validation and merge pending.
+- Builds 2A–8: not started and not authorized.
+- Completion: 8.7%.
+- Completed effort: 6 of 69 planned hours.
+- Pending effort: 63 hours, 91.3%.
 - Controlled contingency used: 0 of 2 hours.
+- Controlled contingency remaining: 2 hours.
 - Absolute release cap: 71 hours.
 
+## Controlling Build 1 records
+- `PVE_1.3_BUILD_1_RELEASE_BOUNDARY.md`
+- `PVE_1.3_BUILD_1_RECORD_AND_AUTHORITY_MODEL.md`
+- `PVE_1.3_BUILD_1_ACCEPTANCE_GATES.md`
+
 ## Mandatory governance controls
-- Engineering validation remains mandatory.
-- Explicit human approval remains mandatory.
+- Engineering validation and explicit human approval remain mandatory.
 - Autonomous engineering approval is prohibited.
 - Drawing preview is not drawing validation.
 - File presence is not evidence quality.
-- A current revision must be matched to the correct project, SKU, supplier, site and specification.
+- A current revision must match the correct project, SKU, supplier, site and specification.
 - Superseded drawings must not be used for trials or implementation.
 - DXF and DWG references must not be represented as interpreted geometry.
 - Trial results must preserve source, units, method, conditions and deviations.
@@ -40,7 +44,7 @@ The release must preserve distinctions among:
 - assumption;
 - synthetic demonstration data.
 
-No class may be silently converted into another. Previewed content is not automatically accepted as a validated fact.
+No class may be silently converted into another. Previewed content is not automatically accepted as validated evidence.
 
 ## Drawing and CAD governance
 Every governed drawing or CAD reference should retain, where applicable:
@@ -48,8 +52,7 @@ Every governed drawing or CAD reference should retain, where applicable:
 - supplier and manufacturing site;
 - document type;
 - drawing number and title;
-- revision;
-- issue date and effective date;
+- revision, issue date and effective date;
 - specification version;
 - baseline or proposed classification;
 - artwork, dieline and tooling relationships;
@@ -60,85 +63,34 @@ Every governed drawing or CAD reference should retain, where applicable:
 - file checksum;
 - immutable revision history.
 
-Unsupported or unpreviewable files remain valid references only when their metadata, source and checksum are preserved. The system must not imply that a file was technically reviewed merely because it was uploaded or displayed.
+Unsupported or unpreviewable files remain references only when metadata, source and checksum are preserved. Upload or display must never imply technical review.
 
 ## Preview governance
-Planned preview support is limited to PDF, SVG, PNG and JPEG.
-
-The preview layer must:
-- preserve the original file reference;
-- display metadata and revision context;
-- disclose unsupported formats;
-- avoid automatic dimensional interpretation;
-- avoid geometry comparison;
-- avoid approval language;
-- require human review for engineering conclusions.
+Planned preview support is limited to PDF, SVG, PNG and JPEG. The preview layer must preserve the source reference, display revision context, disclose unsupported formats, avoid geometry or dimension inference, avoid approval language and require human engineering review.
 
 ## Trial governance
-A trial plan should identify:
-- objective and trial type;
-- protocol and conditions;
-- owner and location;
-- supplier and manufacturing site;
-- material, specification and drawing revision;
-- required evidence;
-- acceptance criteria;
-- prerequisites and blockers;
-- planned date and authorization state.
+A trial plan should identify objective, type, protocol, conditions, owner, location, supplier site, material, specification and drawing revision, required evidence, acceptance criteria, prerequisites, blockers, planned date and authorization state.
 
-A trial execution record should preserve:
-- actual date and conditions;
-- observed results and units;
-- attachments and source classifications;
-- deviations and nonconformances;
-- retest requirements;
-- unresolved blockers;
-- explicit human disposition.
+A trial execution record should preserve actual conditions, observations, units, attachments, source classes, deviations, nonconformances, retest requirements, unresolved blockers and explicit human disposition.
 
-The system must not automatically generate Approved, Rejected or Conditional implementation decisions.
+The system must not automatically generate final implementation approval, rejection or conditional approval.
 
 ## Change-control governance
-Packaging changes must retain:
-- affected SKU, project, supplier and site;
-- current and proposed specification;
-- drawing, artwork, dieline and tooling references;
-- technical and commercial rationale;
-- required validation;
-- transition stock and obsolescence treatment;
-- implementation date;
-- append-only status history;
-- explicit human approval reference.
+Packaging changes must retain affected SKU, project, supplier, site, current and proposed specification, drawing/artwork/dieline/tooling references, rationale, validation requirements, transition stock treatment, implementation date, append-only status history and explicit human approval reference.
 
-No implementation may be treated as authorized while mandatory evidence, revision consistency or trial requirements remain unresolved.
+No implementation is authorized while mandatory evidence, revision consistency or trial requirements remain unresolved.
 
 ## Supplier qualification governance
-Supplier qualification evidence may describe:
-- corrugator capability;
-- printing and converting capability;
-- inspection and laboratory capability;
-- external or subcontracted processes;
-- scope and applicable materials or styles;
-- source and verification status;
-- validity and expiry;
-- requalification requirements.
-
-The module must not score, rank, allocate, shortlist or award suppliers.
+Supplier qualification evidence may describe process capability, inspection and laboratory capability, subcontracting, scope, source, verification status, validity, expiry and requalification requirements. The module must not score, rank, shortlist, allocate or award suppliers.
 
 ## Controlled contingency
-The two-hour contingency may cover only:
-- unexpected regression;
-- CI-only failure;
-- migration compatibility repair;
-- cross-module integration defect;
-- release-evidence reconciliation.
-
-It cannot fund new scope, extra preview formats, CAD interpretation, additional packaging categories, integrations, deployment or productionization.
+The two-hour contingency may cover only unexpected regression, CI-only failure, migration compatibility repair, cross-module integration defects or release-evidence reconciliation. It cannot fund new scope, additional preview formats, CAD interpretation, extra categories, integrations, deployment or productionization.
 
 ## Principal risks and controls
 
 ### False drawing authority — High
 Risk: A stored or previewed drawing appears approved for manufacture.  
-Control: Explicit validation and approval status, human-only approval, visible preview limitations and revision matching.
+Control: Explicit validation/approval state, human-only approval, visible preview limitations and revision matching.
 
 ### Obsolete revision use — High
 Risk: A trial or implementation uses a superseded drawing, artwork or specification.  
@@ -146,35 +98,35 @@ Control: Supersession links, effective dates, trial applicability and blocking r
 
 ### CAD interpretation overclaim — High
 Risk: DXF or DWG files are treated as automatically understood.  
-Control: Reference-only handling; no geometry or dimension extraction in PVE 1.3.
+Control: Reference-only handling; no geometry or dimension extraction.
 
 ### Trial evidence misuse — High
 Risk: Supplier declarations or incomplete observations are treated as validated results.  
-Control: Source classifications, method and condition fields, deviation records and human disposition.
+Control: Source classes, method/condition fields, deviations and human disposition.
 
 ### Commercial override — High
 Risk: Savings drive implementation despite technical or evidence blockers.  
-Control: Technical, safety, evidence, revision and trial blockers have higher precedence.
+Control: Safety, technical, evidence, revision and trial blockers have precedence.
 
 ### Unsupported causal inference — Medium
 Risk: Defect records are used to claim an unproven root cause.  
-Control: Descriptive taxonomy, evidence links and explicit separation of observation from causal conclusion.
+Control: Descriptive taxonomy, evidence links and separation of observation from causal conclusion.
 
 ### Supplier-ranking drift — Medium
 Risk: Qualification evidence becomes an award or allocation score.  
-Control: Evidence completeness and compatibility only; ranking and sourcing decisions excluded.
+Control: Evidence completeness and compatibility only; sourcing decisions excluded.
 
 ### File-security and integrity risk — Medium
 Risk: Files are altered, mismatched or represented under the wrong revision.  
-Control: Checksums, metadata, immutable history and controlled references. Security scanning and enterprise storage remain separate future concerns.
+Control: Checksums, metadata, immutable history and controlled references. Enterprise scanning/storage remain separate future controls.
 
 ### Preview inconsistency — Medium
 Risk: Browser rendering differs from the source engineering file.  
-Control: Original file remains authoritative; preview labelled as convenience-only and human verification required.
+Control: Original file remains authoritative; preview is convenience-only.
 
 ### Scope creep — Medium
-Risk: Planning expands into CAD editing, 3D design or production deployment.  
-Control: Explicit exclusions, fixed 69-hour plan, two-hour restricted contingency and separate authorization for scope change.
+Risk: Work expands into CAD editing, 3D design or production deployment.  
+Control: Locked release boundary, fixed 69-hour plan, restricted contingency and separate authorization.
 
 ## Explicit exclusions
 - automatic DXF geometry extraction;
@@ -190,17 +142,8 @@ Control: Explicit exclusions, fixed 69-hour plan, two-hour restricted contingenc
 - supplier ranking, allocation or sourcing award;
 - ungoverned deployment, activation or production-use claims.
 
-## Acceptance boundary for planning baseline
-The planning baseline is complete only when:
-- the build plan totals 69 planned hours;
-- contingency is fixed at 2 hours;
-- the absolute cap is fixed at 71 hours;
-- all builds are marked not started;
-- 0% completion and 69 pending hours are recorded;
-- CAD and preview boundaries are explicit;
-- exclusions are explicit;
-- no implementation code, schema, migration or tests are introduced;
-- the planning PR remains draft until separately authorized.
+## Build 1 acceptance status
+Build 1 deliverables now define the release boundary, frozen dependency, record ownership, immutability, project isolation, evidence classes, human authority and acceptance gates. Build 1 remains subject to CI, review and post-merge validation before governance closure.
 
 ## Authorization control
-This document does not authorize Build 1. Separate explicit authorization is required before any PVE 1.3 implementation activity begins.
+Build 1 alone is authorized. Builds 2A–8 remain prohibited until separate explicit authorization. Build 1 introduces no implementation schema, migration, data model, product code, preview renderer or UI functionality.
