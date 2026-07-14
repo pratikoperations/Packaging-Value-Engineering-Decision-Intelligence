@@ -1,31 +1,34 @@
 # PVE 1.3 Build 8 — Demonstration Cases, Regression and Release QA
 
 ## Status
-Build 8 implementation has started on the controlled branch. This document establishes the release-QA and human-authority boundary before completion evidence is assembled.
+Build 8 implementation is complete on the controlled branch and remains pending CI, audit, merge and post-merge validation. No release tag has been created and PVE 1.3 has not been declared complete.
 
 ## Objective
 Provide governed demonstration cases, regression evidence and release-readiness assessment for PVE 1.3 without creating a release tag, publishing a release, approving deployment or declaring the release complete.
 
-## Governed QA dimensions
-- demonstration-case identity, purpose and expected outcome;
-- source dataset and synthetic-data disclosure;
-- covered builds and capabilities;
-- expected evidence and acceptance checks;
-- regression-suite identity, test count, failures and errors;
-- exact tested commit, workflow run, job and artifact references;
-- schema-version and migration verification;
-- unresolved defect, limitation and exception registers;
-- named human reviewer and release-readiness recommendation;
-- explicit separation between QA evidence and release authorization.
+## Delivered capability
+- governed demonstration-case manifest covering Builds 1 through 7;
+- explicit synthetic, anonymized and controlled-real data classifications;
+- additive SQLite schema v11 for immutable demonstration cases and release-QA assessments;
+- immutable create, read and list repositories;
+- exact tested commit, workflow run, job, test count, failures, errors, schema version, artifact ID and artifact digest evidence;
+- unresolved defect, limitation, exception and blocker registers;
+- named human review and recommendation rationale;
+- readiness gates requiring positive tests, zero failures, zero errors and no unresolved blockers;
+- artifact digest integrity requiring sha256;
+- repository and database update/delete prohibition;
+- focused migration, persistence, evidence-integrity, immutability and readiness-gate tests.
 
 ## Governance rules
-- demonstration cases must be deterministic, traceable and clearly labelled as synthetic or real;
-- release-QA records must reference exact commits and evidence artifacts;
-- zero failures and zero errors are required for a pass recommendation;
-- unresolved blockers must remain visible and cannot be inferred away;
-- release-readiness assessment is an immutable evidence snapshot;
-- a changed result or new evidence requires a new assessment;
-- release approval, tagging and publication require separate explicit authorization.
+- demonstration cases must be deterministic, traceable and classified as synthetic, anonymized or controlled-real;
+- release-QA records must reference exact commits, workflow jobs and evidence artifacts;
+- zero failures and zero errors are required for a ready recommendation;
+- unresolved defects, limitations, exceptions and blockers remain visible;
+- release-QA assessments are immutable evidence snapshots;
+- changed results or new evidence require new records;
+- named human review is mandatory;
+- readiness recommendation is not release authorization;
+- release approval, tagging, publication and completion declaration require separate explicit authorization.
 
 ## Human authority boundary
 Build 8 may assemble demonstration, regression and release-QA evidence and record a named human readiness recommendation. It does not create tags, publish releases, authorize deployment, certify production readiness, change supplier qualification, approve sourcing decisions or declare PVE 1.3 complete.
@@ -35,15 +38,27 @@ Build 8 may assemble demonstration, regression and release-QA evidence and recor
 - GitHub release publication;
 - deployment or production authorization;
 - autonomous release approval;
-- supplier ranking, award or allocation;
+- supplier ranking or preferred-supplier recommendation;
+- sourcing award or allocation;
 - commercial-term approval;
 - modification of governed Build 1–7 evidence;
 - declaration that PVE 1.3 is complete before separate authorization.
 
+## Acceptance evidence required
+- successful initial Build 8 CI before persistence implementation;
+- explicit additive migration from schema v10 to schema v11;
+- complete regression suite with zero failures and zero errors;
+- original Build 8 validation tests retained;
+- demonstration manifest classification and coverage audit;
+- persistence, evidence-integrity, readiness-gate and immutability tests;
+- exact changed-file audit;
+- PR and post-merge CI evidence;
+- separate authorization before any release tag or completion declaration.
+
 ## Effort accounting
 - Builds 1 through 7 governance-closed: 62 hours.
 - Build 8 allocation: 7 hours.
-- Build 8 implementation started; no completion hours claimed yet.
-- PVE 1.3 governance-closed completion remains 62 of 69 hours, 89.9%.
-- Pending planned effort remains 7 hours.
+- PVE 1.3 implemented on branch: 69 of 69 planned hours.
+- Planned implementation completion on branch: 100%.
+- Governance closure and release completion remain pending CI, merge, post-merge validation and separate release authorization.
 - Controlled contingency used remains 0 of 2 hours.
