@@ -4,7 +4,7 @@
 PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
 
 ## Status
-Builds 1–8 complete and functionally validated on draft PR #26. This report does not authorize merge, deployment, activation, or production use.
+Builds 1–8 are complete and validated on draft PR #26. This report does not authorize merge, deployment, activation, or production use.
 
 ## Budget
 - Planned effort: 74 hours.
@@ -14,14 +14,25 @@ Builds 1–8 complete and functionally validated on draft PR #26. This report do
 - Controlled contingency used: 0 of 2 hours.
 - Absolute cap: 76 hours.
 
-## Functional validation
-- Functional head: `9465d9d6292a9d65834cfc11f27d1f056b9408a4`.
+## Validation
+### Functional Build 8 head
+- Head: `9465d9d6292a9d65834cfc11f27d1f056b9408a4`.
 - Workflow: PVE CI #849.
 - Run ID: `29309701227`.
 - Result: success.
 - Automated tests: 300 passed.
 - Failures: 0.
 - Errors: 0.
+
+### Final documented head
+- Head: `edf517c308cb204c683169d66f47e5b23fd3b0b5`.
+- Workflow: PVE CI #865.
+- Run ID: `29309867905`.
+- Result: success.
+- Automated tests: 300 passed.
+- Failures: 0.
+- Errors: 0.
+- Mandatory-file, JSON, synthetic-label, project-separation, build-identity, integration-contract, release-document, focused-report, and full-suite gates passed.
 
 ## Synthetic demonstration cases
 The governed file `data/pve_1_2_corrugated_demonstration_cases.json` contains eight cases. Every case and the dataset itself are explicitly labelled synthetic demonstration data.
@@ -75,4 +86,4 @@ Update and delete triggers remain present for:
 - Synthetic cases are not validated supplier, manufacturing, laboratory, regulatory, or commercial data.
 
 ## Release-readiness recommendation
-PVE 1.2 is ready for controlled human review and a separate merge decision after successful final current-head CI. It is not production-ready enterprise software and must remain draft and unmerged until separately authorized.
+PVE 1.2 is ready for controlled human review and a separate merge decision. It is not production-ready enterprise software and must remain draft and unmerged until separately authorized.
