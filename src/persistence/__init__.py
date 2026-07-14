@@ -1,3 +1,4 @@
+from .change_control_repository import ImplementationControlRepository, SpecificationChangeRepository
 from .database import Database
 from .dataset_repository import DatasetRepository
 from .decision_repository import DecisionRepository
@@ -20,9 +21,11 @@ __all__ = [
     "DefectClassificationRepository",
     "DrawingEvidenceRepository",
     "ExportRepository",
+    "ImplementationControlRepository",
     "ProjectRepository",
     "ReadinessRepository",
     "ScenarioRepository",
+    "SpecificationChangeRepository",
     "TechnicalAssessmentRepository",
     "ThresholdRepository",
     "TrialExecutionRepository",
