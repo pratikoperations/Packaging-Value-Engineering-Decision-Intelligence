@@ -6,7 +6,7 @@ from sqlite3 import Connection
 
 from src.persistence.database import Database
 
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
 _BASE_SCHEMA = """
 CREATE TABLE IF NOT EXISTS schema_migrations (
@@ -149,6 +149,45 @@ def _apply_v3(connection: Connection) -> None:
     connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (3)")
 
 
+def _apply_v4(connection: Connection) -> None:
+    connection.executescript("""
+    CREATE TABLE IF NOT EXISTS technical_assessments (
+        technical_assessment_id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL,
+        readiness_assessment_id TEXT,
+        dataset_id TEXT NOT NULL,
+        dataset_version INTEGER NOT NULL CHECK (dataset_version > 0),
+        baseline_specification_version TEXT NOT NULL,
+        proposed_specification_version TEXT NOT NULL,
+        rule_set_version TEXT NOT NULL,
+        threshold_profile_id TEXT,
+        threshold_references_json TEXT NOT NULL DEFAULT '[]',
+        evidence_references_json TEXT NOT NULL DEFAULT '[]',
+        formula_inputs_json TEXT NOT NULL DEFAULT '{}',
+        assumptions_json TEXT NOT NULL DEFAULT '[]',
+        technical_outcomes_json TEXT NOT NULL DEFAULT '{}',
+        commercial_outcomes_json TEXT NOT NULL DEFAULT '{}',
+        blockers_json TEXT NOT NULL DEFAULT '[]',
+        required_trials_json TEXT NOT NULL DEFAULT '[]',
+        evidence_confidence_status TEXT NOT NULL,
+        recommendation_outcome TEXT NOT NULL,
+        content_hash TEXT NOT NULL,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT,
+        FOREIGN KEY (readiness_assessment_id) REFERENCES readiness_assessments(readiness_assessment_id) ON DELETE RESTRICT,
+        FOREIGN KEY (dataset_id) REFERENCES project_datasets(dataset_id) ON DELETE RESTRICT,
+        FOREIGN KEY (threshold_profile_id) REFERENCES threshold_profiles(threshold_profile_id) ON DELETE RESTRICT
+    );
+    CREATE INDEX IF NOT EXISTS idx_technical_assessments_project
+    ON technical_assessments(project_id, created_at, technical_assessment_id);
+    CREATE TRIGGER IF NOT EXISTS technical_assessments_immutable_update
+    BEFORE UPDATE ON technical_assessments BEGIN SELECT RAISE(ABORT, 'technical_assessments are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS technical_assessments_immutable_delete
+    BEFORE DELETE ON technical_assessments BEGIN SELECT RAISE(ABORT, 'technical_assessments are immutable'); END;
+    """)
+    connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (4)")
+
+
 def initialize_database(database: Database) -> int:
     with database.transaction() as connection:
         connection.executescript(_BASE_SCHEMA)
@@ -158,6 +197,8 @@ def initialize_database(database: Database) -> int:
             _apply_v2(connection)
         if 3 not in applied:
             _apply_v3(connection)
+        if 4 not in applied:
+            _apply_v4(connection)
     return SCHEMA_VERSION
 
 

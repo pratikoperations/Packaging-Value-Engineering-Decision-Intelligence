@@ -20,8 +20,8 @@ class PVE11ProjectCreationTestCase(unittest.TestCase):
     def tearDown(self) -> None:
         self.tempdir.cleanup()
 
-    def test_schema_v3_is_applied_additively(self):
-        self.assertEqual(current_schema_version(self.database), 3)
+    def test_schema_v4_is_applied_additively(self):
+        self.assertEqual(current_schema_version(self.database), 4)
         with self.database.connect() as connection:
             columns = {row[1] for row in connection.execute("PRAGMA table_info(projects)")}
         self.assertTrue({"objective", "change_type", "project_owner", "current_unit_cost", "expected_realization_percent"} <= columns)
