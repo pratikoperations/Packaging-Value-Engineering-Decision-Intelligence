@@ -1,43 +1,36 @@
 # PVE 1.3 Build 5 — Packaging Defect and Complaint Taxonomy
 
 ## Status
-Build 5 implementation has started on the controlled branch. This document establishes the governed taxonomy and authority boundary before persistence and workflow integration.
+Build 5 implementation is complete on the controlled branch and remains pending CI, review, merge and post-merge validation.
 
 ## Objective
-Provide a consistent, evidence-linked vocabulary for recording packaging defects and customer, plant, warehouse, transport or supplier complaints without making automatic corrective-action, specification-change, implementation or supplier decisions.
+Provide a consistent, evidence-linked vocabulary and immutable record for packaging defects and customer, plant, warehouse, transport or supplier complaints without making automatic corrective-action, specification-change, implementation or supplier decisions.
 
-## Governed defect dimensions
-- packaging level: primary, secondary, tertiary or transport;
-- material family: corrugated, paperboard, flexible, rigid plastic, glass, metal, wood or other;
-- defect family: dimensional, structural, material, print, artwork, closure, seal, contamination, moisture, handling, palletization, labeling or other;
-- defect mode and observable description;
-- severity: minor, major or critical;
-- occurrence stage: incoming, conversion, packing, storage, transport, customer use or unknown;
-- affected SKU, supplier, manufacturing site, batch or shipment where known;
-- evidence references and source classification;
-- human reviewer and review status.
-
-## Complaint dimensions
-- complaint source: customer, consumer, plant, warehouse, logistics, supplier or internal quality;
-- complaint channel and received date;
-- complaint reference and description;
-- linked defect classifications;
-- affected quantity and unit where known;
-- containment status as a recorded fact only;
-- evidence references;
-- human reviewer and review status.
+## Delivered capability
+- additive SQLite schema v8;
+- immutable `defect_classifications` and `complaint_records`;
+- project-scoped create, read and list repositories;
+- governed taxonomy version retained on every record;
+- packaging level, material family, defect family, defect mode, severity and occurrence stage;
+- complaint source, channel, received date, affected quantity and containment status;
+- evidence references and named human reviewer;
+- optional linkage from a defect classification to a Build 4 trial execution;
+- complaint linkage to governed defect-classification records;
+- archived-project protection and cross-project isolation;
+- repository and database update/delete prohibition;
+- focused migration, persistence, immutability and isolation tests.
 
 ## Governance rules
-- taxonomy records and complaint records are immutable snapshots;
-- classification must be explicitly human-reviewed;
-- uncertainty and unknown values are preserved rather than inferred;
-- evidence references are mandatory for confirmed classifications;
-- cross-project references are prohibited;
+- taxonomy and complaint records are immutable snapshots;
+- reviewed records require evidence and a named human reviewer;
+- uncertainty and unknown occurrence stages are preserved rather than inferred;
+- linked trial executions and defect classifications must belong to the same project;
 - archived projects are read-only;
-- taxonomy versions remain identifiable and reproducible.
+- taxonomy versions remain identifiable and reproducible;
+- new information requires a new record rather than mutation.
 
 ## Human authority boundary
-Build 5 may record observed defects, complaints, severity and containment status. It does not determine root cause, approve corrective actions, approve specification or implementation changes, qualify suppliers, allocate business, or authorize production release.
+Build 5 may record observed defects, complaints, severity, evidence and containment status. It does not determine root cause, approve corrective actions, approve specification or implementation changes, qualify suppliers, allocate business, or authorize production release.
 
 ## Explicit Build 6 and later exclusions
 - specification-change request or approval;
@@ -49,10 +42,19 @@ Build 5 may record observed defects, complaints, severity and containment status
 - automatic corrective-action approval;
 - autonomous complaint disposition.
 
+## Acceptance evidence required
+- additive migration from schema v7 to schema v8;
+- complete regression suite with zero failures and zero errors;
+- exact changed-file audit;
+- taxonomy validation tests retained;
+- persistence, immutability, archive and project-isolation tests;
+- explicit rejection of Build 6 and later-build fields;
+- PR and post-merge CI evidence.
+
 ## Effort accounting
 - Builds 1 through 4 governance-closed: 39 hours.
 - Build 5 allocation: 8 hours.
-- Build 5 implementation started; no completion hours claimed yet.
-- PVE 1.3 governance-closed completion remains 39 of 69 hours, 56.5%.
-- Pending planned effort remains 30 hours.
-- Controlled contingency used remains 0 of 2 hours.
+- PVE 1.3 completed on branch: 47 of 69 hours.
+- PVE 1.3 completion: 68.1%.
+- Pending planned effort: 22 hours.
+- Controlled contingency used: 0 of 2 hours.
