@@ -31,8 +31,10 @@ jobs:
             docs/MASTER_ARCHITECTURE.md docs/MASTER_BUILD_PLAN.md docs/INTERVIEW_DEMO_GUIDE.md docs/FINAL_RELEASE_CHECKLIST.md
             docs/qa/PVE-0.1_QA_REPORT.md docs/qa/PVE-0.2_QA_REPORT.md docs/qa/PVE-0.3_QA_REPORT.md
             docs/qa/PVE-0.4_QA_REPORT.md docs/qa/PVE-0.5_QA_REPORT.md docs/qa/PVE-0.6_QA_REPORT.md docs/qa/PVE-0.7_QA_REPORT.md
+            docs/qa/PVE_1.1_QA_PLAN.md PVE_1.1_RELEASE_CHECKLIST.md PVE_1.1_INTERVIEW_DEMO.md
             integration/README.md integration/contracts/PVE_CONTRACT_V1_DRAFT.md integration/exports/.gitkeep integration/samples/.gitkeep
             data/schemas/canonical_data_model.json data/reference/allowed_values.json data/demo/corrugated_shipping_cases.json data/demo/invalid_examples.json
+            data/demo/pve_1_1_release_cases.json tests/release/test_pve_1_1_release_qa.py
             src/__init__.py src/data_models/__init__.py src/data_models/validator.py src/cost_engine/__init__.py src/cost_engine/engine.py
             src/material_engine/__init__.py src/material_engine/engine.py src/technical_qualification/__init__.py src/technical_qualification/engine.py
             src/risk_engine/__init__.py src/risk_engine/engine.py src/scenario_engine/__init__.py src/scenario_engine/engine.py
@@ -52,9 +54,11 @@ jobs:
           python -m json.tool data/reference/allowed_values.json > /dev/null
           python -m json.tool data/demo/corrugated_shipping_cases.json > /dev/null
           python -m json.tool data/demo/invalid_examples.json > /dev/null
-      - name: Verify synthetic demo label
+          python -m json.tool data/demo/pve_1_1_release_cases.json > /dev/null
+      - name: Verify synthetic demo labels
         run: |
           grep -q '"dataset_type": "synthetic_demo"' data/demo/corrugated_shipping_cases.json
+          grep -q '"dataset_type": "synthetic_demo"' data/demo/pve_1_1_release_cases.json
       - name: Verify project separation statement
         run: grep -qi "separate" DECISION_LOG.md
       - name: Verify current build identity
@@ -66,6 +70,7 @@ jobs:
           grep -q "## Quick Start" README.md
           grep -q "## Demo Flow" docs/INTERVIEW_DEMO_GUIDE.md
           grep -q "## Acceptance Criteria" docs/FINAL_RELEASE_CHECKLIST.md
+          grep -q "## Functional acceptance" PVE_1.1_RELEASE_CHECKLIST.md
       - name: Run Build 8 focused report tests
         run: PYTHONPATH=. python tests/build8_executive_summary.py
       - name: Run all automated tests
