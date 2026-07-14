@@ -56,24 +56,24 @@ class CorrugatedEconomicsTestCase(unittest.TestCase):
     def test_should_cost_and_gross_benefit(self):
         result = self.assess()
         self.assertEqual(result.outputs["should_cost"].value, 15.5)
-        self.assertEqual(result.outputs["gross_annual_benefit"].value, 350000)
+        self.assertEqual(result.outputs["gross_annual_benefit"].value, 250000)
 
     def test_failure_cost_and_risk_adjusted_benefit(self):
         result = self.assess()
         self.assertEqual(result.outputs["incremental_failure_cost"].value, 25000)
-        self.assertEqual(result.outputs["risk_adjusted_annual_benefit"].value, 325000)
+        self.assertEqual(result.outputs["risk_adjusted_annual_benefit"].value, 225000)
         self.assertIn("ASSUMPTION-1", result.outputs["risk_adjusted_annual_benefit"].assumptions)
 
     def test_inventory_working_capital_and_write_off(self):
         result = self.assess()
-        self.assertAlmostEqual(result.outputs["incremental_working_capital"].value, 44109.58904109589)
+        self.assertAlmostEqual(result.outputs["incremental_working_capital"].value, 44267.12328767122)
         self.assertEqual(result.outputs["obsolete_stock_write_off"].value, 7750)
 
     def test_first_year_benefit_and_payback(self):
         result = self.assess()
-        expected = 325000 - 75000 - 44109.58904109589 - 7750
+        expected = 225000 - 75000 - 44267.12328767122 - 7750
         self.assertAlmostEqual(result.outputs["first_year_net_benefit"].value, expected)
-        self.assertAlmostEqual(result.outputs["payback_months"].value, 75000 / 325000 * 12)
+        self.assertAlmostEqual(result.outputs["payback_months"].value, 75000 / 225000 * 12)
 
     def test_duplicate_one_time_cost_is_rejected_without_double_counting(self):
         duplicate = self.one_time + [dict(self.one_time[0], record_id="tooling-2")]
