@@ -1,14 +1,16 @@
 # PVE 1.2 Governance, Risk and Acceptance Controls
 
 ## Release status
-PVE 1.2 Builds 1–8 are complete and validated on draft PR #26.
+PVE 1.2 Builds 1–8 are complete, squash-merged through PR #26, post-merge validated on `main`, and governance-closed.
 
 - Completed effort: 74 of 74 planned hours.
 - Completion: 100%.
 - Pending planned work: 0 hours, 0%.
 - Contingency used: 0 of 2 hours.
-- Functional validation: PVE CI #849, run `29309701227`, 300 tests passed, 0 failures, 0 errors.
-- Final documented-head validation: PVE CI #865, run `29309867905`, 300 tests passed, 0 failures, 0 errors.
+- Final feature head: `20b60393eb21c75e56676ec119fb2c1818d33db0`.
+- Squash-merge commit: `8c5511e096b4526a85630e38ef939db371b307b1`.
+- Post-merge validation: PVE CI #896, run `29317676780`, job `87035353112`, 300 tests passed, 0 failures, 0 errors.
+- Artifact: `pve-full-test-output`, artifact ID `8304598530`.
 
 ## Mandatory governance controls
 - Engineering validation remains mandatory.
@@ -73,14 +75,14 @@ A positive financial, material, pallet, logistics, or sustainability result does
 - Historical datasets, thresholds, scenarios, readiness assessments, and decision snapshots remain unchanged when technical assessments are created.
 
 ## Controlled contingency
-The two-hour contingency remains unused. It may only cover:
+The two-hour contingency remains unused. It was restricted to:
 - unexpected regression;
 - CI-only failure;
 - migration compatibility repair;
 - cross-module integration defect;
 - release-evidence reconciliation.
 
-It cannot fund new functionality, additional categories, deployment, or scope expansion.
+It did not fund new functionality, additional categories, deployment, or scope expansion.
 
 ## Principal residual risks and controls
 
@@ -132,8 +134,8 @@ Control: Dataset-level and case-level synthetic labels, QA assertions, and docum
 - Archived-project protection and cross-project isolation pass.
 - JSON and CSV-compatible normalization and Excel-template regression pass.
 - Approved, Rejected, and Conditional are absent from automatic outcomes.
-- Functional and documented-head suites pass with 300 tests and zero failures or errors.
+- Post-merge PVE CI #896 validated `main` commit `8c5511e096b4526a85630e38ef939db371b307b1` with 300 tests and zero failures or errors.
 - Release QA report, checklist, notes, status, build plan, README, architecture, and governance records are reconciled.
 
-## Release control
-Build 8 completion does not authorize marking PR #26 ready for review, merging, deployment, pilot, activation, or production use. PR #26 must remain draft and unmerged until separately authorized.
+## Governance closure
+PVE 1.2 is frozen as a completed decision-support release after successful post-merge validation. Deployment, pilot, activation, publication as production software, and production use remain separately unauthorized. Any new product scope belongs to a separately authorized future release. PVE 1.3 has not started. Tag `pve-v1.2` is recommended after this governance-closure PR is merged and final `main` CI passes.
