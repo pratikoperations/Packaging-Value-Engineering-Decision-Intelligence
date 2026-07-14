@@ -28,14 +28,14 @@ PVE-0.7 remains the original interview-release identity required by repository C
 ## Active Release
 
 ### PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
-- Status: Builds 1–4 complete and validated on draft PR #26.
+- Status: Builds 1–5 complete and validated on draft PR #26.
 - Branch: `feature/pve-1.2-corrugated-engineering`.
 - Planned effort: 74 hours.
 - Controlled contingency: 2 hours.
 - Absolute cap: 76 hours.
-- Completed effort: 41 of 74 planned hours.
-- Release completion: 55.4%.
-- Pending planned work: 33 hours, 44.6%.
+- Completed effort: 52 of 74 planned hours.
+- Release completion: 70.3%.
+- Pending planned work: 22 hours, 29.7%.
 - Contingency used: 0 of 2 hours.
 
 ## Completed PVE 1.2 Builds
@@ -56,32 +56,40 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Effort: 10 hours.
 - Validation: PVE CI #785, run `29308320923`, success.
 - Tests: 243 passed, 0 failures, 0 errors.
-- Implemented governed requirements, full-context evidence matching, evidence validity/conflict detection, distinct source classifications, supplier compatibility-only assessment, evidence-confidence classification, and additive upload normalization.
 
 ### Build 4 — Compression, Stacking, Environment and Packing-Line Screening
 - Status: complete and validated.
 - Effort: 12 hours.
-- Functional head: `3abaf7d4053af17fbfb6b6dba1cdedefda9c3a45`.
-- Validation: PVE CI #793, run `29308512768`, success.
+- Validation: PVE CI #797, run `29308574949`, success.
 - Tests: 257 passed, 0 failures, 0 errors.
+- Implemented supplied-evidence technical screening, governed factors, stacking/environment/warehouse checks, packing-line compatibility, blocker precedence, and non-approval outcomes.
+
+### Build 5 — Material, Pallet, Logistics and Physical Sustainability Analysis
+- Status: complete and validated.
+- Effort: 11 hours.
+- Functional head: `0e31f3369ad1dccb9592f7b4b30f30bfa58f925c`.
+- Validation: PVE CI #805, run `29308755665`, success.
+- Tests: 271 passed, 0 failures, 0 errors.
 - Implemented:
-  - deterministic comparison of supplied BCT and ECT evidence against explicit project requirements;
-  - governed safety and environmental derating factors requiring source, version, applicability, and valid status;
-  - stack-layer, pallet-load, storage-duration, static/dynamic stacking, humidity, temperature, refrigerated, and humid-context screening;
-  - floor/rack storage, pallet overhang/underhang, handling, mixed-load, and stretch-wrap checks;
-  - machine dimensional limits, case-erector/sealing/flap/barcode compatibility, speed, squareness, warp, and line-trial blockers;
-  - explainable outcomes limited to criteria met, criteria not met, validation required, evidence conflict, or insufficient technical data;
-  - additive normalization for governed factors, warehouse profiles, and packing-line profiles.
-- Excluded: BCT prediction, McKee coefficients, pallet optimisation, sustainability calculations, damage-cost economics, approval decisions, and Build 5.
+  - board area calculated only from supplied blank dimensions;
+  - supplied case-weight, annual-material-consumption, and material-change comparisons;
+  - simple rectangular length-by-width and width-by-length pallet patterns;
+  - cases per layer, validated layers, cases per pallet, footprint utilisation, height, gross weight, and annual pallet movements;
+  - explicit-input pallet movement, freight cube, warehouse-position, and vehicle-space comparisons;
+  - annual paper consumption/reduction, packaging weight, packaging-to-product ratio, fibre-content, pallets avoided, and transport movements avoided;
+  - unavailable-output reasons for missing governed inputs and carbon calculations;
+  - technical-blocker precedence over material, logistics, and sustainability benefits;
+  - additive normalization for Build 5 input profiles.
+- Limitations: no inferred box geometry, mixed-SKU palletisation, truck-load optimisation, 3D optimisation, or carbon calculation.
 
 ## Governance
 - Engineering validation and human approval remain mandatory.
 - Autonomous approval remains prohibited.
 - Unsourced engineering thresholds and hidden coefficients remain prohibited.
-- Critical technical, environmental, evidence, and line blockers override commercial attractiveness.
+- Critical technical, environmental, evidence, and line blockers override commercial, material, logistics, and sustainability benefits.
 - Source classifications remain distinct and traceable.
 - Supplier capability does not rank suppliers or allocate business.
 - Historical records remain immutable and project-scoped.
 
 ## Current State
-PVE 1.1 remains stable on `main`. PVE 1.2 Builds 1–4 are complete on PR #26. Build 5 is not started or authorized. PR #26 remains draft and unmerged.
+PVE 1.1 remains stable on `main`. PVE 1.2 Builds 1–5 are complete on PR #26. Build 6 is not started or authorized. PR #26 remains draft and unmerged.
