@@ -5,6 +5,7 @@ from .export_repository import ExportRepository
 from .project_repository import ProjectRepository
 from .readiness_repository import ReadinessRepository
 from .scenario_repository import ScenarioRepository
+from .technical_assessment_repository import TechnicalAssessmentRepository
 from .threshold_repository import ThresholdRepository
 
 __all__ = [
@@ -15,5 +16,6 @@ __all__ = [
     "ProjectRepository",
     "ReadinessRepository",
     "ScenarioRepository",
+    "TechnicalAssessmentRepository",
     "ThresholdRepository",
 ]
