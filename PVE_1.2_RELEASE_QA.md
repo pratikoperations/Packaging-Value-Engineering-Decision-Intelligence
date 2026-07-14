@@ -32,6 +32,15 @@ Builds 1–8 are complete and validated on draft PR #26. This report does not au
 - Automated tests: 300 passed.
 - Failures: 0.
 - Errors: 0.
+
+### Final closure head
+- Head: `6a2c372238a531c3ca6977753ff2d90d69e07b5f`.
+- Workflow: PVE CI #875.
+- Run ID: `29309985760`.
+- Result: success.
+- Automated tests: 300 passed.
+- Failures: 0.
+- Errors: 0.
 - Mandatory-file, JSON, synthetic-label, project-separation, build-identity, integration-contract, release-document, focused-report, and full-suite gates passed.
 
 ## Synthetic demonstration cases
@@ -86,4 +95,4 @@ Update and delete triggers remain present for:
 - Synthetic cases are not validated supplier, manufacturing, laboratory, regulatory, or commercial data.
 
 ## Release-readiness recommendation
-PVE 1.2 is ready for controlled human review and a separate merge decision. It is not production-ready enterprise software and must remain draft and unmerged until separately authorized.
+PVE 1.2 has completed functional, documented-head, and final closure validation and is ready for explicit authorization to mark PR #26 ready for review and proceed to a separate squash-merge decision. It is not production-ready enterprise software and remains draft and unmerged until separately authorized.
