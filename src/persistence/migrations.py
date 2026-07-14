@@ -6,7 +6,7 @@ from sqlite3 import Connection
 
 from src.persistence.database import Database
 
-SCHEMA_VERSION = 7
+SCHEMA_VERSION = 8
 
 _BASE_SCHEMA = """
 CREATE TABLE IF NOT EXISTS schema_migrations (
@@ -305,6 +305,74 @@ def _apply_v7(connection: Connection) -> None:
     connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (7)")
 
 
+def _apply_v8(connection: Connection) -> None:
+    connection.executescript("""
+    CREATE TABLE IF NOT EXISTS defect_classifications (
+        defect_classification_id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL,
+        trial_execution_id TEXT,
+        taxonomy_version TEXT NOT NULL,
+        defect_code TEXT NOT NULL,
+        packaging_level TEXT NOT NULL,
+        material_family TEXT NOT NULL,
+        defect_family TEXT NOT NULL,
+        defect_mode TEXT NOT NULL,
+        description TEXT NOT NULL,
+        severity TEXT NOT NULL CHECK (severity IN ('minor', 'major', 'critical')),
+        occurrence_stage TEXT NOT NULL,
+        sku TEXT,
+        supplier TEXT,
+        manufacturing_site TEXT,
+        batch_or_shipment TEXT,
+        evidence_references_json TEXT NOT NULL DEFAULT '[]',
+        review_status TEXT NOT NULL CHECK (review_status IN ('pending', 'reviewed', 'rejected')),
+        reviewed_by TEXT NOT NULL,
+        metadata_json TEXT NOT NULL DEFAULT '{}',
+        content_hash TEXT NOT NULL,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT,
+        FOREIGN KEY (trial_execution_id) REFERENCES trial_executions(trial_execution_id) ON DELETE RESTRICT,
+        UNIQUE (project_id, taxonomy_version, defect_code),
+        UNIQUE (project_id, content_hash)
+    );
+    CREATE TABLE IF NOT EXISTS complaint_records (
+        complaint_record_id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL,
+        complaint_reference TEXT NOT NULL,
+        complaint_source TEXT NOT NULL,
+        complaint_channel TEXT,
+        received_date TEXT NOT NULL,
+        description TEXT NOT NULL,
+        taxonomy_version TEXT NOT NULL,
+        linked_defect_classification_ids_json TEXT NOT NULL DEFAULT '[]',
+        affected_quantity REAL,
+        quantity_unit TEXT,
+        containment_status TEXT NOT NULL,
+        evidence_references_json TEXT NOT NULL DEFAULT '[]',
+        review_status TEXT NOT NULL CHECK (review_status IN ('pending', 'reviewed', 'rejected')),
+        reviewed_by TEXT NOT NULL,
+        metadata_json TEXT NOT NULL DEFAULT '{}',
+        content_hash TEXT NOT NULL,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT,
+        UNIQUE (project_id, complaint_reference),
+        UNIQUE (project_id, content_hash)
+    );
+    CREATE INDEX IF NOT EXISTS idx_defect_classifications_project ON defect_classifications(project_id, taxonomy_version, created_at, defect_classification_id);
+    CREATE INDEX IF NOT EXISTS idx_defect_classifications_execution ON defect_classifications(trial_execution_id, created_at, defect_classification_id);
+    CREATE INDEX IF NOT EXISTS idx_complaint_records_project ON complaint_records(project_id, received_date, complaint_record_id);
+    CREATE TRIGGER IF NOT EXISTS defect_classifications_immutable_update
+    BEFORE UPDATE ON defect_classifications BEGIN SELECT RAISE(ABORT, 'defect_classifications are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS defect_classifications_immutable_delete
+    BEFORE DELETE ON defect_classifications BEGIN SELECT RAISE(ABORT, 'defect_classifications are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS complaint_records_immutable_update
+    BEFORE UPDATE ON complaint_records BEGIN SELECT RAISE(ABORT, 'complaint_records are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS complaint_records_immutable_delete
+    BEFORE DELETE ON complaint_records BEGIN SELECT RAISE(ABORT, 'complaint_records are immutable'); END;
+    """)
+    connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (8)")
+
+
 def initialize_database(database: Database) -> int:
     with database.transaction() as connection:
         connection.executescript(_BASE_SCHEMA)
@@ -322,6 +390,8 @@ def initialize_database(database: Database) -> int:
             _apply_v6(connection)
         if 7 not in applied:
             _apply_v7(connection)
+        if 8 not in applied:
+            _apply_v8(connection)
     return SCHEMA_VERSION
 
 
