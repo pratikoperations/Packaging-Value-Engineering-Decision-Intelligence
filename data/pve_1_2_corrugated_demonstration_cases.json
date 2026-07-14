@@ -1,0 +1,64 @@
+{
+  "dataset_type": "synthetic_demonstration_data",
+  "release": "PVE 1.2",
+  "category": "corrugated",
+  "notice": "SYNTHETIC DEMONSTRATION DATA ONLY. Not supplier, production, laboratory, regulatory, or commercial fact.",
+  "cases": [
+    {
+      "case_id": "PVE12-DEMO-01",
+      "name": "Right-sized proposal with sufficient evidence",
+      "synthetic": true,
+      "expected_outcome": "criteria met for engineering review",
+      "scenario": {"screening_outcome": "criteria met", "evidence_confidence": "High evidence confidence", "technical_blockers": [], "required_trials": [], "annual_material_change_kg": -5000, "risk_adjusted_annual_benefit": 225000}
+    },
+    {
+      "case_id": "PVE12-DEMO-02",
+      "name": "Commercially attractive proposal blocked by compression failure",
+      "synthetic": true,
+      "expected_outcome": "criteria not met",
+      "scenario": {"screening_outcome": "criteria not met", "evidence_confidence": "High evidence confidence", "technical_blockers": ["BCT below governed requirement"], "required_trials": [], "risk_adjusted_annual_benefit": 900000}
+    },
+    {
+      "case_id": "PVE12-DEMO-03",
+      "name": "Packing-line incompatibility",
+      "synthetic": true,
+      "expected_outcome": "criteria not met",
+      "scenario": {"screening_outcome": "criteria not met", "evidence_confidence": "Moderate evidence confidence", "technical_blockers": ["sealing method incompatible"], "required_trials": ["Packing-line trial required"]}
+    },
+    {
+      "case_id": "PVE12-DEMO-04",
+      "name": "Wrong-specification or conflicting evidence",
+      "synthetic": true,
+      "expected_outcome": "evidence conflict",
+      "scenario": {"screening_outcome": "evidence conflict", "evidence_confidence": "Low evidence confidence", "technical_blockers": ["conflicting technical evidence"], "required_trials": ["Laboratory validation required"]}
+    },
+    {
+      "case_id": "PVE12-DEMO-05",
+      "name": "Damage-cost reversal",
+      "synthetic": true,
+      "expected_outcome": "engineering review required",
+      "scenario": {"screening_outcome": "criteria met", "evidence_confidence": "Moderate evidence confidence", "technical_blockers": [], "required_trials": [], "gross_annual_benefit": 250000, "incremental_failure_cost": 325000, "risk_adjusted_annual_benefit": -75000}
+    },
+    {
+      "case_id": "PVE12-DEMO-06",
+      "name": "MOQ transition-stock and obsolescence impact",
+      "synthetic": true,
+      "expected_outcome": "engineering review required",
+      "scenario": {"screening_outcome": "criteria met", "evidence_confidence": "Moderate evidence confidence", "technical_blockers": [], "required_trials": [], "incremental_working_capital": 44109.59, "obsolete_stock_write_off": 7750, "first_year_net_benefit": 98000}
+    },
+    {
+      "case_id": "PVE12-DEMO-07",
+      "name": "Pallet and logistics improvement without material saving",
+      "synthetic": true,
+      "expected_outcome": "criteria met for engineering review",
+      "scenario": {"screening_outcome": "criteria met", "evidence_confidence": "High evidence confidence", "technical_blockers": [], "required_trials": [], "annual_material_change_kg": 0, "annual_pallet_movements_change": -200}
+    },
+    {
+      "case_id": "PVE12-DEMO-08",
+      "name": "Humid export case requiring additional validation",
+      "synthetic": true,
+      "expected_outcome": "laboratory validation required",
+      "scenario": {"screening_outcome": "validation required", "evidence_confidence": "Low evidence confidence", "technical_blockers": [], "required_trials": ["Laboratory validation required", "Transport trial required"], "humidity_percent": 85, "distribution_mode": "export"}
+    }
+  ]
+}
