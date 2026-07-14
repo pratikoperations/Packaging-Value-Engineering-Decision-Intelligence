@@ -118,7 +118,7 @@ class CorrugatedSpecificationTestCase(unittest.TestCase):
         from io import BytesIO
         from openpyxl import load_workbook
 
-        workbook = load_workbook(BytesIO(generate_workbook("corrugated", "Cost reduction", "Right-sizing")))
+        workbook = load_workbook(BytesIO(generate_workbook("corrugated", "Cost reduction", "Size optimization")))
         for sheet_name in ("BASELINE", "PROPOSED"):
             field_keys = {workbook[sheet_name].cell(row, 1).value for row in range(2, workbook[sheet_name].max_row + 1)}
             self.assertIn("box_style", field_keys)
