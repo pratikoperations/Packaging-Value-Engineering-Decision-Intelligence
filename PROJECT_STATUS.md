@@ -6,47 +6,33 @@ Packaging Value Engineering & Decision Intelligence
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 
-## Historical Build Identity
-PVE-0.7 remains the original interview-release identity required by repository CI.
-
 ## Stable Releases
 
 ### PVE 1.0.6
 - Status: complete and governance-closed on `main`.
 - Final PR: #22.
-- Merge commit: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`.
-- Final CI: PVE CI #520, run `29223657516`.
 - Tests: 179 passed, 0 failed, 0 errors.
 - Cumulative effort: 89.5 hours.
 
 ### PVE 1.1 — All-Category Project Intake and Validation Readiness
-- Status: complete, validated, squash-merged, and governance-closed.
+- Status: complete, validated, merged, and governance-closed.
 - Final PR: #25.
-- Final branch head: `dc85db49afee46bde3118684761c0a176dd32194`.
 - Squash merge commit: `37f4ae58e0d57c4531293371e423d771ada7ae50`.
-- Merged at: 2026-07-14.
-- Final pre-merge CI: PVE CI #735, run `29302903427`, success.
-- Complete unittest suite: 221 passed.
-- Focused Build 8 report tests: 4 passed.
-- Total test executions: 225.
-- Failures: 0.
-- Errors: 0.
-- Fixed hard cap: 80 hours.
-- Total consumed: 80 hours.
-- Remaining allocation: 0 hours.
+- Final CI: PVE CI #735, run `29302903427`, success.
+- Total test executions: 225; failures: 0; errors: 0.
+- Total consumed: 80 of 80 hours.
 
 ## Active Release
 
 ### PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
-- Status: Builds 1 and 2 complete and validated on a draft, unmerged feature branch.
+- Status: Builds 1–3 complete and validated on draft PR #26.
 - Branch: `feature/pve-1.2-corrugated-engineering`.
-- Pull request: #26, draft and unmerged.
-- Planned release effort: 74 hours.
+- Planned effort: 74 hours.
 - Controlled contingency: 2 hours.
-- Absolute release cap: 76 hours.
-- Completed effort: 19 of 74 planned hours.
-- Release completion: 25.7%.
-- Pending planned work: 55 hours, 74.3%.
+- Absolute cap: 76 hours.
+- Completed effort: 29 of 74 planned hours.
+- Release completion: 39.2%.
+- Pending planned work: 45 hours, 60.8%.
 - Contingency used: 0 of 2 hours.
 
 ## Completed PVE 1.2 Builds
@@ -55,41 +41,38 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Status: complete and validated.
 - Effort: 8 hours.
 - Validation: PVE CI #753, run `29307462790`, success.
-- Scope: corrugated-only architecture, deterministic-calculation governance, sourced-threshold rules, evidence classification, recommendation and approval boundaries, append-only persistence intent, risks, exclusions, and acceptance gates.
 
 ### Build 2 — Corrugated Specification, Style and Tolerance Model
 - Status: complete and validated.
 - Effort: 11 hours.
-- Functional validation head before closure records: `0a417f48d9c19590e3ee9c5b9226efd48a00a921`.
-- Validation: PVE CI #767, run `29307874995`, success.
+- Validation: PVE CI #771, run `29307965581`, success.
 - Tests: 233 passed, 0 failures, 0 errors.
+
+### Build 3 — Technical Requirements, Evidence and Supplier Capability
+- Status: complete and validated.
+- Effort: 10 hours.
+- Functional head: `b818901eb35a851f9015d7f15d8eb8eee9cd2aa5`.
+- Validation: PVE CI #779, run `29308208791`, success.
+- Tests: 243 passed, 0 failures, 0 errors.
 - Implemented:
-  - configuration-driven baseline and proposed corrugated specification fields;
-  - internal and external dimensions while retaining legacy dimension compatibility;
-  - box styles and converting-process profiles;
-  - ply, flute combination, paper-layer structure, GSM profile, board grade, and caliper;
-  - joint, closure, printing, colour, coating, blank, manufacturer-joint, packed-weight, and case-pack fields;
-  - sourced and versioned specification-tolerance validation;
-  - artwork and compliance-change fields;
-  - transparent baseline/proposed comparison;
-  - source-preserving intake and tolerance normalization;
-  - JSON, CSV, and Excel workflow regression protection.
-- Excluded: production compression formulas, evidence matching, supplier capability, packing-line screening, pallet analysis, damage-cost logic, and Build 3.
+  - governed corrugated technical-requirement profiles for product, compression, stacking, storage, humidity, distribution, handling, pallet limits, and trial requirements;
+  - deterministic evidence matching across project, context, specification version, supplier, manufacturing site, material structure, test method, laboratory, sample/batch, date, and validity;
+  - detection of wrong-project, wrong-specification, wrong-supplier, wrong-site, expired, superseded, and conflicting evidence;
+  - source-classification preservation for uploaded, manually entered, supplier-declared, laboratory-tested, predicted, and assumed values;
+  - supplier manufacturing-capability compatibility checks covering flute, ply, corrugator width, sheet range, print colours, converting processes, laboratory access, trials, backup site, and subcontracting;
+  - capability outcomes restricted to compatible, incompatible, or evidence missing;
+  - explainable evidence-confidence classifications describing evidence quality, not technical-success probability;
+  - normalized JSON/CSV evidence, technical requirement, and supplier-capability records while preserving Excel compatibility.
+- Excluded: compression calculations, packing-line screening, pallet analysis, damage-cost logic, supplier ranking/allocation, and Build 4.
 
-## PVE 1.2 Governance
-- Engineering validation remains mandatory.
-- Human approval remains mandatory.
+## Governance
+- Engineering validation and human approval remain mandatory.
 - Autonomous approval remains prohibited.
-- Critical technical, compliance, evidence, and line blockers override commercial attractiveness.
-- Unsourced universal engineering thresholds are prohibited.
-- Assumptions remain explicit and source-classified.
-- Supplier-declared, predicted, assumed, and laboratory-tested values remain distinct.
-- Evidence confidence describes evidence quality, not probability of technical success.
+- Unsourced engineering thresholds and hidden coefficients remain prohibited.
+- Technical and compliance blockers override commercial attractiveness.
+- Source classifications remain distinct and traceable.
+- Supplier capability does not rank suppliers or allocate business.
 - Historical records remain immutable and project-scoped.
-- Supplier capability checks must not become supplier ranking or allocation.
-
-## PVE 1.2 Exclusions
-Flexible and rigid technical implementation, advanced BCT prediction, structural simulation, finite-element analysis, CAD, dieline generation, OCR, AI document reading, image interpretation, machine learning, supplier ranking, supplier allocation, ERP integration, authentication, role-based approval, cloud database, deployment, pilot, activation, and production use remain excluded.
 
 ## Current State
-PVE 1.1 remains the stable governance-closed release on `main`. PVE 1.2 Builds 1 and 2 are complete on PR #26. Build 3 is not started or authorized. PR #26 must remain draft and unmerged until separate authorization.
+PVE 1.1 remains stable on `main`. PVE 1.2 Builds 1–3 are complete on PR #26. Build 4 is not started or authorized. PR #26 remains draft and unmerged.
