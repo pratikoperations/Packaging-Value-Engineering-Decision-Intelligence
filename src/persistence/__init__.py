@@ -3,6 +3,7 @@ from .dataset_repository import DatasetRepository
 from .decision_repository import DecisionRepository
 from .export_repository import ExportRepository
 from .project_repository import ProjectRepository
+from .readiness_repository import ReadinessRepository
 from .scenario_repository import ScenarioRepository
 from .threshold_repository import ThresholdRepository
 
@@ -12,6 +13,7 @@ __all__ = [
     "DecisionRepository",
     "ExportRepository",
     "ProjectRepository",
+    "ReadinessRepository",
     "ScenarioRepository",
     "ThresholdRepository",
 ]

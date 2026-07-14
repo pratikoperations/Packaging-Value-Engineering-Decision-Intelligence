@@ -6,67 +6,55 @@ Packaging Value Engineering & Decision Intelligence
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 
-## Stable Branch
-`main`
+## Historical Build Identity
+PVE-0.7 remains the original interview-release identity required by repository CI.
 
-## Original Interview Release
-- Final build: PVE-0.7 — QA and Interview Release
-- Status: Completed
-- Release PR: PR #13 merged and closed
-- Release merge commit: `fb0962ba611fcf59ae7ab194dd2514970a19909d`
-- Public application: https://packaging-value-engineering-decision-intelligence.streamlit.app/
+## Stable Release
+PVE 1.0.6 is complete and governance-closed on `main`.
 
-## PVE 1.0 Controlled Build
+- Final PR: #22
+- Merge commit: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`
+- Final CI: PVE CI #520, run `29223657516`
+- Tests: 179 passed, 0 failed, 0 errors
+- Cumulative PVE 1.0 effort: 89.5 hours
 
-### Program Status
-Completed, validated, merged, and governance-closed.
+## PVE 1.1 — All-Category Project Intake and Validation Readiness
+
+### Control State
+- Branch: `feature/pve-1.1-all-category-intake`
+- Pull request: PR #25
+- PR state: open, draft, unmerged
+- Hold: removed by explicit user directive on 2026-07-14
 
 ### Completed Builds
-- PVE-1.0.1 — Foundation and Persistence; PR #17; merge `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`; 85 tests; 14.5 hours.
-- PVE-1.0.2 — Project Dashboard; PR #18; merge `87f3897c68503cddc2c7e64827d8c395b45065a5`; 100 tests; 11.5 hours.
-- PVE-1.0.3 — Upload and Validation; PR #19; merge `c3e5247510c062fe64ac1da171dcc2f107ff4967`; 126 tests; 16.5 hours.
-- PVE-1.0.4 — Configurable Business Thresholds; PR #20; merge `301a0d92d41f46a15e37c5bd059e8673c3f666a6`; 143 tests; 12.5 hours.
-- PVE-1.0.5 — Controlled Scenario Execution; PR #21; merge `99416d91025b6cfbff40142ce9fbcd462eb1028f`; 160 passed, 0 failed, 0 errors; 17.5 hours; source branch deleted.
-- PVE-1.0.6 — Decision Snapshot and Final Release Closure; PR #22; squash merge `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`; 179 passed, 0 failed, 0 errors; 17.0 hours; source branch deleted.
+- Build 1 — Architecture and Scope Lock: complete; 6 hours.
+- Build 2 — Project Creation Expansion: complete; 7 hours.
+- Build 3 — Category Input Definitions: complete; 14 hours.
+- Build 4 — Excel Template Generation: complete; 10 hours.
+- Build 5 — Excel Upload and Normalization: complete; 10 hours.
+- Build 6 — Readiness and Blocking Engine: complete; 9 hours.
+- Build 7 — Commercial and ROI Extension: complete and validated; 5 hours.
+- Build 8 — Guided Streamlit Workflow and Updated Reports: complete and validated; 8 hours.
+- Build 9 — Testing and Release QA: complete and validated; 11 hours.
 
-### Final Build
-PVE-1.0.6 — Decision Snapshot and Final Release Closure
-
-### Final Validation
-- Workflow: PVE CI
-- Run number: 520
-- Run ID: `29223657516`
-- Tests: 179 passed, 0 failed, 0 errors
-
-### Implemented Scope
-- Immutable decision snapshots from saved scenarios
-- Exact project, scenario, dataset, and threshold references
-- Dataset-defined baseline exclusion
-- Recommendation-for-review statuses
-- Project-scoped read-only decision history
-- Archived-project repository write protection
-- Final interview guide
-- Final QA and release checklist
-
-### Mandatory Controls
-- Engineering validation remains required
-- Human approval remains required
-- Autonomous approval remains prohibited
-- Critical risk remains blocking
-- Not-qualified alternatives remain blocked
-- Insufficient data cannot become recommended
-- Decision snapshots remain immutable
-- Project isolation remains enforced
+### Final QA Evidence
+- PVE CI #725, run `29302736072`, success on Build 9 implementation head `f2cd981fdb2d8173569b138c8bedd399e7bb1c0d`.
+- Complete unittest suite: 221 passed.
+- Focused Build 8 report tests: 4 passed.
+- Total test executions: 225.
+- Failures: 0.
+- Errors: 0.
+- One synthetic sample per packaging category.
+- Three detailed demonstration cases.
+- QA report, release checklist, and interview demonstration updated.
 
 ### Budget
-- Original working budget: 90 hours
-- Hard ceiling: 110 hours
-- PVE-1.0.6 actual effort used: 17.0 hours
-- Cumulative effort used: 89.5 hours
-- Remaining program budget: 0.5 hours
+- Fixed hard cap: 80 hours.
+- Total consumed: 80 hours.
+- Remaining allocation: 0 hours.
 
-### Explicit Exclusions
-No authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, analytical-engine modification, recommendation-engine modification, or new packaging category.
+### Scope Exclusions
+Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking or allocation, cloud database, machine learning, live pricing, and autonomous approval remain excluded.
 
-### Final State
-PVE 1.0 is fully completed and governance-closed. No next build has been started.
+### Current State
+PVE 1.1 Builds 1–9 are complete and release-ready for merge review. PR #25 remains draft and unmerged. Merge, deployment, pilot, activation, and production work require separate authorization.

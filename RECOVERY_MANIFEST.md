@@ -1,65 +1,39 @@
 # Recovery Manifest
 
-## Purpose
-Recover the completed PVE 1.0 release from GitHub without relying on chat history.
-
-## Project Identity
-- Project: Packaging Value Engineering & Decision Intelligence
+## Stable release
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 - Stable branch: `main`
-- Final build: PVE-1.0.6 — Decision Snapshot and Final Release Closure
-- Status: Completed, validated, merged, and governance-closed
-- Pull request: PR #22 merged and closed
-- Squash merge commit: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`
-- Source branch: Deleted
+- Stable release: PVE 1.0.6
+- Stable merge: `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`
+- Stable CI: PVE CI #520, run `29223657516`
+- Stable tests: 179 passed
 
-## Previous Stable Build
-- PVE-1.0.5 — Controlled Scenario Execution
-- PR #21 merged and closed
-- Merge commit: `99416d91025b6cfbff40142ce9fbcd462eb1028f`
-- Tests: 160 passed, 0 failed, 0 errors
-- Effort: 17.5 hours
-- Source branch: Deleted
+## Active PVE 1.1 recovery point
+- Branch: `feature/pve-1.1-all-category-intake`
+- Pull request: PR #25
+- PR state: open, draft, unmerged
+- Hold removed: 2026-07-14
+- Builds 1 through 9: complete
+- Total consumed: 80 hours
+- Remaining allocation: 0 hours
 
-## PVE-1.0.6 Validation
-- Final CI: PVE CI #520
-- Run ID: `29223657516`
-- Tests: 179 passed, 0 failed, 0 errors
-- Actual effort: 17.0 hours
-- Cumulative effort: 89.5 hours
-- Remaining program budget: 0.5 hours
+## Final validation evidence
+- Build 9 implementation validation: PVE CI #725
+- Run ID: `29302736072`
+- Validated implementation head: `f2cd981fdb2d8173569b138c8bedd399e7bb1c0d`
+- Complete suite: 221 passed
+- Focused report tests: 4 passed
+- Total executions: 225
+- Failures: 0
+- Errors: 0
 
-## Mandatory Reading Order
-1. `PROJECT_STATUS.md`
-2. `VERSION_MANIFEST.md`
-3. `CHANGELOG.md`
-4. `BUILD_HISTORY.md`
-5. `ACTIVITY_LOG.md`
-6. `DECISION_LOG.md`
-7. `docs/design/PVE-1.0.6_DECISION_SNAPSHOT_RELEASE_DESIGN.md`
-8. `docs/qa/PVE-1.0.6_FINAL_QA_REPORT.md`
-9. `docs/release/PVE_1.0_FINAL_RELEASE_CHECKLIST.md`
-10. `docs/interview/PVE_1.0_FINAL_INTERVIEW_DEMO.md`
-11. `pages/05_Decision_History.py`
-12. `src/decision_snapshots/service.py`
-13. `src/persistence/decision_repository.py`
-14. `tests/decision_snapshots/test_decision_snapshots.py`
+## Release evidence
+- Eight synthetic category samples are stored in `data/demo/pve_1_1_release_cases.json`.
+- Three detailed demonstration cases cover ready, blocked, and critical-data-missing outcomes.
+- Final QA plan, QA report, release checklist, and interview demo are present.
 
-## Recovery Procedure
-1. Check out `main` at or after merge commit `4fc7f8a7a8b6764d80df7341cdb9b2ce39678213`.
-2. Run `python -m unittest discover -s tests -p "test_*.py" -v` and confirm 179 tests pass.
-3. Run the Streamlit application and select a project with a saved controlled scenario.
-4. Prepare and save a decision snapshot.
-5. Confirm exact project, scenario, dataset, and threshold references.
-6. Confirm the dataset-defined baseline is excluded.
-7. Confirm engineering validation and human approval remain mandatory and autonomous approval is prohibited.
-8. Archive a project and verify prior history is readable while new snapshot creation is rejected.
+## Recovery rule
+Resume only for final-head validation, merge review, or governance closure after explicit authorization. Do not start another PVE 1.1 development increment because the 80-hour cap is fully consumed.
 
-## Stable Scope Boundary
-No authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, analytical-engine modification, recommendation-engine modification, or additional packaging category.
-
-## Separation Rule
-This repository does not store AI Procurement Copilot source files. Cross-project communication uses governed integration packages only.
-
-## Final State
-PVE 1.0 is fully completed and governance-closed. No next build has been started.
+## Scope boundary
+Power BI, PostgreSQL reporting integration, ERP integration, OCR, AI document reading, deployment, activation, pilot, production, authentication, supplier ranking or allocation, cloud database, machine learning, live pricing, and autonomous approval remain excluded.
