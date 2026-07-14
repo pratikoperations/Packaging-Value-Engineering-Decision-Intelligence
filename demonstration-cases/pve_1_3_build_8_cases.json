@@ -1,0 +1,67 @@
+{
+  "release": "PVE 1.3",
+  "status": "qa_evidence_only",
+  "release_authorized": false,
+  "release_complete": false,
+  "cases": [
+    {
+      "case_id": "DEMO-001",
+      "title": "Synthetic end-to-end packaging evidence flow",
+      "purpose": "Demonstrate traceable evidence from project governance through supplier qualification without making release, sourcing or commercial decisions.",
+      "data_classification": "synthetic",
+      "covered_builds": [1, "2A", "2B", 3, 4, 5, 6, 7],
+      "expected_outcomes": [
+        "drawing and preview evidence remains governed",
+        "trial planning and execution evidence resolves",
+        "defect and complaint evidence resolves",
+        "specification and implementation controls resolve",
+        "supplier qualification evidence resolves"
+      ],
+      "acceptance_checks": [
+        "all referenced records remain project-scoped",
+        "all governed records remain immutable",
+        "all approval decisions remain attributable to named humans"
+      ],
+      "status": "ready",
+      "evidence_references": ["DEMO-DATA-SYNTHETIC-001"]
+    },
+    {
+      "case_id": "DEMO-002",
+      "title": "Anonymized packaging change-control regression case",
+      "purpose": "Exercise specification change, implementation authorization, defect evidence and qualification review with anonymized identifiers.",
+      "data_classification": "anonymized",
+      "covered_builds": [5, 6, 7],
+      "expected_outcomes": [
+        "implementation authorization requires an approved change",
+        "linked evidence cannot cross project boundaries",
+        "qualification scope and validity remain explicit"
+      ],
+      "acceptance_checks": [
+        "cross-project links are rejected",
+        "archived projects are read-only",
+        "repository and database mutations are rejected"
+      ],
+      "status": "ready",
+      "evidence_references": ["DEMO-DATA-ANON-002"]
+    },
+    {
+      "case_id": "DEMO-003",
+      "title": "Controlled-real release-QA evidence reconciliation",
+      "purpose": "Reconcile exact commit, workflow, job, test and artifact evidence without authorizing tagging, publication or deployment.",
+      "data_classification": "real_controlled",
+      "covered_builds": [8],
+      "expected_outcomes": [
+        "exact CI evidence is preserved",
+        "limitations and unresolved blockers remain visible",
+        "readiness remains a human recommendation only"
+      ],
+      "acceptance_checks": [
+        "test failures and errors must be zero for a ready recommendation",
+        "artifact digest must use sha256",
+        "release actions remain prohibited"
+      ],
+      "status": "ready",
+      "evidence_references": ["PVE-CI-CONTROLLED-REAL-003"]
+    }
+  ]
+}

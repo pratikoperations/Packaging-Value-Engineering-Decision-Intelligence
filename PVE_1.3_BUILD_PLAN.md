@@ -4,8 +4,8 @@
 PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governance
 
 ## Current implementation status
-- Status: Builds 1 through 6 governance-closed; Build 7 implementation complete on a controlled branch.
-- Implementation started: yes, limited to Builds 1 through 7.
+- Status: Builds 1 through 7 governance-closed; Build 8 implementation complete on a controlled branch.
+- Implementation scope: limited to Builds 1 through 8.
 - Build 1 status: merged, post-merge validated and governance-closed.
 - Build 2A status: merged, post-merge validated and governance-closed.
 - Build 2B status: merged, post-merge validated and governance-closed.
@@ -13,14 +13,14 @@ PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governanc
 - Build 4 status: merged, post-merge validated and governance-closed.
 - Build 5 status: merged, post-merge validated and governance-closed.
 - Build 6 status: merged, post-merge validated and governance-closed.
-- Build 7 status: implementation complete on controlled branch; CI, audit, merge and governance closure pending.
-- Build 8: not started and not authorized.
-- Release completion on branch: 89.9%.
-- Completed planned effort on branch: 62 of 69 hours.
-- Pending planned effort: 7 hours, 10.1%.
+- Build 7 status: merged, post-merge validated and governance-closed.
+- Build 8 status: implementation complete on controlled branch; CI, audit, merge and governance closure pending.
+- Planned implementation on branch: 69 of 69 hours, 100%.
+- Governance-closed release completion remains 89.9% until Build 8 is validated and governance-closed.
 - Controlled contingency used: 0 of 2 hours.
 - Controlled contingency remaining: 2 hours.
 - Absolute release cap: 71 hours.
+- No release tag has been created and PVE 1.3 has not been declared complete.
 
 ## Budget control
 The 69 planned hours remain fixed. The two-hour contingency may be used only for unexpected regression, CI-only failure, migration compatibility repair, cross-module integration defects or release-evidence reconciliation. It cannot fund new functionality, additional categories, deployment or scope expansion.
@@ -36,8 +36,8 @@ The 69 planned hours remain fixed. The two-hour contingency may be used only for
 | 4 | Trial execution, results and deviations | 9 | 39 | 56.5% | Governance-closed |
 | 5 | Packaging defect and complaint taxonomy | 8 | 47 | 68.1% | Governance-closed |
 | 6 | Specification and implementation change control | 8 | 55 | 79.7% | Governance-closed |
-| 7 | Supplier qualification evidence register | 7 | 62 | 89.9% | Implemented; validation pending |
-| 8 | Demonstration cases, regression and release QA | 7 | 69 | 100% | Not started |
+| 7 | Supplier qualification evidence register | 7 | 62 | 89.9% | Governance-closed |
+| 8 | Demonstration cases, regression and release QA | 7 | 69 | 100% | Implemented; validation pending |
 
 ## Build 1 — Architecture, governance and release boundary — 6 hours
 Delivered and governance-closed on `main` at `d5e29f9750b7409be8cccd57bd8036eb988c2faf`.
@@ -73,25 +73,27 @@ Delivered and governance-closed on `main` at `a52cd4bcbb5309f8c8c21e49e0e50be35e
 Build 6 records human-controlled change approval and implementation evidence. It introduces no supplier qualification, supplier scoring, approved-supplier-list decision, sourcing award, allocation, ranking or autonomous production release.
 
 ## Build 7 — Supplier qualification evidence register — 7 hours
-
-### Delivered
-- additive schema v10 supplier qualification assessment register;
-- supplier and site-specific qualification scope;
-- status, validity, conditions, open actions and review dates;
-- evidence-linked named human assessment and approval;
-- linked trial, defect, complaint, specification-change and implementation-control evidence;
-- project-scoped repository and linked-evidence isolation;
-- archived-project protection;
-- repository and database immutability;
-- focused migration, persistence, approval, archive and isolation tests.
+Delivered and governance-closed on `main` at `b49899d0de1fb9ea0e129bf55e857edf6fba8532`.
 
 Build 7 records supplier qualification evidence and named human decisions only. It introduces no supplier ranking, preferred-supplier recommendation, sourcing award, allocation, commercial-term approval, release certification, final regression sign-off or autonomous qualification decision.
 
 ## Build 8 — Demonstration cases, regression and release QA — 7 hours
-Not started.
+
+### Delivered
+- governed demonstration manifests covering Builds 1 through 7;
+- synthetic, anonymized and controlled-real data classification;
+- additive schema v11 demonstration-case and release-QA evidence registers;
+- exact commit, workflow, job, test, schema and artifact evidence;
+- unresolved defect, limitation, exception and blocker visibility;
+- named human review and readiness recommendation;
+- clean-test and no-blocker readiness gates;
+- immutable repositories and database triggers;
+- focused migration, persistence, integrity, immutability and readiness-gate tests.
+
+Build 8 assembles release-QA evidence only. It cannot create a release tag, publish a release, authorize deployment, certify production readiness or declare PVE 1.3 complete without separate authorization after validation.
 
 ## Explicit exclusions
 PVE 1.3 will not include automatic DXF geometry extraction, automatic dimension extraction, cut/crease/slot recognition, parametric dieline generation, automated blank optimization, full CAD editing, 3D folding, tooling design, manufacturing-ready drawing approval, autonomous engineering approval, supplier ranking/allocation/award, or ungoverned production deployment.
 
 ## Authorization boundary
-Build 7 alone is authorized beyond governance-closed Builds 1 through 6. Build 8 requires separate explicit authorization. Build 7 must pass CI, review, merge and post-merge controls before it is governance-closed.
+Build 8 implementation is authorized. Release tagging, publication, deployment authorization and declaration of PVE 1.3 completion require separate explicit authorization after Build 8 validation, audit, merge and post-merge controls.
