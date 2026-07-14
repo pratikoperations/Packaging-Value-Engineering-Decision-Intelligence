@@ -27,7 +27,7 @@ from src.persistence import (
     TechnicalAssessmentRepository,
 )
 from src.persistence import migrations
-from src.persistence.migrations import current_schema_version, initialize_database
+from src.persistence.migrations import SCHEMA_VERSION, current_schema_version, initialize_database
 from src.templates import generate_workbook
 from src.uploads.normalizer import normalize_user_dataset
 
@@ -270,8 +270,8 @@ class PVE12ReleaseQATestCase(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "immutable"):
                 assessments.delete(saved["technical_assessment_id"])
 
-    def test_additive_migration_from_schema_versions_one_two_and_three(self):
-        for starting_version in (1, 2, 3):
+    def test_additive_migration_from_schema_versions_one_through_four(self):
+        for starting_version in (1, 2, 3, 4):
             with self.subTest(starting_version=starting_version), tempfile.TemporaryDirectory() as tempdir:
                 database = Database(Path(tempdir) / "pve.sqlite3")
                 with database.transaction() as connection:
@@ -281,12 +281,15 @@ class PVE12ReleaseQATestCase(unittest.TestCase):
                         migrations._apply_v2(connection)
                     if starting_version >= 3:
                         migrations._apply_v3(connection)
+                    if starting_version >= 4:
+                        migrations._apply_v4(connection)
                 self.assertEqual(current_schema_version(database), starting_version)
-                self.assertEqual(initialize_database(database), 4)
-                self.assertEqual(current_schema_version(database), 4)
+                self.assertEqual(initialize_database(database), SCHEMA_VERSION)
+                self.assertEqual(current_schema_version(database), SCHEMA_VERSION)
                 with database.connect() as connection:
                     tables = {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
                 self.assertIn("technical_assessments", tables)
+                self.assertIn("drawing_evidence", tables)
 
     def test_all_immutable_record_families_have_update_and_delete_triggers(self):
         with tempfile.TemporaryDirectory() as tempdir:
@@ -297,6 +300,7 @@ class PVE12ReleaseQATestCase(unittest.TestCase):
             families = (
                 "project_datasets", "threshold_profiles", "scenarios",
                 "decision_snapshots", "readiness_assessments", "technical_assessments",
+                "drawing_evidence",
             )
             for family in families:
                 self.assertIn(f"{family}_immutable_update", triggers)

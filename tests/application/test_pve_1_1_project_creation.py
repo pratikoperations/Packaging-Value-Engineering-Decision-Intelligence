@@ -7,7 +7,7 @@ from pathlib import Path
 from src.application import ProjectService
 from src.category_registry import default_registry
 from src.persistence import Database, ProjectRepository
-from src.persistence.migrations import current_schema_version, initialize_database
+from src.persistence.migrations import SCHEMA_VERSION, current_schema_version, initialize_database
 
 
 class PVE11ProjectCreationTestCase(unittest.TestCase):
@@ -20,8 +20,8 @@ class PVE11ProjectCreationTestCase(unittest.TestCase):
     def tearDown(self) -> None:
         self.tempdir.cleanup()
 
-    def test_schema_v4_is_applied_additively(self):
-        self.assertEqual(current_schema_version(self.database), 4)
+    def test_current_schema_preserves_pve_1_1_project_columns(self):
+        self.assertEqual(current_schema_version(self.database), SCHEMA_VERSION)
         with self.database.connect() as connection:
             columns = {row[1] for row in connection.execute("PRAGMA table_info(projects)")}
         self.assertTrue({"objective", "change_type", "project_owner", "current_unit_cost", "expected_realization_percent"} <= columns)
