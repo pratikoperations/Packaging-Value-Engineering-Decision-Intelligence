@@ -11,17 +11,17 @@ Hard cap: 80 hours.
 | 5 | Excel upload and normalization | 10 | Complete |
 | 6 | Readiness and blocking engine | 9 | Complete |
 | 7 | Commercial and ROI extension | 5 | Complete |
-| 8 | Streamlit UI and reports | 8 | Implemented; final CI required |
-| 9 | Testing and release QA | 11 | Not authorized |
+| 8 | Streamlit UI and reports | 8 | Complete and validated |
+| 9 | Testing and release QA | 11 | Authorized and in progress |
 | **Total** |  | **80** | |
 
-## Build 8 Acceptance Gate
-- Guided workflow exposes all eight registry categories.
-- Category/objective/change-type context is visible.
-- Excel template, Excel upload, retained JSON/CSV upload, readiness, commercial, testing, document evidence, and report export are connected.
-- Unavailable outputs always include reasons.
-- Estimate labels, source traceability, assumptions, engineering validation, and human approval are retained.
-- Complete automated test suite must pass with zero failures and errors.
+## Build 9 Acceptance Gate
+- Complete regression suite passes with zero failures and errors.
+- One synthetic sample exists for every supported category.
+- Three detailed demonstration cases cover ready, attractive-but-blocked, and critical-data-missing outcomes.
+- QA report, release checklist, and interview demo are current.
+- Governance controls, historical immutability, archive protection, project isolation, and scope exclusions remain intact.
+- PR #25 remains draft and unmerged until separate merge authorization.
 
 ## Control
-Each build is delivered through controlled increments on the dedicated feature branch. Scope cannot expand without replacing an approved item within the same cap. Build 9 requires separate authorization and PR #25 remains draft and unmerged.
+The user removed the hold and authorized Build 9 on 2026-07-14. Build 9 consumes the final 11 hours of the fixed 80-hour cap. No later development increment is authorized within PVE 1.1.
