@@ -36,7 +36,7 @@
 - [x] JSON and CSV-compatible normalization regression is included.
 - [x] Excel-template regression is included.
 - [x] Functional full suite passed: 300 tests, 0 failures, 0 errors.
-- [ ] Final documented-head CI passed.
+- [x] Final documented-head CI #865, run `29309867905`, passed with zero failures and errors.
 
 ## Documentation
 - [x] README reconciled for PVE 1.2 completion state.
