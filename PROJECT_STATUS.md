@@ -25,18 +25,21 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Total test executions: 225; failures: 0; errors: 0.
 - Total consumed: 80 of 80 hours.
 
-## Active Release
+## Completed Release Awaiting Separate Merge Decision
 
 ### PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
-- Status: Builds 1–7 complete and validated on draft PR #26.
+- Status: Builds 1–8 complete and functionally validated on draft PR #26.
 - Branch: `feature/pve-1.2-corrugated-engineering`.
 - Planned effort: 74 hours.
-- Controlled contingency: 2 hours.
+- Completed effort: 74 of 74 planned hours.
+- Release completion: 100%.
+- Pending planned work: 0 hours, 0%.
+- Controlled contingency used: 0 of 2 hours.
+- Controlled contingency remaining: 2 hours.
 - Absolute cap: 76 hours.
-- Completed effort: 68 of 74 planned hours.
-- Release completion: 91.9%.
-- Pending planned work: 6 hours, 8.1%.
-- Contingency used: 0 of 2 hours.
+- Functional Build 8 head: `9465d9d6292a9d65834cfc11f27d1f056b9408a4`.
+- Functional validation: PVE CI #849, run `29309701227`, success.
+- Tests: 300 passed, 0 failures, 0 errors.
 
 ## Completed PVE 1.2 Builds
 - Build 1 — Architecture, Governance and Engineering Boundary Lock — 8 hours — validated by PVE CI #753.
@@ -45,32 +48,27 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Build 4 — Compression, Stacking, Environment and Packing-Line Screening — 12 hours — validated by PVE CI #797.
 - Build 5 — Material, Pallet, Logistics and Physical Sustainability Analysis — 11 hours — validated by PVE CI #809.
 - Build 6 — Should-Cost, Failure Cost and Implementation Economics — 9 hours — validated by PVE CI #823.
+- Build 7 — Engineering Recommendation, Evidence Confidence and Immutable Technical-Assessment Persistence — 7 hours — validated by PVE CI #843.
+- Build 8 — Demonstration Cases, Full Regression and Release QA — 6 hours — functionally validated by PVE CI #849.
 
-### Build 7 — Engineering Recommendation, Evidence Confidence and Immutable Technical-Assessment Persistence
-- Status: complete and validated.
-- Effort: 7 hours.
-- Functional head: `432ed1c196d989841021aff8656e35abf1c2034d`.
-- Validation: PVE CI #839, run `29309404539`, success.
-- Tests: 293 passed, 0 failures, 0 errors.
-- Implemented:
-  - review-only engineering recommendation outcomes with explicit precedence;
-  - evidence confidence stored separately from recommendation and success probability;
-  - aggregation of technical, material/logistics, and economic outputs without commercial override of technical risk;
-  - additive SQLite schema migration version 4;
-  - append-only `technical_assessments` records retaining project, readiness, dataset and specification versions, rule set, thresholds, evidence, formulas, assumptions, outcomes, blockers, trials, confidence, recommendation, hash, and timestamp;
-  - immutable update/delete triggers and repository-level rejection;
-  - archived-project write protection;
-  - same-project validation for dataset, readiness, threshold, and evidence references;
-  - preservation of historical datasets, readiness assessments, scenarios, thresholds, and decision snapshots.
-- Excluded: demonstration cases, final release QA, merge preparation, autonomous approval, and Build 8.
+## Build 8 Release Evidence
+- Eight governed synthetic corrugated cases are stored in `data/pve_1_2_corrugated_demonstration_cases.json`.
+- Every case is explicitly labelled synthetic demonstration data.
+- End-to-end release QA covers intake, specifications, tolerances, evidence, supplier capability, technical screening, material, pallet, logistics, physical sustainability, economics, recommendation, and immutable technical-assessment persistence.
+- Additive migration is tested from schema versions 1, 2, and 3 to schema version 4.
+- Update/delete rejection remains validated for all immutable record families.
+- Archived-project protection and cross-project isolation remain validated.
+- JSON and CSV-compatible normalization and Excel-template regressions remain validated.
+- `Approved`, `Rejected`, and `Conditional` are never generated automatically.
 
 ## Governance
 - Engineering validation and explicit human approval remain mandatory.
-- Autonomous Approved, Rejected, or Conditional decisions remain prohibited.
+- Autonomous approval remains prohibited.
 - Evidence confidence is not probability of technical success.
 - Technical and evidence blockers override commercial, economic, material, logistics, and sustainability benefits.
 - Technical assessments are append-only, immutable, and project-scoped.
 - Historical records remain preserved.
+- PR #26 must remain draft and unmerged until separate authorization.
 
 ## Current State
-PVE 1.1 remains stable on `main`. PVE 1.2 Builds 1–7 are complete on PR #26. Build 8 is not started or authorized. PR #26 remains draft and unmerged.
+PVE 1.1 remains stable on `main`. PVE 1.2 is 100% complete at 74 of 74 planned hours on PR #26, with 0% and 0 planned hours pending. Functional CI is green. Final documented-head CI is required before Build 8 closure is recorded in the PR. PR #26 remains draft and unmerged and has not been marked ready for review.
