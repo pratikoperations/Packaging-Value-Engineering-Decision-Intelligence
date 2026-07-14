@@ -30,6 +30,11 @@ from .corrugated_evidence import (
     match_evidence,
     technical_requirement_profile,
 )
+from .corrugated_recommendation import (
+    RECOMMENDATION_OUTCOMES,
+    EngineeringRecommendation,
+    build_engineering_recommendation,
+)
 from .corrugated_screening import (
     SCREENING_OUTCOMES,
     GovernedFactor,
@@ -63,6 +68,7 @@ __all__ = [
     "CapabilityAssessment", "EvidenceConfidenceAssessment", "EvidenceMatch",
     "assess_evidence_confidence", "assess_supplier_capability",
     "detect_conflicting_evidence", "match_evidence", "technical_requirement_profile",
+    "RECOMMENDATION_OUTCOMES", "EngineeringRecommendation", "build_engineering_recommendation",
     "SCREENING_OUTCOMES", "GovernedFactor", "ScreeningAssessment",
     "screen_corrugated", "validate_governed_factor",
     "BOX_STYLES", "CLOSURE_METHODS", "CONVERTING_PROFILES", "JOINT_TYPES", "PRINT_PROCESSES",
