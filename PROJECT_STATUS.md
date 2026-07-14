@@ -35,78 +35,61 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Total consumed: 80 hours.
 - Remaining allocation: 0 hours.
 
-## Completed PVE 1.1 Builds
-- Build 1 — Architecture and Scope Lock: 6 hours.
-- Build 2 — Project Creation Expansion: 7 hours.
-- Build 3 — Category Input Definitions: 14 hours.
-- Build 4 — Excel Template Generation: 10 hours.
-- Build 5 — Excel Upload and Normalization: 10 hours.
-- Build 6 — Readiness and Blocking Engine: 9 hours.
-- Build 7 — Commercial and ROI Extension: 5 hours.
-- Build 8 — Guided Streamlit Workflow and Updated Reports: 8 hours.
-- Build 9 — Testing and Release QA: 11 hours.
-
-## PVE 1.1 Release Evidence
-- One synthetic sample for each of eight packaging categories.
-- Three detailed demonstration cases.
-- QA plan and final QA report.
-- Completed release checklist.
-- Updated interview demonstration.
-- Source classification retained.
-- Blocking issues override readiness percentage.
-- Engineering validation and human approval remain mandatory.
-- Autonomous approval remains prohibited.
-- Historical datasets, scenarios, thresholds, readiness assessments, and decision snapshots remain immutable.
-- Archived projects remain read-only.
-- Project isolation remains enforced.
-
-## Active Release Planning
+## Active Release
 
 ### PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
-- Status: Build 1 active on a draft, unmerged feature branch.
+- Status: Builds 1 and 2 complete and validated on a draft, unmerged feature branch.
 - Branch: `feature/pve-1.2-corrugated-engineering`.
-- Build 1: Architecture, Governance and Engineering Boundary Lock.
-- Authorized Build 1 effort: 8 hours.
+- Pull request: #26, draft and unmerged.
 - Planned release effort: 74 hours.
 - Controlled contingency: 2 hours.
 - Absolute release cap: 76 hours.
-- Release completion after validated Build 1: 10.8%.
-- Release hours after validated Build 1: 8 of 74 planned hours.
-- Pending after validated Build 1: 89.2%, 66 planned hours.
-- Contingency remains separately governed and is not counted as planned completion.
+- Completed effort: 19 of 74 planned hours.
+- Release completion: 25.7%.
+- Pending planned work: 55 hours, 74.3%.
+- Contingency used: 0 of 2 hours.
 
-## PVE 1.2 Build 1 Scope
+## Completed PVE 1.2 Builds
 
-Build 1 defines:
+### Build 1 — Architecture, Governance and Engineering Boundary Lock
+- Status: complete and validated.
+- Effort: 8 hours.
+- Validation: PVE CI #753, run `29307462790`, success.
+- Scope: corrugated-only architecture, deterministic-calculation governance, sourced-threshold rules, evidence classification, recommendation and approval boundaries, append-only persistence intent, risks, exclusions, and acceptance gates.
 
-- corrugated-only architecture and boundaries;
-- deterministic-calculation governance;
-- sourced and versioned threshold governance;
-- project-specific input and override rules;
-- source and evidence-classification controls;
-- technical screening, engineering recommendation, and human-approval boundaries;
-- proposed specification, tolerance, evidence, supplier-capability, packing-line, pallet, logistics, damage-cost, implementation-economics, physical-sustainability, and confidence models;
-- append-only technical-assessment persistence requirements;
-- dependencies, risks, exclusions, build sequence, and acceptance gates.
-
-Build 1 does not authorize or implement production technical formulas, migrations, persistence tables, Build 2 schemas, deployment, or later-build functionality.
+### Build 2 — Corrugated Specification, Style and Tolerance Model
+- Status: complete and validated.
+- Effort: 11 hours.
+- Functional validation head before closure records: `0a417f48d9c19590e3ee9c5b9226efd48a00a921`.
+- Validation: PVE CI #767, run `29307874995`, success.
+- Tests: 233 passed, 0 failures, 0 errors.
+- Implemented:
+  - configuration-driven baseline and proposed corrugated specification fields;
+  - internal and external dimensions while retaining legacy dimension compatibility;
+  - box styles and converting-process profiles;
+  - ply, flute combination, paper-layer structure, GSM profile, board grade, and caliper;
+  - joint, closure, printing, colour, coating, blank, manufacturer-joint, packed-weight, and case-pack fields;
+  - sourced and versioned specification-tolerance validation;
+  - artwork and compliance-change fields;
+  - transparent baseline/proposed comparison;
+  - source-preserving intake and tolerance normalization;
+  - JSON, CSV, and Excel workflow regression protection.
+- Excluded: production compression formulas, evidence matching, supplier capability, packing-line screening, pallet analysis, damage-cost logic, and Build 3.
 
 ## PVE 1.2 Governance
-
 - Engineering validation remains mandatory.
 - Human approval remains mandatory.
 - Autonomous approval remains prohibited.
 - Critical technical, compliance, evidence, and line blockers override commercial attractiveness.
 - Unsourced universal engineering thresholds are prohibited.
 - Assumptions remain explicit and source-classified.
+- Supplier-declared, predicted, assumed, and laboratory-tested values remain distinct.
 - Evidence confidence describes evidence quality, not probability of technical success.
 - Historical records remain immutable and project-scoped.
 - Supplier capability checks must not become supplier ranking or allocation.
 
 ## PVE 1.2 Exclusions
-
 Flexible and rigid technical implementation, advanced BCT prediction, structural simulation, finite-element analysis, CAD, dieline generation, OCR, AI document reading, image interpretation, machine learning, supplier ranking, supplier allocation, ERP integration, authentication, role-based approval, cloud database, deployment, pilot, activation, and production use remain excluded.
 
 ## Current State
-
-PVE 1.1 remains the stable governance-closed release on `main`. PVE 1.2 Build 1 is a planning-and-governance increment only. Build 2 is not started or authorized. The PVE 1.2 pull request must remain draft and unmerged until separate authorization.
+PVE 1.1 remains the stable governance-closed release on `main`. PVE 1.2 Builds 1 and 2 are complete on PR #26. Build 3 is not started or authorized. PR #26 must remain draft and unmerged until separate authorization.
