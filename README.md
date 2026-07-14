@@ -1,9 +1,8 @@
 # Packaging Value Engineering & Decision Intelligence
 
-**Stable Release on `main`:** PVE 1.1 — All-Category Project Intake and Validation Readiness  
-**Completed Release Awaiting Separate Merge Decision:** PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence  
+**Stable Release on `main`:** PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence  
 **PVE 1.2 Status:** Builds 1–8 complete; 74 of 74 planned hours; 100% complete; 0 hours and 0% pending  
-**Pull Request:** PR #26 remains draft and unmerged  
+**Release Record:** PR #26 squash-merged; post-merge PVE CI #896 passed on `main`  
 **Canonical Repository:** `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 
 The historical PVE-0.7 QA and Interview Release remains preserved as the original interview-release identity required by repository CI.
@@ -24,29 +23,31 @@ The system produces traceable readiness and engineering-review outputs. It never
 
 ## Current Release State
 
-### PVE 1.1 — Stable
+### PVE 1.1 — Stable historical release
 
 PVE 1.1 added all-category project intake, category-specific requirements, Excel templates and uploads, readiness scoring, blockers, output availability, source traceability, commercial and ROI extensions, guided workflow, reports, immutable readiness assessments, and release QA.
 
 - Final PR: #25
 - Squash merge commit: `37f4ae58e0d57c4531293371e423d771ada7ae50`
-- Final pre-merge CI: PVE CI #735, run `29302903427`
+- Final CI: PVE CI #735, run `29302903427`
 - Total executions: 225
 - Failures: 0
 - Errors: 0
 
-### PVE 1.2 — Complete on draft PR #26
+### PVE 1.2 — Stable and governance-closed
 
-PVE 1.2 is corrugated-only and has completed all eight controlled builds.
+PVE 1.2 is corrugated-only and completed all eight controlled builds.
 
 - Planned and completed effort: 74 hours
 - Completion: 100%
 - Pending: 0 hours, 0%
 - Controlled contingency used: 0 of 2 hours
-- Functional Build 8 head: `9465d9d6292a9d65834cfc11f27d1f056b9408a4`
-- Functional Build 8 validation: PVE CI #849, run `29309701227`
-- Functional full suite: 300 passed, 0 failures, 0 errors
-- PR #26 remains draft, unmerged, and not ready for review
+- Final feature head: `20b60393eb21c75e56676ec119fb2c1818d33db0`
+- Squash merge commit: `8c5511e096b4526a85630e38ef939db371b307b1`
+- Post-merge validation: PVE CI #896, run `29317676780`, job `87035353112`
+- Tested branch and commit: `main` at `8c5511e096b4526a85630e38ef939db371b307b1`
+- Full suite: 300 passed, 0 failures, 0 errors
+- Diagnostic artifact: `pve-full-test-output`, artifact ID `8304598530`
 
 See:
 
@@ -155,8 +156,8 @@ The integration contract remains draft. PVE exports a read-only internal decisio
 | PVE-0.1 to PVE-0.7 | Foundation through QA and interview release | Completed |
 | PVE 1.0.1 to PVE 1.0.6 | Persistent projects, datasets, scenarios, thresholds, and immutable decision snapshots | Completed and governance-closed |
 | PVE 1.1 | All-category intake and validation readiness | Completed and governance-closed |
-| PVE 1.2 | Corrugated engineering and validation intelligence | 100% complete on draft PR #26; separate merge decision pending |
+| PVE 1.2 | Corrugated engineering and validation intelligence | Completed, squash-merged, post-merge validated, and governance-closed |
 
 ## Recovery
 
-Read [`RECOVERY_MANIFEST.md`](RECOVERY_MANIFEST.md), [`PROJECT_STATUS.md`](PROJECT_STATUS.md), and the PVE 1.2 release records to reconstruct the stable releases and current draft release from GitHub alone.
+Read [`RECOVERY_MANIFEST.md`](RECOVERY_MANIFEST.md), [`PROJECT_STATUS.md`](PROJECT_STATUS.md), and the PVE 1.2 release records to reconstruct the stable releases from GitHub alone.

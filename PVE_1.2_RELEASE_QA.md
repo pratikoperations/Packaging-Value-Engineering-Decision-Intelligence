@@ -4,7 +4,7 @@
 PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
 
 ## Status
-Builds 1–8 are complete and validated on draft PR #26. This report does not authorize merge, deployment, activation, or production use.
+Builds 1–8 are complete, validated, squash-merged through PR #26, and post-merge validated on `main`. PVE 1.2 is governance-closed as a decision-support release. This status does not authorize deployment, activation, pilot, or production use.
 
 ## Budget
 - Planned effort: 74 hours.
@@ -41,7 +41,32 @@ Builds 1–8 are complete and validated on draft PR #26. This report does not au
 - Automated tests: 300 passed.
 - Failures: 0.
 - Errors: 0.
-- Mandatory-file, JSON, synthetic-label, project-separation, build-identity, integration-contract, release-document, focused-report, and full-suite gates passed.
+
+### Final feature head
+- Head: `20b60393eb21c75e56676ec119fb2c1818d33db0`.
+- Workflow: PVE CI #883.
+- Run ID: `29313538879`.
+- Result: success.
+- Automated tests: 300 passed.
+- Failures: 0.
+- Errors: 0.
+
+### Post-merge validation on main
+- Merged PR: #26.
+- Squash-merge commit: `8c5511e096b4526a85630e38ef939db371b307b1`.
+- Workflow: PVE CI #896.
+- Run ID: `29317676780`.
+- Job ID: `87035353112`.
+- Trigger: `workflow_dispatch`.
+- Branch: `main`.
+- Tested commit: `8c5511e096b4526a85630e38ef939db371b307b1`.
+- Result: success.
+- Automated tests: 300 passed.
+- Failures: 0.
+- Errors: 0.
+- Artifact: `pve-full-test-output`.
+- Artifact ID: `8304598530`.
+- Mandatory-file, JSON, synthetic-label, project-separation, build-identity, integration-contract, release-document, focused-report, full-suite, and diagnostic-artifact gates passed.
 
 ## Synthetic demonstration cases
 The governed file `data/pve_1_2_corrugated_demonstration_cases.json` contains eight cases. Every case and the dataset itself are explicitly labelled synthetic demonstration data.
@@ -94,5 +119,5 @@ Update and delete triggers remain present for:
 - No supplier ranking, allocation, RFQ comparison, negotiation, ERP integration, authentication, deployment, pilot, activation, or production use.
 - Synthetic cases are not validated supplier, manufacturing, laboratory, regulatory, or commercial data.
 
-## Release-readiness recommendation
-PVE 1.2 has completed functional, documented-head, and final closure validation and is ready for explicit authorization to mark PR #26 ready for review and proceed to a separate squash-merge decision. It is not production-ready enterprise software and remains draft and unmerged until separately authorized.
+## Governance-closure recommendation
+PVE 1.2 has completed feature-head and post-merge validation, is squash-merged on `main`, and is ready to be frozen as a governance-closed release after this documentation-only closure PR is merged and final `main` CI passes. Tag `pve-v1.2` is recommended only after that final validation.
