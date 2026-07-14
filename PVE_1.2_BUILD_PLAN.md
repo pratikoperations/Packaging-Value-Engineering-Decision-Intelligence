@@ -16,8 +16,8 @@ PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
 
 | Build | Scope | Hours | Cumulative hours | Release completion | Status |
 |---|---|---:|---:|---:|---|
-| 1 | Architecture, governance and engineering boundary lock | 8 | 8 | 10.8% | Active |
-| 2 | Corrugated specification, style and tolerance model | 11 | 19 | 25.7% | Not started |
+| 1 | Architecture, governance and engineering boundary lock | 8 | 8 | 10.8% | Complete and validated |
+| 2 | Corrugated specification, style and tolerance model | 11 | 19 | 25.7% | Complete and validated |
 | 3 | Technical requirements, evidence and supplier capability | 10 | 29 | 39.2% | Not started |
 | 4 | Compression, stacking, environment and line screening | 12 | 41 | 55.4% | Not started |
 | 5 | Material, pallet, logistics and sustainability analysis | 11 | 52 | 70.3% | Not started |
@@ -25,33 +25,29 @@ PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
 | 7 | Recommendation, confidence and immutable persistence | 7 | 68 | 91.9% | Not started |
 | 8 | Demonstration cases, regression testing and release QA | 6 | 74 | 100% | Not started |
 
-## Build 1 authorized scope
+## Completed Build 1
 
-Build 1 may:
+Build 1 locked corrugated-only architecture, deterministic-calculation governance, sourced-threshold rules, evidence classification, human-approval boundaries, append-only persistence intent, dependencies, risks, exclusions, and release acceptance gates.
 
-- verify the stable PVE 1.1 baseline;
-- define corrugated-only architecture and release boundaries;
-- define deterministic calculation, threshold, evidence, recommendation, and approval governance;
-- define planned data models and persistence requirements;
-- define dependencies, risks, exclusions, and acceptance gates;
-- reconcile obsolete release information in README and canonical status records;
-- run the complete existing test suite;
-- create and maintain a draft pull request.
+## Completed Build 2
 
-Build 1 must not:
+Build 2 implemented configuration-driven baseline and proposed corrugated specifications with:
 
-- implement production formulas;
-- add technical screening services;
-- add database migrations or technical-assessment tables;
-- modify category rules for Build 2;
-- implement pallet, damage, working-capital, sustainability, confidence, or recommendation calculations;
-- begin Build 2.
+- legacy dimension fields retained for upload and template compatibility;
+- internal and external dimensions;
+- box style and converting-process profiles;
+- ply, flute combination, paper-layer structure, layer GSM profile, board grade, and caliper;
+- joint type, closure method, print process, colour count, coating or treatment, blank dimensions, and manufacturer joint;
+- gross packed weight and case-pack quantity;
+- artwork revision, barcode or QR location, transport and regulatory markings, dangerous-goods applicability, customer-artwork approval, and printing-plate change indicators;
+- sourced and versioned tolerance records with nominal, minimum, maximum, unit, inspection method, criticality, source classification, source reference, and validation status;
+- transparent baseline/proposed difference reporting without an engineering conclusion;
+- source-preserving normalization for intake and tolerance records;
+- inherited JSON, CSV, and Excel workflow compatibility.
+
+Build 2 does not implement production compression formulas, evidence matching, supplier capability, line screening, pallet analysis, damage-cost logic, or Build 3 functionality.
 
 ## Later-build intent
-
-### Build 2 — Corrugated specification, style and tolerance model
-
-Configuration and validation for box styles, converting profiles, dimensions, board construction, tolerances, artwork, and compliance-change impact.
 
 ### Build 3 — Technical requirements, evidence and supplier capability
 
@@ -102,4 +98,4 @@ Synthetic cases, complete regression suite, release evidence, documentation, cur
 
 ## Build authorization rule
 
-Completion of a build does not authorize the next build. Each later build requires explicit user authorization after review of the validated current-head report.
+Completion of a build does not authorize the next build. Build 3 is not started or authorized.
