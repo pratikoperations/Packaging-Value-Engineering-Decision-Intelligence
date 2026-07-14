@@ -4,34 +4,29 @@ from copy import deepcopy
 from typing import Any
 
 _COLLECTIONS = (
-    "decision_evidence",
-    "packaging_alternatives",
-    "material_components",
-    "cost_inputs",
-    "logistics_inputs",
-    "technical_requirements",
-    "technical_qualification_results",
-    "risk_records",
-    "sustainability_indicators",
-    "validation_requirements",
-    "intake_values",
-    "quality_tests",
-    "document_register",
-    "specification_tolerances",
+    "decision_evidence", "packaging_alternatives", "material_components",
+    "cost_inputs", "logistics_inputs", "technical_requirements",
+    "technical_qualification_results", "risk_records", "sustainability_indicators",
+    "validation_requirements", "intake_values", "quality_tests", "document_register",
+    "specification_tolerances", "corrugated_evidence", "supplier_capabilities",
 )
 
 _NUMERIC_FIELDS = {
-    "annual_volume",
-    "length_mm", "width_mm", "height_mm",
+    "annual_volume", "length_mm", "width_mm", "height_mm",
     "internal_length_mm", "internal_width_mm", "internal_height_mm",
     "external_length_mm", "external_width_mm", "external_height_mm",
     "blank_length_mm", "blank_width_mm", "manufacturers_joint_mm",
     "board_caliper_mm", "gross_packed_weight_kg", "case_pack_quantity",
     "print_colour_count", "ply", "layer_gsm", "stack_height",
-    "storage_duration_days", "humidity_percent", "ect_kn_m", "bct_n", "burst_kpa",
+    "stack_layers_required", "storage_duration_days", "storage_temperature_min_c",
+    "storage_temperature_max_c", "humidity_percent", "route_duration_days",
+    "handling_touches", "maximum_pallet_height_mm", "maximum_pallet_weight_kg",
+    "compression_requirement_n", "ect_kn_m", "bct_n", "burst_kpa",
     "case_weight_g", "weight_g", "recycled_content_percent", "value",
     "cases_per_pallet", "freight_distance_km", "minimum_value", "probability_percent",
-    "nominal", "minimum", "maximum",
+    "nominal", "minimum", "maximum", "maximum_ply", "corrugator_width_mm",
+    "minimum_sheet_length_mm", "maximum_sheet_length_mm", "minimum_sheet_width_mm",
+    "maximum_sheet_width_mm", "maximum_print_colours", "result_value",
 }
 
 
