@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from src.persistence import Database, ProjectRepository, ReadinessRepository
-from src.persistence.migrations import current_schema_version, initialize_database
+from src.persistence.migrations import SCHEMA_VERSION, current_schema_version, initialize_database
 from src.validation_readiness import assess_readiness
 
 
@@ -48,8 +48,8 @@ class ReadinessTestCase(unittest.TestCase):
     def tearDown(self):
         self.tempdir.cleanup()
 
-    def test_schema_version_four(self):
-        self.assertEqual(current_schema_version(self.database), 4)
+    def test_current_schema_preserves_readiness_storage(self):
+        self.assertEqual(current_schema_version(self.database), SCHEMA_VERSION)
 
     def test_blockers_override_score_and_never_approve(self):
         data = canonical(True)
