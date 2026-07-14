@@ -6,6 +6,9 @@ Packaging Value Engineering & Decision Intelligence
 ## Canonical Repository
 `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 
+## Historical Build Identity
+PVE-0.7 remains the original interview-release identity required by repository CI and is preserved as historical release evidence.
+
 ## Stable Releases
 
 ### PVE 1.0.6
