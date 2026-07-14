@@ -20,6 +20,9 @@ COMMON_DOCUMENTS = (
 CATEGORY_REQUIREMENTS = {
 "corrugated": {
  "fields": (
+    F("length_mm","Legacy length",M,"number",("mm",),1,description="Retained for backward compatibility; internal/external dimensions provide the PVE 1.2 detail."),
+    F("width_mm","Legacy width",M,"number",("mm",),1,description="Retained for backward compatibility; internal/external dimensions provide the PVE 1.2 detail."),
+    F("height_mm","Legacy height",M,"number",("mm",),1,description="Retained for backward compatibility; internal/external dimensions provide the PVE 1.2 detail."),
     F("box_style","Box style",M,"text",description="Use a configured box-style value or a documented other style."),
     F("converting_profile","Converting profile",M,"text",description="Configured converting process; does not imply machine compatibility."),
     F("internal_length_mm","Internal length",M,"number",("mm",),1),
@@ -28,9 +31,6 @@ CATEGORY_REQUIREMENTS = {
     F("external_length_mm","External length",R,"number",("mm",),1),
     F("external_width_mm","External width",R,"number",("mm",),1),
     F("external_height_mm","External height",R,"number",("mm",),1),
-    F("length_mm","Legacy length",O,"number",("mm",),1,description="Retained for backward compatibility; prefer internal/external dimensions."),
-    F("width_mm","Legacy width",O,"number",("mm",),1,description="Retained for backward compatibility; prefer internal/external dimensions."),
-    F("height_mm","Legacy height",O,"number",("mm",),1,description="Retained for backward compatibility; prefer internal/external dimensions."),
     F("ply","Ply",M,"integer",("ply",),1,9),
     F("flute_combination","Flute combination",M,"text"),
     F("flute","Legacy flute",O,"text",description="Retained for backward compatibility; prefer flute_combination."),
