@@ -1,0 +1,47 @@
+{
+  "dataset_type": "synthetic_demo",
+  "release": "PVE 1.1",
+  "notice": "Synthetic portfolio data for QA and interview demonstration only.",
+  "category_samples": [
+    {"project_code":"PVE11-COR-001","category":"corrugated","objective":"Cost reduction","change_type":"GSM reduction","readiness_stage":"Ready for Laboratory Testing"},
+    {"project_code":"PVE11-FCT-001","category":"folding_carton","objective":"Material reduction","change_type":"Board-grade change","readiness_stage":"Ready for Technical Screening"},
+    {"project_code":"PVE11-RPL-001","category":"rigid_plastic","objective":"Sustainability improvement","change_type":"PCR-content increase","readiness_stage":"Ready for Laboratory Testing"},
+    {"project_code":"PVE11-FLX-001","category":"flexible_packaging","objective":"Sustainability improvement","change_type":"Mono-material conversion","readiness_stage":"Ready for Technical Screening"},
+    {"project_code":"PVE11-LBL-001","category":"labels","objective":"Cost reduction","change_type":"Liner reduction","readiness_stage":"Ready for Commercial Screening"},
+    {"project_code":"PVE11-CLO-001","category":"closures","objective":"Quality improvement","change_type":"Torque specification change","readiness_stage":"Ready for Trial Validation"},
+    {"project_code":"PVE11-GLS-001","category":"glass","objective":"Material reduction","change_type":"Weight reduction","readiness_stage":"Ready for Laboratory Testing"},
+    {"project_code":"PVE11-MET-001","category":"metal","objective":"Cost reduction","change_type":"Gauge reduction","readiness_stage":"Ready for Technical Screening"}
+  ],
+  "detailed_cases": [
+    {
+      "case_id":"DEMO-READY-001",
+      "title":"Commercially attractive and ready for testing",
+      "category":"corrugated",
+      "commercial_status":"attractive",
+      "readiness_stage":"Ready for Laboratory Testing",
+      "blockers":[],
+      "available_outputs":["cost_comparison","annual_gross_saving","first_year_net_benefit","payback_period","testing_checklist"],
+      "unavailable_outputs":[{"output":"final_technical_feasibility","reason":"Engineering validation remains mandatory."}]
+    },
+    {
+      "case_id":"DEMO-BLOCKED-002",
+      "title":"Attractive but blocked by missing technical data",
+      "category":"flexible_packaging",
+      "commercial_status":"attractive",
+      "readiness_stage":"Insufficient Data",
+      "blockers":["missing_required_barrier_evidence","missing_migration_compliance"],
+      "available_outputs":["cost_comparison","annual_gross_saving","document_completeness"],
+      "unavailable_outputs":[{"output":"technical_screening","reason":"OTR, WVTR and migration evidence are incomplete."},{"output":"approval_review","reason":"Blocking technical evidence is missing."}]
+    },
+    {
+      "case_id":"DEMO-REJECTED-003",
+      "title":"Rejected because critical mandatory data is missing",
+      "category":"rigid_plastic",
+      "commercial_status":"not_assessable",
+      "readiness_stage":"Rejected",
+      "blockers":["missing_baseline_specification","missing_annual_volume","missing_current_cost","missing_product_compatibility"],
+      "available_outputs":["document_completeness","testing_checklist"],
+      "unavailable_outputs":[{"output":"commercial_analysis","reason":"Annual volume and current cost are missing."},{"output":"technical_recommendation","reason":"Baseline specification and product compatibility are missing."}]
+    }
+  ]
+}
