@@ -6,7 +6,7 @@ from sqlite3 import Connection
 
 from src.persistence.database import Database
 
-SCHEMA_VERSION = 4
+SCHEMA_VERSION = 5
 
 _BASE_SCHEMA = """
 CREATE TABLE IF NOT EXISTS schema_migrations (
@@ -188,6 +188,51 @@ def _apply_v4(connection: Connection) -> None:
     connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (4)")
 
 
+def _apply_v5(connection: Connection) -> None:
+    connection.executescript("""
+    CREATE TABLE IF NOT EXISTS drawing_evidence (
+        drawing_evidence_id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL,
+        sku TEXT,
+        supplier TEXT,
+        manufacturing_site TEXT,
+        specification_version TEXT,
+        document_type TEXT NOT NULL,
+        document_number TEXT NOT NULL,
+        title TEXT NOT NULL,
+        revision TEXT NOT NULL,
+        classification TEXT NOT NULL CHECK (classification IN ('baseline', 'proposed')),
+        file_format TEXT NOT NULL,
+        source_reference TEXT NOT NULL,
+        source_classification TEXT NOT NULL,
+        validation_status TEXT NOT NULL,
+        approval_status TEXT NOT NULL,
+        issue_date TEXT,
+        effective_date TEXT,
+        supersedes_id TEXT,
+        related_document_ids_json TEXT NOT NULL DEFAULT '[]',
+        trial_applicability_json TEXT NOT NULL DEFAULT '[]',
+        metadata_json TEXT NOT NULL DEFAULT '{}',
+        content_hash TEXT NOT NULL,
+        geometry_interpreted INTEGER NOT NULL DEFAULT 0 CHECK (geometry_interpreted = 0),
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT,
+        FOREIGN KEY (supersedes_id) REFERENCES drawing_evidence(drawing_evidence_id) ON DELETE RESTRICT,
+        UNIQUE (project_id, document_number, revision),
+        UNIQUE (project_id, content_hash)
+    );
+    CREATE INDEX IF NOT EXISTS idx_drawing_evidence_project
+    ON drawing_evidence(project_id, document_number, created_at, drawing_evidence_id);
+    CREATE INDEX IF NOT EXISTS idx_drawing_evidence_supersedes
+    ON drawing_evidence(supersedes_id);
+    CREATE TRIGGER IF NOT EXISTS drawing_evidence_immutable_update
+    BEFORE UPDATE ON drawing_evidence BEGIN SELECT RAISE(ABORT, 'drawing_evidence is immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS drawing_evidence_immutable_delete
+    BEFORE DELETE ON drawing_evidence BEGIN SELECT RAISE(ABORT, 'drawing_evidence is immutable'); END;
+    """)
+    connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (5)")
+
+
 def initialize_database(database: Database) -> int:
     with database.transaction() as connection:
         connection.executescript(_BASE_SCHEMA)
@@ -199,6 +244,8 @@ def initialize_database(database: Database) -> int:
             _apply_v3(connection)
         if 4 not in applied:
             _apply_v4(connection)
+        if 5 not in applied:
+            _apply_v5(connection)
     return SCHEMA_VERSION
 
 
