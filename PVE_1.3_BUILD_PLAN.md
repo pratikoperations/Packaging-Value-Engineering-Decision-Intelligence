@@ -4,18 +4,19 @@
 PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governance
 
 ## Current implementation status
-- Status: Builds 1, 2A, 2B, 3, 4 and 5 implemented; Build 5 validation and governance closure remain pending.
-- Implementation started: yes, limited to Builds 1, 2A, 2B, 3, 4 and 5.
+- Status: Builds 1, 2A, 2B, 3, 4 and 5 governance-closed; Build 6 implementation complete on a controlled branch.
+- Implementation started: yes, limited to Builds 1, 2A, 2B, 3, 4, 5 and authorized Build 6.
 - Build 1 status: merged, post-merge validated and governance-closed.
 - Build 2A status: merged, post-merge validated and governance-closed.
 - Build 2B status: merged, post-merge validated and governance-closed.
 - Build 3 status: merged, post-merge validated and governance-closed.
 - Build 4 status: merged, post-merge validated and governance-closed.
-- Build 5 status: implementation complete on controlled branch; CI and governance closure pending.
-- Builds 6–8: not started and not authorized.
-- Release completion on branch: 68.1%.
-- Completed planned effort on branch: 47 of 69 hours.
-- Pending planned effort: 22 hours, 31.9%.
+- Build 5 status: merged, post-merge validated and governance-closed.
+- Build 6 status: implementation complete on controlled branch; CI, audit, merge and governance closure pending.
+- Builds 7–8: not started and not authorized.
+- Release completion on branch: 79.7%.
+- Completed planned effort on branch: 55 of 69 hours.
+- Pending planned effort: 14 hours, 20.3%.
 - Controlled contingency used: 0 of 2 hours.
 - Controlled contingency remaining: 2 hours.
 - Absolute release cap: 71 hours.
@@ -32,8 +33,8 @@ The 69 planned hours remain fixed. The two-hour contingency may be used only for
 | 2B | Lightweight PDF, SVG and image preview support | 5 | 21 | 30.4% | Governance-closed |
 | 3 | Trial planning and validation requirements | 9 | 30 | 43.5% | Governance-closed |
 | 4 | Trial execution, results and deviations | 9 | 39 | 56.5% | Governance-closed |
-| 5 | Packaging defect and complaint taxonomy | 8 | 47 | 68.1% | Implemented; validation pending |
-| 6 | Specification and implementation change control | 8 | 55 | 79.7% | Not started |
+| 5 | Packaging defect and complaint taxonomy | 8 | 47 | 68.1% | Governance-closed |
+| 6 | Specification and implementation change control | 8 | 55 | 79.7% | Implemented; validation pending |
 | 7 | Supplier qualification evidence register | 7 | 62 | 89.9% | Not started |
 | 8 | Demonstration cases, regression and release QA | 7 | 69 | 100% | Not started |
 
@@ -61,20 +62,24 @@ Delivered and governance-closed on `main` at `e206b7ab62d386cb8d32def2b20aa71f96
 Build 4 records execution evidence and deviations only. It introduces no defect taxonomy, complaint classification, specification approval, supplier qualification or sourcing decision.
 
 ## Build 5 — Packaging defect and complaint taxonomy — 8 hours
-
-### Delivered
-- schema v8 immutable defect-classification and complaint registers;
-- governed, versioned packaging taxonomy;
-- evidence-linked human-reviewed classification and complaint intake;
-- project-scoped repositories and linked-record isolation;
-- archived-project protection;
-- repository and database immutability;
-- focused migration, persistence, archive and isolation tests.
+Delivered and governance-closed on `main` at `b5590d57180d9aefc1155ecc68c293bb42119029`.
 
 Build 5 records defects, complaints, severity and containment as governed evidence. It introduces no specification-change approval, implementation authorization, supplier qualification, sourcing decision, automatic root cause or corrective-action approval.
 
 ## Build 6 — Specification and implementation change control — 8 hours
-Not started.
+
+### Delivered
+- schema v9 immutable specification-change and implementation-control registers;
+- current and proposed specification-version traceability;
+- evidence-linked named human approval and effective-date control;
+- approved-change prerequisite for implementation authorization;
+- implementation authorization, completion and verification evidence;
+- project-scoped repositories and linked-evidence isolation;
+- archived-project protection;
+- repository and database immutability;
+- focused migration, authorization, persistence, archive and isolation tests.
+
+Build 6 records human-controlled change approval and implementation evidence. It introduces no supplier qualification, supplier scoring, approved-supplier-list decision, sourcing award, allocation, ranking or autonomous production release.
 
 ## Build 7 — Supplier qualification evidence register — 7 hours
 Not started.
@@ -86,4 +91,4 @@ Not started.
 PVE 1.3 will not include automatic DXF geometry extraction, automatic dimension extraction, cut/crease/slot recognition, parametric dieline generation, automated blank optimization, full CAD editing, 3D folding, tooling design, manufacturing-ready drawing approval, autonomous engineering approval, supplier ranking/allocation/award, or ungoverned production deployment.
 
 ## Authorization boundary
-Build 5 alone is authorized beyond governance-closed Builds 1, 2A, 2B, 3 and 4. Builds 6–8 require separate explicit authorization. Build 5 must pass CI, review, merge and post-merge controls before it is governance-closed.
+Build 6 alone is authorized beyond governance-closed Builds 1, 2A, 2B, 3, 4 and 5. Builds 7–8 require separate explicit authorization. Build 6 must pass CI, review, merge and post-merge controls before it is governance-closed.

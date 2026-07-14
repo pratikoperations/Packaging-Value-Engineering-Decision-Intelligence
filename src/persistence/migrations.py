@@ -6,7 +6,7 @@ from sqlite3 import Connection
 
 from src.persistence.database import Database
 
-SCHEMA_VERSION = 8
+SCHEMA_VERSION = 9
 
 _BASE_SCHEMA = """
 CREATE TABLE IF NOT EXISTS schema_migrations (
@@ -141,10 +141,8 @@ def _apply_v3(connection: Connection) -> None:
         FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT,
         FOREIGN KEY (dataset_id) REFERENCES project_datasets(dataset_id) ON DELETE RESTRICT
     );
-    CREATE TRIGGER IF NOT EXISTS readiness_assessments_immutable_update
-    BEFORE UPDATE ON readiness_assessments BEGIN SELECT RAISE(ABORT, 'readiness_assessments are immutable'); END;
-    CREATE TRIGGER IF NOT EXISTS readiness_assessments_immutable_delete
-    BEFORE DELETE ON readiness_assessments BEGIN SELECT RAISE(ABORT, 'readiness_assessments are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS readiness_assessments_immutable_update BEFORE UPDATE ON readiness_assessments BEGIN SELECT RAISE(ABORT, 'readiness_assessments are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS readiness_assessments_immutable_delete BEFORE DELETE ON readiness_assessments BEGIN SELECT RAISE(ABORT, 'readiness_assessments are immutable'); END;
     """)
     connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (3)")
 
@@ -179,10 +177,8 @@ def _apply_v4(connection: Connection) -> None:
         FOREIGN KEY (threshold_profile_id) REFERENCES threshold_profiles(threshold_profile_id) ON DELETE RESTRICT
     );
     CREATE INDEX IF NOT EXISTS idx_technical_assessments_project ON technical_assessments(project_id, created_at, technical_assessment_id);
-    CREATE TRIGGER IF NOT EXISTS technical_assessments_immutable_update
-    BEFORE UPDATE ON technical_assessments BEGIN SELECT RAISE(ABORT, 'technical_assessments are immutable'); END;
-    CREATE TRIGGER IF NOT EXISTS technical_assessments_immutable_delete
-    BEFORE DELETE ON technical_assessments BEGIN SELECT RAISE(ABORT, 'technical_assessments are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS technical_assessments_immutable_update BEFORE UPDATE ON technical_assessments BEGIN SELECT RAISE(ABORT, 'technical_assessments are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS technical_assessments_immutable_delete BEFORE DELETE ON technical_assessments BEGIN SELECT RAISE(ABORT, 'technical_assessments are immutable'); END;
     """)
     connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (4)")
 
@@ -222,10 +218,8 @@ def _apply_v5(connection: Connection) -> None:
     );
     CREATE INDEX IF NOT EXISTS idx_drawing_evidence_project ON drawing_evidence(project_id, document_number, created_at, drawing_evidence_id);
     CREATE INDEX IF NOT EXISTS idx_drawing_evidence_supersedes ON drawing_evidence(supersedes_id);
-    CREATE TRIGGER IF NOT EXISTS drawing_evidence_immutable_update
-    BEFORE UPDATE ON drawing_evidence BEGIN SELECT RAISE(ABORT, 'drawing_evidence is immutable'); END;
-    CREATE TRIGGER IF NOT EXISTS drawing_evidence_immutable_delete
-    BEFORE DELETE ON drawing_evidence BEGIN SELECT RAISE(ABORT, 'drawing_evidence is immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS drawing_evidence_immutable_update BEFORE UPDATE ON drawing_evidence BEGIN SELECT RAISE(ABORT, 'drawing_evidence is immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS drawing_evidence_immutable_delete BEFORE DELETE ON drawing_evidence BEGIN SELECT RAISE(ABORT, 'drawing_evidence is immutable'); END;
     """)
     connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (5)")
 
@@ -261,10 +255,8 @@ def _apply_v6(connection: Connection) -> None:
         UNIQUE (project_id, content_hash)
     );
     CREATE INDEX IF NOT EXISTS idx_trial_plans_project ON trial_plans(project_id, created_at, trial_plan_id);
-    CREATE TRIGGER IF NOT EXISTS trial_plans_immutable_update
-    BEFORE UPDATE ON trial_plans BEGIN SELECT RAISE(ABORT, 'trial_plans are immutable'); END;
-    CREATE TRIGGER IF NOT EXISTS trial_plans_immutable_delete
-    BEFORE DELETE ON trial_plans BEGIN SELECT RAISE(ABORT, 'trial_plans are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS trial_plans_immutable_update BEFORE UPDATE ON trial_plans BEGIN SELECT RAISE(ABORT, 'trial_plans are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS trial_plans_immutable_delete BEFORE DELETE ON trial_plans BEGIN SELECT RAISE(ABORT, 'trial_plans are immutable'); END;
     """)
     connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (6)")
 
@@ -297,10 +289,8 @@ def _apply_v7(connection: Connection) -> None:
     );
     CREATE INDEX IF NOT EXISTS idx_trial_executions_project ON trial_executions(project_id, created_at, trial_execution_id);
     CREATE INDEX IF NOT EXISTS idx_trial_executions_plan ON trial_executions(trial_plan_id, created_at, trial_execution_id);
-    CREATE TRIGGER IF NOT EXISTS trial_executions_immutable_update
-    BEFORE UPDATE ON trial_executions BEGIN SELECT RAISE(ABORT, 'trial_executions are immutable'); END;
-    CREATE TRIGGER IF NOT EXISTS trial_executions_immutable_delete
-    BEFORE DELETE ON trial_executions BEGIN SELECT RAISE(ABORT, 'trial_executions are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS trial_executions_immutable_update BEFORE UPDATE ON trial_executions BEGIN SELECT RAISE(ABORT, 'trial_executions are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS trial_executions_immutable_delete BEFORE DELETE ON trial_executions BEGIN SELECT RAISE(ABORT, 'trial_executions are immutable'); END;
     """)
     connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (7)")
 
@@ -361,16 +351,76 @@ def _apply_v8(connection: Connection) -> None:
     CREATE INDEX IF NOT EXISTS idx_defect_classifications_project ON defect_classifications(project_id, taxonomy_version, created_at, defect_classification_id);
     CREATE INDEX IF NOT EXISTS idx_defect_classifications_execution ON defect_classifications(trial_execution_id, created_at, defect_classification_id);
     CREATE INDEX IF NOT EXISTS idx_complaint_records_project ON complaint_records(project_id, received_date, complaint_record_id);
-    CREATE TRIGGER IF NOT EXISTS defect_classifications_immutable_update
-    BEFORE UPDATE ON defect_classifications BEGIN SELECT RAISE(ABORT, 'defect_classifications are immutable'); END;
-    CREATE TRIGGER IF NOT EXISTS defect_classifications_immutable_delete
-    BEFORE DELETE ON defect_classifications BEGIN SELECT RAISE(ABORT, 'defect_classifications are immutable'); END;
-    CREATE TRIGGER IF NOT EXISTS complaint_records_immutable_update
-    BEFORE UPDATE ON complaint_records BEGIN SELECT RAISE(ABORT, 'complaint_records are immutable'); END;
-    CREATE TRIGGER IF NOT EXISTS complaint_records_immutable_delete
-    BEFORE DELETE ON complaint_records BEGIN SELECT RAISE(ABORT, 'complaint_records are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS defect_classifications_immutable_update BEFORE UPDATE ON defect_classifications BEGIN SELECT RAISE(ABORT, 'defect_classifications are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS defect_classifications_immutable_delete BEFORE DELETE ON defect_classifications BEGIN SELECT RAISE(ABORT, 'defect_classifications are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS complaint_records_immutable_update BEFORE UPDATE ON complaint_records BEGIN SELECT RAISE(ABORT, 'complaint_records are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS complaint_records_immutable_delete BEFORE DELETE ON complaint_records BEGIN SELECT RAISE(ABORT, 'complaint_records are immutable'); END;
     """)
     connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (8)")
+
+
+def _apply_v9(connection: Connection) -> None:
+    connection.executescript("""
+    CREATE TABLE IF NOT EXISTS specification_change_requests (
+        specification_change_request_id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL,
+        change_code TEXT NOT NULL,
+        change_type TEXT NOT NULL CHECK (change_type IN ('specification', 'implementation', 'combined')),
+        title TEXT NOT NULL,
+        rationale TEXT NOT NULL,
+        current_specification_version TEXT NOT NULL,
+        proposed_specification_version TEXT NOT NULL,
+        review_status TEXT NOT NULL,
+        approval_status TEXT NOT NULL CHECK (approval_status IN ('not_requested', 'pending', 'approved', 'rejected')),
+        requested_by TEXT NOT NULL,
+        requested_effective_date TEXT,
+        linked_trial_execution_ids_json TEXT NOT NULL DEFAULT '[]',
+        linked_defect_classification_ids_json TEXT NOT NULL DEFAULT '[]',
+        linked_complaint_record_ids_json TEXT NOT NULL DEFAULT '[]',
+        evidence_references_json TEXT NOT NULL DEFAULT '[]',
+        approved_by TEXT,
+        approval_reference TEXT,
+        approved_at TEXT,
+        metadata_json TEXT NOT NULL DEFAULT '{}',
+        content_hash TEXT NOT NULL,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT,
+        UNIQUE (project_id, change_code),
+        UNIQUE (project_id, content_hash)
+    );
+    CREATE TABLE IF NOT EXISTS implementation_controls (
+        implementation_control_id TEXT PRIMARY KEY,
+        project_id TEXT NOT NULL,
+        change_request_id TEXT NOT NULL,
+        implementation_code TEXT NOT NULL,
+        implementation_site TEXT NOT NULL,
+        implementation_owner TEXT NOT NULL,
+        implementation_status TEXT NOT NULL CHECK (implementation_status IN ('planned', 'authorized', 'in_progress', 'implemented', 'aborted')),
+        planned_implementation_date TEXT,
+        actual_implementation_date TEXT,
+        verification_status TEXT NOT NULL CHECK (verification_status IN ('not_started', 'pending', 'verified', 'failed', 'not_required')),
+        evidence_references_json TEXT NOT NULL DEFAULT '[]',
+        authorized_by TEXT,
+        authorization_reference TEXT,
+        verified_by TEXT,
+        verified_at TEXT,
+        metadata_json TEXT NOT NULL DEFAULT '{}',
+        content_hash TEXT NOT NULL,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (project_id) REFERENCES projects(project_id) ON DELETE RESTRICT,
+        FOREIGN KEY (change_request_id) REFERENCES specification_change_requests(specification_change_request_id) ON DELETE RESTRICT,
+        UNIQUE (project_id, implementation_code),
+        UNIQUE (project_id, content_hash)
+    );
+    CREATE INDEX IF NOT EXISTS idx_specification_change_requests_project ON specification_change_requests(project_id, created_at, specification_change_request_id);
+    CREATE INDEX IF NOT EXISTS idx_implementation_controls_project ON implementation_controls(project_id, created_at, implementation_control_id);
+    CREATE INDEX IF NOT EXISTS idx_implementation_controls_change ON implementation_controls(change_request_id, created_at, implementation_control_id);
+    CREATE TRIGGER IF NOT EXISTS specification_change_requests_immutable_update BEFORE UPDATE ON specification_change_requests BEGIN SELECT RAISE(ABORT, 'specification_change_requests are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS specification_change_requests_immutable_delete BEFORE DELETE ON specification_change_requests BEGIN SELECT RAISE(ABORT, 'specification_change_requests are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS implementation_controls_immutable_update BEFORE UPDATE ON implementation_controls BEGIN SELECT RAISE(ABORT, 'implementation_controls are immutable'); END;
+    CREATE TRIGGER IF NOT EXISTS implementation_controls_immutable_delete BEFORE DELETE ON implementation_controls BEGIN SELECT RAISE(ABORT, 'implementation_controls are immutable'); END;
+    """)
+    connection.execute("INSERT OR IGNORE INTO schema_migrations(version) VALUES (9)")
 
 
 def initialize_database(database: Database) -> int:
@@ -392,6 +442,8 @@ def initialize_database(database: Database) -> int:
             _apply_v7(connection)
         if 8 not in applied:
             _apply_v8(connection)
+        if 9 not in applied:
+            _apply_v9(connection)
     return SCHEMA_VERSION
 
 
