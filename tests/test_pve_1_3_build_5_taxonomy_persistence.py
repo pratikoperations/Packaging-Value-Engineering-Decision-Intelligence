@@ -72,9 +72,9 @@ class Build5TaxonomyPersistenceTests(unittest.TestCase):
         values.update(overrides)
         return self.complaints.create(**values)
 
-    def test_schema_v8_is_applied(self) -> None:
-        self.assertEqual(SCHEMA_VERSION, 8)
-        self.assertEqual(current_schema_version(self.database), 8)
+    def test_schema_v8_remains_present_under_governed_schema(self) -> None:
+        self.assertGreaterEqual(SCHEMA_VERSION, 8)
+        self.assertEqual(current_schema_version(self.database), SCHEMA_VERSION)
 
     def test_additive_migration_from_v7_to_v8(self) -> None:
         with tempfile.TemporaryDirectory() as tempdir:
@@ -89,7 +89,8 @@ class Build5TaxonomyPersistenceTests(unittest.TestCase):
                 migrations._apply_v6(connection)
                 migrations._apply_v7(connection)
             self.assertEqual(current_schema_version(database), 7)
-            self.assertEqual(initialize_database(database), 8)
+            with database.transaction() as connection:
+                migrations._apply_v8(connection)
             self.assertEqual(current_schema_version(database), 8)
 
     def test_create_read_and_list_preserve_taxonomy_evidence_and_review(self) -> None:
