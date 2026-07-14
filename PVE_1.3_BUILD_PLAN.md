@@ -4,8 +4,8 @@
 PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governance
 
 ## Current implementation status
-- Status: Builds 1 through 7 governance-closed; Build 8 implementation started on a controlled branch.
-- Implementation started: yes, limited to Builds 1 through 8.
+- Status: Builds 1 through 7 governance-closed; Build 8 implementation complete on a controlled branch.
+- Implementation scope: limited to Builds 1 through 8.
 - Build 1 status: merged, post-merge validated and governance-closed.
 - Build 2A status: merged, post-merge validated and governance-closed.
 - Build 2B status: merged, post-merge validated and governance-closed.
@@ -14,13 +14,13 @@ PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governanc
 - Build 5 status: merged, post-merge validated and governance-closed.
 - Build 6 status: merged, post-merge validated and governance-closed.
 - Build 7 status: merged, post-merge validated and governance-closed.
-- Build 8 status: implementation started on controlled branch; validation, audit, merge and governance closure pending.
-- Release completion remains 89.9% until Build 8 is validated and governance-closed.
-- Governance-closed planned effort: 62 of 69 hours.
-- Pending planned effort: 7 hours, 10.1%.
+- Build 8 status: implementation complete on controlled branch; CI, audit, merge and governance closure pending.
+- Planned implementation on branch: 69 of 69 hours, 100%.
+- Governance-closed release completion remains 89.9% until Build 8 is validated and governance-closed.
 - Controlled contingency used: 0 of 2 hours.
 - Controlled contingency remaining: 2 hours.
 - Absolute release cap: 71 hours.
+- No release tag has been created and PVE 1.3 has not been declared complete.
 
 ## Budget control
 The 69 planned hours remain fixed. The two-hour contingency may be used only for unexpected regression, CI-only failure, migration compatibility repair, cross-module integration defects or release-evidence reconciliation. It cannot fund new functionality, additional categories, deployment or scope expansion.
@@ -37,7 +37,7 @@ The 69 planned hours remain fixed. The two-hour contingency may be used only for
 | 5 | Packaging defect and complaint taxonomy | 8 | 47 | 68.1% | Governance-closed |
 | 6 | Specification and implementation change control | 8 | 55 | 79.7% | Governance-closed |
 | 7 | Supplier qualification evidence register | 7 | 62 | 89.9% | Governance-closed |
-| 8 | Demonstration cases, regression and release QA | 7 | 69 | 100% | Started; validation pending |
+| 8 | Demonstration cases, regression and release QA | 7 | 69 | 100% | Implemented; validation pending |
 
 ## Build 1 — Architecture, governance and release boundary — 6 hours
 Delivered and governance-closed on `main` at `d5e29f9750b7409be8cccd57bd8036eb988c2faf`.
@@ -79,18 +79,21 @@ Build 7 records supplier qualification evidence and named human decisions only. 
 
 ## Build 8 — Demonstration cases, regression and release QA — 7 hours
 
-### Initial authorized scope
-- governed demonstration-case definitions and synthetic-data disclosure;
-- regression evidence tied to exact commits, workflow runs, jobs and artifacts;
-- schema and migration verification;
-- unresolved defect, limitation and exception visibility;
-- named human release-QA review and readiness recommendation;
-- explicit separation between QA evidence and release authorization.
+### Delivered
+- governed demonstration manifests covering Builds 1 through 7;
+- synthetic, anonymized and controlled-real data classification;
+- additive schema v11 demonstration-case and release-QA evidence registers;
+- exact commit, workflow, job, test, schema and artifact evidence;
+- unresolved defect, limitation, exception and blocker visibility;
+- named human review and readiness recommendation;
+- clean-test and no-blocker readiness gates;
+- immutable repositories and database triggers;
+- focused migration, persistence, integrity, immutability and readiness-gate tests.
 
-Build 8 may assemble release-QA evidence only. It cannot create a release tag, publish a release, authorize deployment, certify production readiness or declare PVE 1.3 complete without separate authorization after validation.
+Build 8 assembles release-QA evidence only. It cannot create a release tag, publish a release, authorize deployment, certify production readiness or declare PVE 1.3 complete without separate authorization after validation.
 
 ## Explicit exclusions
 PVE 1.3 will not include automatic DXF geometry extraction, automatic dimension extraction, cut/crease/slot recognition, parametric dieline generation, automated blank optimization, full CAD editing, 3D folding, tooling design, manufacturing-ready drawing approval, autonomous engineering approval, supplier ranking/allocation/award, or ungoverned production deployment.
 
 ## Authorization boundary
-Build 8 alone is authorized beyond governance-closed Builds 1 through 7. Release tagging, publication, deployment authorization and declaration of PVE 1.3 completion require separate explicit authorization after Build 8 validation, audit, merge and post-merge controls.
+Build 8 implementation is authorized. Release tagging, publication, deployment authorization and declaration of PVE 1.3 completion require separate explicit authorization after Build 8 validation, audit, merge and post-merge controls.
