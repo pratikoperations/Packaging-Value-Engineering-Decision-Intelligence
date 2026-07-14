@@ -41,6 +41,8 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Functional validation: PVE CI #849, run `29309701227`, success.
 - Final documented head: `edf517c308cb204c683169d66f47e5b23fd3b0b5`.
 - Final documented-head validation: PVE CI #865, run `29309867905`, success.
+- Final closure head: `6a2c372238a531c3ca6977753ff2d90d69e07b5f`.
+- Final closure validation: PVE CI #875, run `29309985760`, success.
 - Tests: 300 passed, 0 failures, 0 errors.
 
 ## Completed PVE 1.2 Builds
@@ -51,7 +53,7 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Build 5 — Material, Pallet, Logistics and Physical Sustainability Analysis — 11 hours — validated by PVE CI #809.
 - Build 6 — Should-Cost, Failure Cost and Implementation Economics — 9 hours — validated by PVE CI #823.
 - Build 7 — Engineering Recommendation, Evidence Confidence and Immutable Technical-Assessment Persistence — 7 hours — validated by PVE CI #843.
-- Build 8 — Demonstration Cases, Full Regression and Release QA — 6 hours — validated by PVE CI #849 and final documented-head CI #865.
+- Build 8 — Demonstration Cases, Full Regression and Release QA — 6 hours — validated by PVE CI #849, final documented-head CI #865, and final closure CI #875.
 
 ## Build 8 Release Evidence
 - Eight governed synthetic corrugated cases are stored in `data/pve_1_2_corrugated_demonstration_cases.json`.
@@ -73,4 +75,4 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - PR #26 must remain draft and unmerged until separate authorization.
 
 ## Current State
-PVE 1.1 remains stable on `main`. PVE 1.2 is 100% complete at 74 of 74 planned hours on PR #26, with 0% and 0 planned hours pending. Functional and documented-head CI are green with 300 tests, 0 failures, and 0 errors. PR #26 remains draft and unmerged and has not been marked ready for review.
+PVE 1.1 remains stable on `main`. PVE 1.2 is 100% complete at 74 of 74 planned hours on PR #26, with 0% and 0 planned hours pending. Functional, documented-head, and final closure CI are green with 300 tests, 0 failures, and 0 errors. PR #26 remains draft and unmerged and has not been marked ready for review.
