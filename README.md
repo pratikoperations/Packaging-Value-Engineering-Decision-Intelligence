@@ -105,6 +105,10 @@ python -m unittest discover -s tests -p "test_*.py" -v
 | `src/reports/` | Readiness and executive summaries |
 | `src/exports/` | Deterministic JSON and Markdown decision packages |
 
+## Interview Demonstration
+
+Use [`docs/INTERVIEW_DEMO_GUIDE.md`](docs/INTERVIEW_DEMO_GUIDE.md) for the historical 8–12 minute demonstration and [`PVE_1.1_INTERVIEW_DEMO.md`](PVE_1.1_INTERVIEW_DEMO.md) for the current stable PVE 1.1 walkthrough. Use [`docs/FINAL_RELEASE_CHECKLIST.md`](docs/FINAL_RELEASE_CHECKLIST.md) and [`PVE_1.1_RELEASE_CHECKLIST.md`](PVE_1.1_RELEASE_CHECKLIST.md) for preserved release evidence.
+
 ## Data and Evidence
 
 Included demonstration datasets are synthetic and intended only for testing and portfolio demonstration. They must not be represented as validated supplier, production, laboratory, or commercial data.
