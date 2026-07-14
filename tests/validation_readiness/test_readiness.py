@@ -48,8 +48,8 @@ class ReadinessTestCase(unittest.TestCase):
     def tearDown(self):
         self.tempdir.cleanup()
 
-    def test_schema_version_three(self):
-        self.assertEqual(current_schema_version(self.database), 3)
+    def test_schema_version_four(self):
+        self.assertEqual(current_schema_version(self.database), 4)
 
     def test_blockers_override_score_and_never_approve(self):
         data = canonical(True)
