@@ -11,7 +11,7 @@ PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
 - Controlled contingency: 2 hours.
 - Contingency used: 0 hours.
 - Absolute cap: 76 hours.
-- Contingency remains restricted to regression, CI, migration compatibility, integration defects, or release-evidence repair; it cannot fund new scope.
+- Contingency remained restricted to regression, CI, migration compatibility, integration defects, or release-evidence repair; it did not fund new scope.
 
 ## Build sequence
 
@@ -39,12 +39,19 @@ Implemented:
 - PVE 1.2 release QA report, release checklist, and release notes;
 - documentation reconciliation across README, status, architecture, governance, and build plan.
 
-Build 8 validation:
+## Validation sequence
 - Functional head: `9465d9d6292a9d65834cfc11f27d1f056b9408a4`.
 - Functional PVE CI #849, run `29309701227`, success.
 - Final documented head: `edf517c308cb204c683169d66f47e5b23fd3b0b5`.
 - Final documented-head PVE CI #865, run `29309867905`, success.
-- 300 tests passed, 0 failures, 0 errors.
+- Final closure head: `6a2c372238a531c3ca6977753ff2d90d69e07b5f`.
+- Final closure PVE CI #875, run `29309985760`, success.
+- Final feature head: `20b60393eb21c75e56676ec119fb2c1818d33db0`.
+- Final feature-head PVE CI #883, run `29313538879`, success.
+- Squash-merge commit: `8c5511e096b4526a85630e38ef939db371b307b1`.
+- Post-merge PVE CI #896, run `29317676780`, job `87035353112`, success on `main`.
+- Post-merge tests: 300 passed, 0 failures, 0 errors.
+- Artifact: `pve-full-test-output`, artifact ID `8304598530`.
 
 ## Release acceptance gates
 1. Scope remains corrugated-only — passed.
@@ -59,7 +66,11 @@ Build 8 validation:
 10. Technical assessments remain append-only and immutable — passed.
 11. Functional full suite and CI pass — passed at CI #849.
 12. Final documented-head CI pass — passed at CI #865.
-13. PR #26 remains draft and unmerged until separate authorization — passed.
+13. Final closure CI pass — passed at CI #875.
+14. Final feature-head CI pass — passed at CI #883.
+15. PR #26 squash merge — completed.
+16. Post-merge validation on `main` — passed at CI #896.
+17. Governance-closure documentation — prepared on dedicated closure branch.
 
 ## Release control
-Build 8 completion does not authorize marking PR #26 ready for review, merging, deployment, pilot, activation, publication as production software, or production use. These actions require separate authorization.
+PVE 1.2 is complete, squash-merged, post-merge validated, and governance-closed as a decision-support release. Deployment, pilot, activation, publication as production software, and production use remain separately unauthorized. PVE 1.3 has not started. Create tag `pve-v1.2` only after this governance-closure PR is merged and final `main` CI passes.
