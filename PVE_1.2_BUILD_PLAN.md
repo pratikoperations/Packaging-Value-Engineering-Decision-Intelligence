@@ -24,7 +24,7 @@ PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
 | 5 | Material, pallet, logistics and sustainability analysis | 11 | 52 | 70.3% | Complete and validated |
 | 6 | Should-cost, failure cost and implementation economics | 9 | 61 | 82.4% | Complete and validated |
 | 7 | Recommendation, confidence and immutable persistence | 7 | 68 | 91.9% | Complete and validated |
-| 8 | Demonstration cases, regression testing and release QA | 6 | 74 | 100% | Complete and functionally validated |
+| 8 | Demonstration cases, regression testing and release QA | 6 | 74 | 100% | Complete and validated |
 
 ## Build 8 completion
 Implemented:
@@ -39,9 +39,11 @@ Implemented:
 - PVE 1.2 release QA report, release checklist, and release notes;
 - documentation reconciliation across README, status, architecture, governance, and build plan.
 
-Build 8 functional validation:
+Build 8 validation:
 - Functional head: `9465d9d6292a9d65834cfc11f27d1f056b9408a4`.
-- PVE CI #849, run `29309701227`, success.
+- Functional PVE CI #849, run `29309701227`, success.
+- Final documented head: `edf517c308cb204c683169d66f47e5b23fd3b0b5`.
+- Final documented-head PVE CI #865, run `29309867905`, success.
 - 300 tests passed, 0 failures, 0 errors.
 
 ## Release acceptance gates
@@ -56,7 +58,7 @@ Build 8 functional validation:
 9. Historical records remain immutable and project-scoped — passed.
 10. Technical assessments remain append-only and immutable — passed.
 11. Functional full suite and CI pass — passed at CI #849.
-12. Final documented-head CI pass — pending at the time of this record.
+12. Final documented-head CI pass — passed at CI #865.
 13. PR #26 remains draft and unmerged until separate authorization — passed.
 
 ## Release control
