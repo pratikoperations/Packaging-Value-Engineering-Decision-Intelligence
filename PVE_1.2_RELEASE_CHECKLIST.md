@@ -37,6 +37,7 @@
 - [x] Excel-template regression is included.
 - [x] Functional full suite passed: 300 tests, 0 failures, 0 errors.
 - [x] Final documented-head CI #865, run `29309867905`, passed with zero failures and errors.
+- [x] Final closure head `6a2c372238a531c3ca6977753ff2d90d69e07b5f` passed PVE CI #875, run `29309985760`, with 300 tests, 0 failures, and 0 errors.
 
 ## Documentation
 - [x] README reconciled for PVE 1.2 completion state.
@@ -45,6 +46,7 @@
 - [x] Architecture and governance records reconciled.
 - [x] Release QA report created.
 - [x] Release notes created.
+- [x] Final release-evidence correction completed.
 
 ## Release control
 - [x] PR #26 remains draft.
