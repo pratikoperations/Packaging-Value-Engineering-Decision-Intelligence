@@ -19,39 +19,35 @@ PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
 | 4 | Compression, stacking, environment and line screening | 12 | 41 | 55.4% | Complete and validated |
 | 5 | Material, pallet, logistics and sustainability analysis | 11 | 52 | 70.3% | Complete and validated |
 | 6 | Should-cost, failure cost and implementation economics | 9 | 61 | 82.4% | Complete and validated |
-| 7 | Recommendation, confidence and immutable persistence | 7 | 68 | 91.9% | Not started |
+| 7 | Recommendation, confidence and immutable persistence | 7 | 68 | 91.9% | Complete and validated |
 | 8 | Demonstration cases, regression testing and release QA | 6 | 74 | 100% | Not started |
 
-## Completed Builds 1–5
-Builds 1–5 established corrugated-only governance, specification and tolerance models, evidence and supplier compatibility, supplied-evidence technical screening, line/environment blockers, material analysis, simple pallet comparisons, explicit logistics scenarios, and physical sustainability indicators.
+## Completed Builds 1–6
+Builds 1–6 established corrugated-only governance, specification and tolerances, evidence and supplier compatibility, deterministic technical screening, material/pallet/logistics analysis, physical sustainability indicators, and explicit-input economics.
 
-## Completed Build 6
+## Completed Build 7
 Implemented:
-- explicit supplied should-cost components for board/paper, conversion, printing, coating/treatment, manufacturing waste, quality inspection, and freight;
-- no inferred market prices, supplier margins, paper prices, conversion rates, or waste percentages;
-- baseline/proposed expected failure-cost scenarios using annual cases, damage rate, and loss per damaged case;
-- distinct and traceable source classification/reference for all commercial inputs;
-- risk-adjusted annual benefit equal to gross annual benefit minus incremental expected failure cost;
-- explicit inventory days, MOQ/batch, transition stock, obsolete stock, write-off, and incremental working-capital scenarios;
-- one-time tooling, artwork, trial, and implementation costs with duplicate-component protection;
-- first-year net benefit and payback months;
-- available, unavailable, and technically blocked outputs with supporting inputs, assumptions, limitations, and blocking conditions;
-- additive normalization for `should_cost_inputs`, `failure_cost_inputs`, `inventory_inputs`, and `one_time_costs`.
+- review-only outcomes: criteria met for engineering review, criteria not met, laboratory validation required, packing-line trial required, transport trial required, evidence conflict, insufficient technical data, and engineering review required;
+- recommendation precedence that prevents economic or logistics attractiveness from overriding technical and evidence blockers;
+- evidence confidence retained separately from recommendation and from probability of technical success;
+- additive SQLite migration version 4 with a `technical_assessments` table;
+- retained project, readiness, dataset/version, baseline/proposed specification versions, rule-set version, threshold/evidence references, formula inputs, assumptions, technical/commercial outcomes, blockers, required trials, confidence, recommendation, content hash, and timestamp;
+- append-only repository behavior plus database triggers prohibiting update and delete;
+- archived-project write protection;
+- cross-project validation for dataset, readiness, threshold, and evidence references;
+- historical datasets, readiness assessments, scenarios, thresholds, and decision snapshots preserved unchanged.
 
-Build 6 validation:
-- Functional head: `01bc744f90e820a6364c90b55eb1b38a02572a67`.
-- PVE CI #819, run `29309084978`, success.
-- 282 tests passed, 0 failures, 0 errors.
+Build 7 validation:
+- Functional head: `432ed1c196d989841021aff8656e35abf1c2034d`.
+- PVE CI #839, run `29309404539`, success.
+- 293 tests passed, 0 failures, 0 errors.
 
-Build 6 does not implement engineering recommendation persistence, database migrations, immutable technical-assessment records, role-based approval, autonomous approval, or Build 7 functionality.
+Build 7 does not implement demonstration cases, final release QA, merge preparation, role-based approval, autonomous approval, or Build 8 functionality.
 
 ## Later-build intent
 
-### Build 7 — Recommendation, confidence and immutable persistence
-Add engineering recommendation for review, keep evidence confidence separate from technical outcome, add append-only technical assessments, archive protection, and cross-project isolation.
-
 ### Build 8 — Demonstration cases, regression and release QA
-Add synthetic cases, full regression, release evidence, documentation, and closure validation.
+Add governed synthetic cases, complete regression and migration validation, release evidence, documentation reconciliation, closure recommendation, and current-head CI. Merge remains separately authorized.
 
 ## Release acceptance gates
 1. Scope remains corrugated-only.
@@ -59,12 +55,13 @@ Add synthetic cases, full regression, release evidence, documentation, and closu
 3. Thresholds and commercial inputs remain sourced, explicit, and traceable.
 4. Assumptions remain explicit.
 5. Source classifications remain distinct.
-6. Technical/compliance blockers override commercial, economic, material, logistics, and sustainability benefits.
+6. Technical and evidence blockers override commercial, economic, material, logistics, and sustainability benefits.
 7. Engineering validation and human approval remain mandatory.
 8. Autonomous approval remains prohibited.
 9. Historical records remain immutable and project-scoped.
-10. Complete tests and current-head CI pass before closure.
-11. PR #26 remains draft and unmerged until separate authorization.
+10. Technical assessments remain append-only and immutable.
+11. Complete tests and current-head CI pass before closure.
+12. PR #26 remains draft and unmerged until separate authorization.
 
 ## Build authorization rule
-Completion of Build 6 does not authorize Build 7. Build 7 is not started or authorized.
+Completion of Build 7 does not authorize Build 8. Build 8 is not started or authorized.
