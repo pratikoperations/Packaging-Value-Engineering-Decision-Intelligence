@@ -14,27 +14,32 @@ PVE-0.1 through PVE-0.7.2 and PVE-1.0.1 through PVE-1.0.6 were completed, valida
 
 ## 2026-07-13 — PVE 1.1 Builds 1–7
 - Branch: `feature/pve-1.1-all-category-intake`
-- Pull request: PR #25, open and draft
+- Pull request: PR #25
 - Builds 1–7 completed and validated
 - Cumulative PVE 1.1 effort through Build 7: 61 hours
 - Latest pre-Build-8 CI: PVE CI #650, run `29256238990`
 - Expected tests: 213
 
-## 2026-07-14 — PVE 1.1 Build 8 Guided Streamlit Workflow and Updated Reports
-- Authorized effort: 8 hours
-- Starting head: `4de563c08178ca2c0e406fce2fa4e7347938119b`
-- Implemented guided all-category workflow over completed Builds 1–7
-- Added category Excel intake while retaining JSON and CSV workflows
-- Added readiness, blockers, warnings, output availability, source traceability, commercial estimates, testing evidence, and report views
-- Added machine-readable JSON and human-readable Markdown executive summaries
-- Existing SQLite persistence and immutable dataset versioning retained
-- Engineering validation and human approval retained
-- Focused Build 8 tests: 4 passed
-- Complete automated suite: 213 passed
-- Total test executions: 217
-- Validation: PVE CI #699, run `29278878816`, success
-- Build 8 effort consumed: 8 hours
-- Total PVE 1.1 effort consumed: 69 hours
-- Remaining program budget: 11 hours
-- Status: complete and validated
-- Next action: stop at Build 9 authorization gate
+## 2026-07-14 — PVE 1.1 Build 8
+- Guided all-category workflow and executive reports completed.
+- Validation: PVE CI #699, run `29278878816`, success.
+- Complete automated suite: 213 passed.
+- Focused report tests: 4 passed.
+- Total executions: 217.
+- Cumulative effort: 69 hours.
+
+## 2026-07-14 — PVE 1.1 Build 9 and Final Closure
+- Build 9 testing and release QA completed.
+- Final feature head: `dc85db49afee46bde3118684761c0a176dd32194`.
+- Final pre-merge CI: PVE CI #735, run `29302903427`, success.
+- Complete unittest suite: 221 passed.
+- Focused report tests: 4 passed.
+- Total test executions: 225.
+- Failures: 0.
+- Errors: 0.
+- Pull request: PR #25 merged and closed.
+- Squash merge commit: `37f4ae58e0d57c4531293371e423d771ada7ae50`.
+- Total PVE 1.1 effort: 80 hours.
+- Remaining budget: 0 hours.
+- Release status: completed, validated, merged, and governance-closed.
+- No later release or excluded integration work has started.
