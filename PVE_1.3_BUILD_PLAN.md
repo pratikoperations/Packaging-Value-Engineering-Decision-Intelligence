@@ -4,8 +4,8 @@
 PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governance
 
 ## Current implementation status
-- Status: Builds 1, 2A, 2B, 3, 4, 5 and 6 governance-closed; Build 7 implementation started on a controlled branch.
-- Implementation started: yes, limited to Builds 1, 2A, 2B, 3, 4, 5, 6 and authorized Build 7.
+- Status: Builds 1 through 6 governance-closed; Build 7 implementation complete on a controlled branch.
+- Implementation started: yes, limited to Builds 1 through 7.
 - Build 1 status: merged, post-merge validated and governance-closed.
 - Build 2A status: merged, post-merge validated and governance-closed.
 - Build 2B status: merged, post-merge validated and governance-closed.
@@ -13,12 +13,11 @@ PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governanc
 - Build 4 status: merged, post-merge validated and governance-closed.
 - Build 5 status: merged, post-merge validated and governance-closed.
 - Build 6 status: merged, post-merge validated and governance-closed.
-- Build 7 status: initial supplier-qualification validation tranche implemented on controlled branch; persistence and governance closure pending.
+- Build 7 status: implementation complete on controlled branch; CI, audit, merge and governance closure pending.
 - Build 8: not started and not authorized.
-- Governance-closed release completion: 79.7%.
-- Governance-closed planned effort: 55 of 69 hours.
-- Pending planned effort: 14 hours, 20.3%.
-- Build 7 completion hours claimed: 0 of 7 hours.
+- Release completion on branch: 89.9%.
+- Completed planned effort on branch: 62 of 69 hours.
+- Pending planned effort: 7 hours, 10.1%.
 - Controlled contingency used: 0 of 2 hours.
 - Controlled contingency remaining: 2 hours.
 - Absolute release cap: 71 hours.
@@ -37,7 +36,7 @@ The 69 planned hours remain fixed. The two-hour contingency may be used only for
 | 4 | Trial execution, results and deviations | 9 | 39 | 56.5% | Governance-closed |
 | 5 | Packaging defect and complaint taxonomy | 8 | 47 | 68.1% | Governance-closed |
 | 6 | Specification and implementation change control | 8 | 55 | 79.7% | Governance-closed |
-| 7 | Supplier qualification evidence register | 7 | 62 | 89.9% | Started; initial validation tranche |
+| 7 | Supplier qualification evidence register | 7 | 62 | 89.9% | Implemented; validation pending |
 | 8 | Demonstration cases, regression and release QA | 7 | 69 | 100% | Not started |
 
 ## Build 1 — Architecture, governance and release boundary — 6 hours
@@ -75,16 +74,18 @@ Build 6 records human-controlled change approval and implementation evidence. It
 
 ## Build 7 — Supplier qualification evidence register — 7 hours
 
-### Initial tranche
-- governed supplier qualification validation;
-- supplier, site and scope-specific decision identity;
-- qualification status, validity, conditions and review dates;
-- evidence references and named human assessor/approver;
-- linked trial, defect, complaint and change-control evidence;
-- explicit Build 8 release, sourcing and commercial-decision rejection;
-- focused validation tests.
+### Delivered
+- additive schema v10 supplier qualification assessment register;
+- supplier and site-specific qualification scope;
+- status, validity, conditions, open actions and review dates;
+- evidence-linked named human assessment and approval;
+- linked trial, defect, complaint, specification-change and implementation-control evidence;
+- project-scoped repository and linked-evidence isolation;
+- archived-project protection;
+- repository and database immutability;
+- focused migration, persistence, approval, archive and isolation tests.
 
-Persistence, additive migration, immutable repository, project/archive isolation and full regression remain pending within Build 7.
+Build 7 records supplier qualification evidence and named human decisions only. It introduces no supplier ranking, preferred-supplier recommendation, sourcing award, allocation, commercial-term approval, release certification, final regression sign-off or autonomous qualification decision.
 
 ## Build 8 — Demonstration cases, regression and release QA — 7 hours
 Not started.
@@ -93,4 +94,4 @@ Not started.
 PVE 1.3 will not include automatic DXF geometry extraction, automatic dimension extraction, cut/crease/slot recognition, parametric dieline generation, automated blank optimization, full CAD editing, 3D folding, tooling design, manufacturing-ready drawing approval, autonomous engineering approval, supplier ranking/allocation/award, or ungoverned production deployment.
 
 ## Authorization boundary
-Build 7 alone is authorized beyond governance-closed Builds 1, 2A, 2B, 3, 4, 5 and 6. Build 8 requires separate explicit authorization. Build 7 must pass CI, review, merge and post-merge controls before it is governance-closed.
+Build 7 alone is authorized beyond governance-closed Builds 1 through 6. Build 8 requires separate explicit authorization. Build 7 must pass CI, review, merge and post-merge controls before it is governance-closed.
