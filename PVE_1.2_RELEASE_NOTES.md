@@ -31,7 +31,12 @@ PVE 1.2 extends the stable PVE 1.1 intake-readiness platform with a corrugated-s
 - PVE CI #865, run `29309867905`: success.
 - Final closure head: `6a2c372238a531c3ca6977753ff2d90d69e07b5f`.
 - PVE CI #875, run `29309985760`: success.
-- 300 tests passed, 0 failures, 0 errors.
+- Final feature head: `20b60393eb21c75e56676ec119fb2c1818d33db0`.
+- PVE CI #883, run `29313538879`: success.
+- PR #26 squash-merge commit: `8c5511e096b4526a85630e38ef939db371b307b1`.
+- Post-merge PVE CI #896, run `29317676780`, job `87035353112`: success on `main`.
+- Post-merge tests: 300 passed, 0 failures, 0 errors.
+- Artifact: `pve-full-test-output`, artifact ID `8304598530`.
 
 ## Budget
 - Planned release: 74 hours.
@@ -40,4 +45,4 @@ PVE 1.2 extends the stable PVE 1.1 intake-readiness platform with a corrugated-s
 - Controlled contingency used: 0 of 2 hours.
 
 ## Release control
-PVE 1.2 has completed final closure validation and is suitable for explicit authorization to mark PR #26 ready for review and proceed to a separate squash-merge decision. PR #26 remains draft and unmerged. No deployment, activation, pilot, or production-readiness claim is included.
+PVE 1.2 is complete, squash-merged through PR #26, post-merge validated on `main`, and governance-closed as a decision-support release. It is not a production-ready enterprise system. Deployment, activation, pilot, publication as production software, and production use remain separately unauthorized. PVE 1.3 has not started. Tag `pve-v1.2` is recommended after this governance-closure PR is merged and final `main` CI passes.
