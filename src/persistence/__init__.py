@@ -7,6 +7,7 @@ from .drawing_evidence_repository import DrawingEvidenceRepository
 from .export_repository import ExportRepository
 from .project_repository import ProjectRepository
 from .readiness_repository import ReadinessRepository
+from .release_qa_repository import DemonstrationCaseRepository, ReleaseQAAssessmentRepository
 from .scenario_repository import ScenarioRepository
 from .supplier_qualification_repository import SupplierQualificationRepository
 from .technical_assessment_repository import TechnicalAssessmentRepository
@@ -20,11 +21,13 @@ __all__ = [
     "DatasetRepository",
     "DecisionRepository",
     "DefectClassificationRepository",
+    "DemonstrationCaseRepository",
     "DrawingEvidenceRepository",
     "ExportRepository",
     "ImplementationControlRepository",
     "ProjectRepository",
     "ReadinessRepository",
+    "ReleaseQAAssessmentRepository",
     "ScenarioRepository",
     "SpecificationChangeRepository",
     "SupplierQualificationRepository",
