@@ -28,8 +28,8 @@
 - [x] One synthetic sample exists for each category.
 - [x] Three detailed release cases exist.
 - [x] New release QA tests are included.
-- [ ] Final Build 9 CI succeeds with zero failures and zero errors.
+- [x] Build 9 CI #725 succeeded with 221 complete-suite tests plus 4 focused report tests; zero failures and errors.
 - [ ] PR #25 receives separate merge authorization.
 
 ## Release state
-Build 9 may be marked complete only after final-head CI passes. Completion does not authorize deployment, pilot, production use, or merge.
+PVE 1.1 is release-ready for merge review. Build completion does not authorize deployment, pilot, production use, or merge.
