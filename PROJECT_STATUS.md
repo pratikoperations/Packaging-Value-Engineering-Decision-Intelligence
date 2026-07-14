@@ -25,11 +25,11 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Total test executions: 225; failures: 0; errors: 0.
 - Total consumed: 80 of 80 hours.
 
-## Completed Release Awaiting Separate Merge Decision
-
 ### PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
-- Status: Builds 1–8 complete and validated on draft PR #26.
-- Branch: `feature/pve-1.2-corrugated-engineering`.
+- Status: complete, validated, squash-merged through PR #26, and governance-closed after post-merge validation.
+- Final feature branch: `feature/pve-1.2-corrugated-engineering`.
+- Final feature head: `20b60393eb21c75e56676ec119fb2c1818d33db0`.
+- Squash merge commit on `main`: `8c5511e096b4526a85630e38ef939db371b307b1`.
 - Planned effort: 74 hours.
 - Completed effort: 74 of 74 planned hours.
 - Release completion: 100%.
@@ -43,7 +43,11 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Final documented-head validation: PVE CI #865, run `29309867905`, success.
 - Final closure head: `6a2c372238a531c3ca6977753ff2d90d69e07b5f`.
 - Final closure validation: PVE CI #875, run `29309985760`, success.
-- Tests: 300 passed, 0 failures, 0 errors.
+- Final feature-head validation: PVE CI #883, run `29313538879`, success.
+- Post-merge validation on `main`: PVE CI #896, run `29317676780`, job `87035353112`, `workflow_dispatch`, success.
+- Post-merge tested commit: `8c5511e096b4526a85630e38ef939db371b307b1`.
+- Post-merge tests: 300 passed, 0 failures, 0 errors.
+- Diagnostic artifact: `pve-full-test-output`, artifact ID `8304598530`.
 
 ## Completed PVE 1.2 Builds
 - Build 1 — Architecture, Governance and Engineering Boundary Lock — 8 hours — validated by PVE CI #753.
@@ -53,9 +57,9 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Build 5 — Material, Pallet, Logistics and Physical Sustainability Analysis — 11 hours — validated by PVE CI #809.
 - Build 6 — Should-Cost, Failure Cost and Implementation Economics — 9 hours — validated by PVE CI #823.
 - Build 7 — Engineering Recommendation, Evidence Confidence and Immutable Technical-Assessment Persistence — 7 hours — validated by PVE CI #843.
-- Build 8 — Demonstration Cases, Full Regression and Release QA — 6 hours — validated by PVE CI #849, final documented-head CI #865, and final closure CI #875.
+- Build 8 — Demonstration Cases, Full Regression and Release QA — 6 hours — validated by PVE CI #849, #865, #875, #883, and post-merge CI #896.
 
-## Build 8 Release Evidence
+## Release Evidence
 - Eight governed synthetic corrugated cases are stored in `data/pve_1_2_corrugated_demonstration_cases.json`.
 - Every case is explicitly labelled synthetic demonstration data.
 - End-to-end release QA covers intake, specifications, tolerances, evidence, supplier capability, technical screening, material, pallet, logistics, physical sustainability, economics, recommendation, and immutable technical-assessment persistence.
@@ -72,7 +76,8 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Technical and evidence blockers override commercial, economic, material, logistics, and sustainability benefits.
 - Technical assessments are append-only, immutable, and project-scoped.
 - Historical records remain preserved.
-- PR #26 must remain draft and unmerged until separate authorization.
+- PVE 1.2 is frozen as a governance-closed release after successful validation on `main`.
+- Deployment, pilot, activation, publication as production software, and production use remain separately unauthorized.
 
 ## Current State
-PVE 1.1 remains stable on `main`. PVE 1.2 is 100% complete at 74 of 74 planned hours on PR #26, with 0% and 0 planned hours pending. Functional, documented-head, and final closure CI are green with 300 tests, 0 failures, and 0 errors. PR #26 remains draft and unmerged and has not been marked ready for review.
+PVE 1.2 is the latest stable governance-closed release on `main`. It is 100% complete at 74 of 74 planned hours, with 0 hours and 0% pending and 0 of 2 contingency hours used. PR #26 is squash-merged, and post-merge PVE CI #896 validated commit `8c5511e096b4526a85630e38ef939db371b307b1` with 300 tests, 0 failures, and 0 errors. PVE 1.3 has not started and must branch only from the final validated governance-closure state after this closure PR is merged and final `main` CI passes.
