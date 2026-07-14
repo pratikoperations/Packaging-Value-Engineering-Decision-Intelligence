@@ -8,7 +8,7 @@ from pathlib import Path
 
 from src.drawing_evidence import validate_drawing_evidence
 from src.persistence import Database, DrawingEvidenceRepository
-from src.persistence.migrations import current_schema_version, initialize_database
+from src.persistence.migrations import SCHEMA_VERSION, current_schema_version, initialize_database
 
 
 class DrawingEvidenceBuild2ATests(unittest.TestCase):
@@ -58,8 +58,8 @@ class DrawingEvidenceBuild2ATests(unittest.TestCase):
         values.update(overrides)
         return self.repository.create(**values)
 
-    def test_schema_v5_is_applied(self) -> None:
-        self.assertEqual(current_schema_version(self.database), 5)
+    def test_current_governed_schema_is_applied(self) -> None:
+        self.assertEqual(current_schema_version(self.database), SCHEMA_VERSION)
 
     def test_create_and_read_governed_record(self) -> None:
         record = self.create_record()
