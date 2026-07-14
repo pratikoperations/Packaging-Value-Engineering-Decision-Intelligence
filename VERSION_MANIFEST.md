@@ -53,35 +53,52 @@
 - Run ID: `29223657516`
 - Tests: 179 passed, 0 failed, 0 errors
 
-## PVE-1.0.6 Deliverables
-- Immutable decision snapshots
-- Exact project, scenario, dataset, and threshold references
-- Dataset-defined baseline exclusion
-- Recommendation-for-review statuses
-- Project-scoped read-only decision history
-- Archived-project repository write protection
-- Final interview guide
-- Final QA and release checklist
+## PVE 1.1 Completion Record
+
+### PVE-1.1
+- Build: PVE 1.1 — All-Category Project Intake and Validation Readiness
+- Version: `1.1-all-category-intake-validation-readiness`
+- Status: Completed, validated, squash-merged, and governance-closed
+- Pull request: PR #25 merged and closed
+- Final feature head: `dc85db49afee46bde3118684761c0a176dd32194`
+- Squash merge commit: `37f4ae58e0d57c4531293371e423d771ada7ae50`
+- Final CI: PVE CI #735
+- Run ID: `29302903427`
+- Complete unittest suite: 221 passed
+- Focused report tests: 4 passed
+- Total executions: 225
+- Failures: 0
+- Errors: 0
+- Fixed release cap: 80 hours
+- Total consumed: 80 hours
+- Remaining: 0 hours
+
+## PVE 1.1 Deliverables
+- Eight-category project intake and configuration registry
+- Category objectives, change types, fields, documents, tests, warnings, blockers, and analyses
+- Category-specific Excel generation
+- Excel upload parsing, normalization, and validation
+- Transparent weighted readiness and blocker override
+- Reasoned output availability
+- Common commercial and ROI analysis
+- Guided Streamlit workflow
+- JSON and Markdown executive reporting
+- Eight synthetic category samples and three detailed demonstration cases
+- Final QA plan, QA report, checklist, and interview demonstration
 
 ## Mandatory Controls
 - Engineering validation required
 - Human approval required
 - Autonomous approval prohibited
-- Critical risk blocked
-- Not-qualified alternatives blocked
-- Insufficient data cannot become recommended
-- Decision snapshots immutable
+- Readiness percentage cannot approve a project
+- Critical blockers override percentage and commercial attractiveness
+- Supplier-declared and predicted values are not presented as tested
+- Historical datasets, thresholds, scenarios, and decision snapshots immutable
+- Archived projects read-only
 - Project isolation enforced
 
-## Program Budget
-- Original budget: 90 hours
-- Hard ceiling: 110 hours
-- PVE-1.0.6 actual effort: 17.0 hours
-- Cumulative effort through PVE-1.0.6: 89.5 hours
-- Remaining program budget: 0.5 hours
-
 ## Scope Boundary
-No authentication, external database, ERP integration, supplier ranking or allocation, autonomous approval, analytical-engine modification, recommendation-engine modification, or new packaging category.
+No PVE 1.2, Power BI, PostgreSQL reporting integration, deployment, activation, pilot, production, ERP integration, OCR, AI document reading, authentication, cloud database, supplier ranking or allocation, machine learning, live pricing, autonomous approval, or full all-category technical-feasibility claim is authorized.
 
 ## Final State
-PVE 1.0 is fully completed and governance-closed. No next build has been started.
+PVE 1.1 is the current completed and governance-closed release on `main`. No new development build has started.
