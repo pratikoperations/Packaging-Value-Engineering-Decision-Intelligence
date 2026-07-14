@@ -13,7 +13,7 @@ from src.persistence import (
     ReadinessRepository,
     TechnicalAssessmentRepository,
 )
-from src.persistence.migrations import current_schema_version, initialize_database
+from src.persistence.migrations import SCHEMA_VERSION, current_schema_version, initialize_database
 
 
 class TechnicalAssessmentRepositoryTestCase(unittest.TestCase):
@@ -72,8 +72,8 @@ class TechnicalAssessmentRepositoryTestCase(unittest.TestCase):
         values.update(overrides)
         return self.assessments.create(**values)
 
-    def test_schema_version_four_and_append_only_create(self):
-        self.assertEqual(current_schema_version(self.database), 4)
+    def test_current_schema_preserves_append_only_technical_assessments(self):
+        self.assertEqual(current_schema_version(self.database), SCHEMA_VERSION)
         created = self.create_assessment()
         self.assertEqual(created["dataset_version"], 1)
         self.assertEqual(created["recommendation_outcome"], "criteria met for engineering review")
