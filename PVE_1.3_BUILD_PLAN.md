@@ -4,7 +4,7 @@
 PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governance
 
 ## Current implementation status
-- Status: Builds 1, 2A, 2B, 3, 4 and 5 governance-closed; Build 6 implementation started on a controlled branch.
+- Status: Builds 1, 2A, 2B, 3, 4 and 5 governance-closed; Build 6 implementation complete on a controlled branch.
 - Implementation started: yes, limited to Builds 1, 2A, 2B, 3, 4, 5 and authorized Build 6.
 - Build 1 status: merged, post-merge validated and governance-closed.
 - Build 2A status: merged, post-merge validated and governance-closed.
@@ -12,12 +12,11 @@ PVE 1.3 — Validation Execution, Drawing Control and Packaging Change Governanc
 - Build 3 status: merged, post-merge validated and governance-closed.
 - Build 4 status: merged, post-merge validated and governance-closed.
 - Build 5 status: merged, post-merge validated and governance-closed.
-- Build 6 status: initial change-control validation tranche implemented on controlled branch; persistence and governance closure pending.
+- Build 6 status: implementation complete on controlled branch; CI, audit, merge and governance closure pending.
 - Builds 7–8: not started and not authorized.
-- Governance-closed release completion: 68.1%.
-- Governance-closed planned effort: 47 of 69 hours.
-- Pending planned effort: 22 hours, 31.9%.
-- Build 6 completion hours claimed: 0 of 8 hours.
+- Release completion on branch: 79.7%.
+- Completed planned effort on branch: 55 of 69 hours.
+- Pending planned effort: 14 hours, 20.3%.
 - Controlled contingency used: 0 of 2 hours.
 - Controlled contingency remaining: 2 hours.
 - Absolute release cap: 71 hours.
@@ -35,7 +34,7 @@ The 69 planned hours remain fixed. The two-hour contingency may be used only for
 | 3 | Trial planning and validation requirements | 9 | 30 | 43.5% | Governance-closed |
 | 4 | Trial execution, results and deviations | 9 | 39 | 56.5% | Governance-closed |
 | 5 | Packaging defect and complaint taxonomy | 8 | 47 | 68.1% | Governance-closed |
-| 6 | Specification and implementation change control | 8 | 55 | 79.7% | Started; initial validation tranche |
+| 6 | Specification and implementation change control | 8 | 55 | 79.7% | Implemented; validation pending |
 | 7 | Supplier qualification evidence register | 7 | 62 | 89.9% | Not started |
 | 8 | Demonstration cases, regression and release QA | 7 | 69 | 100% | Not started |
 
@@ -69,16 +68,18 @@ Build 5 records defects, complaints, severity and containment as governed eviden
 
 ## Build 6 — Specification and implementation change control — 8 hours
 
-### Initial tranche
-- governed specification-change validation;
+### Delivered
+- schema v9 immutable specification-change and implementation-control registers;
 - current and proposed specification-version traceability;
-- human approval identity and approval reference;
-- governed implementation authorization and verification;
-- effective-date and evidence controls;
-- explicit Build 7 supplier-qualification and sourcing-decision rejection;
-- focused validation tests.
+- evidence-linked named human approval and effective-date control;
+- approved-change prerequisite for implementation authorization;
+- implementation authorization, completion and verification evidence;
+- project-scoped repositories and linked-evidence isolation;
+- archived-project protection;
+- repository and database immutability;
+- focused migration, authorization, persistence, archive and isolation tests.
 
-Persistence, additive migration, immutable repositories, project/archive isolation and full regression remain pending within Build 6.
+Build 6 records human-controlled change approval and implementation evidence. It introduces no supplier qualification, supplier scoring, approved-supplier-list decision, sourcing award, allocation, ranking or autonomous production release.
 
 ## Build 7 — Supplier qualification evidence register — 7 hours
 Not started.
