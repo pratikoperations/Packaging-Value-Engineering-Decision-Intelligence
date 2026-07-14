@@ -1,14 +1,14 @@
 # PVE 1.2 Governance, Risk and Acceptance Controls
 
 ## Release status
-PVE 1.2 Builds 1–8 are complete on draft PR #26.
+PVE 1.2 Builds 1–8 are complete and validated on draft PR #26.
 
 - Completed effort: 74 of 74 planned hours.
 - Completion: 100%.
 - Pending planned work: 0 hours, 0%.
 - Contingency used: 0 of 2 hours.
 - Functional validation: PVE CI #849, run `29309701227`, 300 tests passed, 0 failures, 0 errors.
-- Final documented-head CI is required before the PR record is updated for Build 8 closure.
+- Final documented-head validation: PVE CI #865, run `29309867905`, 300 tests passed, 0 failures, 0 errors.
 
 ## Mandatory governance controls
 - Engineering validation remains mandatory.
@@ -132,7 +132,7 @@ Control: Dataset-level and case-level synthetic labels, QA assertions, and docum
 - Archived-project protection and cross-project isolation pass.
 - JSON and CSV-compatible normalization and Excel-template regression pass.
 - Approved, Rejected, and Conditional are absent from automatic outcomes.
-- Functional full suite passes with 300 tests and zero failures or errors.
+- Functional and documented-head suites pass with 300 tests and zero failures or errors.
 - Release QA report, checklist, notes, status, build plan, README, architecture, and governance records are reconciled.
 
 ## Release control
