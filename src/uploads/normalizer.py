@@ -11,11 +11,12 @@ _COLLECTIONS = (
     "specification_tolerances", "corrugated_evidence", "supplier_capabilities",
     "governed_factors", "warehouse_profiles", "packing_line_profiles",
     "corrugated_material_profiles", "pallet_pattern_inputs", "logistics_scenarios",
-    "physical_sustainability_profiles",
+    "physical_sustainability_profiles", "should_cost_inputs", "failure_cost_inputs",
+    "inventory_inputs", "one_time_costs",
 )
 
 _NUMERIC_FIELDS = {
-    "annual_volume", "annual_volume_cases", "length_mm", "width_mm", "height_mm",
+    "annual_volume", "annual_volume_cases", "annual_cases", "length_mm", "width_mm", "height_mm",
     "internal_length_mm", "internal_width_mm", "internal_height_mm",
     "external_length_mm", "external_width_mm", "external_height_mm",
     "case_external_length_mm", "case_external_width_mm", "case_external_height_mm",
@@ -28,7 +29,10 @@ _NUMERIC_FIELDS = {
     "maximum_pallet_weight_kg", "pallet_load_kg", "compression_requirement_n",
     "ect_requirement_kn_m", "ect_kn_m", "bct_n", "burst_kpa",
     "case_weight_g", "case_weight_kg", "product_weight_per_case_kg", "weight_g",
-    "recycled_content_percent", "virgin_fibre_percent", "value",
+    "recycled_content_percent", "virgin_fibre_percent", "value", "value_per_case",
+    "damage_rate_percent", "loss_per_damaged_case", "inventory_days",
+    "unit_inventory_value", "transition_stock_units", "obsolete_stock_units",
+    "write_off_percent", "production_batch_units", "moq_units",
     "cases_per_layer", "layers_per_pallet", "cases_per_pallet", "freight_distance_km",
     "minimum_value", "probability_percent", "nominal", "minimum", "maximum",
     "maximum_ply", "corrugator_width_mm", "minimum_sheet_length_mm",
