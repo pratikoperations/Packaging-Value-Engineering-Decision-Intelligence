@@ -11,6 +11,7 @@ _PROHIBITED_RELEASE_ACTIONS = {
     "autonomous_release_approval",
     "declare_release_complete",
     "supplier_rank",
+    "preferred_supplier_recommendation",
     "sourcing_award_status",
     "sourcing_allocation_percent",
     "commercial_terms_approval",
@@ -99,7 +100,6 @@ def validate_release_qa_assessment(payload: Mapping[str, Any]) -> ReleaseQAValid
         "artifact_digest",
         "schema_version",
         "demonstration_case_ids",
-        "unresolved_blockers",
         "reviewed_by",
         "recommendation",
         "evidence_references",
@@ -109,11 +109,14 @@ def validate_release_qa_assessment(payload: Mapping[str, Any]) -> ReleaseQAValid
         _sequence(payload, field, issues)
     if payload.get("recommendation") not in _ALLOWED_RECOMMENDATIONS:
         _issue(issues, "invalid_enum", "recommendation", "Unsupported release-QA recommendation.")
+    if not str(payload.get("artifact_digest", "")).startswith("sha256:"):
+        _issue(issues, "invalid_artifact_digest", "artifact_digest", "Artifact digest must use sha256.")
     try:
         tests = int(payload.get("test_count", -1))
         failures = int(payload.get("failure_count", -1))
         errors = int(payload.get("error_count", -1))
-        if tests <= 0 or failures < 0 or errors < 0:
+        schema = int(payload.get("schema_version", -1))
+        if tests <= 0 or failures < 0 or errors < 0 or schema <= 0:
             raise ValueError
         if payload.get("recommendation") == "ready_for_release_authorization":
             if failures or errors:
@@ -121,6 +124,6 @@ def validate_release_qa_assessment(payload: Mapping[str, Any]) -> ReleaseQAValid
             if payload.get("unresolved_blockers"):
                 _issue(issues, "blockers_present", "unresolved_blockers", "Ready recommendation cannot contain unresolved blockers.")
     except (TypeError, ValueError):
-        _issue(issues, "invalid_test_counts", "test_count", "Test counts must be valid non-negative integers and test_count must be positive.")
+        _issue(issues, "invalid_test_counts", "test_count", "Test counts and schema version must be valid integers; test_count and schema version must be positive.")
     _reject_release_actions(payload, issues)
     return ReleaseQAValidation(tuple(issues))
