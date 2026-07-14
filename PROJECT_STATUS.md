@@ -28,14 +28,14 @@ PVE-0.7 remains the original interview-release identity required by repository C
 ## Active Release
 
 ### PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
-- Status: Builds 1–5 complete and validated on draft PR #26.
+- Status: Builds 1–6 complete and validated on draft PR #26.
 - Branch: `feature/pve-1.2-corrugated-engineering`.
 - Planned effort: 74 hours.
 - Controlled contingency: 2 hours.
 - Absolute cap: 76 hours.
-- Completed effort: 52 of 74 planned hours.
-- Release completion: 70.3%.
-- Pending planned work: 22 hours, 29.7%.
+- Completed effort: 61 of 74 planned hours.
+- Release completion: 82.4%.
+- Pending planned work: 13 hours, 17.6%.
 - Contingency used: 0 of 2 hours.
 
 ## Completed PVE 1.2 Builds
@@ -62,34 +62,40 @@ PVE-0.7 remains the original interview-release identity required by repository C
 - Effort: 12 hours.
 - Validation: PVE CI #797, run `29308574949`, success.
 - Tests: 257 passed, 0 failures, 0 errors.
-- Implemented supplied-evidence technical screening, governed factors, stacking/environment/warehouse checks, packing-line compatibility, blocker precedence, and non-approval outcomes.
 
 ### Build 5 — Material, Pallet, Logistics and Physical Sustainability Analysis
 - Status: complete and validated.
 - Effort: 11 hours.
-- Functional head: `0e31f3369ad1dccb9592f7b4b30f30bfa58f925c`.
-- Validation: PVE CI #805, run `29308755665`, success.
+- Validation: PVE CI #809, run `29308828861`, success.
 - Tests: 271 passed, 0 failures, 0 errors.
+
+### Build 6 — Should-Cost, Failure Cost and Implementation Economics
+- Status: complete and validated.
+- Effort: 9 hours.
+- Functional head: `01bc744f90e820a6364c90b55eb1b38a02572a67`.
+- Validation: PVE CI #819, run `29309084978`, success.
+- Tests: 282 passed, 0 failures, 0 errors.
 - Implemented:
-  - board area calculated only from supplied blank dimensions;
-  - supplied case-weight, annual-material-consumption, and material-change comparisons;
-  - simple rectangular length-by-width and width-by-length pallet patterns;
-  - cases per layer, validated layers, cases per pallet, footprint utilisation, height, gross weight, and annual pallet movements;
-  - explicit-input pallet movement, freight cube, warehouse-position, and vehicle-space comparisons;
-  - annual paper consumption/reduction, packaging weight, packaging-to-product ratio, fibre-content, pallets avoided, and transport movements avoided;
-  - unavailable-output reasons for missing governed inputs and carbon calculations;
-  - technical-blocker precedence over material, logistics, and sustainability benefits;
-  - additive normalization for Build 5 input profiles.
-- Limitations: no inferred box geometry, mixed-SKU palletisation, truck-load optimisation, 3D optimisation, or carbon calculation.
+  - explicit supplied should-cost components for board/paper, conversion, printing, coating/treatment, manufacturing waste, quality inspection, and freight;
+  - no inferred market prices, supplier margins, paper prices, conversion rates, or waste percentages;
+  - baseline/proposed expected failure cost from annual cases, damage rate, and loss per damaged case;
+  - source classification and reference retention for all cost, failure, inventory, and one-time inputs;
+  - risk-adjusted annual benefit after incremental expected failure cost;
+  - inventory-day, MOQ/batch, transition-stock, obsolete-stock, write-off, and incremental working-capital scenarios;
+  - one-time tooling, artwork, trial, and implementation costs with duplicate-component protection;
+  - first-year net benefit and payback-month calculations;
+  - available, unavailable, and technically blocked outputs with supporting inputs, assumptions, limitations, and blocking conditions;
+  - additive normalization for Build 6 input collections.
+- Excluded: recommendation persistence, database migration, immutable technical-assessment records, autonomous approval, and Build 7.
 
 ## Governance
 - Engineering validation and human approval remain mandatory.
 - Autonomous approval remains prohibited.
-- Unsourced engineering thresholds and hidden coefficients remain prohibited.
-- Critical technical, environmental, evidence, and line blockers override commercial, material, logistics, and sustainability benefits.
+- Unsourced engineering thresholds, market inputs, and hidden coefficients remain prohibited.
+- Critical technical, environmental, evidence, pallet, and packing-line blockers override commercial and economic attractiveness.
 - Source classifications remain distinct and traceable.
-- Supplier capability does not rank suppliers or allocate business.
+- One-time costs are not repeated through duplicate components.
 - Historical records remain immutable and project-scoped.
 
 ## Current State
-PVE 1.1 remains stable on `main`. PVE 1.2 Builds 1–5 are complete on PR #26. Build 6 is not started or authorized. PR #26 remains draft and unmerged.
+PVE 1.1 remains stable on `main`. PVE 1.2 Builds 1–6 are complete on PR #26. Build 7 is not started or authorized. PR #26 remains draft and unmerged.
