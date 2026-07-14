@@ -8,6 +8,7 @@ from .readiness_repository import ReadinessRepository
 from .scenario_repository import ScenarioRepository
 from .technical_assessment_repository import TechnicalAssessmentRepository
 from .threshold_repository import ThresholdRepository
+from .trial_execution_repository import TrialExecutionRepository
 from .trial_plan_repository import TrialPlanRepository
 
 __all__ = [
@@ -21,5 +22,6 @@ __all__ = [
     "ScenarioRepository",
     "TechnicalAssessmentRepository",
     "ThresholdRepository",
+    "TrialExecutionRepository",
     "TrialPlanRepository",
 ]
