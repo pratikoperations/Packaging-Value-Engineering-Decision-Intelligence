@@ -27,6 +27,10 @@ PVE 1.2 extends the stable PVE 1.1 intake-readiness platform with a corrugated-s
 ## Validation
 - Functional Build 8 head: `9465d9d6292a9d65834cfc11f27d1f056b9408a4`.
 - PVE CI #849, run `29309701227`: success.
+- Final documented head: `edf517c308cb204c683169d66f47e5b23fd3b0b5`.
+- PVE CI #865, run `29309867905`: success.
+- Final closure head: `6a2c372238a531c3ca6977753ff2d90d69e07b5f`.
+- PVE CI #875, run `29309985760`: success.
 - 300 tests passed, 0 failures, 0 errors.
 
 ## Budget
@@ -36,4 +40,4 @@ PVE 1.2 extends the stable PVE 1.1 intake-readiness platform with a corrugated-s
 - Controlled contingency used: 0 of 2 hours.
 
 ## Release control
-PVE 1.2 is suitable for controlled human review after final documented-head CI. PR #26 remains draft and unmerged. No deployment, activation, pilot, or production-readiness claim is included.
+PVE 1.2 has completed final closure validation and is suitable for explicit authorization to mark PR #26 ready for review and proceed to a separate squash-merge decision. PR #26 remains draft and unmerged. No deployment, activation, pilot, or production-readiness claim is included.
