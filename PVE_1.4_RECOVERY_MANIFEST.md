@@ -23,12 +23,14 @@ Provide the authoritative continuation record for the controlled PVE 1.4 plannin
 - Active build: PVE 1.4 Build 4 — Integration Architecture Specifications
 - Working branch: `planning/pve-1.4-build-4-integration-architecture`
 - Branch source commit: `893d855fedb29ea0893cd84bb2b4a166f8d3ebc7`
+- Accepted pre-update head: `5f102b01c275bdd4cd7ef86ca045e6b06bf36291`
+- Formal acceptance result: PASS
 - Build 4 authorized maximum: 6 hours
 - Build 4 actual controlled effort: 5.5 hours
 - Build 4 unused authorized effort: 0.5 hour
 - Build 4 pending effort: 0 hours
-- Build 4 status: COMPLETE — PENDING REVIEW
-- Draft PR required: YES
+- Build 4 status: ACCEPTED — PENDING MERGE AUTHORIZATION
+- Draft PR: #46
 - Merge authorization: NOT GRANTED
 - Live integration authorization: NOT GRANTED
 - Endpoint or connector authorization: NOT GRANTED
@@ -45,7 +47,7 @@ Provide the authoritative continuation record for the controlled PVE 1.4 plannin
 - Build 1: 6 hours completed and governance-closed
 - Build 2: 12 hours completed and governance-closed
 - Build 3: 11 hours completed and governance-closed
-- Build 4: 5.5 hours completed, pending review
+- Build 4: 5.5 hours completed and accepted, pending merge authorization
 - Total completed controlled effort: 40.5 hours
 - Pending planned effort: 13.5 hours
 - Phase completion: 75.0%
@@ -101,18 +103,20 @@ Unused Build 2, Build 3 and Build 4 authorization remains unused. It cannot be r
 - Operational gaps or risks closed with evidence: 0
 - Application, security-infrastructure and real-data changes: 0
 
-## Build 4 output state
+## Build 4 accepted output state
 
-- Small future-system inventory: COMPLETE
-- Integration principles and conceptual trust boundaries: COMPLETE
-- Five-interface synthetic catalogue: COMPLETE
-- Provisional ownership matrix: COMPLETE
-- Conceptual data-contract template: COMPLETE
-- Authentication and authorization requirements: COMPLETE
-- Retry and idempotency requirements: COMPLETE
-- Reconciliation requirements: COMPLETE
-- Monitoring and observability requirements: COMPLETE
-- Error-ownership model: COMPLETE
+- Formal acceptance result: PASS
+- Small future-system inventory: COMPLETE AND ACCEPTED
+- Integration principles and conceptual trust boundaries: COMPLETE AND ACCEPTED
+- Five-interface synthetic catalogue: COMPLETE AND ACCEPTED
+- INT-05 non-automation boundary: COMPLETE AND ACCEPTED
+- Provisional ownership matrix: COMPLETE AND ACCEPTED
+- Conceptual data-contract template: COMPLETE AND ACCEPTED
+- Authentication and authorization requirements: COMPLETE AND ACCEPTED
+- Retry and idempotency requirements: COMPLETE AND ACCEPTED
+- Reconciliation requirements: COMPLETE AND ACCEPTED
+- Mandatory future monitoring and observability requirements: COMPLETE AND ACCEPTED
+- Error-ownership model: COMPLETE AND ACCEPTED
 - Live endpoints or URLs created: 0
 - Credentials, secrets or service accounts created: 0
 - Active connectors: 0
@@ -125,7 +129,7 @@ Unused Build 2, Build 3 and Build 4 authorization remains unused. It cannot be r
 
 ## Build 4 gap relationship
 
-Build 4 develops planning outputs for:
+Build 4 develops accepted planning outputs for:
 
 - P14-G07 — conceptual interface ownership, trust boundaries, data contracts, retry, reconciliation and monitoring requirements;
 - selected future environment requirements for P14-G08 without deployment;
@@ -136,11 +140,11 @@ All sixteen Build 1 gap records and substantive target-build routing remain pres
 
 ## Recovery checks
 
-1. Confirm `main` remains exactly `893d855fedb29ea0893cd84bb2b4a166f8d3ebc7` until the Build 4 branch is created.
+1. Confirm `main` remains exactly or validly descends from `893d855fedb29ea0893cd84bb2b4a166f8d3ebc7` without unrelated baseline invalidation.
 2. Confirm tag `pve-v1.3` and its published release remain unchanged.
 3. Confirm the active branch is `planning/pve-1.4-build-4-integration-architecture`.
 4. Confirm the branch descends from exact main SHA `893d855fedb29ea0893cd84bb2b4a166f8d3ebc7`.
-5. Confirm changed files are limited to one substantive Build 4 specification and two control records.
+5. Confirm changed files remain limited to one substantive Build 4 specification and two control records.
 6. Confirm no application code, tests, schemas, migrations, workflows, infrastructure, deployment, dependencies, datasets or existing integration contracts changed.
 7. Confirm Build 4 effort is 5.5 hours against a maximum of 6 and the remaining 0.5 hour is unused.
 8. Confirm cumulative PVE 1.4 effort is 40.5 completed and 13.5 pending hours.
@@ -152,8 +156,11 @@ All sixteen Build 1 gap records and substantive target-build routing remain pres
 14. Confirm live endpoints, credentials, connectors, integration activation, deployment and infrastructure remain zero and unauthorized.
 15. Confirm no OpenAPI, executable schema, migration, code or integration artifact was created.
 16. Confirm human approval remains mandatory and supplier ranking, award and allocation remain prohibited.
-17. Confirm Build 5 UAT and value-validation scope remains unchanged.
-18. Confirm the draft PR remains unmerged until separate acceptance and merge authorization.
+17. Confirm INT-05 can only reference a separately recorded human decision and cannot create, modify, approve, revoke or infer it.
+18. Confirm future connected-pilot monitoring requirements are mandatory but remain unimplemented.
+19. Confirm Build 5 UAT and value-validation scope remains unchanged.
+20. Confirm Build 4 acceptance remains PASS and merge authorization remains separate.
+21. Confirm PR #46 remains draft and unmerged until explicit authorization.
 
 ## Stop and review conditions
 
@@ -191,4 +198,4 @@ Stop work and require a new explicit decision when:
 
 ## Current next gate
 
-Create a draft Build 4 pull request, verify the exact three-file documentation-only scope, run full PVE CI on the final branch head and issue a separate PASS or FAIL acceptance recommendation. Keep the pull request draft and unmerged.
+Keep PR #46 draft and unmerged. Verify full PVE CI on the final Build 4 acceptance-record head. After successful CI, decide separately whether to authorize squash merge. Following any authorized merge, require post-merge CI on the resulting exact `main` SHA before Build 4 governance closure. Do not begin Build 5 before Build 4 governance closure.
