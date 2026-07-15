@@ -2,7 +2,9 @@
 
 ## Register status
 
-**Final planning synthesis: COMPLETE — CORRECTED FOR FINAL REVIEW**
+**Final planning synthesis: ACCEPTED — GOVERNANCE CLOSED**
+
+**PVE 1.4 status: COMPLETED AND GOVERNANCE CLOSED**
 
 **Pilot authorization: NOT GRANTED**
 
@@ -95,7 +97,7 @@ Before any risk is CLOSED WITH EVIDENCE, ACCEPTED BY AUTHORIZED OWNER, or used t
 - Deployment readiness: NOT APPROVED
 - Enterprise production-readiness certification: NOT GRANTED
 
-PVE 1.4 planning may specify controls and evidence requirements, but it cannot approve a real-user pilot or deployment.
+PVE 1.4 planning may specify controls and evidence requirements, but its governance closure cannot approve a real-user pilot or deployment.
 
 ## Escalation rules
 
