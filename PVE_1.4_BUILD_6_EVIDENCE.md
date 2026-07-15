@@ -2,7 +2,7 @@
 
 ## Build status
 
-**Build 6 status: COMPLETE — PENDING REVIEW**
+**Build 6 status: CORRECTED — PENDING FINAL ACCEPTANCE REVIEW**
 
 - Original Build 6 plan: 8 hours
 - Current executable phase-ledger cap: 6 hours
@@ -89,9 +89,18 @@ Operational evidence, named accountability and separate authorizations are incom
 
 **NOT APPROVED**
 
-### Production readiness
+### Enterprise production-readiness certification
 
-**NOT CERTIFIED**
+**NOT GRANTED**
+
+## Formal blocker-correction record
+
+The formal acceptance review identified two documentation-governance blockers. Both are corrected:
+
+1. `PVE_1.4_ACCEPTANCE_CRITERIA.md` now uses only `PASS`, `FAIL`, `NOT APPLICABLE — APPROVED` or `PENDING` in controlled gate-status fields. Planning-only qualifications, operational-evidence limitations and the 8-hour/6-hour reconciliation are retained in separate implication, limitation or comment fields.
+2. `PVE_1.4_RISK_REGISTER.md` now states that every risk remains operationally `OPEN`, `EVIDENCE PENDING` or `TREATMENT PLANNED`, consistently preserving P14-R14 as `TREATMENT PLANNED`.
+
+No substantive planning determination, pilot recommendation, risk closure, authorization or operational boundary changed.
 
 ## Risk-control evidence
 
@@ -174,6 +183,8 @@ Operational evidence, named accountability and separate authorizations are incom
 | Contingency remains unused | PASS |
 | All risk IDs and core fields preserved | PASS |
 | Planning and operational evidence separated | PASS |
+| Controlled gate-status vocabulary enforced | PASS |
+| Risk-status summary aligned with P14-R14 | PASS |
 | Deployment readiness remains NOT APPROVED | PASS |
 | Planning and pilot decisions are separate | PASS |
 | No GO or CONDITIONAL GO issued | PASS |
@@ -202,15 +213,15 @@ Operational evidence, named accountability and separate authorizations are incom
 - PVE 1.4 controlled phase ledger: 54 hours
 - PVE 1.4 completed effort: 53.75 hours
 - PVE 1.4 unused planned authorization: 0.25 hour
-- PVE 1.4 planned completion: 99.5% by consumed hours; planning deliverables complete pending review and closure
+- PVE 1.4 planned completion: 99.5% by consumed hours; planning deliverables complete pending final acceptance and closure
 - Controlled contingency used: 0 of 4 hours
 
 ## Completion determination
 
-Build 6 is complete as a documentation-only final planning package pending formal review of the final branch head and successful CI.
+Build 6 is complete as a documentation-only final planning package and has received the required blocker corrections. It remains pending a focused final acceptance review of the resulting exact head and successful CI.
 
 This completion does not authorize or evidence a pilot, deployment, production operation, real-user use, live integration, UAT acceptance, security certification, production KPI, Finance-validated benefit or realized value.
 
 ## Next controlled gate
 
-Create a draft pull request, verify the exact five-file scope and full CI on the final head, then issue a separate Build 6 PASS or FAIL acceptance decision. Keep the pull request draft and unmerged until separately authorized.
+Verify the exact resulting PR head, exact five-file documentation-only scope and successful full CI, then issue the focused final Build 6 PASS or FAIL acceptance recommendation. Keep PR #48 draft and unmerged pending separate merge authorization.
