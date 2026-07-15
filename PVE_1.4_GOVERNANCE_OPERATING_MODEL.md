@@ -2,7 +2,9 @@
 
 ## Status and boundary
 
-**Build 2 planning output: COMPLETE — PENDING REVIEW**
+**Build 2 planning output: ACCEPTED — PENDING MERGE AUTHORIZATION**
+
+**Formal acceptance result: PASS**
 
 This document specifies a future controlled operating model. It does not implement authentication, RBAC, workflow tooling, audit logging, integrations, deployment, real-user access or production controls. All roles below are provisional role placeholders, not appointed people or evidence of operational authority.
 
@@ -158,6 +160,6 @@ This is a requirements catalogue only. No production audit logging is implemente
 - Integration specifications remain Build 4 scope.
 - UAT and value-validation execution models remain Build 5 scope.
 
-## Acceptance intent
+## Acceptance determination
 
-This operating model is acceptable only when reviewed as internally consistent, human-governed, documentation-only and aligned to Build 1 gaps P14-G01, P14-G02, P14-G03 and P14-G16. It does not close any operational gap with evidence.
+This operating model received a formal PASS acceptance result as internally consistent, human-governed, documentation-only and aligned to Build 1 gaps P14-G01, P14-G02, P14-G03 and P14-G16. It does not close any operational gap with evidence. Merge authorization remains separate.
