@@ -2,7 +2,9 @@
 
 ## Status and boundary
 
-**Build 4 planning output: COMPLETE — PENDING REVIEW**
+**Build 4 planning output: ACCEPTED — PENDING MERGE AUTHORIZATION**
+
+**Formal acceptance result: PASS**
 
 This document defines conceptual integration architecture and future requirements only. It does not create or activate endpoints, URLs, connectors, credentials, tokens, API keys, certificates, secrets, service accounts, identity-provider configuration, middleware, queues, monitoring, infrastructure, deployment, schemas, migrations, code or real-user access.
 
@@ -95,7 +97,9 @@ The statuses Active, Implemented, Connected, Deployed and Production are prohibi
 | INT-02 | Quality evidence reference intake | QMS/laboratory platform | PVE | Reference synthetic test or trial evidence | Synthetic evidence ID, method, date, result and validity state | Future QMS/laboratory owner | Controlled | No | Quality Reviewer review | Do not infer a passing result; block affected conclusion | Missing, duplicate, stale and conflict check | Proposed |
 | INT-03 | Procurement baseline reference intake | Procurement/ERP platform | PVE | Support analytical cost comparison | Synthetic material ID, normalized fictitious cost, volume band and currency basis | Future procurement/ERP owner | Controlled | No | Procurement and Finance/Value review | Hold cost conclusion | Source, period, currency and duplicate check | Proposed |
 | INT-04 | Decision-package export | PVE | Controlled repository or reporting platform | Preserve reviewed recommendation and evidence references | Synthetic project ID, assumptions, blockers, calculations, limitations and review state | Future approved decision-record owner | Controlled | No | Human Approval Authority remains separate | Retain export failure and pending-review state | Package checksum/version and record-reference check | Proposed |
-| INT-05 | Human-decision reference | Future authorized decision record | PVE | Link a named human decision without creating one | Synthetic decision reference, decision state, authority role and date | Future authorized decision system | Controlled | No | Named human authority required | Keep decision pending and unapproved | Authority, version and state comparison | Proposed |
+| INT-05 | Human-decision reference | Future authorized decision record | PVE | Reference a separately recorded named human decision without creating or changing it | Synthetic decision reference, decision state, authority role and date | Future authorized decision system | Controlled | No | Named human authority required | Keep decision pending and unapproved; any discrepancy returns the record to pending human review | Authority, version and state comparison | Proposed |
+
+INT-05 may reference a separately recorded human decision, but it cannot create, modify, approve, revoke or infer that decision. Any authority, version or status discrepancy returns the PVE record to pending human review.
 
 These interfaces are illustrative planning records. They are not endpoints, data feeds, integrations or executed test cases.
 
@@ -194,7 +198,7 @@ A reconciliation failure must block or qualify affected decision use until a nam
 
 ## Monitoring and observability requirements
 
-A future connected pilot should define requirements for:
+A future connected pilot must define and obtain approval for requirements covering:
 
 - interface availability;
 - successful and failed transaction counts;
@@ -273,4 +277,4 @@ Build 4 prohibits:
 
 ## Acceptance intent
 
-This document is acceptable only as a consolidated, synthetic, requirements-level integration architecture specification aligned primarily to P14-G07 and selected future requirements for P14-G08, P14-G12 and P14-G13. It grants no live-connection, pilot, deployment or production authority and closes no operational gap or risk with evidence.
+This document is accepted only as a consolidated, synthetic, requirements-level integration architecture specification aligned primarily to P14-G07 and selected future requirements for P14-G08, P14-G12 and P14-G13. Formal acceptance does not grant live-connection, pilot, deployment or production authority and closes no operational gap or risk with evidence.
