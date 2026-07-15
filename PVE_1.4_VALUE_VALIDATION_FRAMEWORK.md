@@ -2,7 +2,9 @@
 
 ## Status and boundary
 
-**Build 5 planning output: COMPLETE — PENDING REVIEW**
+**Build 5 planning output: ACCEPTED — PENDING MERGE AUTHORIZATION**
+
+**Formal acceptance result: PASS**
 
 This document defines future KPI, baseline, formula, evidence, ownership and claim-state requirements only. It does not validate an operational baseline, measure production performance, execute a pilot, establish ROI, certify adoption, confirm productivity improvement or record realized benefit.
 
@@ -38,12 +40,14 @@ All examples are synthetic or explicitly controlled. No actual personal, supplie
 | Conceptual opportunity | Potential source of value identified | Business rationale and assumptions | Permitted with synthetic label |
 | Analytical estimate | Formula applied to synthetic or approved assumptions | Variables, units, formula, source class and limitations | Permitted with synthetic label |
 | Reviewed estimate | Analytical estimate independently reviewed for arithmetic and assumptions | Reviewer, review date, findings and controlled version | Permitted as a framework example only |
-| Validated baseline | Baseline independently approved for future comparison | Approved scope, period, normalization and system-of-record evidence | Definition only; no Build 5 claim |
-| Pilot-observed result | Separately authorized pilot has executed evidence | Approved pilot record, scenario evidence and measured result | Definition only; no Build 5 claim |
-| Finance-validated benefit | Finance has reviewed executed evidence and calculation | Approved baseline, result, formula, exclusions and Finance decision | Definition only; no Build 5 claim |
+| Validated baseline | Independently approved evidence foundation for future comparison; it is not a reviewed estimate changing state | Approved scope, period, normalization and system-of-record evidence | Definition only; no Build 5 claim |
+| Pilot-observed result | Separately authorized pilot result supported by both an approved baseline and executed evidence | Approved baseline, approved pilot record, scenario evidence and measured result | Definition only; no Build 5 claim |
+| Finance-validated benefit | Finance-reviewed benefit supported by both an approved baseline and separately executed result evidence | Approved baseline, executed result, formula, exclusions and Finance decision | Definition only; no Build 5 claim |
 | Realized value | Benefit appears in approved operational or financial records | Finance or operational ledger evidence, ownership and effective period | Definition only; prohibited as Build 5 claim |
 
-A claim cannot skip states. Review of a synthetic estimate does not create a validated baseline, pilot result, Finance-validated benefit or realized value.
+The seven states describe distinct evidence and claim conditions. A reviewed estimate does not transform into a validated baseline. A validated baseline is a separately approved evidence foundation that may support later comparison. Pilot-observed and Finance-validated benefit states require both that approved baseline and separately executed result evidence.
+
+Review of a synthetic estimate does not create a validated baseline, pilot result, Finance-validated benefit or realized value. No claim may bypass the evidence required for its applicable state.
 
 ## Claim language controls
 
@@ -128,6 +132,8 @@ A future baseline must be:
 8. linked to a named Baseline Owner and Finance/Value Reviewer;
 9. approved before any value is described as validated;
 10. accompanied by exclusions, assumptions, limitations and confidence.
+
+A validated baseline is an independently approved evidence foundation for later comparison. It is not the next version of a reviewed estimate, and approval of a baseline does not by itself establish any benefit.
 
 Build 5 approves no operational baseline.
 
@@ -272,16 +278,17 @@ Define opportunity and scope
 
 Build 5 executes none of these future reviews or approvals.
 
-## Claim-state transition controls
+## Claim-state evidence controls
 
-- Conceptual opportunity → analytical estimate requires a transparent formula and synthetic or approved assumptions.
-- Analytical estimate → reviewed estimate requires independent review evidence.
-- Reviewed estimate → validated baseline requires separately approved operational baseline evidence.
-- Validated baseline → pilot-observed result requires separately authorized executed pilot evidence.
-- Pilot-observed result → Finance-validated benefit requires Finance review of executed evidence.
-- Finance-validated benefit → realized value requires approved operational or financial record evidence.
+- Conceptual opportunity requires a business rationale and explicit assumptions.
+- Analytical estimate requires a transparent formula and synthetic or approved assumptions.
+- Reviewed estimate requires independent review evidence.
+- Validated baseline is a separately approved evidence foundation; it is not produced by maturing a reviewed estimate.
+- Pilot-observed result requires both an approved baseline and separately authorized executed pilot evidence.
+- Finance-validated benefit requires both an approved baseline, separately executed result evidence and a Finance review decision.
+- Realized value requires approved operational or financial record evidence in addition to prior evidence gates.
 
-No transition beyond reviewed synthetic estimate is available from Build 5 evidence.
+No state beyond reviewed synthetic estimate is available from Build 5 evidence.
 
 ## Prohibited implementation and claims
 
@@ -309,6 +316,6 @@ Build 5 prohibits:
 - No live data source or integration is authorized.
 - Build 6 retains final readiness and pilot-decision scope.
 
-## Acceptance intent
+## Acceptance determination
 
-This framework is acceptable only as a synthetic, requirements-level value-validation package aligned primarily to P14-G10 and selected planning contributions to P14-G13 and P14-G15. It grants no value validation, pilot, deployment, production or commercial authority and closes no operational gap or risk with evidence.
+This framework received a formal PASS acceptance result as a synthetic, requirements-level value-validation package aligned primarily to P14-G10 and selected planning contributions to P14-G13 and P14-G15. It grants no value validation, pilot, deployment, production or commercial authority, closes no operational gap or risk with evidence, and remains pending separate merge authorization.
