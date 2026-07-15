@@ -8,6 +8,21 @@
 
 **Deployment approval: NOT GRANTED**
 
+**Enterprise production-readiness certification: NOT GRANTED**
+
+## Decision-status vocabulary
+
+Every gate must use exactly one of these statuses:
+
+- PASS
+- FAIL
+- NOT APPLICABLE — APPROVED
+- PENDING
+
+A gate cannot be treated as passed based on narrative language alone.
+
+`NOT APPLICABLE — APPROVED` requires a written rationale, a named evidence owner, an authorized approver, and confirmation that exclusion does not create an uncontrolled risk.
+
 ## Phase acceptance criteria
 
 PVE 1.4 planning is acceptable only when all criteria below are evidenced and reviewed.
@@ -81,36 +96,97 @@ PVE 1.4 planning is acceptable only when all criteria below are evidenced and re
 - Deployment-readiness checklist remains marked **NOT APPROVED**.
 - A separately controlled pilot recommendation is produced.
 
-## Future pilot go criteria
+## Separate determination framework
 
-A future pilot may be recommended only when:
+### Determination A — PVE 1.4 planning closure
 
-1. a pilot charter, sponsor, scope, site/category and accountable owners are approved;
-2. the data set and processing basis are approved;
-3. security, privacy and legal reviews are complete for the pilot scope;
-4. roles, approvals, audit and support are operationally defined;
-5. environment, monitoring, backup and recovery plans are approved;
-6. UAT plan, acceptance authority and defect process are approved;
-7. value baseline and measurement ownership are approved;
-8. all Critical pilot risks are closed or formally accepted by authorized owners;
-9. no autonomous engineering, procurement or supplier decision is enabled;
-10. deployment is separately authorized.
+Allowed outcomes:
+
+- PLANNING COMPLETE
+- PLANNING COMPLETE WITH DOCUMENTED LIMITATIONS
+- PLANNING INCOMPLETE
+
+Planning closure requires:
+
+1. all six build-control records completed;
+2. all planned outputs reviewed;
+3. planned and actual hours reconciled;
+4. all gaps assigned a status and evidence requirement;
+5. all risks assigned a trigger, owner role, treatment and evidence gate;
+6. deployment-readiness checklist marked NOT APPROVED;
+7. no excluded implementation or authorization action performed.
+
+### Determination B — Future pilot recommendation
+
+Allowed outcomes:
+
+- GO
+- CONDITIONAL GO
+- NO-GO
+- DECISION DEFERRED
+
+Planning closure may be successful while the pilot recommendation remains NO-GO or DECISION DEFERRED.
+
+## Objective pilot decision matrix
+
+| Gate | Pass condition | Required evidence | Evidence owner | Required approver | Status |
+|---|---|---|---|---|---|
+| Pilot charter | Sponsor, site/category, scope, objectives, exclusions, duration and accountable owners are approved | Signed pilot charter | Program Owner | Pilot Sponsor | PENDING |
+| Named accountability | All mandatory roles are assigned to named people or approved positions | RACI and appointment evidence | Program Owner | Governance Decision Authority | PENDING |
+| Data approval | Dataset, classifications, minimization, masking, retention, deletion and access controls are approved | Data inventory and approval record | Data Owner | Authorized Data Approver | PENDING |
+| Privacy applicability | Privacy applicability and processing basis are approved where relevant | Privacy assessment | Privacy Owner | Authorized Privacy Approver | PENDING |
+| Security review | All Critical findings are resolved or formally accepted within authority | Security assessment and residual-risk register | Security Owner | Authorized Security Approver | PENDING |
+| Legal and commercial review | Required confidentiality, IP, liability, usage and processing terms are approved | Legal review record | Legal/Commercial Owner | Legal Approval Authority | PENDING |
+| Roles and approvals | Role model, segregation of duties, human approvals, delegation and escalation are approved | Approval matrix and process specification | Business Process Owner | Business Approval Authority | PENDING |
+| Auditability | Required audit events, retention, review and exception handling are approved | Audit-event specification | Governance Owner | Governance Decision Authority | PENDING |
+| Environment | Pilot environment, configuration control and separation requirements are approved | Environment design | Technology Owner | Technology Approval Authority | PENDING |
+| Backup and recovery | Backup, restore, recovery objectives and test requirements are approved | Recovery plan | Technology Owner | Technology Approval Authority | PENDING |
+| Monitoring and support | Logging, metrics, alerts, service ownership, incident severity and support window are approved | Observability and support plan | Service Owner | Service Approval Authority | PENDING |
+| Integration readiness | Every proposed interface has ownership, contract, trust boundary, reconciliation and failure handling | Interface package | Integration Owner | Architecture Review Authority | PENDING |
+| UAT readiness | Personas, scenarios, entry/exit, severity, defects and sign-off authority are approved | UAT plan | UAT Owner | UAT Acceptance Authority | PENDING |
+| Value validation | Baseline, formula, evidence source, claim state and benefit owner are approved | Value-validation plan | Finance/Value Owner | Finance Approval Authority | PENDING |
+| Critical risks | Every Critical pilot risk is CLOSED WITH EVIDENCE or formally ACCEPTED BY AUTHORIZED OWNER | Final risk register | Program Owner | Governance Decision Authority | PENDING |
+| Autonomous-decision prohibition | No autonomous engineering, procurement, supplier-ranking, award or allocation authority exists | Boundary review | Governance Owner | Governance Decision Authority | PENDING |
+| Release integrity | PVE 1.3 tag and published release remain unchanged | Tag and release verification | Release Owner | Release Decision Authority | PENDING |
+| Deployment authorization | A separate deployment decision exists | Explicit deployment authorization record | Pilot Sponsor | Authorized Deployment Authority | PENDING |
+
+## Pilot recommendation rules
+
+A GO recommendation requires every applicable gate to be PASS.
+
+A CONDITIONAL GO recommendation is permitted only when no Critical risk is open; every condition has a named owner, due date and evidence requirement; the decision authority records why the condition does not make execution unsafe; and separate deployment authorization still exists.
+
+A NO-GO recommendation is mandatory when any gate is FAIL and the failure affects safety, data, security, legal authority, human approval, UAT authority, release integrity or deployment authorization.
+
+A DECISION DEFERRED outcome applies when evidence is incomplete but no prohibited action has occurred.
 
 ## No-go conditions
 
-The recommendation must be **NO-GO** when any of the following applies:
+The future pilot recommendation must be NO-GO when any of the following applies:
 
-- uncontrolled real, personal, supplier-confidential or commercial data;
-- missing identity, role or approval controls;
-- unresolved Critical security, privacy, legal or operational risk;
-- no accountable pilot sponsor or business owner;
-- inability to reconcile incomplete or failed integrations;
-- unclear UAT acceptance authority;
-- unsupported production or realized-savings claims;
-- autonomous engineering approval, supplier ranking, award or allocation;
-- proposed modification of the closed PVE 1.3 tag or release;
-- absence of separate deployment authorization.
+- uncontrolled real, personal, supplier-confidential or commercial data is proposed;
+- required identity, role or approval controls are missing;
+- a Critical security, privacy, legal, data or operational risk remains open;
+- there is no accountable sponsor or business owner;
+- failed or incomplete integrations cannot be reconciled;
+- UAT acceptance authority is unclear;
+- production or realized-savings claims are unsupported;
+- autonomous engineering approval, procurement approval, supplier ranking, award or allocation is proposed;
+- the closed PVE 1.3 tag or release has been modified;
+- separate deployment authorization is absent;
+- required evidence is represented only by planning language.
 
 ## Completion determination
 
-Passing PVE 1.4 acceptance criteria means the planning package is complete. It does not mean a pilot, deployment, security posture or enterprise production readiness has been approved.
+Passing the PVE 1.4 planning criteria means only that the authorized planning package is complete.
+
+It does not mean:
+
+- a pilot has been approved;
+- deployment has been approved;
+- operational controls have been implemented;
+- security has been certified;
+- enterprise production readiness has been certified;
+- real-user access has been approved;
+- live integrations have been approved;
+- autonomous engineering or procurement authority has been granted.
