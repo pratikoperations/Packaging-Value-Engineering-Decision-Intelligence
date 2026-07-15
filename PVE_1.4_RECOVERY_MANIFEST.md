@@ -29,8 +29,9 @@ Provide the authoritative continuation and closure record for the controlled PVE
 - Build 6 unused authorized effort: 0.25 hour
 - Prior-build unused hours reassigned: 0
 - Contingency used: 0 of 4 hours
-- Build 6 status: COMPLETE — PENDING REVIEW
-- Draft PR required: YES
+- Build 6 status: CORRECTED — PENDING FINAL ACCEPTANCE REVIEW
+- Draft PR: #48
+- Merge authorization: NOT GRANTED
 - Pilot authorization: NOT GRANTED
 - Deployment readiness: NOT APPROVED
 - Deployment authorization: NOT GRANTED
@@ -55,11 +56,11 @@ The lower current amount controls. Prior-build unused hours cannot be reassigned
 - Build 3: 11 hours completed and governance-closed
 - Build 4: 5.5 hours completed and governance-closed
 - Build 5: 7.5 hours completed and governance-closed
-- Build 6: 5.75 hours completed, pending review
+- Build 6: 5.75 hours completed and corrected, pending final acceptance review
 - Total completed controlled effort: 53.75 hours
 - Unused planned authorization: 0.25 hour
 - Phase effort consumption: 99.5%
-- Planning deliverables: complete pending Build 6 review and closure
+- Planning deliverables: complete pending Build 6 final acceptance and closure
 - Contingency used: 0 of 4 hours
 - Contingency remaining: 4 hours
 
@@ -145,6 +146,8 @@ Unused authorization remains unused. It cannot be reassigned to new scope or tre
 - Deployment-readiness checklist: COMPLETE; overall NOT APPROVED
 - Planning-closure determination: PLANNING COMPLETE WITH DOCUMENTED LIMITATIONS
 - Future-pilot recommendation: DECISION DEFERRED
+- Controlled acceptance-gate vocabulary: CORRECTED
+- Risk-status summary including TREATMENT PLANNED: CORRECTED
 - Risks CLOSED WITH EVIDENCE: 0
 - Risks ACCEPTED BY AUTHORIZED OWNER: 0
 - Pilot executions: 0
@@ -161,6 +164,7 @@ Unused authorization remains unused. It cannot be reassigned to new scope or tre
 - All sixteen Build 1 gap records and substantive routing remain preserved.
 - All eighteen risk IDs, triggers, provisional owners, evidence requirements and gates remain preserved.
 - Planning controls are separated from operational evidence.
+- Every risk remains operationally OPEN, EVIDENCE PENDING or TREATMENT PLANNED.
 - No gap or risk is operationally closed based on planning language.
 - Critical risks without named owners and evidence block GO and CONDITIONAL GO.
 
@@ -177,16 +181,18 @@ Unused authorization remains unused. It cannot be reassigned to new scope or tre
 9. Confirm contingency remains 0 of 4 hours used.
 10. Confirm all 18 risk IDs and core control fields remain present.
 11. Confirm no risk is CLOSED WITH EVIDENCE or ACCEPTED BY AUTHORIZED OWNER.
-12. Confirm planning closure and future-pilot recommendation remain separate.
-13. Confirm deployment readiness remains NOT APPROVED.
-14. Confirm no GO or CONDITIONAL GO is issued.
-15. Confirm all pilot gates requiring operational evidence remain PENDING.
-16. Confirm no real, personal, supplier-confidential, pricing, contractual, drawing, test or commercial data was introduced.
-17. Confirm no live system, endpoint, credential, connector or integration was accessed.
-18. Confirm no UAT, feedback, real defects, business sign-off, production KPI or realized value exists.
-19. Confirm no code, test, schema, migration, workflow, infrastructure, deployment, dependency, dataset, dashboard or telemetry changed.
-20. Confirm PVE 1.3 release records remain unchanged.
-21. Confirm the draft PR remains unmerged until separate acceptance and merge authorization.
+12. Confirm the risk summary permits OPEN, EVIDENCE PENDING and TREATMENT PLANNED.
+13. Confirm controlled gate result fields use only PASS, FAIL, NOT APPLICABLE — APPROVED or PENDING.
+14. Confirm planning closure and future-pilot recommendation remain separate.
+15. Confirm deployment readiness remains NOT APPROVED.
+16. Confirm no GO or CONDITIONAL GO is issued.
+17. Confirm all pilot gates requiring operational evidence remain PENDING.
+18. Confirm no real, personal, supplier-confidential, pricing, contractual, drawing, test or commercial data was introduced.
+19. Confirm no live system, endpoint, credential, connector or integration was accessed.
+20. Confirm no UAT, feedback, real defects, business sign-off, production KPI or realized value exists.
+21. Confirm no code, test, schema, migration, workflow, infrastructure, deployment, dependency, dataset, dashboard or telemetry changed.
+22. Confirm PVE 1.3 release records remain unchanged.
+23. Confirm PR #48 remains draft and unmerged until separate merge authorization.
 
 ## Stop and review conditions
 
@@ -220,4 +226,4 @@ Stop and require a new explicit decision when:
 
 ## Current next gate
 
-Create a draft Build 6 pull request, verify the exact five-file documentation-only scope and successful full CI on the final branch head, then issue a separate PASS or FAIL acceptance decision. Keep the pull request draft and unmerged.
+Verify the exact resulting PR head, exact five-file documentation-only scope and successful full CI, then issue the focused final Build 6 PASS or FAIL acceptance recommendation. Keep PR #48 draft and unmerged pending separate merge authorization.
