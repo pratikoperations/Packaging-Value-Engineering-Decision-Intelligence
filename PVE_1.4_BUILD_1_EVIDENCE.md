@@ -2,7 +2,9 @@
 
 ## Build status
 
-**Build 1 status: COMPLETE — PENDING REVIEW**
+**Build 1 status: ACCEPTED — PENDING MERGE AUTHORIZATION**
+
+**Formal acceptance result:** PASS
 
 **Build authorization:** 6 hours
 
@@ -22,6 +24,7 @@
 - Source branch: `main`
 - Source commit: `4ce3bc620c8fe91510cccfa6ba8be1d904158744`
 - Build branch: `planning/pve-1.4-build-1-gap-assessment`
+- Accepted pre-update head: `3c3bcf0ba60b125caf3950d6c4b013714ebefd1f`
 - Closed release tag: `pve-v1.3`
 - PVE 1.3 completed effort: 312.5 hours
 - PVE 1.4 total planned scope: 54 hours
@@ -86,6 +89,7 @@
 | No implementation work occurred | PASS | Documentation-only changed-file scope |
 | No excluded authority was granted | PASS | Boundary statements preserved |
 | Planned and actual effort are recorded | PASS | 6 planned; 6 actual; 0 contingency |
+| Formal acceptance review completed | PASS | Review against final pre-update head `3c3bcf0ba60b125caf3950d6c4b013714ebefd1f` |
 
 ## Stop-condition review
 
@@ -118,9 +122,9 @@
 
 ## Completion determination
 
-Build 1 is complete as a documentation and analysis deliverable, subject to review of the draft pull request and CI on the branch head.
+Build 1 is accepted as a documentation and analysis deliverable. The formal acceptance review result is PASS. Merge authorization remains separate and has not been granted.
 
-This completion:
+This acceptance:
 
 - does not close operational pilot gaps;
 - does not authorize a pilot;
@@ -133,4 +137,4 @@ This completion:
 
 ## Next controlled gate
 
-Review the Build 1 draft pull request, verify CI on the final branch head, and decide separately whether it may be marked ready for review. Do not merge without separate authorization.
+Verify CI on the acceptance-record head, keep PR #43 draft and unmerged, and decide separately whether merge authorization should be granted.
