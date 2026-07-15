@@ -2,8 +2,11 @@
 
 ## Build status
 
-**Build 6 status: CORRECTED — PENDING FINAL ACCEPTANCE REVIEW**
+**Build 6 status: ACCEPTED — PENDING MERGE AUTHORIZATION**
 
+**Formal acceptance result: PASS**
+
+- Accepted corrected head before this record update: `31ef2684cd5e0805c6cd0c6e190b63913b5d2810`
 - Original Build 6 plan: 8 hours
 - Current executable phase-ledger cap: 6 hours
 - Actual controlled effort: 5.75 hours
@@ -17,6 +20,7 @@
 - Business sign-offs: 0
 - Live integrations: 0
 - Production KPI claims: 0
+- Finance-validated benefits: 0
 - Realized-value claims: 0
 - Risks closed with evidence: 0
 - Risks accepted by authorized owner: 0
@@ -27,6 +31,7 @@
 - Source branch: `main`
 - Source commit: `06cd4cbc778cf3c0b50a60e9a26fb5fe32aa515c`
 - Build branch: `planning/pve-1.4-build-6-final-readiness-decision`
+- Draft PR: #48
 - Build 5 squash merge: `06cd4cbc778cf3c0b50a60e9a26fb5fe32aa515c`
 - Build 5 post-merge workflow: `29408584355`
 - Build 5 post-merge job: `87329949557`
@@ -36,28 +41,26 @@
 
 ## Objective
 
-Complete the final PVE 1.4 planning synthesis by reconciling risk, readiness, evidence, planning closure and the separate future-pilot decision without executing or authorizing operational activity.
+Complete and formally accept the final PVE 1.4 planning synthesis by reconciling risk, readiness, evidence, planning closure and the separate future-pilot decision without executing or authorizing operational activity.
 
-## Required outputs
+## Accepted outputs
 
 | Output | Evidence | Result |
 |---|---|---|
-| Final readiness and decision package | `PVE_1.4_FINAL_READINESS_AND_DECISION_PACKAGE.md` | COMPLETE |
-| Final risk synthesis | Updated `PVE_1.4_RISK_REGISTER.md` | COMPLETE |
-| Final acceptance and pilot gates | Updated `PVE_1.4_ACCEPTANCE_CRITERIA.md` | COMPLETE |
-| Build 6 evidence | This document | COMPLETE |
-| Recovery and continuation state | Updated `PVE_1.4_RECOVERY_MANIFEST.md` | COMPLETE |
-| Deployment-readiness checklist | Overall result NOT APPROVED | COMPLETE |
-| Planning-closure determination | PLANNING COMPLETE WITH DOCUMENTED LIMITATIONS | COMPLETE |
-| Future-pilot recommendation | DECISION DEFERRED | COMPLETE |
-| Evidence index and residual limitations | Final decision package | COMPLETE |
-| Future-evidence roadmap | Five future gates | COMPLETE |
+| Final readiness and decision package | `PVE_1.4_FINAL_READINESS_AND_DECISION_PACKAGE.md` | COMPLETE AND ACCEPTED |
+| Final risk synthesis | `PVE_1.4_RISK_REGISTER.md` | COMPLETE AND ACCEPTED |
+| Final acceptance and pilot gates | `PVE_1.4_ACCEPTANCE_CRITERIA.md` | COMPLETE AND ACCEPTED |
+| Build 6 evidence | This document | COMPLETE AND ACCEPTED |
+| Recovery and continuation state | `PVE_1.4_RECOVERY_MANIFEST.md` | COMPLETE AND ACCEPTED |
+| Deployment-readiness checklist | Overall result `NOT APPROVED` | COMPLETE AND ACCEPTED |
+| Planning-closure determination | `PLANNING COMPLETE WITH DOCUMENTED LIMITATIONS` | COMPLETE AND ACCEPTED |
+| Future-pilot recommendation | `DECISION DEFERRED` | COMPLETE AND ACCEPTED |
+| Evidence index and residual limitations | Final decision package | COMPLETE AND ACCEPTED |
+| Future-evidence roadmap | Five future gates | COMPLETE AND ACCEPTED |
 
 ## Effort reconciliation
 
-The original Build 6 row allocated 8 hours, but the authoritative current phase ledger recorded 48 completed of 54 planned hours after Build 5. Only 6 planned hours therefore remained executable.
-
-The lower current amount controlled execution. No prior-build unused time was reassigned and no contingency was used.
+The original Build 6 row allocated 8 hours, but the authoritative phase ledger recorded 48 completed of 54 planned hours after Build 5. Only 6 planned hours remained executable. The lower current amount controlled execution. No prior-build unused time was reassigned and no contingency was used.
 
 | Activity | Controlled effort |
 |---|---:|
@@ -83,22 +86,34 @@ The authorized planning package is complete, evidence-linked and bounded. Operat
 
 **DECISION DEFERRED**
 
-Operational evidence, named accountability and separate authorizations are incomplete. No prohibited action occurred, so a deferred decision is more accurate than a GO, CONDITIONAL GO or operational failure determination.
+Operational evidence, named accountability and separate authorizations are incomplete. No prohibited action occurred, so a deferred decision is more accurate than GO, CONDITIONAL GO or an operational failure determination.
 
 ### Deployment readiness
 
 **NOT APPROVED**
 
+### Pilot authorization
+
+**NOT GRANTED**
+
+### Deployment authorization
+
+**NOT GRANTED**
+
 ### Enterprise production-readiness certification
 
 **NOT GRANTED**
 
-## Formal blocker-correction record
+## Formal acceptance record
 
-The formal acceptance review identified two documentation-governance blockers. Both are corrected:
+The focused final acceptance review confirmed that the two earlier documentation-governance blockers were resolved:
 
-1. `PVE_1.4_ACCEPTANCE_CRITERIA.md` now uses only `PASS`, `FAIL`, `NOT APPLICABLE — APPROVED` or `PENDING` in controlled gate-status fields. Planning-only qualifications, operational-evidence limitations and the 8-hour/6-hour reconciliation are retained in separate implication, limitation or comment fields.
-2. `PVE_1.4_RISK_REGISTER.md` now states that every risk remains operationally `OPEN`, `EVIDENCE PENDING` or `TREATMENT PLANNED`, consistently preserving P14-R14 as `TREATMENT PLANNED`.
+1. Controlled gate-status fields use only `PASS`, `FAIL`, `NOT APPLICABLE — APPROVED` or `PENDING`; planning-only qualifications and the 8-hour/6-hour reconciliation are carried in separate implication or comment fields.
+2. The risk summary consistently permits `OPEN`, `EVIDENCE PENDING` and `TREATMENT PLANNED`, preserving P14-R14 as `TREATMENT PLANNED`.
+
+Formal result: **PASS**.
+
+Blocking findings remaining: **0**.
 
 No substantive planning determination, pilot recommendation, risk closure, authorization or operational boundary changed.
 
@@ -108,29 +123,24 @@ No substantive planning determination, pilot recommendation, risk closure, autho
 - Triggers preserved: PASS
 - Provisional owners preserved: PASS
 - Evidence requirements preserved: PASS
-- Gates preserved: PASS
+- Authorities and gates preserved: PASS
 - Planning controls distinguished from operational evidence: PASS
 - Future-pilot blockers classified: PASS
 - Connected-pilot blockers classified: PASS
 - Production-evidence deferrals classified: PASS
 - Continuous governance risks classified: PASS
-- Risks marked CLOSED WITH EVIDENCE: 0
-- Risks marked ACCEPTED BY AUTHORIZED OWNER: 0
+- Risks marked `CLOSED WITH EVIDENCE`: 0
+- Risks marked `ACCEPTED BY AUTHORIZED OWNER`: 0
 
 ## Dependency preservation
 
 | Boundary | Result |
 |---|---|
 | All 16 Build 1 gaps and substantive routing preserved | PASS |
-| Build 2 human approval and segregation preserved | PASS |
-| Build 2 audit and supplier-authority boundaries preserved | PASS |
-| Build 3 classification and synthetic-data requirements preserved | PASS |
-| Build 3 no-personal-data, privacy and security gates preserved | PASS |
-| Build 4 no-live-connection boundary preserved | PASS |
-| Build 4 system-of-record, safe-failure and reconciliation preserved | PASS |
-| Build 5 automated-test/UAT distinction preserved | PASS |
-| Build 5 non-execution state preserved | PASS |
-| Build 5 value non-claim controls preserved | PASS |
+| Build 2 human approval, segregation, audit and supplier-authority boundaries preserved | PASS |
+| Build 3 classification, synthetic-data, no-personal-data, privacy and security gates preserved | PASS |
+| Build 4 no-live-connection, system-of-record, safe-failure and reconciliation preserved | PASS |
+| Build 5 automated-test/UAT distinction, non-execution and value non-claim controls preserved | PASS |
 | PVE 1.3 release and tag preserved | PASS |
 
 ## Explicit zero and non-authorization record
@@ -163,13 +173,9 @@ No substantive planning determination, pilot recommendation, risk closure, autho
 - real UAT report;
 - benefits-realization report;
 - operational support commitment;
-- application code;
-- tests;
-- schemas or migrations;
-- workflows;
-- infrastructure or deployment configuration;
-- dependencies or datasets;
-- dashboards or telemetry;
+- application code, tests, schemas or migrations;
+- workflows, infrastructure or deployment configuration;
+- dependencies, datasets, dashboards or telemetry;
 - active integrations.
 
 ## Acceptance checks
@@ -177,8 +183,8 @@ No substantive planning determination, pilot recommendation, risk closure, autho
 | Condition | Result |
 |---|---|
 | Exact baseline traced | PASS |
-| Five-file documentation-only scope | PASS |
-| Build 5 closure evidence corrected | PASS |
+| Five-file documentation-only PR scope | PASS |
+| Build 5 closure evidence recorded | PASS |
 | Six-hour execution cap respected | PASS |
 | Contingency remains unused | PASS |
 | All risk IDs and core fields preserved | PASS |
@@ -186,26 +192,15 @@ No substantive planning determination, pilot recommendation, risk closure, autho
 | Controlled gate-status vocabulary enforced | PASS |
 | Risk-status summary aligned with P14-R14 | PASS |
 | Deployment readiness remains NOT APPROVED | PASS |
-| Planning and pilot decisions are separate | PASS |
+| Planning and pilot decisions remain separate | PASS |
 | No GO or CONDITIONAL GO issued | PASS |
 | No operational risk closure claimed | PASS |
 | No pilot, deployment or production authority granted | PASS |
+| Formal Build 6 acceptance | PASS |
 
 ## Stop-condition review
 
-- Main baseline mismatch: NOT TRIGGERED
-- Build 5 closure evidence unavailable: NOT TRIGGERED
-- Effort above 6 hours: NOT TRIGGERED
-- Prior-build unused time reassigned: NOT TRIGGERED
-- Contingency use without authorization: NOT TRIGGERED
-- Critical risk closed without evidence: NOT TRIGGERED
-- GO or CONDITIONAL GO while Critical risks remain open: NOT TRIGGERED
-- Deployment readiness marked approved: NOT TRIGGERED
-- Real-user, UAT, live integration or deployment activity: NOT TRIGGERED
-- Real or confidential data introduction: NOT TRIGGERED
-- Realized-value or production KPI claim: NOT TRIGGERED
-- Application or infrastructure change: NOT TRIGGERED
-- PVE 1.3 tag or release change: NOT TRIGGERED
+No stop condition was triggered. In particular, there was no baseline mismatch, effort overrun, reassignment of unused hours, contingency use, unsupported risk closure, GO or CONDITIONAL GO, deployment approval, real-user activity, live integration, real-data introduction, realized-value claim, application or infrastructure change, or PVE 1.3 tag/release change.
 
 ## PVE 1.4 effort state after Build 6
 
@@ -213,15 +208,13 @@ No substantive planning determination, pilot recommendation, risk closure, autho
 - PVE 1.4 controlled phase ledger: 54 hours
 - PVE 1.4 completed effort: 53.75 hours
 - PVE 1.4 unused planned authorization: 0.25 hour
-- PVE 1.4 planned completion: 99.5% by consumed hours; planning deliverables complete pending final acceptance and closure
+- PVE 1.4 planned completion: 99.5% by consumed hours; planning deliverables complete and accepted pending merge and post-merge validation
 - Controlled contingency used: 0 of 4 hours
 
 ## Completion determination
 
-Build 6 is complete as a documentation-only final planning package and has received the required blocker corrections. It remains pending a focused final acceptance review of the resulting exact head and successful CI.
-
-This completion does not authorize or evidence a pilot, deployment, production operation, real-user use, live integration, UAT acceptance, security certification, production KPI, Finance-validated benefit or realized value.
+Build 6 is complete and formally accepted as a documentation-only final planning package. This acceptance does not authorize or evidence a pilot, deployment, production operation, real-user use, live integration, UAT acceptance, security certification, production KPI, Finance-validated benefit or realized value.
 
 ## Next controlled gate
 
-Verify the exact resulting PR head, exact five-file documentation-only scope and successful full CI, then issue the focused final Build 6 PASS or FAIL acceptance recommendation. Keep PR #48 draft and unmerged pending separate merge authorization.
+Keep PR #48 draft and unmerged pending separate explicit merge authorization. Before merge, verify the exact final head, exact five-file documentation-only scope and successful full CI. Following an authorized squash merge, require post-merge CI on the resulting exact `main` SHA before Build 6 and PVE 1.4 governance closure.
