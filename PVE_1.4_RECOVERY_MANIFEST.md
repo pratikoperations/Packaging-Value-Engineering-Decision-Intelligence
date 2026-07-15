@@ -23,12 +23,14 @@ Provide the authoritative continuation record for the controlled PVE 1.4 plannin
 - Active build: PVE 1.4 Build 3 — Data, Privacy and Security Requirements
 - Working branch: `planning/pve-1.4-build-3-data-privacy-security`
 - Branch source commit: `a9a95ccc455e60bf1a655ff466f84b347d076c3f`
+- Accepted pre-update head: `8736d4e2e1dd5167e5ac9bf64b287f04447c74bb`
+- Formal acceptance result: PASS
 - Build 3 authorized maximum: 12 hours
 - Build 3 actual controlled effort: 11 hours
 - Build 3 unused authorized effort: 1 hour
 - Build 3 pending effort: 0 hours
-- Build 3 status: COMPLETE — PENDING REVIEW
-- Draft PR required: YES
+- Build 3 status: ACCEPTED — PENDING MERGE AUTHORIZATION
+- Draft PR: #45
 - Merge authorization: NOT GRANTED
 - Personal-data processing authorization: NOT GRANTED
 - Pilot authorization: NOT GRANTED
@@ -44,7 +46,7 @@ Provide the authoritative continuation record for the controlled PVE 1.4 plannin
 - Initiation/planning package: 6 hours completed
 - Build 1: 6 hours completed and governance-closed
 - Build 2: 12 hours completed and governance-closed
-- Build 3: 11 hours completed, pending review
+- Build 3: 11 hours completed and accepted, pending merge authorization
 - Total completed controlled effort: 35 hours
 - Pending planned effort: 19 hours
 - Phase completion: 64.8%
@@ -91,21 +93,23 @@ Unused Build 2 and Build 3 authorization remains unused. It cannot be reassigned
 
 ## Build 3 output state
 
-- Synthetic data-inventory template: COMPLETE
-- Practical classification model: COMPLETE
-- Ownership, minimization, masking, retention and deletion requirements: COMPLETE
-- No-personal-data default and privacy applicability gate: COMPLETE
-- Project-specific threat model: COMPLETE
-- Access-control requirements: COMPLETE
-- Incident and vulnerability-review requirements: COMPLETE
-- Security-evidence plan: COMPLETE
+- Formal acceptance result: PASS
+- Synthetic data-inventory template: COMPLETE AND ACCEPTED
+- Practical classification model with overlap precedence: COMPLETE AND ACCEPTED
+- Ownership, minimization, masking, retention and deletion requirements: COMPLETE AND ACCEPTED
+- Future deletion-evidence requirements: COMPLETE AND ACCEPTED
+- No-personal-data default and privacy applicability gate: COMPLETE AND ACCEPTED
+- Project-specific threat model: COMPLETE AND ACCEPTED
+- Access-control requirements: COMPLETE AND ACCEPTED
+- Incident and vulnerability-review requirements: COMPLETE AND ACCEPTED
+- Security-evidence plan: COMPLETE AND ACCEPTED
 - Real personal, supplier-confidential or commercial data introduced: 0
 - Operational gaps or risks closed with evidence: 0
 - Application, workflow, dependency, dataset, infrastructure or integration changes: 0
 
 ## Build 3 gap relationship
 
-Build 3 develops planning outputs for:
+Build 3 develops accepted planning outputs for:
 
 - P14-G01 — access requirements only; no authentication or RBAC implementation;
 - P14-G04 — data inventory, classification, minimization, masking, retention and deletion requirements;
@@ -122,7 +126,7 @@ All sixteen Build 1 gap records and substantive target-build routing remain pres
 2. Confirm tag `pve-v1.3` and its published release remain unchanged.
 3. Confirm the active branch is `planning/pve-1.4-build-3-data-privacy-security`.
 4. Confirm the branch descends from exact main SHA `a9a95ccc455e60bf1a655ff466f84b347d076c3f`.
-5. Confirm changed files are limited to two substantive Build 3 documents and two control records.
+5. Confirm changed files remain limited to two substantive Build 3 documents and two control records.
 6. Confirm no application code, tests, schemas, migrations, workflows, infrastructure, deployment, dependencies, datasets or integration contracts changed.
 7. Confirm Build 3 effort is 11 hours against a maximum of 12 and the remaining hour is unused.
 8. Confirm cumulative PVE 1.4 effort is 35 completed and 19 pending hours.
@@ -134,7 +138,8 @@ All sixteen Build 1 gap records and substantive target-build routing remain pres
 14. Confirm authentication, RBAC, encryption, secrets, monitoring, security infrastructure, integrations and real-user access remain unimplemented and unauthorized.
 15. Confirm no legal-compliance, approved-processing-basis, security-certification or production-readiness claim is made.
 16. Confirm Build 4 integration scope and Build 5 UAT scope remain unchanged.
-17. Confirm the draft PR remains unmerged until separate authorization.
+17. Confirm Build 3 acceptance remains PASS and merge authorization remains separate.
+18. Confirm PR #45 remains draft and unmerged until explicit authorization.
 
 ## Stop and review conditions
 
@@ -169,4 +174,4 @@ Stop work and require a new explicit decision when:
 
 ## Current next gate
 
-Create a draft Build 3 pull request, verify the exact four-file documentation-only scope, run the full PVE CI suite on the final branch head and issue a separate PASS or FAIL acceptance recommendation. Keep the pull request draft and unmerged.
+Verify full PVE CI on the Build 3 acceptance-record head. Keep PR #45 draft and unmerged. After successful CI, decide separately whether to authorize squash merge. Do not begin Build 4 until Build 3 is merged and post-merge validation is complete.
