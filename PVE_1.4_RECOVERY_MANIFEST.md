@@ -23,12 +23,14 @@ Provide the authoritative GitHub continuation record for the PVE 1.4 controlled 
 - Active build: PVE 1.4 Build 2 — Governance and Demonstration Operating Model
 - Working branch: `planning/pve-1.4-build-2-governance-demo-model`
 - Branch source commit: `7ee3ed625121303f5b96de8220c0b81bc4c1f8a1`
+- Accepted pre-update head: `989113b15bcd9d386b230942bc657aa228de502b`
+- Formal acceptance result: PASS
 - Build 2 authorized maximum: 14 hours
 - Build 2 actual controlled effort: 12 hours
 - Build 2 unused authorized effort: 2 hours
 - Build 2 pending effort: 0 hours
-- Build 2 status: COMPLETE — PENDING REVIEW
-- Draft PR required: YES
+- Build 2 status: ACCEPTED — PENDING MERGE AUTHORIZATION
+- Draft PR: #44
 - Merge authorization: NOT GRANTED
 - Pilot authorization: NOT GRANTED
 - Deployment authorization: NOT GRANTED
@@ -41,7 +43,7 @@ Provide the authoritative GitHub continuation record for the PVE 1.4 controlled 
 
 - Initiation/planning package: 6 hours completed
 - Build 1: 6 hours completed and governance-closed
-- Build 2: 12 hours completed, pending review
+- Build 2: 12 hours completed and accepted, pending merge authorization
 - Total completed controlled effort: 24 hours
 - Pending planned effort: 30 hours
 - Phase completion: 44.4%
@@ -77,24 +79,26 @@ Unused Build 2 authorization remains unused. It cannot be reassigned to new scop
 - Operational gaps closed with evidence: 0
 - Implementation changes: 0
 
-### Build 2 — Complete pending review
+### Build 2 — Accepted pending merge authorization
 
-- Minimum provisional role model: COMPLETE
-- Responsibility matrix: COMPLETE
-- Human approval flow and decision states: COMPLETE
-- Segregation-of-duties controls: COMPLETE
-- Exception and escalation model: COMPLETE
-- Audit-event requirements catalogue: COMPLETE
-- Persona-led 6–8 minute demo: COMPLETE
-- 90-second fallback path: COMPLETE
-- Evidence-traceability map: COMPLETE
+- Formal acceptance result: PASS
+- Minimum provisional role model: COMPLETE AND ACCEPTED
+- Responsibility matrix: COMPLETE AND ACCEPTED
+- Human approval flow and decision states: COMPLETE AND ACCEPTED
+- Segregation-of-duties controls: COMPLETE AND ACCEPTED
+- Exception and escalation model: COMPLETE AND ACCEPTED
+- Audit-event requirements catalogue: COMPLETE AND ACCEPTED
+- Persona-led 6–8 minute demo: COMPLETE AND ACCEPTED
+- 90-second fallback path: COMPLETE AND ACCEPTED
+- Evidence-traceability map: COMPLETE AND ACCEPTED
 - Separate low-value governance documents created: 0
 - Operational gaps closed with evidence: 0
 - Application or infrastructure changes: 0
+- Rehearsal execution evidence: NOT YET PRODUCED; carried forward to later demonstration readiness
 
 ## Build 2 gap relationship
 
-Build 2 develops planning outputs for:
+Build 2 develops accepted planning outputs for:
 
 - P14-G01 — role model contribution only; detailed access/security requirements remain Build 3;
 - P14-G02 — approval, delegation, escalation and segregation model;
@@ -119,7 +123,8 @@ All sixteen Build 1 gap records and substantive target-build routing remain pres
 12. Confirm production deployment, integrations, authentication implementation and real-user access remain unauthorized.
 13. Confirm autonomous approval, supplier ranking, award and allocation remain prohibited.
 14. Confirm enterprise production readiness remains uncertified.
-15. Confirm the draft PR remains unmerged until separate authorization.
+15. Confirm Build 2 acceptance remains PASS and merge authorization remains separate.
+16. Confirm PR #44 remains draft and unmerged until explicit authorization.
 
 ## Stop and review conditions
 
@@ -155,4 +160,4 @@ Stop work and require a new explicit decision when:
 
 ## Current next gate
 
-Create a draft Build 2 pull request, verify the exact four-file documentation-only scope, run the full PVE CI suite on the final branch head and issue a separate PASS or FAIL acceptance recommendation. Keep the pull request draft and unmerged.
+Verify full PVE CI on the acceptance-record head. Keep PR #44 draft and unmerged. After successful CI, decide separately whether to authorize squash merge. Do not begin Build 3 until Build 2 is merged and post-merge validation is complete.
