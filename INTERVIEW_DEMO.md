@@ -4,6 +4,7 @@
 
 This is the current controlled interview-demonstration authority for PVE 1.4. Historical demo guides remain preserved as release-specific references.
 
+**Build 2 acceptance result:** PASS — PENDING MERGE AUTHORIZATION  
 **Target duration:** 6–8 minutes  
 **Fallback duration:** 90 seconds  
 **Data:** synthetic or explicitly controlled only  
@@ -116,13 +117,13 @@ Suggested close:
 
 | Interview claim | Demonstration evidence | Repository authority | Limitation statement |
 |---|---|---|---|
-| Intake and evidence completeness are governed | Readiness, blockers and source classifications | PVE 1.1/PVE 1.2 architecture and tests | Readiness is not approval |
-| Technical blockers override savings | Screening result and required-trial output | Corrugated engineering rules and governance records | No universal hidden thresholds |
-| Savings are explainable | Cost, material and implementation-economics outputs | Deterministic calculation and release QA | Analytical, not realized value |
-| Supplier evidence is controlled | Evidence validity, conflict and source type | Evidence model and immutable assessment | No supplier ranking or award |
+| Intake and evidence completeness are governed | Readiness, blockers and source classifications | `PVE_1.1_RELEASE_QA.md`, `PVE_1.2_ARCHITECTURE.md` | Readiness is not approval |
+| Technical blockers override savings | Screening result and required-trial output | `PVE_1.2_ARCHITECTURE.md`, `PVE_1.2_GOVERNANCE_AND_RISK.md` | No universal hidden thresholds |
+| Savings are explainable | Cost, material and implementation-economics outputs | `PVE_1.2_ARCHITECTURE.md`, `PVE_1.2_RELEASE_QA.md` | Analytical, not realized value |
+| Supplier evidence is controlled | Evidence validity, conflict and source type | `PVE_1.2_ARCHITECTURE.md`, `PVE_1.4_GAP_ASSESSMENT.md` | No supplier ranking or award |
 | Decision is human-governed | Review-only recommendation and approval boundary | `PVE_1.4_GOVERNANCE_OPERATING_MODEL.md` | System cannot approve |
-| Records are traceable | Assessment/export with version and evidence references | Persistence and release evidence | Portfolio-grade, not production audit certification |
-| Build quality is validated | Current CI run and full test artifact | GitHub Actions evidence | Automated tests are not UAT |
+| Records are traceable | Assessment/export with version and evidence references | `PVE_1.2_ARCHITECTURE.md`, `PVE_1.2_RELEASE_QA.md` | Portfolio-grade, not production audit certification |
+| Build quality is validated | Current CI run and full test artifact | `PVE_1.4_BUILD_2_EVIDENCE.md` and GitHub Actions run `29399733039` | Automated tests are not UAT |
 
 ## Fallback demonstration — 90 seconds
 
@@ -197,7 +198,7 @@ Autonomous engineering or procurement approval, supplier ranking, sourcing award
 
 ## Rehearsal acceptance
 
-The demonstration is ready for Build 2 review when:
+The demonstration is ready for final executive-package use when:
 
 - it completes in 6–8 minutes;
 - the fallback completes in 90 seconds;
@@ -207,4 +208,4 @@ The demonstration is ready for Build 2 review when:
 - synthetic and non-production boundaries remain visible;
 - no unsupported capability or realized-value claim is made.
 
-Build 2 documents the demonstration operating model; it does not constitute rehearsal evidence, real-user UAT, pilot authorization or production approval.
+Build 2 acceptance confirms the demonstration specification, not rehearsal execution. Rehearsal evidence remains a later demonstration-readiness action and does not constitute real-user UAT, pilot authorization or production approval.
