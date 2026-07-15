@@ -2,7 +2,9 @@
 
 ## Status
 
-**Planning acceptance framework: FINAL SYNTHESIS — CORRECTED FOR FINAL REVIEW**
+**Planning acceptance framework: ACCEPTED — GOVERNANCE CLOSED**
+
+**PVE 1.4 status: COMPLETED AND GOVERNANCE CLOSED**
 
 **Pilot approval: NOT GRANTED**
 
@@ -163,6 +165,6 @@ A future pilot recommendation must be NO-GO when:
 
 ## Completion boundary
 
-Passing the PVE 1.4 planning criteria means only that the authorized planning package is complete with documented limitations.
+Passing and governance-closing the PVE 1.4 planning criteria means only that the authorized planning package is complete with documented limitations.
 
 It does not mean that a pilot, deployment, operational control, security certification, enterprise production readiness, real-user access, live integration, autonomous approval or realized value has been approved or achieved.
