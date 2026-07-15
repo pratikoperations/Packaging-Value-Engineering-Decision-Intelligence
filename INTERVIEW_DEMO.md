@@ -117,7 +117,7 @@ Suggested close:
 
 | Interview claim | Demonstration evidence | Repository authority | Limitation statement |
 |---|---|---|---|
-| Intake and evidence completeness are governed | Readiness, blockers and source classifications | `PVE_1.1_RELEASE_QA.md`, `PVE_1.2_ARCHITECTURE.md` | Readiness is not approval |
+| Intake and evidence completeness are governed | Readiness, blockers and source classifications | `PVE_1.2_ARCHITECTURE.md`, `PVE_1.4_GAP_ASSESSMENT.md` | Readiness is not approval |
 | Technical blockers override savings | Screening result and required-trial output | `PVE_1.2_ARCHITECTURE.md`, `PVE_1.2_GOVERNANCE_AND_RISK.md` | No universal hidden thresholds |
 | Savings are explainable | Cost, material and implementation-economics outputs | `PVE_1.2_ARCHITECTURE.md`, `PVE_1.2_RELEASE_QA.md` | Analytical, not realized value |
 | Supplier evidence is controlled | Evidence validity, conflict and source type | `PVE_1.2_ARCHITECTURE.md`, `PVE_1.4_GAP_ASSESSMENT.md` | No supplier ranking or award |
