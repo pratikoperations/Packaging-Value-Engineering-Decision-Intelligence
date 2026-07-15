@@ -2,7 +2,9 @@
 
 ## Status and boundary
 
-**Build 3 planning output: COMPLETE — PENDING REVIEW**
+**Build 3 planning output: ACCEPTED — PENDING MERGE AUTHORIZATION**
+
+**Formal acceptance result: PASS**
 
 This document defines security requirements and a future pilot threat model only. It does not implement authentication, RBAC, encryption, secrets management, monitoring, vulnerability tooling, incident tooling, integrations, infrastructure, deployment or real-user access.
 
@@ -219,6 +221,6 @@ Build 3 prohibits:
 - Detailed integration architecture remains Build 4 scope.
 - UAT and value validation remain Build 5 scope.
 
-## Acceptance intent
+## Acceptance determination
 
-This document is acceptable only as a project-specific, requirements-level threat and security package aligned to P14-G01, P14-G05 and selected future requirements for P14-G08, P14-G12 and P14-G14. It does not authorize a pilot, deployment or real-data processing and does not close any operational gap or risk with evidence.
+Build 3 received a formal **PASS** as a project-specific, requirements-level threat and security package aligned to P14-G01, P14-G05 and selected future requirements for P14-G08, P14-G12 and P14-G14. This acceptance confirms documentation quality only. It does not authorize a pilot, deployment or real-data processing; certify security or compliance; appoint owners; implement controls; or close any operational gap or risk with evidence.
