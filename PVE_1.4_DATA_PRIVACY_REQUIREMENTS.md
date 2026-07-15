@@ -2,7 +2,9 @@
 
 ## Status and boundary
 
-**Build 3 planning output: COMPLETE — PENDING REVIEW**
+**Build 3 planning output: ACCEPTED — PENDING MERGE AUTHORIZATION**
+
+**Formal acceptance result: PASS**
 
 This document defines future pilot data-governance and privacy requirements only. It does not authorize or implement real-data processing, personal-data processing, authentication, RBAC, encryption, masking tooling, retention automation, deletion automation, integrations, deployment or real-user access.
 
@@ -71,12 +73,12 @@ These examples are not operational data assets and do not evidence approved proc
 | Classification | Definition | Typical PVE example | Minimum handling requirement |
 |---|---|---|---|
 | Public | Approved for public disclosure | Published standards or public packaging guidance | Verify source and usage rights |
-| Internal | Non-public but low sensitivity | Generic process notes or non-sensitive metadata | Internal access and controlled sharing |
-| Controlled | Synthetic or governed portfolio data | Demo inputs, calculations and outputs | Role-based future access requirement; clear synthetic label |
+| Internal | Non-public, low-sensitivity information that does not require controlled provenance, synthetic labelling or decision traceability | Generic process notes or non-sensitive metadata | Internal access and controlled sharing |
+| Controlled | Synthetic or governed portfolio information requiring provenance, versioning, synthetic labelling or decision traceability even when confidentiality is low | Demo inputs, calculations and outputs | Role-based future access requirement; clear synthetic label; retained provenance |
 | Confidential | Supplier, technical, quality or commercial information | Pricing, specifications, drawings, test reports | Named owner, approved purpose, restricted access and retention rule |
 | Restricted | Personal, legally protected, security-sensitive or highly confidential information | Personal identifiers, credentials or highly sensitive supplier data | Default prohibition; separate approval and enhanced controls required |
 
-Classification does not itself authorize use. Purpose, ownership, access, retention and review evidence remain required.
+Classification does not itself authorize use. Purpose, ownership, access, retention and review evidence remain required. When more than one classification appears applicable, the higher-handling classification governs. `Controlled` applies whenever provenance, versioning, synthetic labelling or decision traceability is required, even if the information would otherwise appear low sensitivity.
 
 ## Data minimization requirements
 
@@ -119,6 +121,23 @@ Build 3 does not implement automated masking or anonymization tooling.
 | Backups | Align with approved retention and deletion obligations | Backup architecture remains later scope |
 
 Exact periods require future Data Owner, Legal/Commercial and business approval. Build 3 does not claim that deletion can currently be proven across production systems or backups.
+
+### Future deletion-evidence requirements
+
+Any future claim that a data asset has been deleted must include, at minimum:
+
+- data asset ID;
+- deletion trigger and approved purpose for deletion;
+- authorizing role or named authority when later appointed;
+- deletion request date;
+- completion date;
+- primary record or storage location affected;
+- verifier and verification method;
+- backup, replica or downstream-copy exception status;
+- residual-copy status and treatment;
+- exception, failure or re-review reference where complete deletion cannot yet be evidenced.
+
+These are future evidence requirements only. Build 3 does not execute deletion or prove deletion across any operational system, backup or integration.
 
 ## Privacy applicability gate
 
@@ -182,6 +201,6 @@ This checklist is not legal advice and does not establish compliance or an appro
 - UAT data and execution remain Build 5 scope.
 - Pilot authorization and production readiness remain separate future decisions.
 
-## Acceptance intent
+## Acceptance determination
 
-This document is acceptable only as a synthetic, no-personal-data-default, requirements-level planning artefact aligned to P14-G04, P14-G06 and the data aspects of P14-G01 and P14-G14. It does not close any operational gap or risk with evidence.
+Build 3 received a formal **PASS** as a synthetic, no-personal-data-default, requirements-level planning artefact aligned to P14-G04, P14-G06 and the data aspects of P14-G01 and P14-G14. This acceptance confirms documentation quality only. It does not close any operational gap or risk with evidence, approve personal-data processing, appoint owners or authorize implementation, pilot use or deployment.
