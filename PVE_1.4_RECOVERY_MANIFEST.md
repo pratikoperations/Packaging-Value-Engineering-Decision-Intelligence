@@ -23,12 +23,15 @@ Provide the authoritative continuation record for the controlled PVE 1.4 plannin
 - Active build: PVE 1.4 Build 5 — UAT and Value Validation
 - Working branch: `planning/pve-1.4-build-5-uat-value-validation`
 - Branch source commit: `5210c19cc0dbe5dc93ba1104312d49f2629e0987`
+- Accepted pre-update head: `4765c1c51cfb5c9dab9af1954a0870328b1253ad`
+- Formal acceptance result: PASS
 - Build 5 authorized maximum: 8 hours
 - Build 5 actual controlled effort: 7.5 hours
 - Build 5 unused authorized effort: 0.5 hour
 - Build 5 pending effort: 0 hours
-- Build 5 status: COMPLETE — PENDING REVIEW
-- Draft PR required: YES
+- Build 5 status: ACCEPTED — PENDING MERGE AUTHORIZATION
+- Draft PR: #47
+- Merge authorization: NOT GRANTED
 - UAT execution authorization: NOT GRANTED
 - Real-user participation authorization: NOT GRANTED
 - Personal-data processing authorization: NOT GRANTED
@@ -46,7 +49,7 @@ Provide the authoritative continuation record for the controlled PVE 1.4 plannin
 - Build 2: 12 hours completed and governance-closed
 - Build 3: 11 hours completed and governance-closed
 - Build 4: 5.5 hours completed and governance-closed
-- Build 5: 7.5 hours completed, pending review
+- Build 5: 7.5 hours completed and accepted, pending merge authorization
 - Total completed controlled effort: 48 hours
 - Pending planned effort: 6 hours
 - Phase completion: 88.9%
@@ -119,23 +122,26 @@ Unused Build 2, Build 3, Build 4 and Build 5 authorization remains unused. It ca
 - Live endpoints, credentials, connectors, transmitted real records, deployed infrastructure, executed integration tests and real-user access: 0
 - Operational gaps or risks closed with evidence: 0
 
-## Build 5 output state
+## Build 5 accepted output state
 
-- Provisional UAT personas: COMPLETE
-- Twelve-scenario synthetic UAT catalogue: COMPLETE
-- Future UAT entry and exit criteria: COMPLETE
-- Four-level defect severity model: COMPLETE
-- Future defect, sign-off and traceability templates: COMPLETE
-- Automated-test/UAT distinction: COMPLETE
+- Formal acceptance result: PASS
+- Provisional UAT personas, including Integration and Error/Reconciliation supporting roles: COMPLETE AND ACCEPTED
+- Twelve-scenario synthetic UAT catalogue: COMPLETE AND ACCEPTED
+- Future UAT entry and exit criteria: COMPLETE AND ACCEPTED
+- Four-level defect severity model: COMPLETE AND ACCEPTED
+- Future defect, sign-off and traceability templates: COMPLETE AND ACCEPTED
+- Automated-test/UAT distinction: COMPLETE AND ACCEPTED
 - UAT sessions executed: 0
 - Real users invited or identified: 0
 - Real feedback collected: 0
 - Real defects recorded: 0
 - Business sign-offs granted: 0
-- Seven-state value claim model: COMPLETE
-- Twelve-KPI compact catalogue: COMPLETE
-- KPI, baseline, formula, evidence, ownership and review templates: COMPLETE
-- Finance/Value review requirement: COMPLETE
+- Seven-state value claim model: COMPLETE AND ACCEPTED
+- Validated-baseline evidence-foundation clarification: COMPLETE AND ACCEPTED
+- Pilot-observed and Finance-validated benefit evidence requirements: COMPLETE AND ACCEPTED
+- Twelve-KPI compact catalogue: COMPLETE AND ACCEPTED
+- KPI, baseline, formula, evidence, ownership and review templates: COMPLETE AND ACCEPTED
+- Finance/Value review requirement: COMPLETE AND ACCEPTED
 - Production KPI, ROI, adoption, productivity or realized-benefit claims: 0
 - Live systems, endpoints, credentials, connectors or integrations accessed: 0
 - Operational gaps or risks closed with evidence: 0
@@ -143,7 +149,7 @@ Unused Build 2, Build 3, Build 4 and Build 5 authorization remains unused. It ca
 
 ## Build 5 gap relationship
 
-Build 5 develops planning outputs for:
+Build 5 develops accepted planning outputs for:
 
 - P14-G09 — future UAT personas, scenarios, entry/exit, defect and sign-off requirements;
 - P14-G10 — KPI, baseline, formula, evidence, ownership and claim-state requirements;
@@ -154,29 +160,32 @@ All sixteen Build 1 gap records and substantive target-build routing remain pres
 
 ## Recovery checks
 
-1. Confirm `main` remains exactly `5210c19cc0dbe5dc93ba1104312d49f2629e0987` until the Build 5 branch is created.
+1. Confirm `main` remains exactly or validly descends from `5210c19cc0dbe5dc93ba1104312d49f2629e0987` without unrelated baseline invalidation.
 2. Confirm Build 4 post-merge CI run `29405792614`, job `87320799192`, 382 tests, 0 failures, 0 errors and artifact `8338984642` remain traceable.
 3. Confirm tag `pve-v1.3` and its published release remain unchanged.
 4. Confirm the active branch is `planning/pve-1.4-build-5-uat-value-validation`.
 5. Confirm the branch descends from exact main SHA `5210c19cc0dbe5dc93ba1104312d49f2629e0987`.
-6. Confirm changed files are limited to two substantive Build 5 frameworks and two control records.
+6. Confirm changed files remain limited to two substantive Build 5 frameworks and two control records.
 7. Confirm no application code, tests, schemas, migrations, workflows, infrastructure, deployment, dependencies, datasets, dashboards, telemetry or integration contracts changed.
 8. Confirm Build 5 effort is 7.5 hours against a maximum of 8 and the remaining 0.5 hour is unused.
 9. Confirm cumulative PVE 1.4 effort is 48 completed and 6 pending hours.
 10. Confirm controlled contingency remains 0 of 4 hours used.
 11. Confirm all personas remain provisional placeholders and no real users are named or appointed.
-12. Confirm all scenarios, data, KPI examples and formulas remain synthetic or explicitly controlled.
-13. Confirm no actual personal, supplier-confidential, pricing, contractual, drawing, test or commercial data was introduced.
-14. Confirm automated tests are not represented as UAT.
-15. Confirm no UAT, feedback collection, real defect creation or business sign-off occurred.
-16. Confirm no validated baseline, pilot result, Finance-validated benefit or realized value is claimed.
-17. Confirm no production KPI, ROI, adoption or productivity result is claimed.
-18. Confirm Build 2 human approval, segregation and supplier-authority boundaries remain binding.
-19. Confirm Build 3 data, privacy and security requirements remain binding.
-20. Confirm Build 4 no-live-connection, system-of-record, safe-failure and reconciliation requirements remain binding.
-21. Confirm no operational gap or risk is marked `CLOSED WITH EVIDENCE`.
-22. Confirm Build 6 final readiness and decision scope remains unchanged.
-23. Confirm the draft PR remains unmerged until separate acceptance and merge authorization.
+12. Confirm Integration Owner and Error/Reconciliation Owner remain supporting personas under UAT coordination and gain no approval authority.
+13. Confirm all scenarios, data, KPI examples and formulas remain synthetic or explicitly controlled.
+14. Confirm no actual personal, supplier-confidential, pricing, contractual, drawing, test or commercial data was introduced.
+15. Confirm automated tests are not represented as UAT.
+16. Confirm no UAT, feedback collection, real defect creation or business sign-off occurred.
+17. Confirm validated baseline remains a separately approved evidence foundation rather than a reviewed estimate changing state.
+18. Confirm pilot-observed and Finance-validated benefit require an approved baseline and separately executed result evidence.
+19. Confirm no validated baseline, pilot result, Finance-validated benefit or realized value is claimed.
+20. Confirm no production KPI, ROI, adoption or productivity result is claimed.
+21. Confirm Build 2 human approval, segregation and supplier-authority boundaries remain binding.
+22. Confirm Build 3 data, privacy and security requirements remain binding.
+23. Confirm Build 4 no-live-connection, system-of-record, safe-failure and reconciliation requirements remain binding.
+24. Confirm no operational gap or risk is marked `CLOSED WITH EVIDENCE`.
+25. Confirm Build 6 final readiness and decision scope remains unchanged.
+26. Confirm PR #47 remains draft and unmerged until explicit merge authorization.
 
 ## Stop and review conditions
 
@@ -208,10 +217,10 @@ Stop work and require a new explicit decision when:
 - Synthetic or explicitly controlled data remains the default.
 - Personal data remains unnecessary and prohibited by default.
 - Build 4 is governance-closed and provides conceptual integration requirements only.
-- Build 5 defines UAT and value-validation frameworks; it executes no UAT and validates no business value.
+- Build 5 defines accepted UAT and value-validation frameworks; it executes no UAT and validates no business value.
 - Build 6 retains final pilot-readiness, executive package and separate future pilot recommendation scope.
 - Pilot, deployment and production authorization remain separate future decisions.
 
 ## Current next gate
 
-Create a draft Build 5 pull request, verify the exact four-file documentation-only scope, run full PVE CI on the final branch head and issue a separate PASS or FAIL acceptance recommendation. Keep the pull request draft and unmerged.
+Keep PR #47 draft and unmerged pending explicit merge authorization. Before any merge, verify the exact final head, the four-file documentation-only scope and successful full CI. Following an authorized merge, require post-merge CI on the resulting exact `main` SHA before Build 5 governance closure. Do not begin Build 6 before Build 5 governance closure.
