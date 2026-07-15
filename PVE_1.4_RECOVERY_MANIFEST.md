@@ -2,124 +2,117 @@
 
 ## Purpose
 
-Provide a GitHub-based continuation record for the PVE 1.4 planning phase while preserving PVE 1.3 as the closed baseline.
+Provide a GitHub-based continuation record for the PVE 1.4 controlled planning phase while preserving PVE 1.3 as the closed reference baseline.
 
-## Baseline
+## Stable baseline
 
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
-- Working branch: `planning/pve-1.4-pilot-readiness`
 - Baseline branch: `main`
-- Baseline commit: `b28e6cc7716e1e693f2ca72d534f6e17bfc4ffe6`
+- PVE 1.4 planning-package merge commit: `4ce3bc620c8fe91510cccfa6ba8be1d904158744`
 - Closed release tag: `pve-v1.3`
 - Completed effort through PVE 1.3: 312.5 hours
 - PVE 1.4 planned scope: 54 hours
 - PVE 1.4 contingency: 4 hours, separately controlled
-- PVE 1.4 completed controlled effort: 6 hours
-- PVE 1.4 pending controlled effort: 48 hours
+- PVE 1.4 completed controlled effort after Build 1: 12 hours
+- PVE 1.4 pending controlled effort after Build 1: 42 hours
+- PVE 1.4 completion after Build 1: 22.2%
+- Contingency used: 0 of 4 hours
+
+## Verified main CI baseline
+
+- Workflow run ID: `29393550365`
+- Job ID: `87281950044`
+- Validated branch: `main`
+- Validated commit: `4ce3bc620c8fe91510cccfa6ba8be1d904158744`
+- Tests: 382
+- Failures: 0
+- Errors: 0
+- Artifact ID: `8334189773`
+- Artifact digest: `sha256:316b25ea6c903325108a14807b6a6a3af9c98ced71a709efb31975e43d6f8237`
+- Conclusion: SUCCESS
+
+## Current controlled state
+
+- Active build: PVE 1.4 Build 1 — Baseline and Gap Assessment
+- Working branch: `planning/pve-1.4-build-1-gap-assessment`
+- Branch source commit: `4ce3bc620c8fe91510cccfa6ba8be1d904158744`
+- Build 1 authorized budget: 6 hours
+- Build 1 completed effort: 6 hours
+- Build 1 pending effort: 0 hours
+- Build 1 status: COMPLETE — PENDING REVIEW
+- Draft PR required: YES
+- Merge authorization: NOT GRANTED
+- Pilot authorization: NOT GRANTED
+- Deployment authorization: NOT GRANTED
+- Live integration authorization: NOT GRANTED
+- Authentication implementation authorization: NOT GRANTED
+- Real-user pilot authorization: NOT GRANTED
+- Enterprise production-readiness certification: NOT GRANTED
 
 ## Required reading order
 
 1. `PVE_1.3_RELEASE_EXECUTION_EVIDENCE.md`
 2. `PVE_1.4_SCOPE_AND_BUILD_PLAN.md`
 3. `PVE_1.4_GAP_ASSESSMENT.md`
-4. `PVE_1.4_RISK_REGISTER.md`
-5. `PVE_1.4_ACCEPTANCE_CRITERIA.md`
-6. `PVE_1.4_RECOVERY_MANIFEST.md`
-7. `PROJECT_STATUS.md`
-8. `RECOVERY_MANIFEST.md`
-9. `DECISION_LOG.md`
-10. `QUALITY_ASSURANCE_PROTOCOL.md`
+4. `PVE_1.4_BUILD_1_EVIDENCE.md`
+5. `PVE_1.4_RISK_REGISTER.md`
+6. `PVE_1.4_ACCEPTANCE_CRITERIA.md`
+7. `PVE_1.4_RECOVERY_MANIFEST.md`
+8. `PROJECT_STATUS.md`
+9. `RECOVERY_MANIFEST.md`
+10. `DECISION_LOG.md`
+11. `QUALITY_ASSURANCE_PROTOCOL.md`
 
-## Verified planning state
+## Build 1 output state
 
-- Verified corrected-package PR head before this metadata-only correction: `8bf116a696360d02fbebcce03963ff76c863e195`
-- PR: #42
-- PR state required: draft and unmerged
-- Last completed gate: final corrected-head governance and CI audit
-- Current gate: separate authorization for ready-for-review transition
-- Ready-for-review authorization: NOT GRANTED
-- Merge authorization: NOT GRANTED
-- Pilot authorization: NOT GRANTED
-- Deployment authorization: NOT GRANTED
-- Enterprise production-readiness certification: NOT GRANTED
-- Next authorized action: retain PR #42 as draft unless a separate explicit ready-for-review instruction is issued
-
-This status must be refreshed whenever the branch head, PR state, current gate or authorized next action changes.
-
-## Verified CI evidence for corrected package
-
-- Workflow: PVE CI #1078
-- Workflow run ID: `29387541251`
-- Job ID: `87263828740`
-- Validated branch: `planning/pve-1.4-pilot-readiness`
-- Validated head: `8bf116a696360d02fbebcce03963ff76c863e195`
-- Tests: 382
-- Failures: 0
-- Errors: 0
-- Artifact ID: `8331996179`
-- Artifact name: `pve-full-test-output`
-- Artifact digest: `sha256:19c5db34f62b383af1e53b760524e3846c23130771f9966a5b62dcc39058092e`
-- CI conclusion: SUCCESS
-
-This CI evidence validates the corrected five-file planning package at the recorded head. It does not authorize pilot execution, deployment, live integrations, authentication implementation, real-user access or enterprise production readiness.
-
-## Authorized initiation files
-
-- `PVE_1.4_SCOPE_AND_BUILD_PLAN.md`
-- `PVE_1.4_GAP_ASSESSMENT.md`
-- `PVE_1.4_RISK_REGISTER.md`
-- `PVE_1.4_ACCEPTANCE_CRITERIA.md`
-- `PVE_1.4_RECOVERY_MANIFEST.md`
+- Capability-to-requirement matrix: COMPLETE
+- Sixteen classified capability gaps: COMPLETE
+- Target-build routing: COMPLETE
+- Provisional ownership assignment: COMPLETE
+- Planned-output assignment: COMPLETE
+- Evidence-requirement assignment: COMPLETE
+- Deferred-items register: COMPLETE
+- Prohibited-items register: COMPLETE
+- Build 1 evidence and completion record: COMPLETE
+- Operational gaps closed: 0
+- Implementation changes made: 0
 
 ## Recovery checks
 
-1. Confirm `main` still contains baseline commit `b28e6cc7716e1e693f2ca72d534f6e17bfc4ffe6`.
+1. Confirm `main` contains commit `4ce3bc620c8fe91510cccfa6ba8be1d904158744`.
 2. Confirm tag `pve-v1.3` and the published release remain unchanged.
-3. Confirm PR #42 is draft and unmerged unless separate authorization states otherwise.
-4. Confirm the PR head matches the last recorded head or record the new head and reason.
-5. Confirm exactly five PVE 1.4 planning files remain in scope.
-6. Confirm no application code, test, schema, migration, workflow, infrastructure or deployment file changed.
-7. Confirm the 54-hour planned scope remains unchanged.
-8. Confirm the 4-hour contingency remains separately controlled.
-9. Confirm completed, pending and contingency hours are current.
-10. Confirm production deployment, live integrations, authentication implementation, real-user access and uncontrolled sensitive data remain excluded.
+3. Confirm the active branch is `planning/pve-1.4-build-1-gap-assessment`.
+4. Confirm the branch descends from the exact stable main commit.
+5. Confirm the draft PR changes documentation only.
+6. Confirm no application code, tests, schema, migration, workflow, infrastructure or deployment file changed.
+7. Confirm Build 1 effort is 6 of 6 hours.
+8. Confirm cumulative PVE 1.4 effort is 12 completed and 42 pending hours.
+9. Confirm the 4-hour contingency remains separate and unused.
+10. Confirm production deployment, live integrations, authentication implementation and real-user access remain unauthorized.
 11. Confirm autonomous engineering approval, procurement approval, supplier ranking, award and allocation remain prohibited.
-12. Confirm deployment and enterprise production readiness remain unapproved.
-
-## Continuation sequence
-
-1. Read the five planning documents and the latest governance record.
-2. Confirm the current PR head and draft status.
-3. Confirm explicit authorization exists for the exact next action.
-4. Keep PR #42 draft until separate ready-for-review authorization.
-5. Before any ready-for-review transition, verify CI on the current head and review the complete PR diff.
-6. Merge only after separate merge authorization.
-7. After any authorized merge, verify post-merge CI on `main`.
-8. Begin later PVE 1.4 builds one at a time under separate controlled execution instructions.
+12. Confirm enterprise production readiness remains uncertified.
 
 ## Stop and review conditions
 
 Stop work and require a new explicit decision when:
 
-- the PR head differs unexpectedly from the recorded head;
-- the baseline, tag or release cannot be verified;
+- the stable main baseline cannot be verified;
+- the PVE 1.3 tag or published release differs from the closed record;
 - a requested change affects application code, tests, schema, migration, workflow, infrastructure or deployment;
-- planned effort would exceed 54 hours without approved contingency;
-- contingency is requested without a recorded authorization;
+- planned effort exceeds the authorized 54-hour scope without approved contingency;
+- contingency is requested without recorded authorization;
 - production deployment, live integration, authentication implementation or real-user execution is proposed;
 - uncontrolled real, personal, supplier-confidential or commercial data is introduced;
 - autonomous engineering or procurement approval is requested;
 - supplier ranking, sourcing award, allocation or commercial approval is requested;
-- a Critical risk lacks accountable ownership or evidence;
+- Build 1 completion is represented as closing operational pilot gaps;
 - planning completion is represented as pilot or deployment approval.
 
-## Cross-document consistency rules
+## Cross-document boundaries
 
-The five documents must consistently preserve these statements:
-
-- PVE 1.4 is a planning and specification phase only.
-- Planned scope is 54 hours.
-- Controlled contingency is 4 hours and remains separate.
+- PVE 1.4 remains a planning and specification phase only.
+- Planned scope remains 54 hours.
+- Controlled contingency remains 4 hours and separate.
 - PVE 1.3 remains the immutable closed baseline.
 - Tag `pve-v1.3` and the published release remain unchanged.
 - Production deployment is not authorized.
@@ -128,16 +121,7 @@ The five documents must consistently preserve these statements:
 - Real-user pilot execution is not authorized.
 - Enterprise production-readiness certification is not granted.
 - System outputs cannot constitute engineering, procurement, supplier, sourcing, allocation or commercial approval.
-- Planning closure and future pilot recommendation are separate determinations.
 
 ## Current next gate
 
-Obtain a separate explicit decision either to:
-
-- authorize the ready-for-review transition; or
-- retain PR #42 as draft.
-
-Ready-for-review authorization remains NOT GRANTED.
-Merge authorization remains NOT GRANTED.
-Do not merge.
-Do not authorize deployment.
+Create and validate a draft Build 1 pull request. Keep it draft and unmerged until separate authorization is issued.
