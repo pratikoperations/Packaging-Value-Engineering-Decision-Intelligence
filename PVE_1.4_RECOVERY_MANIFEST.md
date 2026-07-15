@@ -8,11 +8,11 @@ Provide the authoritative continuation record for the controlled PVE 1.4 plannin
 
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 - Stable branch: `main`
-- Build 3 squash-merge commit: `893d855fedb29ea0893cd84bb2b4a166f8d3ebc7`
-- Build 3 post-merge CI run: `29403450758`
-- Build 3 post-merge job: `87313191474`
-- Build 3 post-merge tests: 382; failures: 0; errors: 0
-- Build 3 post-merge artifact: `8338035804`
+- Build 4 squash-merge commit: `5210c19cc0dbe5dc93ba1104312d49f2629e0987`
+- Build 4 post-merge CI run: `29405792614`
+- Build 4 post-merge job: `87320799192`
+- Build 4 post-merge tests: 382; failures: 0; errors: 0
+- Build 4 post-merge artifact: `8338984642`
 - Closed release tag: `pve-v1.3`
 - Completed effort through PVE 1.3: 312.5 hours
 - PVE 1.4 planned scope: 54 hours
@@ -20,25 +20,23 @@ Provide the authoritative continuation record for the controlled PVE 1.4 plannin
 
 ## Current controlled state
 
-- Active build: PVE 1.4 Build 4 — Integration Architecture Specifications
-- Working branch: `planning/pve-1.4-build-4-integration-architecture`
-- Branch source commit: `893d855fedb29ea0893cd84bb2b4a166f8d3ebc7`
-- Accepted pre-update head: `5f102b01c275bdd4cd7ef86ca045e6b06bf36291`
-- Formal acceptance result: PASS
-- Build 4 authorized maximum: 6 hours
-- Build 4 actual controlled effort: 5.5 hours
-- Build 4 unused authorized effort: 0.5 hour
-- Build 4 pending effort: 0 hours
-- Build 4 status: ACCEPTED — PENDING MERGE AUTHORIZATION
-- Draft PR: #46
-- Merge authorization: NOT GRANTED
-- Live integration authorization: NOT GRANTED
-- Endpoint or connector authorization: NOT GRANTED
-- Credential or secret authorization: NOT GRANTED
+- Active build: PVE 1.4 Build 5 — UAT and Value Validation
+- Working branch: `planning/pve-1.4-build-5-uat-value-validation`
+- Branch source commit: `5210c19cc0dbe5dc93ba1104312d49f2629e0987`
+- Build 5 authorized maximum: 8 hours
+- Build 5 actual controlled effort: 7.5 hours
+- Build 5 unused authorized effort: 0.5 hour
+- Build 5 pending effort: 0 hours
+- Build 5 status: COMPLETE — PENDING REVIEW
+- Draft PR required: YES
+- UAT execution authorization: NOT GRANTED
+- Real-user participation authorization: NOT GRANTED
 - Personal-data processing authorization: NOT GRANTED
+- Live integration authorization: NOT GRANTED
+- Production KPI claim authorization: NOT GRANTED
+- Realized-savings claim authorization: NOT GRANTED
 - Pilot authorization: NOT GRANTED
 - Deployment authorization: NOT GRANTED
-- Real-user access authorization: NOT GRANTED
 - Enterprise production-readiness certification: NOT GRANTED
 
 ## PVE 1.4 effort state
@@ -47,14 +45,15 @@ Provide the authoritative continuation record for the controlled PVE 1.4 plannin
 - Build 1: 6 hours completed and governance-closed
 - Build 2: 12 hours completed and governance-closed
 - Build 3: 11 hours completed and governance-closed
-- Build 4: 5.5 hours completed and accepted, pending merge authorization
-- Total completed controlled effort: 40.5 hours
-- Pending planned effort: 13.5 hours
-- Phase completion: 75.0%
+- Build 4: 5.5 hours completed and governance-closed
+- Build 5: 7.5 hours completed, pending review
+- Total completed controlled effort: 48 hours
+- Pending planned effort: 6 hours
+- Phase completion: 88.9%
 - Contingency used: 0 of 4 hours
 - Contingency remaining: 4 hours
 
-Unused Build 2, Build 3 and Build 4 authorization remains unused. It cannot be reassigned to new scope or treated as contingency.
+Unused Build 2, Build 3, Build 4 and Build 5 authorization remains unused. It cannot be reassigned to new scope or treated as contingency.
 
 ## Required reading order
 
@@ -70,11 +69,14 @@ Unused Build 2, Build 3 and Build 4 authorization remains unused. It cannot be r
 10. `PVE_1.4_BUILD_3_EVIDENCE.md`
 11. `PVE_1.4_INTEGRATION_ARCHITECTURE_SPECIFICATION.md`
 12. `PVE_1.4_BUILD_4_EVIDENCE.md`
-13. `PVE_1.4_RISK_REGISTER.md`
-14. `PVE_1.4_ACCEPTANCE_CRITERIA.md`
-15. `PVE_1.4_RECOVERY_MANIFEST.md`
-16. `DECISION_LOG.md`
-17. `QUALITY_ASSURANCE_PROTOCOL.md`
+13. `PVE_1.4_UAT_FRAMEWORK.md`
+14. `PVE_1.4_VALUE_VALIDATION_FRAMEWORK.md`
+15. `PVE_1.4_BUILD_5_EVIDENCE.md`
+16. `PVE_1.4_RISK_REGISTER.md`
+17. `PVE_1.4_ACCEPTANCE_CRITERIA.md`
+18. `PVE_1.4_RECOVERY_MANIFEST.md`
+19. `DECISION_LOG.md`
+20. `QUALITY_ASSURANCE_PROTOCOL.md`
 
 ## Governance-closed builds
 
@@ -103,99 +105,113 @@ Unused Build 2, Build 3 and Build 4 authorization remains unused. It cannot be r
 - Operational gaps or risks closed with evidence: 0
 - Application, security-infrastructure and real-data changes: 0
 
-## Build 4 accepted output state
+### Build 4 — Governance closed
 
 - Formal acceptance result: PASS
-- Small future-system inventory: COMPLETE AND ACCEPTED
-- Integration principles and conceptual trust boundaries: COMPLETE AND ACCEPTED
-- Five-interface synthetic catalogue: COMPLETE AND ACCEPTED
-- INT-05 non-automation boundary: COMPLETE AND ACCEPTED
-- Provisional ownership matrix: COMPLETE AND ACCEPTED
-- Conceptual data-contract template: COMPLETE AND ACCEPTED
-- Authentication and authorization requirements: COMPLETE AND ACCEPTED
-- Retry and idempotency requirements: COMPLETE AND ACCEPTED
-- Reconciliation requirements: COMPLETE AND ACCEPTED
-- Mandatory future monitoring and observability requirements: COMPLETE AND ACCEPTED
-- Error-ownership model: COMPLETE AND ACCEPTED
-- Live endpoints or URLs created: 0
-- Credentials, secrets or service accounts created: 0
-- Active connectors: 0
-- Transmitted real records: 0
-- Deployed infrastructure: 0
-- Executed integration tests: 0
-- Real-user access: 0
+- Squash-merge commit: `5210c19cc0dbe5dc93ba1104312d49f2629e0987`
+- Post-merge CI run: `29405792614`
+- Post-merge CI job: `87320799192`
+- Tests: 382; failures: 0; errors: 0
+- Artifact: `8338984642`
+- Future-system inventory, integration principles and trust boundaries: COMPLETE AND ACCEPTED
+- Five-interface synthetic catalogue and INT-05 non-automation boundary: COMPLETE AND ACCEPTED
+- Ownership, conceptual data-contract, access, retry, idempotency, reconciliation, monitoring and error-ownership requirements: COMPLETE AND ACCEPTED
+- Live endpoints, credentials, connectors, transmitted real records, deployed infrastructure, executed integration tests and real-user access: 0
 - Operational gaps or risks closed with evidence: 0
-- Application, test, schema, migration, workflow, dependency, dataset or historical integration-contract changes: 0
 
-## Build 4 gap relationship
+## Build 5 output state
 
-Build 4 develops accepted planning outputs for:
+- Provisional UAT personas: COMPLETE
+- Twelve-scenario synthetic UAT catalogue: COMPLETE
+- Future UAT entry and exit criteria: COMPLETE
+- Four-level defect severity model: COMPLETE
+- Future defect, sign-off and traceability templates: COMPLETE
+- Automated-test/UAT distinction: COMPLETE
+- UAT sessions executed: 0
+- Real users invited or identified: 0
+- Real feedback collected: 0
+- Real defects recorded: 0
+- Business sign-offs granted: 0
+- Seven-state value claim model: COMPLETE
+- Twelve-KPI compact catalogue: COMPLETE
+- KPI, baseline, formula, evidence, ownership and review templates: COMPLETE
+- Finance/Value review requirement: COMPLETE
+- Production KPI, ROI, adoption, productivity or realized-benefit claims: 0
+- Live systems, endpoints, credentials, connectors or integrations accessed: 0
+- Operational gaps or risks closed with evidence: 0
+- Application, dashboard, telemetry, test, schema, migration, workflow, dependency, dataset, infrastructure or deployment changes: 0
 
-- P14-G07 — conceptual interface ownership, trust boundaries, data contracts, retry, reconciliation and monitoring requirements;
-- selected future environment requirements for P14-G08 without deployment;
-- selected observability requirements for P14-G12 without implementation;
-- limited pilot-threshold and safe-failure contributions to P14-G13 without scale or resilience certification.
+## Build 5 gap relationship
+
+Build 5 develops planning outputs for:
+
+- P14-G09 — future UAT personas, scenarios, entry/exit, defect and sign-off requirements;
+- P14-G10 — KPI, baseline, formula, evidence, ownership and claim-state requirements;
+- selected future pilot-threshold contributions to P14-G13 without production-scale certification;
+- selected change and adoption planning contributions to P14-G15 without real-user execution.
 
 All sixteen Build 1 gap records and substantive target-build routing remain preserved. No gap or risk is operationally closed.
 
 ## Recovery checks
 
-1. Confirm `main` remains exactly or validly descends from `893d855fedb29ea0893cd84bb2b4a166f8d3ebc7` without unrelated baseline invalidation.
-2. Confirm tag `pve-v1.3` and its published release remain unchanged.
-3. Confirm the active branch is `planning/pve-1.4-build-4-integration-architecture`.
-4. Confirm the branch descends from exact main SHA `893d855fedb29ea0893cd84bb2b4a166f8d3ebc7`.
-5. Confirm changed files remain limited to one substantive Build 4 specification and two control records.
-6. Confirm no application code, tests, schemas, migrations, workflows, infrastructure, deployment, dependencies, datasets or existing integration contracts changed.
-7. Confirm Build 4 effort is 5.5 hours against a maximum of 6 and the remaining 0.5 hour is unused.
-8. Confirm cumulative PVE 1.4 effort is 40.5 completed and 13.5 pending hours.
-9. Confirm controlled contingency remains 0 of 4 hours used.
-10. Confirm all system and payload examples remain synthetic.
-11. Confirm Build 3 classification, no-personal-data and privacy applicability controls remain binding.
-12. Confirm all Integration, system, Data, Security, Privacy, Governance and Approval roles remain provisional placeholders.
-13. Confirm no operational gap or risk is marked `CLOSED WITH EVIDENCE`.
-14. Confirm live endpoints, credentials, connectors, integration activation, deployment and infrastructure remain zero and unauthorized.
-15. Confirm no OpenAPI, executable schema, migration, code or integration artifact was created.
-16. Confirm human approval remains mandatory and supplier ranking, award and allocation remain prohibited.
-17. Confirm INT-05 can only reference a separately recorded human decision and cannot create, modify, approve, revoke or infer it.
-18. Confirm future connected-pilot monitoring requirements are mandatory but remain unimplemented.
-19. Confirm Build 5 UAT and value-validation scope remains unchanged.
-20. Confirm Build 4 acceptance remains PASS and merge authorization remains separate.
-21. Confirm PR #46 remains draft and unmerged until explicit authorization.
+1. Confirm `main` remains exactly `5210c19cc0dbe5dc93ba1104312d49f2629e0987` until the Build 5 branch is created.
+2. Confirm Build 4 post-merge CI run `29405792614`, job `87320799192`, 382 tests, 0 failures, 0 errors and artifact `8338984642` remain traceable.
+3. Confirm tag `pve-v1.3` and its published release remain unchanged.
+4. Confirm the active branch is `planning/pve-1.4-build-5-uat-value-validation`.
+5. Confirm the branch descends from exact main SHA `5210c19cc0dbe5dc93ba1104312d49f2629e0987`.
+6. Confirm changed files are limited to two substantive Build 5 frameworks and two control records.
+7. Confirm no application code, tests, schemas, migrations, workflows, infrastructure, deployment, dependencies, datasets, dashboards, telemetry or integration contracts changed.
+8. Confirm Build 5 effort is 7.5 hours against a maximum of 8 and the remaining 0.5 hour is unused.
+9. Confirm cumulative PVE 1.4 effort is 48 completed and 6 pending hours.
+10. Confirm controlled contingency remains 0 of 4 hours used.
+11. Confirm all personas remain provisional placeholders and no real users are named or appointed.
+12. Confirm all scenarios, data, KPI examples and formulas remain synthetic or explicitly controlled.
+13. Confirm no actual personal, supplier-confidential, pricing, contractual, drawing, test or commercial data was introduced.
+14. Confirm automated tests are not represented as UAT.
+15. Confirm no UAT, feedback collection, real defect creation or business sign-off occurred.
+16. Confirm no validated baseline, pilot result, Finance-validated benefit or realized value is claimed.
+17. Confirm no production KPI, ROI, adoption or productivity result is claimed.
+18. Confirm Build 2 human approval, segregation and supplier-authority boundaries remain binding.
+19. Confirm Build 3 data, privacy and security requirements remain binding.
+20. Confirm Build 4 no-live-connection, system-of-record, safe-failure and reconciliation requirements remain binding.
+21. Confirm no operational gap or risk is marked `CLOSED WITH EVIDENCE`.
+22. Confirm Build 6 final readiness and decision scope remains unchanged.
+23. Confirm the draft PR remains unmerged until separate acceptance and merge authorization.
 
 ## Stop and review conditions
 
 Stop work and require a new explicit decision when:
 
 - the main or branch baseline cannot be traced;
+- Build 4 governance-closure evidence is unavailable or inconsistent;
 - PVE 1.3 tag or release integrity is uncertain;
-- a live endpoint, URL, connector or integration activation is proposed;
-- a credential, token, key, certificate, secret or service account is created;
+- a real user is named, invited or represented as a participant;
+- UAT execution, feedback collection or real defect creation is requested;
+- automated tests are represented as user acceptance;
 - real personal, supplier-confidential, pricing, contractual, drawing, test or commercial data is introduced;
-- application code, tests, schemas, migrations, workflows, infrastructure, deployment, dependencies, datasets or existing integration contracts are proposed for change;
-- OpenAPI, executable schemas, migrations or implementation code are requested;
-- an identity provider, middleware, queue, monitoring platform or integration vendor is selected or configured;
-- an interface is represented as active, implemented, connected, deployed or production-ready;
-- integration testing or real-user execution is represented as completed;
-- system output is represented as human approval;
-- supplier ranking, sourcing award or allocation is introduced;
+- a live system, endpoint, credential, connector or integration is accessed;
+- an analytical estimate is represented as validated or realized value;
+- a production KPI, ROI, adoption or productivity result is claimed;
+- supplier ranking, sourcing award, allocation or commercial approval is introduced;
+- system output is represented as human sign-off;
+- application code, tests, schemas, migrations, workflows, infrastructure, deployment, dependencies, datasets, dashboards or telemetry are proposed for change;
 - any gap or risk is marked `CLOSED WITH EVIDENCE` based only on planning language;
-- Build 5 UAT or value-validation scope is consumed;
-- Build 4 exceeds 6 hours or contingency is requested without authorization;
-- planning completion is represented as pilot, deployment or production approval.
+- Build 6 pilot-readiness or final decision scope is consumed;
+- Build 5 exceeds 8 hours or contingency is requested without authorization;
+- planning completion is represented as UAT, pilot, deployment or production approval.
 
 ## Cross-document boundaries
 
 - PVE 1.4 remains a planning and specification phase.
 - PVE 1.3 remains the immutable governance-closed reference baseline.
-- Human approval remains mandatory.
+- Human approval and segregation remain mandatory.
 - Synthetic or explicitly controlled data remains the default.
 - Personal data remains unnecessary and prohibited by default.
-- Build 3 data, privacy and security requirements govern all conceptual interfaces.
-- Build 4 specifies integration architecture only; it implements no connection or control.
-- Build 5 retains UAT and value-validation scope.
-- Build 6 retains final pilot-readiness and decision-package scope.
+- Build 4 is governance-closed and provides conceptual integration requirements only.
+- Build 5 defines UAT and value-validation frameworks; it executes no UAT and validates no business value.
+- Build 6 retains final pilot-readiness, executive package and separate future pilot recommendation scope.
 - Pilot, deployment and production authorization remain separate future decisions.
 
 ## Current next gate
 
-Keep PR #46 draft and unmerged. Verify full PVE CI on the final Build 4 acceptance-record head. After successful CI, decide separately whether to authorize squash merge. Following any authorized merge, require post-merge CI on the resulting exact `main` SHA before Build 4 governance closure. Do not begin Build 5 before Build 4 governance closure.
+Create a draft Build 5 pull request, verify the exact four-file documentation-only scope, run full PVE CI on the final branch head and issue a separate PASS or FAIL acceptance recommendation. Keep the pull request draft and unmerged.
