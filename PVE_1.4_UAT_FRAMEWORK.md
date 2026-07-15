@@ -2,7 +2,9 @@
 
 ## Status and boundary
 
-**Build 5 planning output: COMPLETE — PENDING REVIEW**
+**Build 5 planning output: ACCEPTED — PENDING MERGE AUTHORIZATION**
+
+**Formal acceptance result: PASS**
 
 This document defines a future user-acceptance-testing framework only. It does not execute UAT, invite or identify real users, collect feedback, create real defect records, access live systems, test integrations, grant business sign-off, authorize a pilot or deployment, or certify production readiness.
 
@@ -47,6 +49,10 @@ All personas are provisional role placeholders. All scenarios, inputs, expected 
 | Human Approval Authority | Final named human decision | Delegate approval to system output |
 | Demo Operator | Controlled synthetic demonstration and fallback | Represent demonstration as UAT evidence |
 | UAT Coordinator | Scenario control, evidence completeness and defect triage | Grant final business approval |
+| Integration Owner | Supporting review of interface assumptions, safe failure and integration-state evidence | Authorize a live connection or grant business approval |
+| Error/Reconciliation Owner | Supporting review of duplicate, stale and reconciliation evidence | Resume affected decision use without named human re-entry approval |
+
+Integration Owner and Error/Reconciliation Owner are provisional Build 4 supporting personas used by UAT-09 and UAT-10. Their scenario coordination remains controlled by the UAT Coordinator; they do not expand UAT authority or represent appointed users.
 
 No persona is a named or appointed individual. Appointment evidence is required before any separately authorized UAT execution.
 
@@ -207,6 +213,6 @@ No actual defects are created or classified by Build 5.
 - No pilot, deployment or production decision is made.
 - Build 6 retains the final readiness and decision package.
 
-## Acceptance intent
+## Acceptance determination
 
-This framework is acceptable only as a synthetic, requirements-level UAT planning package aligned primarily to P14-G09 and selected planning contributions to P14-G13 and P14-G15. It closes no operational gap or risk with evidence and grants no UAT, pilot, deployment or production authority.
+This framework received a formal PASS acceptance result as a synthetic, requirements-level UAT planning package aligned primarily to P14-G09 and selected planning contributions to P14-G13 and P14-G15. It closes no operational gap or risk with evidence, grants no UAT, pilot, deployment or production authority, and remains pending separate merge authorization.
