@@ -36,10 +36,12 @@ Provide a GitHub-based continuation record for the PVE 1.4 controlled planning p
 - Active build: PVE 1.4 Build 1 — Baseline and Gap Assessment
 - Working branch: `planning/pve-1.4-build-1-gap-assessment`
 - Branch source commit: `4ce3bc620c8fe91510cccfa6ba8be1d904158744`
+- Accepted pre-update head: `3c3bcf0ba60b125caf3950d6c4b013714ebefd1f`
+- Formal acceptance result: PASS
 - Build 1 authorized budget: 6 hours
 - Build 1 completed effort: 6 hours
 - Build 1 pending effort: 0 hours
-- Build 1 status: COMPLETE — PENDING REVIEW
+- Build 1 status: ACCEPTED — PENDING MERGE AUTHORIZATION
 - Draft PR required: YES
 - Merge authorization: NOT GRANTED
 - Pilot authorization: NOT GRANTED
@@ -65,15 +67,15 @@ Provide a GitHub-based continuation record for the PVE 1.4 controlled planning p
 
 ## Build 1 output state
 
-- Capability-to-requirement matrix: COMPLETE
-- Sixteen classified capability gaps: COMPLETE
-- Target-build routing: COMPLETE
-- Provisional ownership assignment: COMPLETE
-- Planned-output assignment: COMPLETE
-- Evidence-requirement assignment: COMPLETE
-- Deferred-items register: COMPLETE
-- Prohibited-items register: COMPLETE
-- Build 1 evidence and completion record: COMPLETE
+- Capability-to-requirement matrix: COMPLETE AND ACCEPTED
+- Sixteen classified capability gaps: COMPLETE AND ACCEPTED
+- Target-build routing: COMPLETE AND ACCEPTED
+- Provisional ownership assignment: COMPLETE AND ACCEPTED
+- Planned-output assignment: COMPLETE AND ACCEPTED
+- Evidence-requirement assignment: COMPLETE AND ACCEPTED
+- Deferred-items register: COMPLETE AND ACCEPTED
+- Prohibited-items register: COMPLETE AND ACCEPTED
+- Build 1 evidence and completion record: COMPLETE AND ACCEPTED
 - Operational gaps closed: 0
 - Implementation changes made: 0
 
@@ -91,6 +93,7 @@ Provide a GitHub-based continuation record for the PVE 1.4 controlled planning p
 10. Confirm production deployment, live integrations, authentication implementation and real-user access remain unauthorized.
 11. Confirm autonomous engineering approval, procurement approval, supplier ranking, award and allocation remain prohibited.
 12. Confirm enterprise production readiness remains uncertified.
+13. Confirm Build 1 acceptance remains PASS and merge authorization remains separate.
 
 ## Stop and review conditions
 
@@ -124,4 +127,4 @@ Stop work and require a new explicit decision when:
 
 ## Current next gate
 
-Create and validate a draft Build 1 pull request. Keep it draft and unmerged until separate authorization is issued.
+Verify CI on the acceptance-record head. Keep PR #43 draft and unmerged. After successful CI, decide separately whether to authorize merge; do not begin Build 2 until Build 1 is merged and the post-merge baseline is verified.
