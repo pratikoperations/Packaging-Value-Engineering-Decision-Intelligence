@@ -2,7 +2,9 @@
 
 ## Build status
 
-**Build 4 status: COMPLETE — PENDING REVIEW**
+**Build 4 status: ACCEPTED — PENDING MERGE AUTHORIZATION**
+
+**Formal acceptance result: PASS**
 
 - Authorized maximum: 6 hours
 - Actual controlled effort: 5.5 hours
@@ -25,6 +27,8 @@
 - Source branch: `main`
 - Source commit: `893d855fedb29ea0893cd84bb2b4a166f8d3ebc7`
 - Build branch: `planning/pve-1.4-build-4-integration-architecture`
+- Accepted pre-update head: `5f102b01c275bdd4cd7ef86ca045e6b06bf36291`
+- Draft pull request: #46
 - Builds 1–3: merged, post-merge validated and governance-closed
 - Closed release tag: `pve-v1.3`
 
@@ -36,23 +40,23 @@ Define the minimum conceptual integration architecture required for later UAT an
 
 | Required output | Evidence | Result |
 |---|---|---|
-| Small future-system inventory | System-class inventory in `PVE_1.4_INTEGRATION_ARCHITECTURE_SPECIFICATION.md` | COMPLETE |
-| Integration principles | Twelve governed principles | COMPLETE |
-| Conceptual trust boundaries | Requirements-level boundary flow | COMPLETE |
-| Interface catalogue | Five synthetic conceptual interfaces | COMPLETE |
-| Ownership matrix | Provisional business, integration, system, data, security, privacy, governance and approval roles | COMPLETE |
-| Conceptual data-contract template | Purpose, provenance, classification, validation, ownership and unavailable behaviour | COMPLETE |
-| Authentication and authorization requirements | Future named identity, least privilege, review and segregation requirements | COMPLETE |
-| Retry and idempotency requirements | Safe retry, non-retryable conditions and duplicate prevention | COMPLETE |
-| Reconciliation requirements | Missing, duplicate, stale, conflict and correction controls | COMPLETE |
-| Monitoring requirements | Future availability, failure, latency, retry and exception requirements | COMPLETE |
-| Error-ownership model | Ten failure classes with safe states and owners | COMPLETE |
-| Explicit no-live-connection record | All prohibited operational counts recorded as zero | COMPLETE |
-| Recovery control update | `PVE_1.4_RECOVERY_MANIFEST.md` | COMPLETE |
+| Small future-system inventory | System-class inventory in `PVE_1.4_INTEGRATION_ARCHITECTURE_SPECIFICATION.md` | COMPLETE AND ACCEPTED |
+| Integration principles | Twelve governed principles | COMPLETE AND ACCEPTED |
+| Conceptual trust boundaries | Requirements-level boundary flow | COMPLETE AND ACCEPTED |
+| Interface catalogue | Five synthetic conceptual interfaces | COMPLETE AND ACCEPTED |
+| Ownership matrix | Provisional business, integration, system, data, security, privacy, governance and approval roles | COMPLETE AND ACCEPTED |
+| Conceptual data-contract template | Purpose, provenance, classification, validation, ownership and unavailable behaviour | COMPLETE AND ACCEPTED |
+| Authentication and authorization requirements | Future named identity, least privilege, review and segregation requirements | COMPLETE AND ACCEPTED |
+| Retry and idempotency requirements | Safe retry, non-retryable conditions and duplicate prevention | COMPLETE AND ACCEPTED |
+| Reconciliation requirements | Missing, duplicate, stale, conflict and correction controls | COMPLETE AND ACCEPTED |
+| Monitoring requirements | Mandatory future availability, failure, latency, retry and exception requirements with approval | COMPLETE AND ACCEPTED |
+| Error-ownership model | Ten failure classes with safe states and owners | COMPLETE AND ACCEPTED |
+| Explicit no-live-connection record | All prohibited operational counts recorded as zero | COMPLETE AND ACCEPTED |
+| Recovery control update | `PVE_1.4_RECOVERY_MANIFEST.md` | COMPLETE AND ACCEPTED |
 
 ## Build 1 gap routing preserved
 
-Build 4 develops planning outputs for:
+Build 4 develops accepted planning outputs for:
 
 - P14-G07 — interface ownership, trust boundaries, conceptual contracts, retry, reconciliation and monitoring requirements;
 - selected future environment requirements for P14-G08 without deploying an environment;
@@ -90,12 +94,23 @@ All sixteen Build 1 gap records and substantive target-build routing remain unch
 | Source-of-truth ownership is explicit | PASS | Catalogue and contract template |
 | Data contracts remain conceptual | PASS | No executable artifact created |
 | Human approval remains outside integration authority | PASS | Principles, catalogue and ownership matrix |
+| INT-05 cannot create, modify, approve, revoke or infer a human decision | PASS | Explicit non-automation boundary |
 | Retryable and non-retryable conditions distinguished | PASS | Retry requirements |
 | Idempotency prevents duplicate state change | PASS | Retry and idempotency section |
 | Reconciliation covers missing, duplicate, stale and conflicting data | PASS | Reconciliation section |
 | Failure produces safe blocked, unavailable or review-required state | PASS | Interface catalogue and error model |
-| Monitoring remains requirements-only | PASS | Monitoring section and zero-state confirmation |
+| Monitoring requirements are mandatory before a future connected pilot and remain unimplemented | PASS | Monitoring section and zero-state confirmation |
 | Actual effort remains within authorization | PASS | 5.5 of maximum 6 hours; 0.5 hour unused |
+
+## Formal acceptance observations and resolution
+
+| Observation | Classification | Resolution |
+|---|---|---|
+| Evidence and recovery records requested initial PR creation, initial scope verification and initial CI after those actions were complete | Non-blocking | Replaced with explicit merge-authorization and post-merge-validation gate |
+| INT-05 could be misread as an automated approval-state synchronisation interface | Non-blocking | Added an explicit rule that it can only reference a separately recorded human decision and cannot create, modify, approve, revoke or infer it; discrepancies return to pending human review |
+| Monitoring requirements used optional “should define” language | Non-blocking | Changed to mandatory future definition and approval language without implying implementation |
+
+Blocking findings: **0**.
 
 ## Stop-condition review
 
@@ -140,12 +155,12 @@ The remaining 0.5 authorized hour is unused. It does not become contingency or n
 - PVE 1.4 completion: 75.0%
 - Controlled contingency used: 0 of 4 hours
 
-## Completion determination
+## Acceptance determination
 
-Build 4 is complete as a consolidated conceptual integration-architecture deliverable, pending formal review of the final branch head and successful CI.
+Build 4 is accepted as a consolidated conceptual integration-architecture deliverable. Formal acceptance confirms the completeness and quality of the requirements package only.
 
-This completion does not verify an external system, approve an interface, create a live connection, implement security or reliability controls, execute integration tests, authorize real-user access, approve a pilot or deployment, certify production readiness or close any operational gap or risk with evidence.
+Acceptance does not verify an external system, approve an interface, create a live connection, implement security or reliability controls, execute integration tests, authorize real-user access, approve a pilot or deployment, certify production readiness or close any operational gap or risk with evidence.
 
 ## Next controlled gate
 
-Create a draft pull request, verify the exact three-file documentation-only scope and full CI on the final head, then issue a separate Build 4 PASS or FAIL acceptance decision. Keep the pull request draft and unmerged until separately authorized.
+Keep PR #46 draft and unmerged. Verify full PVE CI on the final acceptance-record head. After successful CI, decide separately whether to authorize squash merge. Following any authorized merge, require post-merge CI on the resulting exact `main` SHA before Build 4 governance closure. Do not begin Build 5 before Build 4 governance closure.
