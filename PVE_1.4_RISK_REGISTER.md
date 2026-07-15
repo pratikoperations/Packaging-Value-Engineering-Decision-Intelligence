@@ -2,7 +2,7 @@
 
 ## Register status
 
-**Final planning synthesis: COMPLETE — PENDING REVIEW**
+**Final planning synthesis: COMPLETE — CORRECTED FOR FINAL REVIEW**
 
 **Pilot authorization: NOT GRANTED**
 
@@ -33,7 +33,7 @@ No risk may be recorded as CLOSED WITH EVIDENCE or ACCEPTED BY AUTHORIZED OWNER 
 
 A documented control means the planning requirement exists. It does not mean the control is implemented, tested, accepted or operationally effective.
 
-Every risk below remains operationally OPEN or EVIDENCE PENDING. Provisional roles are not appointed people and cannot authorize closure, acceptance, GO, CONDITIONAL GO, pilot execution or deployment.
+Every risk below remains operationally OPEN, EVIDENCE PENDING or TREATMENT PLANNED. Provisional roles are not appointed people and cannot authorize closure, acceptance, GO, CONDITIONAL GO, pilot execution or deployment.
 
 ## Expanded risk register
 
@@ -93,7 +93,7 @@ Before any risk is CLOSED WITH EVIDENCE, ACCEPTED BY AUTHORIZED OWNER, or used t
 - Risks ACCEPTED BY AUTHORIZED OWNER: 0
 - Pilot recommendation: DECISION DEFERRED
 - Deployment readiness: NOT APPROVED
-- Enterprise production readiness: NOT CERTIFIED
+- Enterprise production-readiness certification: NOT GRANTED
 
 PVE 1.4 planning may specify controls and evidence requirements, but it cannot approve a real-user pilot or deployment.
 
