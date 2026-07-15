@@ -2,13 +2,14 @@
 
 ## Build status
 
-**Build 6 status: ACCEPTED — PENDING MERGE AUTHORIZATION**
+**Build 6 status: GOVERNANCE CLOSED**
+
+**PVE 1.4 status: COMPLETED AND GOVERNANCE CLOSED**
 
 **Formal acceptance result: PASS**
 
-- Accepted corrected head before this record update: `31ef2684cd5e0805c6cd0c6e190b63913b5d2810`
 - Original Build 6 plan: 8 hours
-- Current executable phase-ledger cap: 6 hours
+- Executable phase-ledger cap: 6 hours
 - Actual controlled effort: 5.75 hours
 - Unused Build 6 authorization: 0.25 hour
 - Prior-build unused hours reassigned: 0
@@ -25,33 +26,34 @@
 - Risks closed with evidence: 0
 - Risks accepted by authorized owner: 0
 
-## Controlled baseline
+## Controlled baseline and closure evidence
 
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
-- Source branch: `main`
-- Source commit: `06cd4cbc778cf3c0b50a60e9a26fb5fe32aa515c`
+- Stable branch: `main`
+- Build 6 source baseline: `06cd4cbc778cf3c0b50a60e9a26fb5fe32aa515c`
 - Build branch: `planning/pve-1.4-build-6-final-readiness-decision`
-- Draft PR: #48
-- Build 5 squash merge: `06cd4cbc778cf3c0b50a60e9a26fb5fe32aa515c`
-- Build 5 post-merge workflow: `29408584355`
-- Build 5 post-merge job: `87329949557`
-- Build 5 tests: 382; failures: 0; errors: 0
-- Build 5 artifact: `8340097326`
+- Merged PR: `#48`
+- Squash-merge and final closed `main` SHA: `742e15af16bdc4973b58460b817e2111e075947f`
+- Post-merge workflow: `29413653445`
+- Post-merge job: `87346382679`
+- Post-merge tests: 382; failures: 0; errors: 0
+- Post-merge artifact: `8342167534`
+- Artifact digest: `sha256:eb73832c24b3a1050c46dfa2c2c3e90de3b6edf29e6f9cdf384d0924ec92f266`
 - Closed release tag: `pve-v1.3`
 
 ## Objective
 
-Complete and formally accept the final PVE 1.4 planning synthesis by reconciling risk, readiness, evidence, planning closure and the separate future-pilot decision without executing or authorizing operational activity.
+Complete, formally accept, merge, post-merge validate and governance-close the final PVE 1.4 planning synthesis by reconciling risk, readiness, evidence, planning closure and the separate future-pilot decision without executing or authorizing operational activity.
 
 ## Accepted outputs
 
 | Output | Evidence | Result |
 |---|---|---|
-| Final readiness and decision package | `PVE_1.4_FINAL_READINESS_AND_DECISION_PACKAGE.md` | COMPLETE AND ACCEPTED |
-| Final risk synthesis | `PVE_1.4_RISK_REGISTER.md` | COMPLETE AND ACCEPTED |
-| Final acceptance and pilot gates | `PVE_1.4_ACCEPTANCE_CRITERIA.md` | COMPLETE AND ACCEPTED |
-| Build 6 evidence | This document | COMPLETE AND ACCEPTED |
-| Recovery and continuation state | `PVE_1.4_RECOVERY_MANIFEST.md` | COMPLETE AND ACCEPTED |
+| Final readiness and decision package | `PVE_1.4_FINAL_READINESS_AND_DECISION_PACKAGE.md` | COMPLETE, ACCEPTED AND GOVERNANCE CLOSED |
+| Final risk synthesis | `PVE_1.4_RISK_REGISTER.md` | COMPLETE, ACCEPTED AND GOVERNANCE CLOSED |
+| Final acceptance and pilot gates | `PVE_1.4_ACCEPTANCE_CRITERIA.md` | COMPLETE, ACCEPTED AND GOVERNANCE CLOSED |
+| Build 6 evidence | This document | COMPLETE, ACCEPTED AND GOVERNANCE CLOSED |
+| Recovery and continuation state | `PVE_1.4_RECOVERY_MANIFEST.md` | COMPLETE, ACCEPTED AND GOVERNANCE CLOSED |
 | Deployment-readiness checklist | Overall result `NOT APPROVED` | COMPLETE AND ACCEPTED |
 | Planning-closure determination | `PLANNING COMPLETE WITH DOCUMENTED LIMITATIONS` | COMPLETE AND ACCEPTED |
 | Future-pilot recommendation | `DECISION DEFERRED` | COMPLETE AND ACCEPTED |
@@ -104,7 +106,7 @@ Operational evidence, named accountability and separate authorizations are incom
 
 **NOT GRANTED**
 
-## Formal acceptance record
+## Formal acceptance and closure record
 
 The focused final acceptance review confirmed that the two earlier documentation-governance blockers were resolved:
 
@@ -114,6 +116,8 @@ The focused final acceptance review confirmed that the two earlier documentation
 Formal result: **PASS**.
 
 Blocking findings remaining: **0**.
+
+PR #48 was squash-merged to `main` at `742e15af16bdc4973b58460b817e2111e075947f`. Post-merge workflow `29413653445`, job `87346382679`, completed successfully with 382 tests, 0 failures and 0 errors. Artifact `8342167534` is tied to the exact final `main` SHA.
 
 No substantive planning determination, pilot recommendation, risk closure, authorization or operational boundary changed.
 
@@ -178,13 +182,12 @@ No substantive planning determination, pilot recommendation, risk closure, autho
 - dependencies, datasets, dashboards or telemetry;
 - active integrations.
 
-## Acceptance checks
+## Acceptance and closure checks
 
 | Condition | Result |
 |---|---|
-| Exact baseline traced | PASS |
-| Five-file documentation-only PR scope | PASS |
-| Build 5 closure evidence recorded | PASS |
+| Exact source baseline traced | PASS |
+| Five-file documentation-only Build 6 scope | PASS |
 | Six-hour execution cap respected | PASS |
 | Contingency remains unused | PASS |
 | All risk IDs and core fields preserved | PASS |
@@ -197,24 +200,32 @@ No substantive planning determination, pilot recommendation, risk closure, autho
 | No operational risk closure claimed | PASS |
 | No pilot, deployment or production authority granted | PASS |
 | Formal Build 6 acceptance | PASS |
+| Squash merge completed | PASS |
+| Post-merge CI on exact final `main` SHA | PASS |
+| Build 6 governance closure | PASS |
+| PVE 1.4 governance closure | PASS |
 
 ## Stop-condition review
 
 No stop condition was triggered. In particular, there was no baseline mismatch, effort overrun, reassignment of unused hours, contingency use, unsupported risk closure, GO or CONDITIONAL GO, deployment approval, real-user activity, live integration, real-data introduction, realized-value claim, application or infrastructure change, or PVE 1.3 tag/release change.
 
-## PVE 1.4 effort state after Build 6
+## PVE 1.4 effort state after closure
 
 - Completed through PVE 1.3: 312.5 hours
 - PVE 1.4 controlled phase ledger: 54 hours
 - PVE 1.4 completed effort: 53.75 hours
 - PVE 1.4 unused planned authorization: 0.25 hour
-- PVE 1.4 planned completion: 99.5% by consumed hours; planning deliverables complete and accepted pending merge and post-merge validation
+- PVE 1.4 planning deliverables: 100% complete
+- Build 6 governance closure: complete
+- PVE 1.4 governance closure: complete
 - Controlled contingency used: 0 of 4 hours
 
 ## Completion determination
 
-Build 6 is complete and formally accepted as a documentation-only final planning package. This acceptance does not authorize or evidence a pilot, deployment, production operation, real-user use, live integration, UAT acceptance, security certification, production KPI, Finance-validated benefit or realized value.
+Build 6 is complete, formally accepted, squash-merged, post-merge validated and governance-closed as a documentation-only final planning package. PVE 1.4 is completed and governance-closed.
+
+This closure does not authorize or evidence a pilot, deployment, production operation, real-user use, live integration, UAT acceptance, security certification, production KPI, Finance-validated benefit or realized value.
 
 ## Next controlled gate
 
-Keep PR #48 draft and unmerged pending separate explicit merge authorization. Before merge, verify the exact final head, exact five-file documentation-only scope and successful full CI. Following an authorized squash merge, require post-merge CI on the resulting exact `main` SHA before Build 6 and PVE 1.4 governance closure.
+PVE 1.4 is frozen. Any future proof of concept, pilot, implementation, live integration, real-user UAT, deployment or production activity requires a separately authorized phase with its own scope, evidence, budget and decision authority.
