@@ -2,7 +2,7 @@
 
 ## Status
 
-**Planning acceptance framework: FINAL SYNTHESIS — PENDING REVIEW**
+**Planning acceptance framework: FINAL SYNTHESIS — CORRECTED FOR FINAL REVIEW**
 
 **Pilot approval: NOT GRANTED**
 
@@ -25,20 +25,22 @@ A gate cannot be treated as passed based on narrative planning language alone.
 
 `NOT APPLICABLE — APPROVED` requires a rationale, named evidence owner, authorized approver and confirmation that exclusion creates no uncontrolled risk.
 
+Planning-only qualifications, operational-evidence limitations and budget-reconciliation notes must appear in the evidence or operational-implication field, not in the controlled result field.
+
 ## Final phase acceptance assessment
 
-| Planning criterion | Planning evidence | Operational implication | Result |
+| Planning criterion | Planning evidence | Operational implication or limitation | Result |
 |---|---|---|---|
 | Baseline integrity | PVE 1.3 closure and immutable-release requirements traceable | Pilot release verification still required | PASS |
-| Scope and budget control | 54-hour ledger retained; Build 6 limited to 6 executable hours | Additional effort needs separate authorization | PASS |
-| Roles, approvals and audit | Role, segregation, audit and exception requirements accepted | Named pilot appointments absent | PASS FOR PLANNING |
-| Data governance | Inventory, classification, minimization and retention requirements accepted | Approved pilot data record absent | PASS FOR PLANNING |
-| Security and privacy | Threat, access, secrets, incident and privacy requirements accepted | Operational assessments absent | PASS FOR PLANNING |
-| Integration specifications | Ownership, contracts, access, retry, reconciliation and monitoring requirements accepted | Live interfaces and executed tests absent | PASS FOR PLANNING |
-| UAT framework | Personas, scenarios, entry/exit, severity and sign-off accepted | Real-user UAT absent | PASS FOR PLANNING |
-| Value validation | Claim states, KPIs, baseline, formula and evidence controls accepted | Approved baseline and measured result absent | PASS FOR PLANNING |
-| Demonstration hardening | Synthetic primary/fallback design exists | Rehearsal evidence remains pending | PASS WITH LIMITATION |
-| Risk and readiness | All 18 risks retain controls, evidence and gates | Critical operational evidence absent | PASS WITH LIMITATION |
+| Scope and budget control | 54-hour ledger retained; Build 6 limited to 6 executable hours | Original 8-hour allocation is reconciled to the lower 6-hour executable cap; additional effort needs separate authorization | PASS |
+| Roles, approvals and audit | Role, segregation, audit and exception requirements accepted | Planning specification only; named pilot appointments absent | PASS |
+| Data governance | Inventory, classification, minimization and retention requirements accepted | Planning specification only; approved pilot data record absent | PASS |
+| Security and privacy | Threat, access, secrets, incident and privacy requirements accepted | Planning specification only; operational assessments absent | PASS |
+| Integration specifications | Ownership, contracts, access, retry, reconciliation and monitoring requirements accepted | Planning specification only; live interfaces and executed tests absent | PASS |
+| UAT framework | Personas, scenarios, entry/exit, severity and sign-off accepted | Planning specification only; real-user UAT absent | PASS |
+| Value validation | Claim states, KPIs, baseline, formula and evidence controls accepted | Planning specification only; approved baseline and measured result absent | PASS |
+| Demonstration hardening | Synthetic primary/fallback design exists | Rehearsal evidence remains pending and is carried as a documented limitation | PASS |
+| Risk and readiness | All 18 risks retain controls, evidence and gates | Critical operational evidence remains absent and is carried as a documented limitation | PASS |
 
 ## Separate determination framework
 
@@ -75,16 +77,16 @@ Evidence is incomplete, Critical risks lack named accountable owners and no proh
 
 ## Planning-closure conditions
 
-| Condition | Result |
-|---|---|
-| All six build-control records exist | PASS |
-| All planned outputs are traceable | PASS |
-| Planned and actual hours are reconciled | PASS WITH DOCUMENTED 8-HOUR/6-HOUR LIMITATION |
-| All 16 gaps retain status, routing and evidence requirement | PASS |
-| All 18 risks retain trigger, owner role, treatment, evidence and gate | PASS |
-| Deployment-readiness checklist is marked NOT APPROVED | PASS |
-| No excluded implementation or authorization occurred | PASS |
-| Unresolved limitations are carried forward | PASS |
+| Condition | Limitation or comment | Result |
+|---|---|---|
+| All six build-control records exist | None | PASS |
+| All planned outputs are traceable | None | PASS |
+| Planned and actual hours are reconciled | Original Build 6 plan stated 8 hours; current phase ledger authorized 6 executable hours; actual effort remains within the lower cap | PASS |
+| All 16 gaps retain status, routing and evidence requirement | No operational gap closure is implied | PASS |
+| All 18 risks retain trigger, owner role, treatment, evidence and gate | No risk closure or authorized acceptance is implied | PASS |
+| Deployment-readiness checklist is marked NOT APPROVED | Operational deployment evidence remains pending | PASS |
+| No excluded implementation or authorization occurred | Pilot, deployment and production authorization remain not granted | PASS |
+| Unresolved limitations are carried forward | Residual limitations and future evidence roadmap are explicit | PASS |
 
 ## Objective future-pilot decision matrix
 
