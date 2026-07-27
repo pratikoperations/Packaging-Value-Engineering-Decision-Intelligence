@@ -134,5 +134,6 @@ def compare_pdf_review_groups(
 ) -> tuple[Tuple[FieldComparison, ...], ChangeSummary]:
     """Reuse existing comparison statuses and deterministic change summary."""
 
-    comparisons = compare_fields(groups, governed_field_names)
+    groups = tuple(groups)
+    comparisons = compare_fields(governed_field_names, groups)
     return comparisons, build_change_summary(comparisons, groups)
