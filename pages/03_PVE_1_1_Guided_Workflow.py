@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict
 from pathlib import Path
+from typing import Any
 
 import streamlit as st
 
@@ -20,6 +21,29 @@ def _status(label: str, value: str, *, blocker: bool = False) -> None:
         st.success(f"{label}: {value}")
     else:
         st.info(f"{label}: Not available")
+
+
+def source_traceability_rows(value: Any, prefix: str = "") -> list[dict[str, str]]:
+    """Flatten recorded source references for a business-readable table."""
+    rows: list[dict[str, str]] = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            label = str(key).replace("_", " ").title()
+            child_prefix = f"{prefix} — {label}" if prefix else label
+            rows.extend(source_traceability_rows(child, child_prefix))
+    elif isinstance(value, list):
+        for index, child in enumerate(value, start=1):
+            item_prefix = f"{prefix} {index}" if len(value) > 1 else prefix
+            rows.extend(source_traceability_rows(child, item_prefix))
+    elif prefix:
+        if isinstance(value, bool):
+            display = "Yes" if value else "No"
+        elif value is None or value == "":
+            display = "Not recorded"
+        else:
+            display = str(value).replace("_", " ")
+        rows.append({"Source reference": prefix, "Recorded value": display})
+    return rows
 
 
 def main() -> None:
@@ -84,7 +108,13 @@ def main() -> None:
                 reasons = "; ".join(output.reasons) or "Requirements are not met."
                 st.warning(f"{output.name}: unavailable — {reasons}")
         st.subheader("Source traceability")
-        st.json(assessment.source_traceability)
+        traceability_rows = source_traceability_rows(assessment.source_traceability)
+        if traceability_rows:
+            st.dataframe(traceability_rows, width="stretch", hide_index=True)
+        else:
+            st.info(
+                "No additional source references are recorded for this synthetic demonstration dataset."
+            )
 
     with commercial_tab:
         analysis, reasons = commercial_from_context(project, canonical)
