@@ -105,6 +105,9 @@ def render_portfolio_demo_loader() -> None:
                 archived=result.project.get("archived_at") is not None,
             ):
                 raise RuntimeError("The demonstration project is archived and cannot become active.")
+            st.session_state["active_threshold_profile_id"] = str(
+                result.threshold_profile["threshold_profile_id"]
+            )
             created_count = len(result.created)
             message = (
                 "Synthetic demonstration loaded and selected as the active workspace. "

@@ -35,6 +35,21 @@ def threshold_label(record: dict) -> str:
     return f"{record['profile_name']} · v{record['version_number']} · {scope}"
 
 
+def selected_profile_index(
+    records: list[dict],
+    active_profile_id: object,
+    project_id: str,
+) -> int:
+    """Select an active threshold only when it belongs to the current scope."""
+    for index, record in enumerate(records):
+        if (
+            record["threshold_profile_id"] == active_profile_id
+            and record["project_id"] in (None, project_id)
+        ):
+            return index
+    return 0
+
+
 def alternative_rows(result) -> list[dict]:
     rows: list[dict] = []
     for alternative_id, record in result.results["alternatives"].items():
@@ -102,12 +117,20 @@ def main() -> None:
         "Immutable dataset version",
         options=list(dataset_options),
     )
+    threshold_labels = list(threshold_options)
+    threshold_index = selected_profile_index(
+        thresholds,
+        st.session_state.get("active_threshold_profile_id"),
+        project["project_id"],
+    )
     selected_threshold_label = st.selectbox(
         "Immutable threshold profile version",
-        options=list(threshold_options),
+        options=threshold_labels,
+        index=threshold_index,
     )
     dataset_record = dataset_options[selected_dataset_label]
     threshold_record = threshold_options[selected_threshold_label]
+    st.session_state["active_threshold_profile_id"] = threshold_record["threshold_profile_id"]
 
     dataset = json.loads(dataset_record["canonical_json"])
     alternatives = dataset.get("packaging_alternatives", [])

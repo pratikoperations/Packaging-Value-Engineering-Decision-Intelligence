@@ -10,6 +10,11 @@ from src.application.runtime import (
     build_project_service,
 )
 from src.demo_portfolio import DEMO_PROJECT_CODE, PortfolioSeedConflict, seed_portfolio_demo
+from src.demo_portfolio.seeder import (
+    DEMO_PROJECT_CHANGE_TYPE,
+    DEMO_PROJECT_NAME,
+    DEMO_PROJECT_OBJECTIVE,
+)
 
 
 class PortfolioSeedTests(unittest.TestCase):
@@ -28,6 +33,8 @@ class PortfolioSeedTests(unittest.TestCase):
             ("project", "dataset", "threshold_profile", "scenario", "decision_snapshot"),
         )
         self.assertEqual(result.project["project_code"], DEMO_PROJECT_CODE)
+        self.assertEqual(result.project["objective"], DEMO_PROJECT_OBJECTIVE)
+        self.assertEqual(result.project["change_type"], DEMO_PROJECT_CHANGE_TYPE)
         self.assertEqual(result.dataset["project_id"], result.project["project_id"])
         self.assertEqual(result.threshold_profile["project_id"], result.project["project_id"])
         self.assertEqual(result.scenario["project_id"], result.project["project_id"])
@@ -87,6 +94,48 @@ class PortfolioSeedTests(unittest.TestCase):
             len(build_controlled_scenario_service(self.database_path).scenarios.list_for_project(first.project["project_id"])),
             1,
         )
+
+    def test_existing_demo_with_missing_governed_metadata_is_repaired(self) -> None:
+        service = build_project_service(self.database_path)
+        existing = service.create_project(
+            project_code=DEMO_PROJECT_CODE,
+            project_name=DEMO_PROJECT_NAME,
+            category="corrugated_shipping_case",
+            currency="INR",
+            annual_volume=1_200_000.0,
+        )
+
+        result = seed_portfolio_demo(self.database_path)
+
+        self.assertEqual(result.project["project_id"], existing["project_id"])
+        self.assertEqual(result.project["objective"], DEMO_PROJECT_OBJECTIVE)
+        self.assertEqual(result.project["change_type"], DEMO_PROJECT_CHANGE_TYPE)
+        self.assertNotIn("project", result.created)
+        self.assertEqual(service.portfolio_summary()["total_projects"], 1)
+
+        repeated = seed_portfolio_demo(self.database_path)
+        self.assertEqual(repeated.created, ())
+        self.assertEqual(repeated.project["project_id"], existing["project_id"])
+
+    def test_conflicting_governed_metadata_stops_without_overwrite(self) -> None:
+        service = build_project_service(self.database_path)
+        conflicting = service.create_project(
+            project_code=DEMO_PROJECT_CODE,
+            project_name=DEMO_PROJECT_NAME,
+            category="corrugated_shipping_case",
+            currency="INR",
+            annual_volume=1_200_000.0,
+            objective="Material reduction",
+            change_type="Ply reduction",
+        )
+
+        with self.assertRaisesRegex(PortfolioSeedConflict, "conflicting governed metadata"):
+            seed_portfolio_demo(self.database_path)
+
+        preserved = service.get_project(conflicting["project_id"])
+        self.assertEqual(preserved["objective"], "Material reduction")
+        self.assertEqual(preserved["change_type"], "Ply reduction")
+        self.assertEqual(service.portfolio_summary()["dataset_versions"], 0)
 
     def test_seed_preserves_human_approval_and_non_autonomy_boundaries(self) -> None:
         result = seed_portfolio_demo(self.database_path)
