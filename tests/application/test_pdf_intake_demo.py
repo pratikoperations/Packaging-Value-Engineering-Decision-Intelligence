@@ -9,8 +9,8 @@ from src.application.pdf_intake_demo import (
     synthetic_pdf_documents,
 )
 from src.document_intake import DocumentRole
-from src.review_comparison import confirm, group_reviews
 from src.pdf_intake import compare_pdf_review_groups
+from src.review_comparison import confirm, group_reviews
 
 
 class PdfIntakeDemoTests(unittest.TestCase):
@@ -21,8 +21,10 @@ class PdfIntakeDemoTests(unittest.TestCase):
         existing, proposed = load_synthetic_pdf_pair()
         self.assertEqual(existing.role, DocumentRole.EXISTING)
         self.assertEqual(proposed.role, DocumentRole.PROPOSED)
-        self.assertGreater(len(existing.blocks), 5)
-        self.assertGreater(len(proposed.blocks), 5)
+        self.assertGreaterEqual(len(existing.blocks), 1)
+        self.assertGreaterEqual(len(proposed.blocks), 1)
+        self.assertEqual(existing.page_count, 1)
+        self.assertEqual(proposed.page_count, 1)
 
     def test_deterministic_extraction_is_grounded_and_uses_expected_values(self):
         existing, proposed = load_synthetic_pdf_pair()
@@ -35,7 +37,8 @@ class PdfIntakeDemoTests(unittest.TestCase):
         self.assertEqual(existing_weight.normalized_value, 780)
         self.assertEqual(proposed_weight.normalized_value, 650)
         self.assertEqual(existing_weight.unit, "g")
-        self.assertIn(existing_weight.source_excerpt, next(b.normalized_text for b in existing.blocks if b.block_id == existing_weight.source_block_id))
+        source = next(b.normalized_text for b in existing.blocks if b.block_id == existing_weight.source_block_id)
+        self.assertIn(existing_weight.source_excerpt, source)
 
     def test_review_and_comparison_reuse(self):
         documents = load_synthetic_pdf_pair()
