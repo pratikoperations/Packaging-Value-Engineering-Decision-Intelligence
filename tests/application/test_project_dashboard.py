@@ -5,7 +5,8 @@ import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
-from typing import MutableMapping
+from types import SimpleNamespace
+from typing import Any, MutableMapping
 
 from src.application import ProjectService
 from src.application.runtime import build_project_service
@@ -36,6 +37,27 @@ def load_workspace_selector():
     namespace = {"MutableMapping": MutableMapping}
     exec(compile(module, str(DASHBOARD_PATH), "exec"), namespace)
     return namespace["select_active_workspace"]
+
+
+def load_portfolio_helpers():
+    """Load the pure seed-completeness and presentation helpers without Streamlit."""
+    source = DASHBOARD_PATH.read_text(encoding="utf-8")
+    tree = ast.parse(source)
+    selected = []
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(
+            isinstance(target, ast.Name) and target.id == "SEED_STAGES" for target in node.targets
+        ):
+            selected.append(node)
+        if isinstance(node, ast.FunctionDef) and node.name in {
+            "portfolio_seed_complete",
+            "seed_stage_rows",
+        }:
+            selected.append(node)
+    module = ast.Module(body=selected, type_ignores=[])
+    namespace = {"Any": Any}
+    exec(compile(module, str(DASHBOARD_PATH), "exec"), namespace)
+    return namespace["portfolio_seed_complete"], namespace["seed_stage_rows"]
 
 
 class ProjectDashboardTestCase(unittest.TestCase):
@@ -200,6 +222,22 @@ class ProjectDashboardTestCase(unittest.TestCase):
             "Duplicate project metadata",
             "Archive selected project",
             "local SQLite demonstration persistence",
+            "Portfolio Demonstration",
+            "Load demonstration project",
+            "seed_portfolio_demo(DATABASE_PATH)",
+            "Guided workflow after loading",
+            "Decision History",
+        ):
+            self.assertIn(marker, dashboard)
+
+    def test_dashboard_preserves_demo_governance_warnings(self):
+        dashboard = DASHBOARD_PATH.read_text(encoding="utf-8")
+        for marker in (
+            "synthetic data only",
+            "not supplier, laboratory, production",
+            "Engineering validation and documented human approval remain mandatory",
+            "autonomous approval is prohibited",
+            "It is not production storage",
         ):
             self.assertIn(marker, dashboard)
 
@@ -207,6 +245,35 @@ class ProjectDashboardTestCase(unittest.TestCase):
         dashboard = DASHBOARD_PATH.read_text(encoding="utf-8")
         self.assertIn("do not represent realized savings", dashboard)
         self.assertNotIn("Realized Savings", dashboard)
+
+    def test_demo_success_requires_complete_record_chain(self):
+        complete, _ = load_portfolio_helpers()
+        complete_result = SimpleNamespace(
+            project={"project_id": "project-1"},
+            dataset={"dataset_id": "dataset-1"},
+            threshold_profile={"threshold_profile_id": "threshold-1"},
+            scenario={"scenario_id": "scenario-1"},
+            decision_snapshot={"decision_snapshot_id": "decision-1"},
+        )
+        self.assertTrue(complete(complete_result))
+        complete_result.decision_snapshot = {}
+        self.assertFalse(complete(complete_result))
+
+    def test_demo_stage_rows_distinguish_created_and_reused_records(self):
+        _, rows = load_portfolio_helpers()
+        presented = rows(("project", "scenario"))
+        by_name = {row["Workflow record"]: row["Load result"] for row in presented}
+        self.assertEqual(by_name["Project workspace"], "Created")
+        self.assertEqual(by_name["Controlled scenario"], "Created")
+        self.assertEqual(by_name["Validated dataset version"], "Reused existing record")
+        self.assertEqual(by_name["Immutable decision snapshot"], "Reused existing record")
+
+    def test_dashboard_records_feedback_only_after_complete_chain_check(self):
+        dashboard = DASHBOARD_PATH.read_text(encoding="utf-8")
+        completion_check = dashboard.index("if not portfolio_seed_complete(result):")
+        feedback_write = dashboard.index("st.session_state[SEED_FEEDBACK_KEY] =")
+        self.assertLess(completion_check, feedback_write)
+        self.assertIn("Demonstration project was not loaded", dashboard)
 
     def test_active_project_can_be_selected_explicitly(self):
         select_active_workspace = load_workspace_selector()
@@ -254,7 +321,6 @@ class ProjectDashboardTestCase(unittest.TestCase):
             "st.file_uploader",
             "Run scenario",
             "Configure thresholds",
-            "Decision history",
         ):
             self.assertNotIn(prohibited, dashboard)
 
