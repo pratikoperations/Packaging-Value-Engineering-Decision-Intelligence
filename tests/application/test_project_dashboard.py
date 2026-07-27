@@ -235,8 +235,8 @@ class ProjectDashboardTestCase(unittest.TestCase):
         for marker in (
             "synthetic data only",
             "not supplier, laboratory, production",
-            "Engineering validation and documented human approval remain mandatory",
-            "autonomous approval is prohibited",
+            "Engineering validation and documented human approval ",
+            "remain mandatory; autonomous approval is prohibited",
             "It is not production storage",
         ):
             self.assertIn(marker, dashboard)
