@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-import io
 import json
+import tempfile
 import unittest
-import zipfile
 from pathlib import Path
 
 from src.document_intake import DocumentRole, DocumentValidationError, validate_docx
@@ -61,15 +60,21 @@ class EvaluationCorpusTests(unittest.TestCase):
             validate_docx("malformed.docx", b"not-a-zip", DocumentRole.EXISTING)
 
     def test_word_intake_migration_is_backward_compatible(self):
-        database = Database(":memory:")
-        self.assertEqual(initialize_database(database), 9)
-        legacy_version = current_schema_version(database)
-        initialize_word_intake_schema(database)
-        self.assertEqual(current_schema_version(database), legacy_version)
-        with database.connect() as connection:
-            tables = {row[0] for row in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
-        self.assertIn("projects", tables)
-        self.assertIn("word_intake_snapshots", tables)
+        with tempfile.TemporaryDirectory() as directory:
+            database = Database(Path(directory) / "evaluation.db")
+            self.assertEqual(initialize_database(database), 9)
+            legacy_version = current_schema_version(database)
+            initialize_word_intake_schema(database)
+            self.assertEqual(current_schema_version(database), legacy_version)
+            with database.connect() as connection:
+                tables = {
+                    row[0]
+                    for row in connection.execute(
+                        "SELECT name FROM sqlite_master WHERE type='table'"
+                    )
+                }
+            self.assertIn("projects", tables)
+            self.assertIn("word_intake_snapshots", tables)
 
 
 if __name__ == "__main__":
