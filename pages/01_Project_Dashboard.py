@@ -2,15 +2,24 @@ from __future__ import annotations
 
 import sqlite3
 from pathlib import Path
-from typing import MutableMapping
+from typing import Any, MutableMapping
 
 import streamlit as st
 
 from src.application.runtime import build_project_service
 from src.category_registry import default_registry
+from src.demo_portfolio import PortfolioSeedConflict, seed_portfolio_demo
 
 ROOT = Path(__file__).resolve().parents[1]
 DATABASE_PATH = ROOT / "runtime" / "pve_portfolio.sqlite3"
+SEED_FEEDBACK_KEY = "portfolio_seed_feedback"
+SEED_STAGES = (
+    ("project", "Project workspace"),
+    ("dataset", "Validated dataset version"),
+    ("threshold_profile", "Business threshold profile"),
+    ("scenario", "Controlled scenario"),
+    ("decision_snapshot", "Immutable decision snapshot"),
+)
 
 
 @st.cache_resource
@@ -23,6 +32,29 @@ def select_active_workspace(session_state: MutableMapping[str, object], project_
         return False
     session_state["active_project_id"] = project_id
     return True
+
+
+def portfolio_seed_complete(result: Any) -> bool:
+    """Return True only when the complete persisted demonstration chain exists."""
+    required = (
+        (result.project, "project_id"),
+        (result.dataset, "dataset_id"),
+        (result.threshold_profile, "threshold_profile_id"),
+        (result.scenario, "scenario_id"),
+        (result.decision_snapshot, "decision_snapshot_id"),
+    )
+    return all(isinstance(record, dict) and bool(record.get(identifier)) for record, identifier in required)
+
+
+def seed_stage_rows(created: tuple[str, ...]) -> list[dict[str, str]]:
+    created_set = set(created)
+    return [
+        {
+            "Workflow record": label,
+            "Load result": "Created" if key in created_set else "Reused existing record",
+        }
+        for key, label in SEED_STAGES
+    ]
 
 
 def project_table_rows(projects: list[dict]) -> list[dict]:
@@ -43,6 +75,59 @@ def project_table_rows(projects: list[dict]) -> list[dict]:
         }
         for p in projects
     ]
+
+
+def render_portfolio_demo_loader() -> None:
+    st.subheader("Portfolio Demonstration")
+    st.write(
+        "Load one complete synthetic corrugated-packaging case containing a project, "
+        "validated dataset, governed threshold profile, controlled scenario, and immutable decision snapshot."
+    )
+    st.warning(
+        "The demonstration uses synthetic data only. It is not supplier, laboratory, production, "
+        "engineering-trial, or commercial evidence. Engineering validation and documented human approval "
+        "remain mandatory; autonomous approval is prohibited."
+    )
+
+    feedback = st.session_state.pop(SEED_FEEDBACK_KEY, None)
+    if isinstance(feedback, dict):
+        st.success(feedback["message"])
+        st.dataframe(feedback["rows"], width="stretch", hide_index=True)
+
+    if st.button("Load demonstration project", type="primary", width="stretch"):
+        try:
+            result = seed_portfolio_demo(DATABASE_PATH)
+            if not portfolio_seed_complete(result):
+                raise RuntimeError("The demonstration record chain is incomplete and was not activated.")
+            if not select_active_workspace(
+                st.session_state,
+                str(result.project["project_id"]),
+                archived=result.project.get("archived_at") is not None,
+            ):
+                raise RuntimeError("The demonstration project is archived and cannot become active.")
+            created_count = len(result.created)
+            message = (
+                "Synthetic demonstration loaded and selected as the active workspace. "
+                f"{created_count} record{' was' if created_count == 1 else 's were'} created; "
+                f"{len(SEED_STAGES) - created_count} existing record"
+                f"{' was' if len(SEED_STAGES) - created_count == 1 else 's were'} reused."
+            )
+            st.session_state[SEED_FEEDBACK_KEY] = {
+                "message": message,
+                "rows": seed_stage_rows(result.created),
+            }
+            st.rerun()
+        except (PortfolioSeedConflict, RuntimeError, ValueError, KeyError, sqlite3.IntegrityError, OSError) as error:
+            st.error(f"Demonstration project was not loaded: {error}")
+
+    st.caption("Guided workflow after loading")
+    st.markdown(
+        "1. **Project Dashboard** — review the active synthetic workspace and saved-record counts.\n"
+        "2. **Upload and Validate** — inspect the immutable validated dataset version.\n"
+        "3. **Business Thresholds** — review the governed project threshold profile.\n"
+        "4. **Controlled Scenarios** — inspect deterministic evidence and mandatory controls.\n"
+        "5. **Decision History** — review the immutable decision snapshot; it is not engineering approval."
+    )
 
 
 def render_current_workspace(service) -> None:
@@ -100,8 +185,10 @@ def render_project_actions(service, projects: list[dict], *, archived: bool) -> 
 def main() -> None:
     st.set_page_config(page_title="PVE Project Dashboard", layout="wide")
     st.title("Packaging Value Engineering Project Dashboard")
-    st.caption("PVE 1.1 all-category project intake foundation")
+    st.caption("PVE controlled project intake and synthetic portfolio demonstration")
     st.warning("This dashboard uses local SQLite demonstration persistence. It is not production storage.")
+
+    render_portfolio_demo_loader()
 
     service = project_service()
     registry = default_registry()
