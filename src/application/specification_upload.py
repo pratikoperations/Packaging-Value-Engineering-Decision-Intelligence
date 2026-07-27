@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass
+from typing import MutableMapping
 
 from src.specification_intake import (
     DocumentRole,
@@ -11,6 +13,11 @@ from src.specification_intake import (
 )
 from src.upload_routing.models import DetectedUpload, FileFormat
 
+SPEC_STATE_PREFIX = "data_upload.specification."
+SPEC_BATCH_KEY = SPEC_STATE_PREFIX + "batch_fingerprint"
+SPEC_CONFIRMATION_KEY = SPEC_STATE_PREFIX + "confirmed"
+SPEC_REVIEWS_KEY = SPEC_STATE_PREFIX + "reviews"
+
 
 @dataclass(frozen=True)
 class SpecificationUploadInput:
@@ -19,6 +26,30 @@ class SpecificationUploadInput:
     content: bytes
     detection: DetectedUpload
     role: DocumentRole
+
+
+def specification_batch_fingerprint(inputs: tuple[SpecificationUploadInput, ...]) -> str:
+    payload = "|".join(
+        sorted(
+            f"{item.detection.sha256}:{item.filename}:{item.role.value}:{item.detection.file_format.value}"
+            for item in inputs
+        )
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def invalidate_specification_state_on_change(
+    state: MutableMapping[str, object],
+    inputs: tuple[SpecificationUploadInput, ...],
+) -> bool:
+    fingerprint = specification_batch_fingerprint(inputs)
+    if state.get(SPEC_BATCH_KEY) == fingerprint:
+        return False
+    for key in tuple(state):
+        if key.startswith(SPEC_STATE_PREFIX):
+            state.pop(key, None)
+    state[SPEC_BATCH_KEY] = fingerprint
+    return True
 
 
 def parse_specification_pair(
