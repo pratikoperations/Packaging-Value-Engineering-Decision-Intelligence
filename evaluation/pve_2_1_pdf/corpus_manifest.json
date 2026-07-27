@@ -1,0 +1,17 @@
+{
+  "corpus_version": "pve-pdf-eval-v1",
+  "synthetic_only": true,
+  "pairs": [
+    {"pair_id":"PDF-PAIR-01","layout":"single_column","features":["searchable","dimensions","weight"]},
+    {"pair_id":"PDF-PAIR-02","layout":"table_like","features":["table_warning","grounding"]},
+    {"pair_id":"PDF-PAIR-03","layout":"multi_column","features":["multi_column_warning","reading_order_risk"]},
+    {"pair_id":"PDF-PAIR-04","layout":"single_column","features":["missing_field","unit_missing"]},
+    {"pair_id":"PDF-PAIR-05","layout":"table_like","features":["duplicate_candidate","unit_conflict"]},
+    {"pair_id":"PDF-PAIR-06","layout":"single_column","features":["prompt_injection","source_grounding"]},
+    {"pair_id":"PDF-PAIR-07","layout":"image_only","features":["scanned_rejection"]},
+    {"pair_id":"PDF-PAIR-08","layout":"encrypted","features":["encrypted_rejection"]},
+    {"pair_id":"PDF-PAIR-09","layout":"malformed","features":["malformed_rejection"]},
+    {"pair_id":"PDF-PAIR-10","layout":"low_text","features":["insufficient_text_rejection","regression"]}
+  ],
+  "claim_boundary": "Reference metrics apply to deterministic synthetic predictions and validation gates, not a live AI provider."
+}
