@@ -23,6 +23,7 @@ _HEADER_FILL = PatternFill("solid", fgColor="D9EAD3")
 _REQUIRED_FILL = PatternFill("solid", fgColor="F4CCCC")
 _RECOMMENDED_FILL = PatternFill("solid", fgColor="FCE5CD")
 _OPTIONAL_FILL = PatternFill("solid", fgColor="E7E6E6")
+_CATEGORY_ALIASES = {"corrugated_shipping_case": "corrugated"}
 
 
 def _style_headers(ws) -> None:
@@ -77,7 +78,8 @@ def _write_common_rows(ws, rows) -> None:
 
 def generate_workbook(category: str, objective: str, change_type: str) -> bytes:
     registry = default_registry()
-    definition = registry.get(category)
+    registry_category = _CATEGORY_ALIASES.get(category, category)
+    definition = registry.get(registry_category)
     if not definition.supports_objective(objective):
         raise ValueError("Unsupported project objective.")
     if not definition.supports_change_type(change_type):
