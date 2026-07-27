@@ -15,6 +15,8 @@ from src.application.runtime import (
 
 DEMO_PROJECT_CODE = "PVE-DEMO-001"
 DEMO_PROJECT_NAME = "Corrugated Shipper Value Engineering — Synthetic Demonstration"
+DEMO_PROJECT_OBJECTIVE = "Cost reduction"
+DEMO_PROJECT_CHANGE_TYPE = "Size optimization"
 DEMO_THRESHOLD_NAME = "Portfolio Demonstration Thresholds"
 DEMO_SCENARIO_NAME = "Balanced Cost and Evidence Review"
 DEFAULT_SEED_PATH = Path(__file__).resolve().parents[2] / "data" / "demo" / "pve_portfolio_project.json"
@@ -57,25 +59,50 @@ def _get_existing_project(project_service) -> dict[str, Any] | None:
         return None
 
 
-def _validate_existing_project(project: dict[str, Any]) -> None:
+def _validate_and_repair_existing_project(project_service, project: dict[str, Any]) -> dict[str, Any]:
     if project.get("archived_at") is not None:
         raise PortfolioSeedConflict("The controlled demonstration project is archived and cannot be reseeded.")
-    expected = {
+
+    expected_identity = {
         "project_name": DEMO_PROJECT_NAME,
         "category": "corrugated_shipping_case",
         "currency": "INR",
         "annual_volume": 1_200_000.0,
     }
-    conflicts = [
+    identity_conflicts = [
         field
-        for field, value in expected.items()
+        for field, value in expected_identity.items()
         if project.get(field) != value
     ]
-    if conflicts:
+    if identity_conflicts:
         raise PortfolioSeedConflict(
             "Project code PVE-DEMO-001 already exists with conflicting fields: "
-            + ", ".join(sorted(conflicts))
+            + ", ".join(sorted(identity_conflicts))
         )
+
+    governed_metadata = {
+        "objective": DEMO_PROJECT_OBJECTIVE,
+        "change_type": DEMO_PROJECT_CHANGE_TYPE,
+    }
+    metadata_conflicts = [
+        field
+        for field, expected in governed_metadata.items()
+        if project.get(field) not in (None, "", expected)
+    ]
+    if metadata_conflicts:
+        raise PortfolioSeedConflict(
+            "Project code PVE-DEMO-001 already exists with conflicting governed metadata: "
+            + ", ".join(sorted(metadata_conflicts))
+        )
+
+    missing = {
+        field: expected
+        for field, expected in governed_metadata.items()
+        if project.get(field) in (None, "")
+    }
+    if missing:
+        project = project_service.update_project(project["project_id"], **missing)
+    return project
 
 
 def _find_threshold(threshold_service, project_id: str) -> dict[str, Any] | None:
@@ -113,7 +140,9 @@ def seed_portfolio_demo(
 
     The operation is intentionally idempotent. Existing immutable records are reused
     only when their controlled identities and references match the seed definition.
-    It never updates, archives, unarchives, or overwrites existing records.
+    It never updates, archives, unarchives, or overwrites existing immutable records.
+    The only permitted metadata repair is to populate missing governed objective and
+    change type values on the active controlled demonstration project.
     """
 
     payload = _load_seed(seed_path)
@@ -132,6 +161,8 @@ def seed_portfolio_demo(
             category="corrugated_shipping_case",
             currency="INR",
             annual_volume=1_200_000.0,
+            objective=DEMO_PROJECT_OBJECTIVE,
+            change_type=DEMO_PROJECT_CHANGE_TYPE,
             product_sku="SYNTHETIC-FMCG-CASE-12X1L",
             business_unit_plant="Synthetic Western India Plant",
             project_owner="Demonstration Procurement Owner",
@@ -147,7 +178,7 @@ def seed_portfolio_demo(
         )
         created.append("project")
     else:
-        _validate_existing_project(project)
+        project = _validate_and_repair_existing_project(project_service, project)
 
     prepared = upload_service.prepare_json(
         content=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
