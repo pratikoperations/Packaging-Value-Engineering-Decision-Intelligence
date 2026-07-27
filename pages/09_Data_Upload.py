@@ -6,7 +6,10 @@ import streamlit as st
 
 from src.application.runtime import build_project_service, build_upload_service
 from src.application.specification_upload import (
+    SPEC_CONFIRMATION_KEY,
+    SPEC_REVIEWS_KEY,
     SpecificationUploadInput,
+    invalidate_specification_state_on_change,
     parse_specification_pair,
     source_block_rows,
 )
@@ -17,7 +20,13 @@ from src.application.structured_upload import (
     prepare_structured_upload,
     validate_structured_batch,
 )
-from src.specification_intake import DocumentRole
+from src.review_comparison import ReviewError, ReviewState
+from src.specification_intake import (
+    DocumentRole,
+    all_reviews_resolved,
+    apply_review_action,
+    build_common_review_views,
+)
 from src.upload_routing import DetectionStatus, WorkflowKind, detect_upload
 from src.uploads import DuplicateDatasetError, UploadParseError
 
@@ -55,12 +64,59 @@ def render_prepared_upload(upload_service, project, prepared):
             st.error(str(error))
 
 
+def render_reviews(views):
+    updated = list(views)
+    st.subheader("Governed extraction review")
+    st.caption("Candidates are deterministic, source-grounded and limited to the existing governed 25-field registry.")
+    for index, view in enumerate(updated):
+        with st.expander(f"{view.document_role.value.title()} — {view.field_name.replace('_', ' ').title()}"):
+            st.write(f"**Extracted:** {view.normalized_value} {view.unit or ''}".strip())
+            st.write(f"**Source:** {view.source_excerpt}")
+            st.write(f"**Format / parser:** {view.document_format.upper()} — {view.parser_name} / {view.parser_version}")
+            st.json(view.source_location)
+            action = st.selectbox(
+                "Review action",
+                [state.value for state in ReviewState],
+                index=[state.value for state in ReviewState].index(view.state.value),
+                key=f"review-action-{view.review_id}",
+                format_func=lambda value: value.replace("_", " ").title(),
+            )
+            corrected_value = corrected_unit = note = None
+            selected_state = ReviewState(action)
+            if selected_state is ReviewState.CORRECTED_CONFIRMED:
+                corrected_value = st.text_input("Corrected value", key=f"corrected-value-{view.review_id}")
+                corrected_unit = st.text_input("Corrected unit", value=view.unit or "", key=f"corrected-unit-{view.review_id}") or None
+                note = st.text_input("Correction note", key=f"review-note-{view.review_id}")
+            elif selected_state in {ReviewState.INTENTIONALLY_OMITTED, ReviewState.REJECTED}:
+                note = st.text_input("Required reviewer note", key=f"review-note-{view.review_id}")
+            elif selected_state is ReviewState.CONFIRMED:
+                note = st.text_input("Reviewer note (optional)", key=f"review-note-{view.review_id}") or None
+            if st.button("Apply review", key=f"apply-review-{view.review_id}"):
+                try:
+                    updated[index] = apply_review_action(
+                        view,
+                        selected_state,
+                        corrected_value=corrected_value,
+                        corrected_unit=corrected_unit,
+                        reviewer_note=note,
+                    )
+                    st.session_state[SPEC_REVIEWS_KEY] = tuple(updated)
+                    st.rerun()
+                except ReviewError as error:
+                    st.error(str(error))
+    resolved = all_reviews_resolved(updated)
+    if resolved:
+        st.success("All extraction candidates are reviewed. Reviewed values are eligible for the next controlled build stage.")
+    else:
+        st.warning("Pending candidates remain. No values can continue to downstream mapping.")
+
+
 st.set_page_config(page_title="Data Upload", layout="wide")
 st.title("Data Upload")
 st.caption("Upload project data or packaging specifications. File type and intended workflow are detected automatically.")
 st.info(
     "Structured files reuse the existing governed validation workflow. "
-    "DOCX and searchable PDF specifications can now be assigned roles and parsed into a common source-block contract."
+    "DOCX and searchable PDF specifications reuse existing parsers, grounding and human-review controls."
 )
 
 uploaded_files = st.file_uploader(
@@ -72,17 +128,14 @@ uploaded_files = st.file_uploader(
 
 if uploaded_files:
     detections = [detect_upload(upload.name, upload.type, upload.getvalue()) for upload in uploaded_files]
-    rows = [
-        {
-            "File": detection.filename,
-            "Detected format": detection.file_format.value.upper() if detection.file_format else "Rejected",
-            "Intended workflow": detection.workflow.value.replace("_", " ").title() if detection.workflow else "None",
-            "Status": detection.status.value.replace("_", " ").title(),
-            "Role confirmation": "Required" if detection.requires_document_role else "Not required",
-            "Reason": detection.reason_code or "",
-        }
-        for detection in detections
-    ]
+    rows = [{
+        "File": detection.filename,
+        "Detected format": detection.file_format.value.upper() if detection.file_format else "Rejected",
+        "Intended workflow": detection.workflow.value.replace("_", " ").title() if detection.workflow else "None",
+        "Status": detection.status.value.replace("_", " ").title(),
+        "Role confirmation": "Required" if detection.requires_document_role else "Not required",
+        "Reason": detection.reason_code or "",
+    } for detection in detections]
     st.subheader("Detection and routing")
     st.dataframe(rows, width="stretch", hide_index=True)
 
@@ -109,61 +162,41 @@ if uploaded_files:
                 st.error("Exactly two specification documents are required: one Existing and one Proposed.")
             else:
                 st.subheader("Specification roles")
-                role_values = [DocumentRole.EXISTING.value, DocumentRole.PROPOSED.value]
-                role_by_hash: dict[str, DocumentRole] = {}
+                role_by_hash = {}
                 for upload, detection in specification_items:
                     selected = st.selectbox(
                         f"Role for {upload.name}",
-                        role_values,
+                        [role.value for role in DocumentRole],
                         key=f"data_upload.role.{detection.sha256}",
                         format_func=str.title,
                     )
                     role_by_hash[detection.sha256] = DocumentRole(selected)
-
-                roles = set(role_by_hash.values())
-                if roles != {DocumentRole.EXISTING, DocumentRole.PROPOSED}:
+                if set(role_by_hash.values()) != {DocumentRole.EXISTING, DocumentRole.PROPOSED}:
                     st.error("Assign exactly one Existing and one Proposed specification.")
                 else:
-                    formats = [detection.file_format.value.upper() for _, detection in specification_items]
-                    st.success(f"Specification pair ready: {formats[0]} + {formats[1]}.")
-                    confirmed = st.checkbox(
-                        "Confirm specification roles and parse source blocks",
-                        key="data_upload.specification.confirmed",
+                    inputs = tuple(
+                        SpecificationUploadInput(
+                            filename=upload.name,
+                            mime_type=upload.type,
+                            content=upload.getvalue(),
+                            detection=detection,
+                            role=role_by_hash[detection.sha256],
+                        )
+                        for upload, detection in specification_items
                     )
+                    invalidate_specification_state_on_change(st.session_state, inputs)
+                    formats = [item.detection.file_format.value.upper() for item in inputs]
+                    st.success(f"Specification pair ready: {formats[0]} + {formats[1]}.")
+                    confirmed = st.checkbox("Confirm roles and run governed extraction", key=SPEC_CONFIRMATION_KEY)
                     if confirmed:
                         try:
-                            pair = parse_specification_pair(
-                                tuple(
-                                    SpecificationUploadInput(
-                                        filename=upload.name,
-                                        mime_type=upload.type,
-                                        content=upload.getvalue(),
-                                        detection=detection,
-                                        role=role_by_hash[detection.sha256],
-                                    )
-                                    for upload, detection in specification_items
-                                )
-                            )
-                            st.success(
-                                f"Parsed {pair.pair_format.value.replace('_', ' + ').upper()} pair into the common specification contract."
-                            )
-                            metadata_rows = [
-                                {
-                                    "Role": document.document_role.value.title(),
-                                    "Format": document.document_format.value.upper(),
-                                    "File": document.filename,
-                                    "SHA-256": document.sha256,
-                                    "Parser": document.parser_name,
-                                    "Parser version": document.parser_version,
-                                    "Source blocks": len(document.source_blocks),
-                                    "Warnings": ", ".join(document.warnings),
-                                }
-                                for document in (pair.existing, pair.proposed)
-                            ]
-                            st.dataframe(metadata_rows, width="stretch", hide_index=True)
-                            st.subheader("Common source blocks")
+                            pair = parse_specification_pair(inputs)
+                            st.success(f"Parsed {pair.pair_format.value.replace('_', ' + ').upper()} pair.")
                             st.dataframe(source_block_rows(pair), width="stretch", hide_index=True)
-                        except ValueError as error:
+                            if SPEC_REVIEWS_KEY not in st.session_state:
+                                st.session_state[SPEC_REVIEWS_KEY] = build_common_review_views(pair)
+                            render_reviews(st.session_state[SPEC_REVIEWS_KEY])
+                        except (ValueError, ReviewError) as error:
                             st.error(str(error))
         elif structured_files:
             invalidate_structured_state_on_change(st.session_state, structured_files)
@@ -189,7 +222,6 @@ if uploaded_files:
                             if project["archived_at"] is not None:
                                 st.error("Archived projects are read-only and cannot receive new uploads.")
                             else:
-                                st.success(f"Active project: {project['project_code']} — {project['project_name']}")
                                 try:
                                     prepared = prepare_structured_upload(upload_service, project, structured_files)
                                     render_prepared_upload(upload_service, project, prepared)
@@ -197,16 +229,13 @@ if uploaded_files:
                                     st.error(str(error))
             except UploadParseError as error:
                 st.error(str(error))
-        else:
-            st.success("All uploaded files passed detection checks.")
 else:
     st.write("No files uploaded.")
 
-with st.expander("Build U3 scope and limitations"):
-    st.write("- XLSX, CSV and JSON reuse the existing structured validation and immutable-save workflow")
-    st.write("- DOCX and searchable PDF reuse their existing validators and deterministic parsers")
+with st.expander("Build U4 scope and limitations"):
+    st.write("- Existing 25-field registry, grounding, confidence, ambiguity and review controls are reused")
     st.write("- PDF/PDF, DOCX/DOCX, PDF/DOCX and DOCX/PDF pairs are supported")
-    st.write("- Exactly one Existing and one Proposed role is required")
-    st.write("- Format, SHA-256, parser identity, parser version and source location are preserved")
-    st.write("- Common source blocks are displayed; extraction, review, comparison, mapping and snapshots remain inactive")
+    st.write("- Confirm, Correct and Confirm, Intentionally Omit, Reject and Pending states are supported")
+    st.write("- File, role or pair-format changes invalidate specification confirmation and review state")
+    st.write("- Canonical mapping, snapshots and persistence remain inactive")
     st.write("- No OCR or live AI")
