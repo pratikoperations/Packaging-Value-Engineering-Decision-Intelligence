@@ -117,7 +117,7 @@ def build_pdf_review_bundle(
                 pdf_block_index=block.block_index,
                 extraction_order=block.extraction_order,
                 parser_version=block.parser_version,
-                layout_warnings=block.layout_warnings,
+                layout_warnings=block.warnings,
                 raw_source_text=block.raw_text,
             )
         )
