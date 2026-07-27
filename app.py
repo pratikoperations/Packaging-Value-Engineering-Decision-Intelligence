@@ -27,7 +27,7 @@ def load_demo() -> dict:
     return json.loads(DEMO_PATH.read_text(encoding="utf-8"))
 
 
-def main() -> None:
+def render_home() -> None:
     st.set_page_config(page_title="PVE Decision Intelligence", layout="wide")
     st.title("Packaging Value Engineering Decision Intelligence")
     st.caption("Deterministic scenario comparison, explainable recommendation, and read-only decision export")
@@ -171,6 +171,40 @@ def main() -> None:
     st.info(
         "This tool does not approve packaging designs autonomously. Recommendations and exports remain subject to engineering validation and documented evidence."
     )
+
+
+def _task_page(path: Path) -> tuple[int, str] | None:
+    stem = path.stem.lower()
+    if "project_dashboard" in stem:
+        return 10, "Project Dashboard"
+    if "guided_workflow" in stem:
+        return 20, "Guided Workflow"
+    if "data_upload" in stem:
+        return 30, "Data Upload"
+    if "business_thresholds" in stem:
+        return 40, "Business Rules & Thresholds"
+    if "controlled_scenarios" in stem:
+        return 50, "Scenario Analysis"
+    if "decision_history" in stem:
+        return 60, "Decision Records"
+    if "capabilities_and_limits" in stem:
+        return 70, "Capabilities & Limits"
+    return None
+
+
+def main() -> None:
+    task_pages: list[tuple[int, st.Page]] = []
+    for path in (ROOT / "pages").glob("*.py"):
+        navigation = _task_page(path)
+        if navigation is None:
+            continue
+        order, title = navigation
+        task_pages.append((order, st.Page(str(path), title=title)))
+
+    pages = [st.Page(render_home, title="Home", default=True)]
+    pages.extend(page for _, page in sorted(task_pages, key=lambda item: item[0]))
+    selected = st.navigation(pages, position="sidebar")
+    selected.run()
 
 
 if __name__ == "__main__":
