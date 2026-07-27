@@ -1,6 +1,14 @@
 """PVE 2.1 searchable digital PDF intake boundary."""
 
 from .file_validation import PdfValidationError, validate_pdf, validate_pdf_pair
+from .integration import (
+    PdfReviewBundle,
+    PdfReviewEvidence,
+    build_pdf_review_bundle,
+    compare_pdf_review_groups,
+    extract_pdf_document,
+    pdf_to_parsed_document,
+)
 from .models import (
     ParsedPdf,
     PdfEligibility,
@@ -16,12 +24,18 @@ __all__ = [
     "ParsedPdf",
     "PdfEligibility",
     "PdfLayoutWarning",
+    "PdfReviewBundle",
+    "PdfReviewEvidence",
     "PdfSourceBlock",
     "PdfValidationError",
     "ValidatedPdf",
+    "build_pdf_review_bundle",
+    "compare_pdf_review_groups",
+    "extract_pdf_document",
     "make_pdf_source_block_id",
     "normalize_pdf_text",
     "parse_validated_pdf",
+    "pdf_to_parsed_document",
     "validate_pdf",
     "validate_pdf_pair",
 ]
