@@ -26,12 +26,15 @@ from src.specification_intake import (
     all_reviews_resolved,
     apply_review_action,
     build_common_review_views,
+    build_unified_canonical_draft,
 )
 from src.upload_routing import DetectionStatus, WorkflowKind, detect_upload
 from src.uploads import DuplicateDatasetError, UploadParseError
 
 ROOT = Path(__file__).resolve().parents[1]
 DATABASE_PATH = ROOT / "runtime" / "pve_portfolio.sqlite3"
+SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
+SOURCE_REFERENCE = "PR-56-DRAFT"
 
 
 @st.cache_resource
@@ -106,9 +109,49 @@ def render_reviews(views):
                     st.error(str(error))
     resolved = all_reviews_resolved(updated)
     if resolved:
-        st.success("All extraction candidates are reviewed. Reviewed values are eligible for the next controlled build stage.")
+        st.success("All extraction candidates are reviewed. Only confirmed and corrected-confirmed values can enter canonical mapping.")
     else:
         st.warning("Pending candidates remain. No values can continue to downstream mapping.")
+    return tuple(updated), resolved
+
+
+def render_specification_canonical_draft(pair, views):
+    active_project_id = st.session_state.get("active_project_id")
+    if not active_project_id:
+        st.info("Select an active workspace from the Project Dashboard before generating the canonical draft.")
+        return
+    project_service, _ = services()
+    try:
+        project = project_service.get_project(str(active_project_id))
+    except KeyError:
+        st.session_state.pop("active_project_id", None)
+        st.error("The active project no longer exists.")
+        return
+    if project["archived_at"] is not None:
+        st.error("Archived projects are read-only and cannot generate a new canonical draft.")
+        return
+    try:
+        result = build_unified_canonical_draft(
+            project=project,
+            pair=pair,
+            views=views,
+            source_repository=SOURCE_REPOSITORY,
+            source_commit=SOURCE_REFERENCE,
+        )
+    except ValueError as error:
+        st.error(str(error))
+        return
+
+    st.subheader("Confirmed-only canonical dataset draft")
+    if result.is_valid:
+        st.success("Canonical validation passed.")
+    else:
+        st.warning("Canonical validation found issues. The draft remains non-persisted and cannot be treated as approved data.")
+        if result.validation_issues:
+            st.dataframe(list(result.validation_issues), width="stretch", hide_index=True)
+    with st.expander("Canonical dataset draft", expanded=True):
+        st.json(result.canonical_data)
+    st.info("Build U5 generates and validates the draft in memory only. No specification snapshot or persistence write occurs.")
 
 
 st.set_page_config(page_title="Data Upload", layout="wide")
@@ -116,7 +159,7 @@ st.title("Data Upload")
 st.caption("Upload project data or packaging specifications. File type and intended workflow are detected automatically.")
 st.info(
     "Structured files reuse the existing governed validation workflow. "
-    "DOCX and searchable PDF specifications reuse existing parsers, grounding and human-review controls."
+    "Reviewed DOCX and searchable PDF values can generate a confirmed-only canonical draft."
 )
 
 uploaded_files = st.file_uploader(
@@ -195,7 +238,9 @@ if uploaded_files:
                             st.dataframe(source_block_rows(pair), width="stretch", hide_index=True)
                             if SPEC_REVIEWS_KEY not in st.session_state:
                                 st.session_state[SPEC_REVIEWS_KEY] = build_common_review_views(pair)
-                            render_reviews(st.session_state[SPEC_REVIEWS_KEY])
+                            views, resolved = render_reviews(st.session_state[SPEC_REVIEWS_KEY])
+                            if resolved:
+                                render_specification_canonical_draft(pair, views)
                         except (ValueError, ReviewError) as error:
                             st.error(str(error))
         elif structured_files:
@@ -232,10 +277,13 @@ if uploaded_files:
 else:
     st.write("No files uploaded.")
 
-with st.expander("Build U4 scope and limitations"):
+with st.expander("Build U5 scope and limitations"):
     st.write("- Existing 25-field registry, grounding, confidence, ambiguity and review controls are reused")
+    st.write("- Only Confirmed and Corrected Confirmed values enter canonical mapping")
+    st.write("- Pending, Rejected and Intentionally Omitted values are excluded")
+    st.write("- Corrected numeric values use typed normalization before mapping")
+    st.write("- Raw, normalized, corrected and format-specific source lineage are preserved in draft metadata")
+    st.write("- Existing canonical validation runs unchanged")
     st.write("- PDF/PDF, DOCX/DOCX, PDF/DOCX and DOCX/PDF pairs are supported")
-    st.write("- Confirm, Correct and Confirm, Intentionally Omit, Reject and Pending states are supported")
-    st.write("- File, role or pair-format changes invalidate specification confirmation and review state")
-    st.write("- Canonical mapping, snapshots and persistence remain inactive")
+    st.write("- No specification snapshot or persistence write occurs")
     st.write("- No OCR or live AI")
