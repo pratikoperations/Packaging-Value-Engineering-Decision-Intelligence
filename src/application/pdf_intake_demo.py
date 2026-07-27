@@ -122,12 +122,27 @@ def _parse_value(field: str, text: str):
 def deterministic_pdf_candidates(document: ParsedPdf) -> tuple[ExtractionCandidate, ...]:
     candidates = []
     for block in document.blocks:
-        for field, label in _LABELS.items():
-            prefix = label + ":"
-            if block.normalized_text.startswith(prefix):
-                raw = block.normalized_text[len(prefix):].strip()
-                value, unit = _parse_value(field, raw)
-                candidates.append(ExtractionCandidate(field, document.role, raw, value, unit, 99.0, ConfidenceBand.HIGH, block.block_id, block.normalized_text, ()))
+        for raw_line in block.raw_text.splitlines():
+            line = " ".join(raw_line.split())
+            for field, label in _LABELS.items():
+                prefix = label + ":"
+                if line.startswith(prefix):
+                    raw = line[len(prefix):].strip()
+                    value, unit = _parse_value(field, raw)
+                    candidates.append(
+                        ExtractionCandidate(
+                            field,
+                            document.role,
+                            raw,
+                            value,
+                            unit,
+                            99.0,
+                            ConfidenceBand.HIGH,
+                            block.block_id,
+                            line,
+                            (),
+                        )
+                    )
     return tuple(candidates)
 
 
