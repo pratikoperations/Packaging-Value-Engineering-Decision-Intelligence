@@ -1,0 +1,91 @@
+{
+  "dataset_type": "synthetic_demo",
+  "synthetic_notice": "All names, values, evidence references, costs, risks, and technical data are fictional and provided only for testing and portfolio demonstration.",
+  "schema_version": "0.2.0",
+  "packaging_project": {
+    "project_id": "PVE-DEMO-001",
+    "project_name": "Corrugated Shipper Value Engineering — Synthetic Demonstration",
+    "category": "corrugated_shipping_case",
+    "annual_volume": 1200000,
+    "annual_volume_unit": "cases_per_year",
+    "currency": "INR",
+    "status": "active"
+  },
+  "decision_evidence": [
+    {"evidence_id":"EV-001","evidence_type":"specification","reference":"SYNTH-SPEC-001"},
+    {"evidence_id":"EV-002","evidence_type":"drawing","reference":"SYNTH-DWG-BASE"},
+    {"evidence_id":"EV-003","evidence_type":"supplier_quote","reference":"SYNTH-QUOTE-A"},
+    {"evidence_id":"EV-004","evidence_type":"assumption","reference":"SYNTH-LOGISTICS-BASIS"},
+    {"evidence_id":"EV-005","evidence_type":"benchmark","reference":"SYNTH-BOARD-BENCHMARK"},
+    {"evidence_id":"EV-006","evidence_type":"test_report","reference":"SYNTH-BCT-BASE"}
+  ],
+  "baseline_specification": {
+    "baseline_id": "BASE-001",
+    "alternative_id": "ALT-BASE",
+    "evidence_id": "EV-001"
+  },
+  "packaging_alternatives": [
+    {"alternative_id":"ALT-BASE","name":"Current 5-ply BC flute case","status":"baseline","length_mm":600,"width_mm":400,"height_mm":350,"case_weight_g":980,"board_grade":"5PLY_BC_FLUTE"},
+    {"alternative_id":"ALT-A","name":"Right-sized 5-ply BC flute case","status":"proposed","length_mm":575,"width_mm":385,"height_mm":330,"case_weight_g":880,"board_grade":"5PLY_BC_FLUTE"},
+    {"alternative_id":"ALT-B","name":"3-ply high-performance B flute case","status":"proposed","length_mm":575,"width_mm":385,"height_mm":330,"case_weight_g":690,"board_grade":"3PLY_B_FLUTE"},
+    {"alternative_id":"ALT-C","name":"5-ply EB flute high-stack case","status":"proposed","length_mm":580,"width_mm":390,"height_mm":335,"case_weight_g":820,"board_grade":"5PLY_EB_FLUTE"}
+  ],
+  "material_components": [
+    {"component_id":"MC-BASE-1","alternative_id":"ALT-BASE","material_name":"Corrugated board blank","weight_g":950,"recycled_content_percent":70},
+    {"component_id":"MC-BASE-2","alternative_id":"ALT-BASE","material_name":"Adhesive and ink","weight_g":30,"recycled_content_percent":0},
+    {"component_id":"MC-A-1","alternative_id":"ALT-A","material_name":"Corrugated board blank","weight_g":852,"recycled_content_percent":72},
+    {"component_id":"MC-A-2","alternative_id":"ALT-A","material_name":"Adhesive and ink","weight_g":28,"recycled_content_percent":0},
+    {"component_id":"MC-B-1","alternative_id":"ALT-B","material_name":"High-performance corrugated board blank","weight_g":665,"recycled_content_percent":68},
+    {"component_id":"MC-B-2","alternative_id":"ALT-B","material_name":"Adhesive and ink","weight_g":25,"recycled_content_percent":0},
+    {"component_id":"MC-C-1","alternative_id":"ALT-C","material_name":"EB flute corrugated board blank","weight_g":793,"recycled_content_percent":74},
+    {"component_id":"MC-C-2","alternative_id":"ALT-C","material_name":"Adhesive and ink","weight_g":27,"recycled_content_percent":0}
+  ],
+  "cost_inputs": [
+    {"cost_id":"COST-BASE","alternative_id":"ALT-BASE","input_name":"Supplier quoted unit price","value":52.4,"unit":"INR_per_case","currency":"INR","evidence_id":"EV-003"},
+    {"cost_id":"COST-A","alternative_id":"ALT-A","input_name":"Synthetic target quote","value":48.8,"unit":"INR_per_case","currency":"INR","evidence_id":"EV-003"},
+    {"cost_id":"COST-B","alternative_id":"ALT-B","input_name":"Synthetic target quote","value":43.5,"unit":"INR_per_case","currency":"INR","evidence_id":"EV-005"},
+    {"cost_id":"COST-C","alternative_id":"ALT-C","input_name":"Synthetic target quote","value":47.2,"unit":"INR_per_case","currency":"INR","evidence_id":"EV-005"}
+  ],
+  "logistics_inputs": [
+    {"logistics_id":"LOG-BASE","alternative_id":"ALT-BASE","cases_per_pallet":24,"freight_distance_km":650,"evidence_id":"EV-004"},
+    {"logistics_id":"LOG-A","alternative_id":"ALT-A","cases_per_pallet":30,"freight_distance_km":650,"evidence_id":"EV-004"},
+    {"logistics_id":"LOG-B","alternative_id":"ALT-B","cases_per_pallet":30,"freight_distance_km":650,"evidence_id":"EV-004"},
+    {"logistics_id":"LOG-C","alternative_id":"ALT-C","cases_per_pallet":28,"freight_distance_km":650,"evidence_id":"EV-004"}
+  ],
+  "technical_requirements": [
+    {"requirement_id":"REQ-BCT","name":"Minimum box compression strength","minimum_value":520,"unit":"kgf"},
+    {"requirement_id":"REQ-STACK","name":"Minimum pallet stack layers","minimum_value":4,"unit":"unitless"}
+  ],
+  "technical_qualification_results": [
+    {"qualification_id":"QUAL-BASE-BCT","alternative_id":"ALT-BASE","requirement_id":"REQ-BCT","status":"qualified","evidence_id":"EV-006"},
+    {"qualification_id":"QUAL-A-BCT","alternative_id":"ALT-A","requirement_id":"REQ-BCT","status":"not_assessed","evidence_id":null},
+    {"qualification_id":"QUAL-B-BCT","alternative_id":"ALT-B","requirement_id":"REQ-BCT","status":"insufficient_data","evidence_id":null},
+    {"qualification_id":"QUAL-C-BCT","alternative_id":"ALT-C","requirement_id":"REQ-BCT","status":"not_assessed","evidence_id":null}
+  ],
+  "risk_records": [
+    {"risk_id":"RISK-A","alternative_id":"ALT-A","risk_type":"implementation","level":"medium","probability_percent":35},
+    {"risk_id":"RISK-B","alternative_id":"ALT-B","risk_type":"quality","level":"high","probability_percent":55},
+    {"risk_id":"RISK-C","alternative_id":"ALT-C","risk_type":"supply","level":"medium","probability_percent":30}
+  ],
+  "sustainability_indicators": [
+    {"indicator_id":"SUS-BASE-W","alternative_id":"ALT-BASE","metric":"material_weight_g","value":980,"unit":"g"},
+    {"indicator_id":"SUS-A-W","alternative_id":"ALT-A","metric":"material_weight_g","value":880,"unit":"g"},
+    {"indicator_id":"SUS-B-W","alternative_id":"ALT-B","metric":"material_weight_g","value":690,"unit":"g"},
+    {"indicator_id":"SUS-C-W","alternative_id":"ALT-C","metric":"material_weight_g","value":820,"unit":"g"}
+  ],
+  "validation_requirements": [
+    {"validation_id":"VAL-A","alternative_id":"ALT-A","activity":"Compression and transport trial","status":"planned"},
+    {"validation_id":"VAL-B","alternative_id":"ALT-B","activity":"Full BCT, drop, vibration, humidity, and line trial","status":"planned"},
+    {"validation_id":"VAL-C","alternative_id":"ALT-C","activity":"Stacking and pallet trial","status":"planned"}
+  ],
+  "decision_recommendation": {
+    "recommendation_id": "REC-PLACEHOLDER-PORTFOLIO-001",
+    "status": "insufficient_data",
+    "rationale": "Synthetic placeholder only. Existing deterministic engines generate the persisted scenario and decision snapshot. Engineering validation remains mandatory."
+  },
+  "export_metadata": {
+    "contract_version": "PVE-CONTRACT-v1.0-DRAFT",
+    "source_repository": "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence",
+    "source_commit": "PVE-PORTFOLIO-SYNTHETIC-DEMO"
+  }
+}
