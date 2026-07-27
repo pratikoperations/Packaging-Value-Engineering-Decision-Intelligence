@@ -17,9 +17,17 @@ from .models import (
     ValidatedPdf,
 )
 from .pdf_parser import PDF_PARSER_VERSION, normalize_pdf_text, parse_validated_pdf
+from .snapshot import (
+    ConfirmedPdfField,
+    ConfirmedPdfSnapshot,
+    build_confirmed_pdf_snapshot,
+    build_pdf_canonical_dataset_draft,
+)
 from .source_blocks import make_pdf_source_block_id
 
 __all__ = [
+    "ConfirmedPdfField",
+    "ConfirmedPdfSnapshot",
     "PDF_PARSER_VERSION",
     "ParsedPdf",
     "PdfEligibility",
@@ -29,6 +37,8 @@ __all__ = [
     "PdfSourceBlock",
     "PdfValidationError",
     "ValidatedPdf",
+    "build_confirmed_pdf_snapshot",
+    "build_pdf_canonical_dataset_draft",
     "build_pdf_review_bundle",
     "compare_pdf_review_groups",
     "extract_pdf_document",
