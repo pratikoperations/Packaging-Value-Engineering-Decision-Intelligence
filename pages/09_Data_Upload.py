@@ -5,6 +5,11 @@ from pathlib import Path
 import streamlit as st
 
 from src.application.runtime import build_project_service, build_upload_service
+from src.application.specification_upload import (
+    SpecificationUploadInput,
+    parse_specification_pair,
+    source_block_rows,
+)
 from src.application.structured_upload import (
     STRUCTURED_CONFIRMATION_KEY,
     StructuredUploadFile,
@@ -12,6 +17,7 @@ from src.application.structured_upload import (
     prepare_structured_upload,
     validate_structured_batch,
 )
+from src.specification_intake import DocumentRole
 from src.upload_routing import DetectionStatus, WorkflowKind, detect_upload
 from src.uploads import DuplicateDatasetError, UploadParseError
 
@@ -53,8 +59,8 @@ st.set_page_config(page_title="Data Upload", layout="wide")
 st.title("Data Upload")
 st.caption("Upload project data or packaging specifications. File type and intended workflow are detected automatically.")
 st.info(
-    "Structured XLSX, CSV and JSON files can now enter the existing governed validation workflow. "
-    "DOCX and PDF processing remain inactive in Build U2."
+    "Structured files reuse the existing governed validation workflow. "
+    "DOCX and searchable PDF specifications can now be assigned roles and parsed into a common source-block contract."
 )
 
 uploaded_files = st.file_uploader(
@@ -90,15 +96,75 @@ if uploaded_files:
             for upload, detection in zip(uploaded_files, detections)
             if detection.workflow is WorkflowKind.STRUCTURED_PROJECT_DATA
         ]
-        specification_count = sum(item.requires_document_role for item in detections)
+        specification_items = [
+            (upload, detection)
+            for upload, detection in zip(uploaded_files, detections)
+            if detection.workflow is WorkflowKind.SPECIFICATION_COMPARISON
+        ]
 
-        if structured_files and specification_count:
+        if structured_files and specification_items:
             st.warning("This batch contains project data and specification documents. Process one workflow group at a time.")
-        elif specification_count:
-            st.warning(
-                "Specification documents require one Existing and one Proposed role. "
-                "DOCX and PDF workflow execution remains inactive in Build U2."
-            )
+        elif specification_items:
+            if len(specification_items) != 2:
+                st.error("Exactly two specification documents are required: one Existing and one Proposed.")
+            else:
+                st.subheader("Specification roles")
+                role_values = [DocumentRole.EXISTING.value, DocumentRole.PROPOSED.value]
+                role_by_hash: dict[str, DocumentRole] = {}
+                for upload, detection in specification_items:
+                    selected = st.selectbox(
+                        f"Role for {upload.name}",
+                        role_values,
+                        key=f"data_upload.role.{detection.sha256}",
+                        format_func=str.title,
+                    )
+                    role_by_hash[detection.sha256] = DocumentRole(selected)
+
+                roles = set(role_by_hash.values())
+                if roles != {DocumentRole.EXISTING, DocumentRole.PROPOSED}:
+                    st.error("Assign exactly one Existing and one Proposed specification.")
+                else:
+                    formats = [detection.file_format.value.upper() for _, detection in specification_items]
+                    st.success(f"Specification pair ready: {formats[0]} + {formats[1]}.")
+                    confirmed = st.checkbox(
+                        "Confirm specification roles and parse source blocks",
+                        key="data_upload.specification.confirmed",
+                    )
+                    if confirmed:
+                        try:
+                            pair = parse_specification_pair(
+                                tuple(
+                                    SpecificationUploadInput(
+                                        filename=upload.name,
+                                        mime_type=upload.type,
+                                        content=upload.getvalue(),
+                                        detection=detection,
+                                        role=role_by_hash[detection.sha256],
+                                    )
+                                    for upload, detection in specification_items
+                                )
+                            )
+                            st.success(
+                                f"Parsed {pair.pair_format.value.replace('_', ' + ').upper()} pair into the common specification contract."
+                            )
+                            metadata_rows = [
+                                {
+                                    "Role": document.document_role.value.title(),
+                                    "Format": document.document_format.value.upper(),
+                                    "File": document.filename,
+                                    "SHA-256": document.sha256,
+                                    "Parser": document.parser_name,
+                                    "Parser version": document.parser_version,
+                                    "Source blocks": len(document.source_blocks),
+                                    "Warnings": ", ".join(document.warnings),
+                                }
+                                for document in (pair.existing, pair.proposed)
+                            ]
+                            st.dataframe(metadata_rows, width="stretch", hide_index=True)
+                            st.subheader("Common source blocks")
+                            st.dataframe(source_block_rows(pair), width="stretch", hide_index=True)
+                        except ValueError as error:
+                            st.error(str(error))
         elif structured_files:
             invalidate_structured_state_on_change(st.session_state, structured_files)
             try:
@@ -136,11 +202,11 @@ if uploaded_files:
 else:
     st.write("No files uploaded.")
 
-with st.expander("Build U2 scope and limitations"):
-    st.write("- Automatic extension, MIME, signature and structural detection")
+with st.expander("Build U3 scope and limitations"):
     st.write("- XLSX, CSV and JSON reuse the existing structured validation and immutable-save workflow")
-    st.write("- Structured upload confirmation is required before processing")
-    st.write("- Upload changes invalidate structured confirmation and prepared state")
-    st.write("- Searchable-PDF eligibility check; no OCR")
-    st.write("- Mixed-pair classification for PDF/PDF, DOCX/DOCX, PDF/DOCX and DOCX/PDF")
-    st.write("- DOCX and PDF processing are not invoked in this build")
+    st.write("- DOCX and searchable PDF reuse their existing validators and deterministic parsers")
+    st.write("- PDF/PDF, DOCX/DOCX, PDF/DOCX and DOCX/PDF pairs are supported")
+    st.write("- Exactly one Existing and one Proposed role is required")
+    st.write("- Format, SHA-256, parser identity, parser version and source location are preserved")
+    st.write("- Common source blocks are displayed; extraction, review, comparison, mapping and snapshots remain inactive")
+    st.write("- No OCR or live AI")
