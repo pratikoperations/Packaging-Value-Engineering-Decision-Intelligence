@@ -36,6 +36,30 @@ def selected_profile_index(
     return 0
 
 
+def profile_summary_rows(record: dict) -> list[dict[str, str]]:
+    profile = record["profile"]
+    return [
+        {
+            "Business threshold": "Minimum annual savings",
+            "Configured value": f"INR {float(profile['minimum_annual_savings']):,.0f}",
+        },
+        {
+            "Business threshold": "Minimum material reduction",
+            "Configured value": f"{float(profile['minimum_material_reduction_percent']):.1f}%",
+        },
+        {
+            "Business threshold": "Maximum acceptable business risk",
+            "Configured value": str(profile["maximum_business_risk"]).title(),
+        },
+        {
+            "Business threshold": "Positive savings or material reduction required",
+            "Configured value": "Yes"
+            if profile["require_positive_savings_or_material_reduction"]
+            else "No",
+        },
+    ]
+
+
 def main() -> None:
     st.set_page_config(page_title="PVE Business Thresholds", layout="wide")
     st.title("Configurable Business Thresholds")
@@ -86,7 +110,7 @@ def main() -> None:
     st.session_state["active_threshold_profile_id"] = selected["threshold_profile_id"]
 
     st.subheader("Selected Profile")
-    st.json(selected["profile"])
+    st.dataframe(profile_summary_rows(selected), width="stretch", hide_index=True)
     if selected["project_id"] is None:
         st.info("The controlled default profile is read-only. Create a project-specific profile to customize business thresholds.")
 
