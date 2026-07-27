@@ -1,0 +1,30 @@
+{
+  "schema_version": "pve-2.0-word-fields-v1",
+  "fields": {
+    "specification_number": ["specification number", "spec no", "specification no"],
+    "specification_revision": ["specification revision", "revision", "rev"],
+    "item_code": ["item code", "material code", "product code"],
+    "item_description": ["item description", "description", "product description"],
+    "supplier_name": ["supplier name", "supplier", "vendor"],
+    "effective_date": ["effective date", "valid from", "issue date"],
+    "box_style": ["box style", "case style", "fefco style"],
+    "internal_length": ["internal length", "id length", "inside length", "length"],
+    "internal_width": ["internal width", "id width", "inside width", "width"],
+    "internal_height": ["internal height", "id height", "inside height", "height"],
+    "external_length": ["external length", "od length", "outside length"],
+    "external_width": ["external width", "od width", "outside width"],
+    "external_height": ["external height", "od height", "outside height"],
+    "dimension_unit": ["dimension unit", "dimensions unit", "unit of dimension"],
+    "joint_type": ["joint type", "manufacturer joint", "case joint"],
+    "closure_method": ["closure method", "closing method", "seal method"],
+    "ply_count": ["ply count", "number of plies", "ply"],
+    "flute_combination": ["flute combination", "fluting", "flute"],
+    "liner_gsm": ["liner gsm", "liner grammage", "liner paper gsm"],
+    "medium_gsm": ["medium gsm", "fluting medium gsm", "medium grammage"],
+    "total_board_gsm": ["total board gsm", "board gsm", "total gsm", "grammage"],
+    "paper_grade": ["paper grade", "paper combination", "board grade"],
+    "box_weight": ["box weight", "case weight", "unit weight"],
+    "box_weight_unit": ["box weight unit", "case weight unit", "weight unit"],
+    "compression_requirement": ["compression requirement", "bct requirement", "box compression requirement"]
+  }
+}

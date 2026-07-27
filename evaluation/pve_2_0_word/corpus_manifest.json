@@ -1,0 +1,16 @@
+{
+  "corpus_version": "pve-word-eval-v1",
+  "independent_ground_truth": true,
+  "pairs": [
+    {"pair_id":"PAIR-01","layout":"paragraph","features":["dimensions","weight","ply","flute"]},
+    {"pair_id":"PAIR-02","layout":"table","features":["dimensions","weight","supplier","revision"]},
+    {"pair_id":"PAIR-03","layout":"mixed","features":["box_style","dimensions","gsm","weight"]},
+    {"pair_id":"PAIR-04","layout":"paragraph","features":["missing_field","unit_missing"]},
+    {"pair_id":"PAIR-05","layout":"table","features":["duplicate_candidate","unit_conflict"]},
+    {"pair_id":"PAIR-06","layout":"mixed","features":["prompt_injection","dimensions"]},
+    {"pair_id":"PAIR-07","layout":"table","features":["unsupported_image","weight"]},
+    {"pair_id":"PAIR-08","layout":"paragraph","features":["role_accuracy","revision","effective_date"]},
+    {"pair_id":"PAIR-09","layout":"mixed","features":["malformed_provider_output","grounding"]},
+    {"pair_id":"PAIR-10","layout":"table","features":["oversized_rejection","migration_regression"]}
+  ]
+}
