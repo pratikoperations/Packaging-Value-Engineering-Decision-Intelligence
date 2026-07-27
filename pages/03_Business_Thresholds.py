@@ -21,6 +21,21 @@ def profile_label(record: dict) -> str:
     return f"{record['profile_name']} · v{record['version_number']} · {scope}"
 
 
+def selected_profile_index(
+    records: list[dict],
+    active_profile_id: object,
+    project_id: str,
+) -> int:
+    """Select an active profile only when it is valid for the current project."""
+    for index, record in enumerate(records):
+        if (
+            record["threshold_profile_id"] == active_profile_id
+            and record["project_id"] in (None, project_id)
+        ):
+            return index
+    return 0
+
+
 def main() -> None:
     st.set_page_config(page_title="PVE Business Thresholds", layout="wide")
     st.title("Configurable Business Thresholds")
@@ -56,7 +71,17 @@ def main() -> None:
 
     profiles = threshold_service.available_profiles(project["project_id"])
     options = {profile_label(profile): profile for profile in profiles}
-    selected_label = st.selectbox("Available threshold profiles", options=list(options))
+    labels = list(options)
+    index = selected_profile_index(
+        profiles,
+        st.session_state.get("active_threshold_profile_id"),
+        project["project_id"],
+    )
+    selected_label = st.selectbox(
+        "Available threshold profiles",
+        options=labels,
+        index=index,
+    )
     selected = options[selected_label]
     st.session_state["active_threshold_profile_id"] = selected["threshold_profile_id"]
 
