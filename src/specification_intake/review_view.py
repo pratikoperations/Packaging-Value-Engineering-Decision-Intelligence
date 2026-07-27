@@ -123,6 +123,21 @@ def _parse_value(field_name: str, raw: str) -> tuple[Any, str | None]:
     return (int(number) if number.is_integer() else number), match.group(2)
 
 
+def normalize_corrected_value(
+    field_name: str,
+    corrected_value: object,
+    corrected_unit: str | None,
+) -> tuple[Any, str | None]:
+    if corrected_value is None or corrected_value == "":
+        raise ReviewError("Corrected value must be supplied.")
+    raw = str(corrected_value).strip()
+    value, parsed_unit = _parse_value(field_name, raw)
+    unit = corrected_unit.strip() if corrected_unit and corrected_unit.strip() else parsed_unit
+    if field_name in _NUMERIC and not isinstance(value, (int, float)):
+        raise ReviewError("Corrected numeric value must contain a valid number.")
+    return value, unit
+
+
 def _field_for_label(label: str, registry: dict[str, tuple[str, ...]]) -> str | None:
     normalized = " ".join(label.lower().strip().rstrip(":").split())
     return next((field for field, aliases in registry.items() if normalized in aliases), None)
@@ -134,7 +149,6 @@ def deterministic_candidates(document: UnifiedSpecificationDocument) -> tuple[Ex
     blocks = document.source_blocks
     for index, block in enumerate(blocks):
         text = block.normalized_text.strip()
-        # PDF and paragraph-style labels: "Label: value".
         if ":" in text:
             label, raw = text.split(":", 1)
             field = _field_for_label(label, registry)
@@ -148,7 +162,6 @@ def deterministic_candidates(document: UnifiedSpecificationDocument) -> tuple[Ex
                     source_block_id=block.block_id, source_excerpt=text,
                     ambiguity_codes=(),
                 ))
-        # DOCX table-cell pairs: label block followed by value block.
         field = _field_for_label(text, registry)
         if field and index + 1 < len(blocks):
             value_block = blocks[index + 1]
@@ -216,8 +229,11 @@ def apply_review_action(
     elif action is ReviewState.CONFIRMED:
         updated = confirm(view.review, reviewer_note=reviewer_note)
     elif action is ReviewState.CORRECTED_CONFIRMED:
+        normalized_value, normalized_unit = normalize_corrected_value(
+            view.field_name, corrected_value, corrected_unit
+        )
         updated = correct_and_confirm(
-            view.review, corrected_value, corrected_unit,
+            view.review, normalized_value, normalized_unit,
             reviewer_note=reviewer_note or "",
         )
     elif action is ReviewState.INTENTIONALLY_OMITTED:
