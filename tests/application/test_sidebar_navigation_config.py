@@ -13,11 +13,19 @@ class SidebarNavigationConfigTests(unittest.TestCase):
         self.assertIn("[client]", config)
         self.assertIn("showSidebarNavigation = false", config)
 
-    def test_task_navigation_remains_defined_in_app(self):
+    def test_approved_task_navigation_is_rendered_explicitly(self):
         source = (ROOT / "app.py").read_text(encoding="utf-8")
-        self.assertIn('st.navigation(pages, position="sidebar")', source)
+        self.assertIn('st.navigation(pages, position="hidden")', source)
+        self.assertIn('st.page_link(home_page, label="Home")', source)
+        self.assertIn("st.page_link(page, label=title)", source)
         self.assertIn('return 30, "Data Upload"', source)
         self.assertIn('return 70, "Capabilities & Limits"', source)
+
+    def test_legacy_titles_are_not_registered(self):
+        source = (ROOT / "app.py").read_text(encoding="utf-8")
+        self.assertNotIn('"Upload Validate"', source)
+        self.assertNotIn('"PVE 2.0 AI Word Intake"', source)
+        self.assertNotIn('"PVE 2.1 Digital PDF Intake"', source)
 
 
 if __name__ == "__main__":
