@@ -15,9 +15,9 @@ class SidebarNavigationConfigTests(unittest.TestCase):
 
     def test_task_navigation_remains_defined_in_app(self):
         source = (ROOT / "app.py").read_text(encoding="utf-8")
-        self.assertIn("st.navigation(pages, position=\"sidebar\")", source)
-        self.assertIn('title="Data Upload"', source)
-        self.assertIn('title="Capabilities & Limits"', source)
+        self.assertIn('st.navigation(pages, position="sidebar")', source)
+        self.assertIn('return 30, "Data Upload"', source)
+        self.assertIn('return 70, "Capabilities & Limits"', source)
 
 
 if __name__ == "__main__":
