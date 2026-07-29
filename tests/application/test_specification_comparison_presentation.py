@@ -31,6 +31,23 @@ class SpecificationComparisonPresentationTests(unittest.TestCase):
         source = PAGE.read_text(encoding="utf-8")
         self.assertIn('with st.expander("Source document evidence")', source)
 
+    def test_pending_candidates_are_visibly_prioritized(self):
+        source = PAGE.read_text(encoding="utf-8")
+        self.assertIn('ReviewState.PENDING: "🟧 ACTION REQUIRED"', source)
+        self.assertIn('"Show unresolved candidates only"', source)
+        self.assertIn('value=True', source)
+        self.assertIn('pending_count = sum(', source)
+        self.assertIn('Pending candidates are listed first', source)
+        self.assertIn('key=lambda item: item[1].state is not ReviewState.PENDING', source)
+
+    def test_resolved_states_are_visible_in_candidate_headings(self):
+        source = PAGE.read_text(encoding="utf-8")
+        self.assertIn('ReviewState.CONFIRMED: "✅ CONFIRMED"', source)
+        self.assertIn('ReviewState.CORRECTED_CONFIRMED: "✅ CORRECTED AND CONFIRMED"', source)
+        self.assertIn('ReviewState.INTENTIONALLY_OMITTED: "⚪ INTENTIONALLY OMITTED"', source)
+        self.assertIn('ReviewState.REJECTED: "⛔ REJECTED"', source)
+        self.assertIn('state_heading = REVIEW_STATE_HEADING[view.state]', source)
+
 
 if __name__ == "__main__":
     unittest.main()
