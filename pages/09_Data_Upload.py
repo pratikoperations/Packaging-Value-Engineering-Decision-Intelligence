@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any, Iterable
 
 import streamlit as st
 
@@ -56,6 +57,109 @@ def issue_rows(prepared):
     return [{"Code": issue.code, "Path": issue.path, "Message": issue.message} for issue in prepared.validation.issues]
 
 
+def _display_value(value: Any, unit: str | None = None) -> str:
+    if value is None or value == "":
+        return "Not provided"
+    rendered = str(value)
+    return f"{rendered} {unit}".strip() if unit else rendered
+
+
+def _effective_display(view) -> str:
+    review = view.review
+    if review.state is ReviewState.CORRECTED_CONFIRMED:
+        return _display_value(review.corrected_value, review.corrected_unit)
+    return _display_value(view.normalized_value, view.unit)
+
+
+def _comparison_rows(views: Iterable) -> list[dict[str, str]]:
+    by_field: dict[str, dict[str, Any]] = {}
+    for view in views:
+        by_field.setdefault(view.field_name, {})[view.document_role.value] = view
+
+    rows: list[dict[str, str]] = []
+    for field_name in sorted(by_field):
+        pair = by_field[field_name]
+        existing = pair.get(DocumentRole.EXISTING.value)
+        proposed = pair.get(DocumentRole.PROPOSED.value)
+        existing_value = _effective_display(existing) if existing else "Not provided"
+        proposed_value = _effective_display(proposed) if proposed else "Not provided"
+        if existing is None or proposed is None:
+            status = "Incomplete"
+        elif existing_value == proposed_value:
+            status = "Unchanged"
+        else:
+            status = "Changed"
+        rows.append({
+            "Parameter": field_name.replace("_", " ").title(),
+            "Existing": existing_value,
+            "Proposed": proposed_value,
+            "Comparison Status": status,
+        })
+    return rows
+
+
+def _format_source_location(location: dict[str, object]) -> str:
+    if location.get("type") == "pdf":
+        parts = [f"Page {location.get('page_number', '—')}"]
+        if location.get("block_index") is not None:
+            parts.append(f"Block {location['block_index']}")
+        return " · ".join(parts)
+
+    parts: list[str] = []
+    if location.get("section_title"):
+        parts.append(f"Section: {location['section_title']}")
+    if location.get("paragraph_index") is not None:
+        parts.append(f"Paragraph {location['paragraph_index']}")
+    if location.get("table_index") is not None:
+        parts.append(f"Table {location['table_index']}")
+    if location.get("row_index") is not None:
+        parts.append(f"Row {location['row_index']}")
+    if location.get("cell_index") is not None:
+        parts.append(f"Cell {location['cell_index']}")
+    return " · ".join(parts) or "Location not available"
+
+
+def _canonical_summary_rows(data: dict[str, Any]) -> list[dict[str, str]]:
+    project = data.get("packaging_project", {})
+    alternatives = data.get("packaging_alternatives", [])
+    evidence = data.get("decision_evidence", [])
+    return [
+        {"Item": "Dataset type", "Value": str(data.get("dataset_type", "Not provided"))},
+        {"Item": "Schema version", "Value": str(data.get("schema_version", "Not provided"))},
+        {"Item": "Project ID", "Value": str(project.get("project_id", "Not provided"))},
+        {"Item": "Project name", "Value": str(project.get("project_name", "Not provided"))},
+        {"Item": "Category", "Value": str(project.get("category", "Not provided"))},
+        {"Item": "Annual volume", "Value": _display_value(project.get("annual_volume"), project.get("annual_volume_unit"))},
+        {"Item": "Currency", "Value": str(project.get("currency", "Not provided"))},
+        {"Item": "Packaging alternatives", "Value": str(len(alternatives))},
+        {"Item": "Evidence references", "Value": str(len(evidence))},
+    ]
+
+
+def _alternative_rows(data: dict[str, Any]) -> list[dict[str, Any]]:
+    rows = []
+    for alternative in data.get("packaging_alternatives", []):
+        rows.append({
+            "Alternative": alternative.get("name", alternative.get("alternative_id", "Unnamed")),
+            "Status": str(alternative.get("status", "Not provided")).title(),
+            "Length (mm)": alternative.get("length_mm"),
+            "Width (mm)": alternative.get("width_mm"),
+            "Height (mm)": alternative.get("height_mm"),
+            "Weight (g)": alternative.get("case_weight_g"),
+            "Board grade": alternative.get("board_grade", "Not provided"),
+        })
+    return rows
+
+
+def render_canonical_summary(data: dict[str, Any], title: str) -> None:
+    with st.expander(title):
+        st.dataframe(_canonical_summary_rows(data), width="stretch", hide_index=True)
+        alternatives = _alternative_rows(data)
+        if alternatives:
+            st.markdown("**Packaging alternatives**")
+            st.dataframe(alternatives, width="stretch", hide_index=True)
+
+
 def render_prepared_upload(upload_service, project, prepared):
     if prepared.validation.is_valid:
         st.success("Validation passed. This canonical dataset is eligible for immutable storage.")
@@ -64,8 +168,7 @@ def render_prepared_upload(upload_service, project, prepared):
         st.dataframe(issue_rows(prepared), width="stretch", hide_index=True)
     if prepared.validation.insufficient_data_eligible:
         st.warning("The dataset remains eligible for an insufficient-data outcome. Technical evidence and human approval controls still apply.")
-    with st.expander("Canonical normalized dataset"):
-        st.json(prepared.canonical_data)
+    render_canonical_summary(prepared.canonical_data, "Canonical dataset summary")
     if st.button("Save immutable dataset version", disabled=not prepared.validation.is_valid, width="stretch", key=f"save-{prepared.source_type}-{prepared.original_filename}"):
         try:
             saved = upload_service.save_valid_dataset(project_id=project["project_id"], prepared=prepared)
@@ -79,14 +182,26 @@ def render_prepared_upload(upload_service, project, prepared):
 
 def render_reviews(views):
     updated = list(views)
+    st.subheader("Specification comparison")
+    st.caption("Existing and proposed values are aligned by governed parameter. Comparison Status shows whether the extracted values differ.")
+    st.dataframe(_comparison_rows(updated), width="stretch", hide_index=True)
+
     st.subheader("Governed extraction review")
-    st.caption("Candidates are deterministic, source-grounded and limited to the existing governed 25-field registry.")
+    st.caption("Review only the parameters requiring confirmation, correction, omission or rejection. Technical evidence is available on demand.")
     for index, view in enumerate(updated):
         with st.expander(f"{view.document_role.value.title()} — {view.field_name.replace('_', ' ').title()}"):
-            st.write(f"**Extracted:** {view.normalized_value} {view.unit or ''}".strip())
-            st.write(f"**Source:** {view.source_excerpt}")
-            st.write(f"**Format / parser:** {view.document_format.upper()} — {view.parser_name} / {view.parser_version}")
-            st.json(view.source_location)
+            st.write(f"**Extracted value:** {_display_value(view.normalized_value, view.unit)}")
+            st.write(f"**Source text:** {view.source_excerpt}")
+            st.caption(f"{view.document_format.upper()} · {view.parser_name} · {view.parser_version}")
+            with st.expander("Technical source evidence"):
+                st.write(f"**Document:** {view.filename}")
+                st.write(f"**Source location:** {_format_source_location(view.source_location)}")
+                st.write(f"**Source block:** {view.source_block_id}")
+                st.write(f"**Confidence:** {view.confidence:.1f} ({view.confidence_band.title()})")
+                if view.ambiguity_codes:
+                    st.write("**Ambiguities:** " + ", ".join(code.replace("_", " ").title() for code in view.ambiguity_codes))
+                if view.warnings:
+                    st.write("**Warnings:** " + "; ".join(view.warnings))
             selected_state = ReviewState(st.selectbox(
                 "Review action",
                 [state.value for state in ReviewState],
@@ -165,8 +280,7 @@ def render_specification_snapshot(pair, views):
         st.warning("Canonical validation found issues. Human and engineering controls remain mandatory.")
         if canonical.validation_issues:
             st.dataframe(list(canonical.validation_issues), width="stretch", hide_index=True)
-    with st.expander("Canonical dataset draft", expanded=True):
-        st.json(canonical.canonical_data)
+    render_canonical_summary(canonical.canonical_data, "Canonical dataset draft summary")
 
     st.subheader("Immutable specification snapshot")
     st.dataframe([{
@@ -182,12 +296,12 @@ def render_specification_snapshot(pair, views):
         try:
             saved = snapshot_repository.create(snapshot)
             st.success(f"Immutable specification snapshot {saved['specification_snapshot_id']} created.")
-            st.json({
-                "snapshot_id": saved["specification_snapshot_id"],
-                "created_at": saved["created_at"],
-                "content_hash": saved["content_hash"],
-                "pair_format": saved["pair_format"],
-            })
+            st.dataframe([{
+                "Snapshot ID": saved["specification_snapshot_id"],
+                "Created": saved["created_at"],
+                "Pair format": saved["pair_format"].replace("_", " + ").upper(),
+                "Content hash": saved["content_hash"],
+            }], width="stretch", hide_index=True)
         except DuplicateSpecificationSnapshotError as error:
             st.warning(str(error))
         except (KeyError, PermissionError, ValueError) as error:
@@ -256,7 +370,8 @@ if uploaded_files:
                     if st.checkbox("Confirm roles and run governed extraction", key=SPEC_CONFIRMATION_KEY):
                         try:
                             pair = parse_specification_pair(inputs)
-                            st.dataframe(source_block_rows(pair), width="stretch", hide_index=True)
+                            with st.expander("Source document evidence"):
+                                st.dataframe(source_block_rows(pair), width="stretch", hide_index=True)
                             if SPEC_REVIEWS_KEY not in st.session_state:
                                 st.session_state[SPEC_REVIEWS_KEY] = build_common_review_views(pair)
                             views, resolved = render_reviews(st.session_state[SPEC_REVIEWS_KEY])
