@@ -52,6 +52,14 @@ DATABASE_PATH = ROOT / "runtime" / "pve_portfolio.sqlite3"
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
 SOURCE_REFERENCE = "PR-56-DRAFT"
 
+REVIEW_STATE_HEADING = {
+    ReviewState.PENDING: "🟧 ACTION REQUIRED",
+    ReviewState.CONFIRMED: "✅ CONFIRMED",
+    ReviewState.CORRECTED_CONFIRMED: "✅ CORRECTED AND CONFIRMED",
+    ReviewState.INTENTIONALLY_OMITTED: "⚪ INTENTIONALLY OMITTED",
+    ReviewState.REJECTED: "⛔ REJECTED",
+}
+
 
 @st.cache_resource
 def services():
@@ -182,14 +190,38 @@ def render_reviews(views):
     render_missing_priority_alerts(rows)
 
     st.subheader("Governed extraction review")
+    total_count = len(updated)
+    pending_count = sum(view.state is ReviewState.PENDING for view in updated)
+    resolved_count = total_count - pending_count
+    st.write(f"**Review progress:** {resolved_count} of {total_count} candidates resolved")
+    if total_count:
+        st.progress(resolved_count / total_count)
+    if pending_count:
+        st.warning(f"🟧 {pending_count} candidates require action. Pending candidates are listed first.")
+    else:
+        st.success("All candidate reviews are resolved.")
+    show_unresolved_only = st.checkbox(
+        "Show unresolved candidates only",
+        value=True,
+        key="data_upload.show_unresolved_only",
+        help="Turn this off to display reviewed candidates for audit inspection.",
+    )
     st.caption("Review actions remain candidate-specific. Technical source evidence is available on demand.")
     visible_fields = {row["Parameter"] for row in filtered_rows}
-    for index, view in enumerate(updated):
+    ordered_views = sorted(
+        enumerate(updated),
+        key=lambda item: item[1].state is not ReviewState.PENDING,
+    )
+    for index, view in ordered_views:
         parameter = view.field_name.replace("_", " ").title()
         if parameter not in visible_fields:
             continue
+        if show_unresolved_only and view.state is not ReviewState.PENDING:
+            continue
         criticality = FIELD_CRITICALITY[view.field_name].value
-        with st.expander(f"{view.document_role.value.title()} — {parameter} · {criticality}"):
+        state_heading = REVIEW_STATE_HEADING[view.state]
+        heading = f"{state_heading} — {view.document_role.value.title()} — {parameter} · {criticality}"
+        with st.expander(heading):
             st.write(f"**Extracted value:** {display_value(view.normalized_value, view.unit)}")
             st.write(f"**Source text:** {view.source_excerpt}")
             st.caption(f"{view.document_format.upper()} · {view.parser_name} · {view.parser_version}")
