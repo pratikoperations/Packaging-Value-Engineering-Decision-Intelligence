@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 import streamlit as st
 
@@ -35,6 +35,15 @@ from src.specification_intake import (
     build_unified_canonical_draft,
     build_unified_snapshot,
 )
+from src.specification_intake.comparison_presentation import (
+    COMPARISON_STATUSES,
+    CRITICALITY_LEVELS,
+    FIELD_CRITICALITY,
+    comparison_rows,
+    display_value,
+    filter_comparison_rows,
+    missing_priority_summary,
+)
 from src.upload_routing import DetectionStatus, WorkflowKind, detect_upload
 from src.uploads import DuplicateDatasetError, UploadParseError
 
@@ -57,54 +66,12 @@ def issue_rows(prepared):
     return [{"Code": issue.code, "Path": issue.path, "Message": issue.message} for issue in prepared.validation.issues]
 
 
-def _display_value(value: Any, unit: str | None = None) -> str:
-    if value is None or value == "":
-        return "Not provided"
-    rendered = str(value)
-    return f"{rendered} {unit}".strip() if unit else rendered
-
-
-def _effective_display(view) -> str:
-    review = view.review
-    if review.state is ReviewState.CORRECTED_CONFIRMED:
-        return _display_value(review.corrected_value, review.corrected_unit)
-    return _display_value(view.normalized_value, view.unit)
-
-
-def _comparison_rows(views: Iterable) -> list[dict[str, str]]:
-    by_field: dict[str, dict[str, Any]] = {}
-    for view in views:
-        by_field.setdefault(view.field_name, {})[view.document_role.value] = view
-
-    rows: list[dict[str, str]] = []
-    for field_name in sorted(by_field):
-        pair = by_field[field_name]
-        existing = pair.get(DocumentRole.EXISTING.value)
-        proposed = pair.get(DocumentRole.PROPOSED.value)
-        existing_value = _effective_display(existing) if existing else "Not provided"
-        proposed_value = _effective_display(proposed) if proposed else "Not provided"
-        if existing is None or proposed is None:
-            status = "Incomplete"
-        elif existing_value == proposed_value:
-            status = "Unchanged"
-        else:
-            status = "Changed"
-        rows.append({
-            "Parameter": field_name.replace("_", " ").title(),
-            "Existing": existing_value,
-            "Proposed": proposed_value,
-            "Comparison Status": status,
-        })
-    return rows
-
-
-def _format_source_location(location: dict[str, object]) -> str:
+def format_source_location(location: dict[str, object]) -> str:
     if location.get("type") == "pdf":
         parts = [f"Page {location.get('page_number', '—')}"]
         if location.get("block_index") is not None:
             parts.append(f"Block {location['block_index']}")
         return " · ".join(parts)
-
     parts: list[str] = []
     if location.get("section_title"):
         parts.append(f"Section: {location['section_title']}")
@@ -119,42 +86,37 @@ def _format_source_location(location: dict[str, object]) -> str:
     return " · ".join(parts) or "Location not available"
 
 
-def _canonical_summary_rows(data: dict[str, Any]) -> list[dict[str, str]]:
+def canonical_summary_rows(data: dict[str, Any]) -> list[dict[str, str]]:
     project = data.get("packaging_project", {})
-    alternatives = data.get("packaging_alternatives", [])
-    evidence = data.get("decision_evidence", [])
     return [
         {"Item": "Dataset type", "Value": str(data.get("dataset_type", "Not provided"))},
         {"Item": "Schema version", "Value": str(data.get("schema_version", "Not provided"))},
         {"Item": "Project ID", "Value": str(project.get("project_id", "Not provided"))},
         {"Item": "Project name", "Value": str(project.get("project_name", "Not provided"))},
         {"Item": "Category", "Value": str(project.get("category", "Not provided"))},
-        {"Item": "Annual volume", "Value": _display_value(project.get("annual_volume"), project.get("annual_volume_unit"))},
+        {"Item": "Annual volume", "Value": display_value(project.get("annual_volume"), project.get("annual_volume_unit"))},
         {"Item": "Currency", "Value": str(project.get("currency", "Not provided"))},
-        {"Item": "Packaging alternatives", "Value": str(len(alternatives))},
-        {"Item": "Evidence references", "Value": str(len(evidence))},
+        {"Item": "Packaging alternatives", "Value": str(len(data.get("packaging_alternatives", [])))},
+        {"Item": "Evidence references", "Value": str(len(data.get("decision_evidence", [])))},
     ]
 
 
-def _alternative_rows(data: dict[str, Any]) -> list[dict[str, Any]]:
-    rows = []
-    for alternative in data.get("packaging_alternatives", []):
-        rows.append({
-            "Alternative": alternative.get("name", alternative.get("alternative_id", "Unnamed")),
-            "Status": str(alternative.get("status", "Not provided")).title(),
-            "Length (mm)": alternative.get("length_mm"),
-            "Width (mm)": alternative.get("width_mm"),
-            "Height (mm)": alternative.get("height_mm"),
-            "Weight (g)": alternative.get("case_weight_g"),
-            "Board grade": alternative.get("board_grade", "Not provided"),
-        })
-    return rows
+def alternative_rows(data: dict[str, Any]) -> list[dict[str, Any]]:
+    return [{
+        "Alternative": item.get("name", item.get("alternative_id", "Unnamed")),
+        "Status": str(item.get("status", "Not provided")).title(),
+        "Length (mm)": item.get("length_mm"),
+        "Width (mm)": item.get("width_mm"),
+        "Height (mm)": item.get("height_mm"),
+        "Weight (g)": item.get("case_weight_g"),
+        "Board grade": item.get("board_grade", "Not provided"),
+    } for item in data.get("packaging_alternatives", [])]
 
 
 def render_canonical_summary(data: dict[str, Any], title: str) -> None:
     with st.expander(title):
-        st.dataframe(_canonical_summary_rows(data), width="stretch", hide_index=True)
-        alternatives = _alternative_rows(data)
+        st.dataframe(canonical_summary_rows(data), width="stretch", hide_index=True)
+        alternatives = alternative_rows(data)
         if alternatives:
             st.markdown("**Packaging alternatives**")
             st.dataframe(alternatives, width="stretch", hide_index=True)
@@ -180,22 +142,60 @@ def render_prepared_upload(upload_service, project, prepared):
             st.error(str(error))
 
 
+def render_missing_priority_alerts(rows: list[dict[str, str]]) -> None:
+    gaps = missing_priority_summary(rows)
+    if gaps.critical:
+        st.error("Critical parameters missing from one document: " + ", ".join(gaps.critical) + ". Resolve before treating the comparison as complete.")
+    if gaps.major:
+        st.warning("Major parameters missing from one document: " + ", ".join(gaps.major) + ". Review before continuing downstream.")
+    if gaps.minor and not gaps.has_high_priority_gap:
+        st.info("Only minor parameters are incomplete: " + ", ".join(gaps.minor) + ". The review may continue, subject to existing validation and human approval controls.")
+
+
 def render_reviews(views):
     updated = list(views)
+    rows = comparison_rows(updated)
+
     st.subheader("Specification comparison")
-    st.caption("Existing and proposed values are aligned by governed parameter. Comparison Status shows whether the extracted values differ.")
-    st.dataframe(_comparison_rows(updated), width="stretch", hide_index=True)
+    st.caption(
+        "Existing and proposed values are aligned by governed parameter. Criticality is a review-priority indicator only; "
+        "it does not override canonical validation, engineering controls or human approval."
+    )
+    selected_statuses = st.multiselect(
+        "Filter by comparison status",
+        options=list(COMPARISON_STATUSES),
+        default=list(COMPARISON_STATUSES),
+        key="data_upload.comparison_status_filter",
+    )
+    selected_criticalities = st.multiselect(
+        "Filter by parameter criticality",
+        options=list(CRITICALITY_LEVELS),
+        default=list(CRITICALITY_LEVELS),
+        key="data_upload.criticality_filter",
+    )
+    filtered_rows = filter_comparison_rows(
+        rows,
+        statuses=selected_statuses,
+        criticalities=selected_criticalities,
+    )
+    st.dataframe(filtered_rows, width="stretch", hide_index=True)
+    render_missing_priority_alerts(rows)
 
     st.subheader("Governed extraction review")
-    st.caption("Review only the parameters requiring confirmation, correction, omission or rejection. Technical evidence is available on demand.")
+    st.caption("Review actions remain candidate-specific. Technical source evidence is available on demand.")
+    visible_fields = {row["Parameter"] for row in filtered_rows}
     for index, view in enumerate(updated):
-        with st.expander(f"{view.document_role.value.title()} — {view.field_name.replace('_', ' ').title()}"):
-            st.write(f"**Extracted value:** {_display_value(view.normalized_value, view.unit)}")
+        parameter = view.field_name.replace("_", " ").title()
+        if parameter not in visible_fields:
+            continue
+        criticality = FIELD_CRITICALITY[view.field_name].value
+        with st.expander(f"{view.document_role.value.title()} — {parameter} · {criticality}"):
+            st.write(f"**Extracted value:** {display_value(view.normalized_value, view.unit)}")
             st.write(f"**Source text:** {view.source_excerpt}")
             st.caption(f"{view.document_format.upper()} · {view.parser_name} · {view.parser_version}")
             with st.expander("Technical source evidence"):
                 st.write(f"**Document:** {view.filename}")
-                st.write(f"**Source location:** {_format_source_location(view.source_location)}")
+                st.write(f"**Source location:** {format_source_location(view.source_location)}")
                 st.write(f"**Source block:** {view.source_block_id}")
                 st.write(f"**Confidence:** {view.confidence:.1f} ({view.confidence_band.title()})")
                 if view.ambiguity_codes:
@@ -231,6 +231,7 @@ def render_reviews(views):
                     st.rerun()
                 except ReviewError as error:
                     st.error(str(error))
+
     resolved = all_reviews_resolved(updated)
     if resolved:
         st.success("All candidates are reviewed. Only confirmed and corrected-confirmed values continue.")
@@ -254,7 +255,6 @@ def render_specification_snapshot(pair, views):
     if project["archived_at"] is not None:
         st.error("Archived projects are read-only.")
         return
-
     try:
         canonical = build_unified_canonical_draft(
             project=project,
@@ -263,12 +263,7 @@ def render_specification_snapshot(pair, views):
             source_repository=SOURCE_REPOSITORY,
             source_commit=SOURCE_REFERENCE,
         )
-        snapshot = build_unified_snapshot(
-            project_id=project["project_id"],
-            pair=pair,
-            views=views,
-            canonical=canonical,
-        )
+        snapshot = build_unified_snapshot(project_id=project["project_id"], pair=pair, views=views, canonical=canonical)
     except ValueError as error:
         st.error(str(error))
         return
@@ -314,8 +309,10 @@ st.caption("Upload project data or packaging specifications. File type and inten
 st.info("Structured files reuse existing validation. Reviewed DOCX and searchable PDF values can create immutable unified specification snapshots.")
 
 uploaded_files = st.file_uploader(
-    "Upload files", type=["xlsx", "csv", "json", "docx", "pdf"],
-    accept_multiple_files=True, help="Supported: XLSX, CSV, JSON, DOCX and searchable PDF.",
+    "Upload files",
+    type=["xlsx", "csv", "json", "docx", "pdf"],
+    accept_multiple_files=True,
+    help="Supported: XLSX, CSV, JSON, DOCX and searchable PDF.",
 )
 
 if uploaded_files:
@@ -341,7 +338,8 @@ if uploaded_files:
             if detection.workflow is WorkflowKind.STRUCTURED_PROJECT_DATA
         ]
         specification_items = [
-            (upload, detection) for upload, detection in zip(uploaded_files, detections)
+            (upload, detection)
+            for upload, detection in zip(uploaded_files, detections)
             if detection.workflow is WorkflowKind.SPECIFICATION_COMPARISON
         ]
         if structured_files and specification_items:
@@ -354,16 +352,21 @@ if uploaded_files:
                 role_by_hash = {}
                 for upload, detection in specification_items:
                     selected = st.selectbox(
-                        f"Role for {upload.name}", [role.value for role in DocumentRole],
-                        key=f"data_upload.role.{detection.sha256}", format_func=str.title,
+                        f"Role for {upload.name}",
+                        [role.value for role in DocumentRole],
+                        key=f"data_upload.role.{detection.sha256}",
+                        format_func=str.title,
                     )
                     role_by_hash[detection.sha256] = DocumentRole(selected)
                 if set(role_by_hash.values()) != {DocumentRole.EXISTING, DocumentRole.PROPOSED}:
                     st.error("Assign exactly one Existing and one Proposed specification.")
                 else:
                     inputs = tuple(SpecificationUploadInput(
-                        filename=upload.name, mime_type=upload.type, content=upload.getvalue(),
-                        detection=detection, role=role_by_hash[detection.sha256],
+                        filename=upload.name,
+                        mime_type=upload.type,
+                        content=upload.getvalue(),
+                        detection=detection,
+                        role=role_by_hash[detection.sha256],
                     ) for upload, detection in specification_items)
                     invalidate_specification_state_on_change(st.session_state, inputs)
                     st.success("Specification pair ready: " + " + ".join(item.detection.file_format.value.upper() for item in inputs))
@@ -395,7 +398,8 @@ if uploaded_files:
                             if project["archived_at"] is not None:
                                 st.error("Archived projects are read-only and cannot receive new uploads.")
                             else:
-                                render_prepared_upload(upload_service, project, prepare_structured_upload(upload_service, project, structured_files))
+                                prepared = prepare_structured_upload(upload_service, project, structured_files)
+                                render_prepared_upload(upload_service, project, prepared)
                         except (KeyError, UploadParseError) as error:
                             st.error(str(error))
             except UploadParseError as error:
@@ -407,6 +411,7 @@ with st.expander("Build U6 scope and limitations"):
     st.write("- Unified snapshots preserve document formats, hashes, parser versions and typed source locations")
     st.write("- Only Confirmed and Corrected Confirmed values are persisted")
     st.write("- Canonical draft and unchanged canonical-validation result are preserved")
+    st.write("- Parameter criticality is a presentation-only review aid and does not override governed validation")
     st.write("- Persistence is additive, append-only and content-addressed")
     st.write("- Duplicate content, updates, deletes, archived projects and cross-project access are rejected")
     st.write("- Existing Word and PDF snapshot tables are not migrated or deleted")
