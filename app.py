@@ -193,17 +193,25 @@ def _task_page(path: Path) -> tuple[int, str] | None:
 
 
 def main() -> None:
-    task_pages: list[tuple[int, st.Page]] = []
+    task_pages: list[tuple[int, str, st.Page]] = []
     for path in (ROOT / "pages").glob("*.py"):
         navigation = _task_page(path)
         if navigation is None:
             continue
         order, title = navigation
-        task_pages.append((order, st.Page(str(path), title=title)))
+        task_pages.append((order, title, st.Page(str(path), title=title)))
 
-    pages = [st.Page(render_home, title="Home", default=True)]
-    pages.extend(page for _, page in sorted(task_pages, key=lambda item: item[0]))
-    selected = st.navigation(pages, position="sidebar")
+    home_page = st.Page(render_home, title="Home", default=True)
+    ordered_task_pages = sorted(task_pages, key=lambda item: item[0])
+    pages = [home_page]
+    pages.extend(page for _, _, page in ordered_task_pages)
+
+    selected = st.navigation(pages, position="hidden")
+    with st.sidebar:
+        st.page_link(home_page, label="Home")
+        for _, title, page in ordered_task_pages:
+            st.page_link(page, label=title)
+        st.divider()
     selected.run()
 
 
