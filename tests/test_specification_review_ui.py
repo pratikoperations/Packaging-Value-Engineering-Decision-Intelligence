@@ -6,6 +6,8 @@ import unittest
 from pathlib import Path
 from types import SimpleNamespace
 
+import app
+
 from src.application.runtime import (
     build_dataset_repository,
     build_persistent_specification_review_service,
@@ -23,6 +25,12 @@ from src.ui.specification_review_ui import (
 
 
 class SpecificationReviewUiAdapterTests(unittest.TestCase):
+    def test_application_registers_specification_review_page(self) -> None:
+        self.assertEqual(
+            app._task_page(Path("pages/25_specification_review.py")),
+            (25, "Specification Review"),
+        )
+
     def test_assigned_dataset_decodes_canonical_json(self) -> None:
         record = {
             "dataset_id": "dataset-1",
