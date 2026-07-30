@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+
 from src.application.persistent_specification_review_service import PersistentSpecificationReviewService
 from src.application.project_service import ProjectService
 from src.application.specification_review_service import SpecificationReviewService
@@ -25,6 +26,14 @@ def _initialized_database(database_path: str | Path) -> Database:
     database = Database(path)
     initialize_database(database)
     return database
+
+
+def build_project_repository(database_path: str | Path) -> ProjectRepository:
+    return ProjectRepository(_initialized_database(database_path))
+
+
+def build_dataset_repository(database_path: str | Path) -> DatasetRepository:
+    return DatasetRepository(_initialized_database(database_path))
 
 
 def build_project_service(database_path: str | Path) -> ProjectService:
