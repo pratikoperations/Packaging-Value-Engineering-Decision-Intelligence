@@ -179,6 +179,8 @@ def _task_page(path: Path) -> tuple[int, str] | None:
         return 10, "Project Dashboard"
     if "guided_workflow" in stem:
         return 20, "Guided Workflow"
+    if "specification_review" in stem:
+        return 25, "Specification Review"
     if "data_upload" in stem:
         return 30, "Data Upload"
     if "business_thresholds" in stem:
