@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from pathlib import Path
+from src.application.persistent_specification_review_service import PersistentSpecificationReviewService
 from src.application.project_service import ProjectService
+from src.application.specification_review_service import SpecificationReviewService
 from src.decision_snapshots.service import DecisionSnapshotService
 from src.persistence.database import Database
 from src.persistence.dataset_repository import DatasetRepository
@@ -9,6 +11,7 @@ from src.persistence.decision_repository import DecisionRepository
 from src.persistence.migrations import initialize_database
 from src.persistence.project_repository import ProjectRepository
 from src.persistence.scenario_repository import ScenarioRepository
+from src.persistence.specification_review_repository import SpecificationReviewRepository
 from src.persistence.specification_snapshot_repository import SpecificationSnapshotRepository
 from src.persistence.threshold_repository import ThresholdRepository
 from src.scenario_execution.service import ControlledScenarioService
@@ -38,6 +41,22 @@ def build_specification_snapshot_repository(database_path: str | Path) -> Specif
     """Create the additive append-only unified specification snapshot repository."""
     database = _initialized_database(database_path)
     return SpecificationSnapshotRepository(database)
+
+
+def build_specification_review_repository(database_path: str | Path) -> SpecificationReviewRepository:
+    """Create the additive append-only specification review repository."""
+    database = _initialized_database(database_path)
+    return SpecificationReviewRepository(database)
+
+
+def build_persistent_specification_review_service(
+    database_path: str | Path,
+) -> PersistentSpecificationReviewService:
+    database = _initialized_database(database_path)
+    return PersistentSpecificationReviewService(
+        SpecificationReviewService(),
+        SpecificationReviewRepository(database),
+    )
 
 
 def build_threshold_service(database_path: str | Path) -> ThresholdService:
