@@ -4,6 +4,7 @@ from pathlib import Path
 
 import streamlit as st
 
+from src.application.presentation import flatten_evidence_rows
 from src.application.runtime import build_project_service, build_upload_service
 from src.templates import generate_workbook
 from src.uploads import DuplicateDatasetError, UploadParseError
@@ -12,12 +13,15 @@ from src.uploads.templates import build_alternatives_csv_template, build_json_te
 ROOT = Path(__file__).resolve().parents[1]
 DATABASE_PATH = ROOT / "runtime" / "pve_portfolio.sqlite3"
 
+
 @st.cache_resource
 def services():
     return build_project_service(DATABASE_PATH), build_upload_service(DATABASE_PATH)
 
+
 def issue_rows(prepared):
     return [{"Code": issue.code, "Path": issue.path, "Message": issue.message} for issue in prepared.validation.issues]
+
 
 def render_prepared_upload(upload_service, project, prepared):
     if prepared.validation.is_valid:
@@ -28,7 +32,7 @@ def render_prepared_upload(upload_service, project, prepared):
     if prepared.validation.insufficient_data_eligible:
         st.warning("The dataset remains eligible for an insufficient-data outcome. Technical evidence and human approval controls still apply.")
     with st.expander("Canonical normalized dataset"):
-        st.json(prepared.canonical_data)
+        st.dataframe(flatten_evidence_rows(prepared.canonical_data), width="stretch", hide_index=True)
     if st.button("Save immutable dataset version", disabled=not prepared.validation.is_valid, width="stretch", key=f"save-{prepared.source_type}-{prepared.original_filename}"):
         try:
             saved = upload_service.save_valid_dataset(project_id=project["project_id"], prepared=prepared)
@@ -38,6 +42,7 @@ def render_prepared_upload(upload_service, project, prepared):
             st.warning(str(error))
         except ValueError as error:
             st.error(str(error))
+
 
 def main():
     st.set_page_config(page_title="PVE Upload and Validation", layout="wide")
@@ -59,7 +64,6 @@ def main():
         st.error("Archived projects are read-only and cannot receive new uploads.")
         st.stop()
     st.success(f"Active project: {project['project_code']} — {project['project_name']}")
-
     st.subheader("Download Input Templates")
     excel = generate_workbook(project["category"], project["objective"], project["change_type"])
     columns = st.columns(4)
@@ -67,7 +71,6 @@ def main():
     columns[1].download_button("Download JSON template", data=build_json_template(project), file_name="pve_user_upload_template.json", mime="application/json", width="stretch")
     columns[2].download_button("Download project.csv", data=build_project_csv_template(project), file_name="project.csv", mime="text/csv", width="stretch")
     columns[3].download_button("Download alternatives.csv", data=build_alternatives_csv_template(), file_name="alternatives.csv", mime="text/csv", width="stretch")
-
     excel_tab, json_tab, csv_tab = st.tabs(["Category Excel", "Canonical JSON", "Limited CSV Templates"])
     with excel_tab:
         st.caption("Complete the guided workbook. Validation issues are shown by field and invalid uploads cannot be saved.")
@@ -92,7 +95,6 @@ def main():
                 render_prepared_upload(upload_service, project, upload_service.prepare_csv(files={item.name: item.getvalue() for item in files}, project=project))
             except UploadParseError as error:
                 st.error(str(error))
-
     st.subheader("Saved Dataset Versions")
     versions = upload_service.datasets.list_for_project(project["project_id"])
     if versions:
@@ -100,6 +102,7 @@ def main():
     else:
         st.info("No dataset versions have been saved for this project.")
     st.info("Only validated canonical datasets are stored. Duplicate canonical content is rejected, and saved versions remain immutable and project-isolated.")
+
 
 if __name__ == "__main__":
     main()
