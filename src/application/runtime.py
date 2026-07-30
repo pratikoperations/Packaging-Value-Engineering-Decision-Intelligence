@@ -4,6 +4,7 @@ from pathlib import Path
 
 from src.application.persistent_specification_review_service import PersistentSpecificationReviewService
 from src.application.project_service import ProjectService
+from src.application.specification_review_read_model import SpecificationReviewReadModel
 from src.application.specification_review_service import SpecificationReviewService
 from src.decision_snapshots.service import DecisionSnapshotService
 from src.persistence.database import Database
@@ -56,6 +57,11 @@ def build_specification_review_repository(database_path: str | Path) -> Specific
     """Create the additive append-only specification review repository."""
     database = _initialized_database(database_path)
     return SpecificationReviewRepository(database)
+
+
+def build_specification_review_read_model(database_path: str | Path) -> SpecificationReviewReadModel:
+    """Create the project-scoped read-only E1.5 review discovery boundary."""
+    return SpecificationReviewReadModel(_initialized_database(database_path))
 
 
 def build_persistent_specification_review_service(
