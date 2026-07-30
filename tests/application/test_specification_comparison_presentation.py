@@ -35,10 +35,10 @@ class SpecificationComparisonPresentationTests(unittest.TestCase):
         source = PAGE.read_text(encoding="utf-8")
         self.assertIn('ReviewState.PENDING: "🟧 ACTION REQUIRED"', source)
         self.assertIn('"Show unresolved candidates only"', source)
-        self.assertIn('value=True', source)
-        self.assertIn('pending_count = sum(', source)
-        self.assertIn('Pending candidates are listed first', source)
-        self.assertIn('key=lambda item: item[1].state is not ReviewState.PENDING', source)
+        self.assertIn("value=True", source)
+        self.assertIn("pending_count = sum(", source)
+        self.assertIn("Pending candidates are listed first", source)
+        self.assertIn("key=lambda item: item[1].state is not ReviewState.PENDING", source)
 
     def test_resolved_states_are_visible_in_candidate_headings(self):
         source = PAGE.read_text(encoding="utf-8")
@@ -46,7 +46,13 @@ class SpecificationComparisonPresentationTests(unittest.TestCase):
         self.assertIn('ReviewState.CORRECTED_CONFIRMED: "✅ CORRECTED AND CONFIRMED"', source)
         self.assertIn('ReviewState.INTENTIONALLY_OMITTED: "⚪ INTENTIONALLY OMITTED"', source)
         self.assertIn('ReviewState.REJECTED: "⛔ REJECTED"', source)
-        self.assertIn('state_heading = REVIEW_STATE_HEADING[view.state]', source)
+        self.assertIn('REVIEW_STATE_HEADING[view.state]', source)
+
+    def test_existing_is_read_only_approved_baseline(self):
+        source = PAGE.read_text(encoding="utf-8")
+        self.assertIn("✅ APPROVED BASELINE", source)
+        self.assertIn("Review actions apply only to the Proposed specification", source)
+        self.assertIn("def confirm_existing_baseline", source)
 
 
 if __name__ == "__main__":

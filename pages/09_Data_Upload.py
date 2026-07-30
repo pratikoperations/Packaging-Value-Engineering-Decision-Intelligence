@@ -5,11 +5,7 @@ from typing import Any
 
 import streamlit as st
 
-from src.application.runtime import (
-    build_project_service,
-    build_specification_snapshot_repository,
-    build_upload_service,
-)
+from src.application.runtime import build_project_service, build_specification_snapshot_repository, build_upload_service
 from src.application.specification_upload import (
     SPEC_CONFIRMATION_KEY,
     SPEC_REVIEWS_KEY,
@@ -50,7 +46,8 @@ from src.uploads import DuplicateDatasetError, UploadParseError
 ROOT = Path(__file__).resolve().parents[1]
 DATABASE_PATH = ROOT / "runtime" / "pve_portfolio.sqlite3"
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
-SOURCE_REFERENCE = "PR-56-DRAFT"
+SOURCE_REFERENCE = "FINAL-WORKFLOW-CORRECTION-DRAFT"
+BASELINE_CONFIRMATION_KEY = "data_upload.approved_existing_baseline"
 
 REVIEW_STATE_HEADING = {
     ReviewState.PENDING: "🟧 ACTION REQUIRED",
@@ -63,11 +60,7 @@ REVIEW_STATE_HEADING = {
 
 @st.cache_resource
 def services():
-    return (
-        build_project_service(DATABASE_PATH),
-        build_upload_service(DATABASE_PATH),
-        build_specification_snapshot_repository(DATABASE_PATH),
-    )
+    return build_project_service(DATABASE_PATH), build_upload_service(DATABASE_PATH), build_specification_snapshot_repository(DATABASE_PATH)
 
 
 def issue_rows(prepared):
@@ -83,14 +76,9 @@ def format_source_location(location: dict[str, object]) -> str:
     parts: list[str] = []
     if location.get("section_title"):
         parts.append(f"Section: {location['section_title']}")
-    if location.get("paragraph_index") is not None:
-        parts.append(f"Paragraph {location['paragraph_index']}")
-    if location.get("table_index") is not None:
-        parts.append(f"Table {location['table_index']}")
-    if location.get("row_index") is not None:
-        parts.append(f"Row {location['row_index']}")
-    if location.get("cell_index") is not None:
-        parts.append(f"Cell {location['cell_index']}")
+    for key, label in (("paragraph_index", "Paragraph"), ("table_index", "Table"), ("row_index", "Row"), ("cell_index", "Cell")):
+        if location.get(key) is not None:
+            parts.append(f"{label} {location[key]}")
     return " · ".join(parts) or "Location not available"
 
 
@@ -160,69 +148,71 @@ def render_missing_priority_alerts(rows: list[dict[str, str]]) -> None:
         st.info("Only minor parameters are incomplete: " + ", ".join(gaps.minor) + ". The review may continue, subject to existing validation and human approval controls.")
 
 
-def render_reviews(views):
-    updated = list(views)
-    rows = comparison_rows(updated)
+def confirm_existing_baseline(views):
+    confirmed = []
+    for view in views:
+        if view.document_role is DocumentRole.EXISTING and view.state is ReviewState.PENDING:
+            confirmed.append(apply_review_action(view, ReviewState.CONFIRMED, reviewer_note="Approved existing baseline confirmed by the reviewer."))
+        else:
+            confirmed.append(view)
+    return tuple(confirmed)
 
-    st.subheader("Specification comparison")
-    st.caption(
-        "Existing and proposed values are aligned by governed parameter. Criticality is a review-priority indicator only; "
-        "it does not override canonical validation, engineering controls or human approval."
-    )
-    selected_statuses = st.multiselect(
-        "Filter by comparison status",
-        options=list(COMPARISON_STATUSES),
-        default=list(COMPARISON_STATUSES),
-        key="data_upload.comparison_status_filter",
-    )
-    selected_criticalities = st.multiselect(
-        "Filter by parameter criticality",
-        options=list(CRITICALITY_LEVELS),
-        default=list(CRITICALITY_LEVELS),
-        key="data_upload.criticality_filter",
-    )
-    filtered_rows = filter_comparison_rows(
-        rows,
-        statuses=selected_statuses,
-        criticalities=selected_criticalities,
-    )
-    st.dataframe(filtered_rows, width="stretch", hide_index=True)
-    render_missing_priority_alerts(rows)
 
-    st.subheader("Governed extraction review")
-    total_count = len(updated)
-    pending_count = sum(view.state is ReviewState.PENDING for view in updated)
-    resolved_count = total_count - pending_count
-    st.write(f"**Review progress:** {resolved_count} of {total_count} candidates resolved")
-    if total_count:
-        st.progress(resolved_count / total_count)
-    if pending_count:
-        st.warning(f"🟧 {pending_count} candidates require action. Pending candidates are listed first.")
-    else:
-        st.success("All candidate reviews are resolved.")
-    show_unresolved_only = st.checkbox(
-        "Show unresolved candidates only",
-        value=True,
-        key="data_upload.show_unresolved_only",
-        help="Turn this off to display reviewed candidates for audit inspection.",
-    )
-    st.caption("Review actions remain candidate-specific. Technical source evidence is available on demand.")
-    visible_fields = {row["Parameter"] for row in filtered_rows}
-    ordered_views = sorted(
-        enumerate(updated),
-        key=lambda item: item[1].state is not ReviewState.PENDING,
-    )
-    for index, view in ordered_views:
+def render_baseline_views(views, visible_fields: set[str]) -> None:
+    st.subheader("Approved existing baseline")
+    st.caption("Existing values are read-only reference evidence. Review actions apply only to the Proposed specification.")
+    for view in views:
+        if view.document_role is not DocumentRole.EXISTING:
+            continue
         parameter = view.field_name.replace("_", " ").title()
         if parameter not in visible_fields:
             continue
-        if show_unresolved_only and view.state is not ReviewState.PENDING:
+        criticality = FIELD_CRITICALITY[view.field_name].value
+        with st.expander(f"✅ APPROVED BASELINE — Existing — {parameter} · {criticality}"):
+            st.write(f"**Baseline value:** {display_value(view.normalized_value, view.unit)}")
+            st.write(f"**Source text:** {view.source_excerpt}")
+            with st.expander("Technical source evidence"):
+                st.write(f"**Document:** {view.filename}")
+                st.write(f"**Source location:** {format_source_location(view.source_location)}")
+                st.write(f"**Source block:** {view.source_block_id}")
+                st.write(f"**Confidence:** {view.confidence:.1f} ({view.confidence_band.title()})")
+
+
+def render_reviews(views):
+    updated = list(views)
+    rows = comparison_rows(updated)
+    st.subheader("Specification comparison")
+    st.caption("Existing approved-baseline and Proposed candidate values are aligned by governed parameter. Criticality remains a presentation-only review aid.")
+    selected_statuses = st.multiselect("Filter by comparison status", options=list(COMPARISON_STATUSES), default=list(COMPARISON_STATUSES), key="data_upload.comparison_status_filter")
+    selected_criticalities = st.multiselect("Filter by parameter criticality", options=list(CRITICALITY_LEVELS), default=list(CRITICALITY_LEVELS), key="data_upload.criticality_filter")
+    filtered_rows = filter_comparison_rows(rows, statuses=selected_statuses, criticalities=selected_criticalities)
+    st.dataframe(filtered_rows, width="stretch", hide_index=True)
+    render_missing_priority_alerts(rows)
+    visible_fields = {row["Parameter"] for row in filtered_rows}
+    render_baseline_views(updated, visible_fields)
+
+    proposed_views = [(index, view) for index, view in enumerate(updated) if view.document_role is DocumentRole.PROPOSED]
+    st.subheader("Proposed specification review")
+    total_count = len(proposed_views)
+    pending_count = sum(view.state is ReviewState.PENDING for _, view in proposed_views)
+    resolved_count = total_count - pending_count
+    st.write(f"**Review progress:** {resolved_count} of {total_count} Proposed candidates resolved")
+    if total_count:
+        st.progress(resolved_count / total_count)
+    if pending_count:
+        st.warning(f"🟧 {pending_count} Proposed candidates require action. Pending candidates are listed first.")
+    else:
+        st.success("All Proposed candidate reviews are resolved.")
+    show_unresolved_only = st.checkbox("Show unresolved candidates only", value=True, key="data_upload.show_unresolved_only", help="Turn this off to display reviewed Proposed candidates for audit inspection.")
+    ordered_views = sorted(proposed_views, key=lambda item: item[1].state is not ReviewState.PENDING)
+    for index, view in ordered_views:
+        parameter = view.field_name.replace("_", " ").title()
+        if parameter not in visible_fields or (show_unresolved_only and view.state is not ReviewState.PENDING):
             continue
         criticality = FIELD_CRITICALITY[view.field_name].value
-        state_heading = REVIEW_STATE_HEADING[view.state]
-        heading = f"{state_heading} — {view.document_role.value.title()} — {parameter} · {criticality}"
+        heading = f"{REVIEW_STATE_HEADING[view.state]} — Proposed — {parameter} · {criticality}"
         with st.expander(heading):
-            st.write(f"**Extracted value:** {display_value(view.normalized_value, view.unit)}")
+            st.write(f"**Proposed value:** {display_value(view.normalized_value, view.unit)}")
             st.write(f"**Source text:** {view.source_excerpt}")
             st.caption(f"{view.document_format.upper()} · {view.parser_name} · {view.parser_version}")
             with st.expander("Technical source evidence"):
@@ -234,13 +224,7 @@ def render_reviews(views):
                     st.write("**Ambiguities:** " + ", ".join(code.replace("_", " ").title() for code in view.ambiguity_codes))
                 if view.warnings:
                     st.write("**Warnings:** " + "; ".join(view.warnings))
-            selected_state = ReviewState(st.selectbox(
-                "Review action",
-                [state.value for state in ReviewState],
-                index=[state.value for state in ReviewState].index(view.state.value),
-                key=f"review-action-{view.review_id}",
-                format_func=lambda value: value.replace("_", " ").title(),
-            ))
+            selected_state = ReviewState(st.selectbox("Review action", [state.value for state in ReviewState], index=[state.value for state in ReviewState].index(view.state.value), key=f"review-action-{view.review_id}", format_func=lambda value: value.replace("_", " ").title()))
             corrected_value = corrected_unit = note = None
             if selected_state is ReviewState.CORRECTED_CONFIRMED:
                 corrected_value = st.text_input("Corrected value", key=f"corrected-value-{view.review_id}")
@@ -252,23 +236,16 @@ def render_reviews(views):
                 note = st.text_input("Reviewer note (optional)", key=f"review-note-{view.review_id}") or None
             if st.button("Apply review", key=f"apply-review-{view.review_id}"):
                 try:
-                    updated[index] = apply_review_action(
-                        view,
-                        selected_state,
-                        corrected_value=corrected_value,
-                        corrected_unit=corrected_unit,
-                        reviewer_note=note,
-                    )
+                    updated[index] = apply_review_action(view, selected_state, corrected_value=corrected_value, corrected_unit=corrected_unit, reviewer_note=note)
                     st.session_state[SPEC_REVIEWS_KEY] = tuple(updated)
                     st.rerun()
                 except ReviewError as error:
                     st.error(str(error))
-
     resolved = all_reviews_resolved(updated)
     if resolved:
-        st.success("All candidates are reviewed. Only confirmed and corrected-confirmed values continue.")
+        st.success("All Proposed candidates are reviewed. Confirmed baseline and accepted Proposed values can continue downstream.")
     else:
-        st.warning("Pending candidates remain. No values can continue downstream.")
+        st.warning("Pending Proposed candidates remain. No values can continue downstream.")
     return tuple(updated), resolved
 
 
@@ -288,18 +265,11 @@ def render_specification_snapshot(pair, views):
         st.error("Archived projects are read-only.")
         return
     try:
-        canonical = build_unified_canonical_draft(
-            project=project,
-            pair=pair,
-            views=views,
-            source_repository=SOURCE_REPOSITORY,
-            source_commit=SOURCE_REFERENCE,
-        )
+        canonical = build_unified_canonical_draft(project=project, pair=pair, views=views, source_repository=SOURCE_REPOSITORY, source_commit=SOURCE_REFERENCE)
         snapshot = build_unified_snapshot(project_id=project["project_id"], pair=pair, views=views, canonical=canonical)
     except ValueError as error:
         st.error(str(error))
         return
-
     st.subheader("Confirmed-only canonical dataset draft")
     if canonical.is_valid:
         st.success("Canonical validation passed.")
@@ -308,27 +278,13 @@ def render_specification_snapshot(pair, views):
         if canonical.validation_issues:
             st.dataframe(list(canonical.validation_issues), width="stretch", hide_index=True)
     render_canonical_summary(canonical.canonical_data, "Canonical dataset draft summary")
-
     st.subheader("Immutable specification snapshot")
-    st.dataframe([{
-        "Snapshot ID": snapshot.snapshot_id,
-        "Pair format": snapshot.pair_format.replace("_", " + ").upper(),
-        "Existing": f"{snapshot.existing_document.format.upper()} — {snapshot.existing_document.filename}",
-        "Proposed": f"{snapshot.proposed_document.format.upper()} — {snapshot.proposed_document.filename}",
-        "Confirmed fields": len(snapshot.confirmed_fields),
-        "Canonical valid": snapshot.canonical_validation_valid,
-        "Content hash": snapshot.content_hash,
-    }], width="stretch", hide_index=True)
+    st.dataframe([{"Snapshot ID": snapshot.snapshot_id, "Pair format": snapshot.pair_format.replace("_", " + ").upper(), "Existing": f"{snapshot.existing_document.format.upper()} — {snapshot.existing_document.filename}", "Proposed": f"{snapshot.proposed_document.format.upper()} — {snapshot.proposed_document.filename}", "Confirmed fields": len(snapshot.confirmed_fields), "Canonical valid": snapshot.canonical_validation_valid, "Content hash": snapshot.content_hash}], width="stretch", hide_index=True)
     if st.button("Create immutable specification snapshot", width="stretch"):
         try:
             saved = snapshot_repository.create(snapshot)
             st.success(f"Immutable specification snapshot {saved['specification_snapshot_id']} created.")
-            st.dataframe([{
-                "Snapshot ID": saved["specification_snapshot_id"],
-                "Created": saved["created_at"],
-                "Pair format": saved["pair_format"].replace("_", " + ").upper(),
-                "Content hash": saved["content_hash"],
-            }], width="stretch", hide_index=True)
+            st.dataframe([{"Snapshot ID": saved["specification_snapshot_id"], "Created": saved["created_at"], "Pair format": saved["pair_format"].replace("_", " + ").upper(), "Content hash": saved["content_hash"]}], width="stretch", hide_index=True)
         except DuplicateSpecificationSnapshotError as error:
             st.warning(str(error))
         except (KeyError, PermissionError, ValueError) as error:
@@ -339,41 +295,19 @@ st.set_page_config(page_title="Data Upload", layout="wide")
 st.title("Data Upload")
 st.caption("Upload project data or packaging specifications. File type and intended workflow are detected automatically.")
 st.info("Structured files reuse existing validation. Reviewed DOCX and searchable PDF values can create immutable unified specification snapshots.")
-
-uploaded_files = st.file_uploader(
-    "Upload files",
-    type=["xlsx", "csv", "json", "docx", "pdf"],
-    accept_multiple_files=True,
-    help="Supported: XLSX, CSV, JSON, DOCX and searchable PDF.",
-)
+uploaded_files = st.file_uploader("Upload files", type=["xlsx", "csv", "json", "docx", "pdf"], accept_multiple_files=True, help="Supported: XLSX, CSV, JSON, DOCX and searchable PDF.")
 
 if uploaded_files:
     detections = [detect_upload(upload.name, upload.type, upload.getvalue()) for upload in uploaded_files]
     st.subheader("Detection and routing")
-    st.dataframe([{
-        "File": detection.filename,
-        "Detected format": detection.file_format.value.upper() if detection.file_format else "Rejected",
-        "Intended workflow": detection.workflow.value.replace("_", " ").title() if detection.workflow else "None",
-        "Status": detection.status.value.replace("_", " ").title(),
-        "Role confirmation": "Required" if detection.requires_document_role else "Not required",
-        "Reason": detection.reason_code or "",
-    } for detection in detections], width="stretch", hide_index=True)
-
+    st.dataframe([{"File": detection.filename, "Detected format": detection.file_format.value.upper() if detection.file_format else "Rejected", "Intended workflow": detection.workflow.value.replace("_", " ").title() if detection.workflow else "None", "Status": detection.status.value.replace("_", " ").title(), "Role confirmation": "Required" if detection.requires_document_role else "Not required", "Reason": detection.reason_code or ""} for detection in detections], width="stretch", hide_index=True)
     rejected = [item for item in detections if item.status is DetectionStatus.REJECTED]
     if rejected:
         for item in rejected:
             st.error(f"{item.filename}: {item.detail or item.reason_code}")
     else:
-        structured_files = [
-            StructuredUploadFile(upload.name, upload.getvalue(), detection)
-            for upload, detection in zip(uploaded_files, detections)
-            if detection.workflow is WorkflowKind.STRUCTURED_PROJECT_DATA
-        ]
-        specification_items = [
-            (upload, detection)
-            for upload, detection in zip(uploaded_files, detections)
-            if detection.workflow is WorkflowKind.SPECIFICATION_COMPARISON
-        ]
+        structured_files = [StructuredUploadFile(upload.name, upload.getvalue(), detection) for upload, detection in zip(uploaded_files, detections) if detection.workflow is WorkflowKind.STRUCTURED_PROJECT_DATA]
+        specification_items = [(upload, detection) for upload, detection in zip(uploaded_files, detections) if detection.workflow is WorkflowKind.SPECIFICATION_COMPARISON]
         if structured_files and specification_items:
             st.warning("This batch contains project data and specification documents. Process one workflow group at a time.")
         elif specification_items:
@@ -383,32 +317,27 @@ if uploaded_files:
                 st.subheader("Specification roles")
                 role_by_hash = {}
                 for upload, detection in specification_items:
-                    selected = st.selectbox(
-                        f"Role for {upload.name}",
-                        [role.value for role in DocumentRole],
-                        key=f"data_upload.role.{detection.sha256}",
-                        format_func=str.title,
-                    )
+                    selected = st.selectbox(f"Role for {upload.name}", [role.value for role in DocumentRole], key=f"data_upload.role.{detection.sha256}", format_func=str.title)
                     role_by_hash[detection.sha256] = DocumentRole(selected)
                 if set(role_by_hash.values()) != {DocumentRole.EXISTING, DocumentRole.PROPOSED}:
                     st.error("Assign exactly one Existing and one Proposed specification.")
                 else:
-                    inputs = tuple(SpecificationUploadInput(
-                        filename=upload.name,
-                        mime_type=upload.type,
-                        content=upload.getvalue(),
-                        detection=detection,
-                        role=role_by_hash[detection.sha256],
-                    ) for upload, detection in specification_items)
+                    inputs = tuple(SpecificationUploadInput(filename=upload.name, mime_type=upload.type, content=upload.getvalue(), detection=detection, role=role_by_hash[detection.sha256]) for upload, detection in specification_items)
                     invalidate_specification_state_on_change(st.session_state, inputs)
                     st.success("Specification pair ready: " + " + ".join(item.detection.file_format.value.upper() for item in inputs))
-                    if st.checkbox("Confirm roles and run governed extraction", key=SPEC_CONFIRMATION_KEY):
+                    baseline_confirmed = st.checkbox("I confirm that the Existing specification is the approved baseline and may be used as read-only reference evidence.", key=BASELINE_CONFIRMATION_KEY)
+                    roles_confirmed = st.checkbox("Confirm roles and run governed extraction", key=SPEC_CONFIRMATION_KEY)
+                    if roles_confirmed and not baseline_confirmed:
+                        st.warning("Confirm the approved Existing baseline before running governed extraction.")
+                    if roles_confirmed and baseline_confirmed:
                         try:
                             pair = parse_specification_pair(inputs)
                             with st.expander("Source document evidence"):
                                 st.dataframe(source_block_rows(pair), width="stretch", hide_index=True)
                             if SPEC_REVIEWS_KEY not in st.session_state:
-                                st.session_state[SPEC_REVIEWS_KEY] = build_common_review_views(pair)
+                                st.session_state[SPEC_REVIEWS_KEY] = confirm_existing_baseline(build_common_review_views(pair))
+                            else:
+                                st.session_state[SPEC_REVIEWS_KEY] = confirm_existing_baseline(st.session_state[SPEC_REVIEWS_KEY])
                             views, resolved = render_reviews(st.session_state[SPEC_REVIEWS_KEY])
                             if resolved:
                                 render_specification_snapshot(pair, views)
@@ -441,10 +370,9 @@ else:
 
 with st.expander("Build U6 scope and limitations"):
     st.write("- Unified snapshots preserve document formats, hashes, parser versions and typed source locations")
-    st.write("- Only Confirmed and Corrected Confirmed values are persisted")
+    st.write("- Existing values are preserved as explicitly confirmed approved-baseline evidence")
+    st.write("- Only reviewed Proposed values continue as candidate changes")
     st.write("- Canonical draft and unchanged canonical-validation result are preserved")
-    st.write("- Parameter criticality is a presentation-only review aid and does not override governed validation")
     st.write("- Persistence is additive, append-only and content-addressed")
     st.write("- Duplicate content, updates, deletes, archived projects and cross-project access are rejected")
-    st.write("- Existing Word and PDF snapshot tables are not migrated or deleted")
     st.write("- No OCR, live AI, recommendation or decision automation")

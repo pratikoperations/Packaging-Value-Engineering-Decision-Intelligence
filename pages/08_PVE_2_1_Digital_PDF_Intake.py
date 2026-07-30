@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import asdict
 from typing import Any
 
 import streamlit as st
-
+from src.application.presentation import flatten_evidence_rows
 from src.application.pdf_intake_demo import (
     ALIAS_REGISTRY_VERSION,
     EXTRACTION_SCHEMA_VERSION,
@@ -23,14 +22,7 @@ from src.pdf_intake import (
     parse_validated_pdf,
     validate_pdf,
 )
-from src.review_comparison import (
-    ReviewError,
-    confirm,
-    correct_and_confirm,
-    group_reviews,
-    intentionally_omit,
-    reject,
-)
+from src.review_comparison import ReviewError, confirm, correct_and_confirm, group_reviews, intentionally_omit, reject
 
 PROJECT = {
     "project_id": "PVE21-SYNTHETIC-PDF-DEMO",
@@ -81,7 +73,7 @@ def _review(reviews):
             metrics[2].metric("Confidence", f"{candidate.confidence:.0f}%")
             metrics[3].metric("Unit", candidate.unit or "Not recorded")
             st.write(f"**Source block:** `{candidate.source_block_id}`")
-            st.code(item.raw_source_text)
+            st.write(item.raw_source_text)
             if item.layout_warnings:
                 st.warning("Layout warnings: " + ", ".join(w.value for w in item.layout_warnings))
             if candidate.ambiguity_codes:
@@ -144,7 +136,7 @@ def main() -> None:
             st.success("Canonical validation passed.") if valid else st.warning("Canonical draft remains incomplete or invalid, which is expected for a two-PDF demonstration.")
             if issues:
                 st.dataframe(list(issues), width="stretch", hide_index=True)
-            st.json(draft)
+            st.dataframe(flatten_evidence_rows(draft), width="stretch", hide_index=True)
             snapshot = build_confirmed_pdf_snapshot(project_id=PROJECT["project_id"], documents=documents, groups=groups, canonical_dataset_draft=draft, canonical_validation_issues=issues, canonical_validation_valid=valid, extraction_schema_version=EXTRACTION_SCHEMA_VERSION, alias_registry_version=ALIAS_REGISTRY_VERSION, provider_id=PROVIDER_ID)
             st.success("Immutable in-memory PDF snapshot created.")
             metrics = st.columns(3)
@@ -152,7 +144,7 @@ def main() -> None:
             metrics[1].metric("Canonical valid", "Yes" if valid else "No")
             metrics[2].metric("Snapshot hash", snapshot.content_hash[:12] + "…")
             with st.expander("Snapshot evidence"):
-                st.json(asdict(snapshot))
+                st.dataframe(flatten_evidence_rows(snapshot), width="stretch", hide_index=True)
         except ValueError as error:
             st.warning(f"Snapshot is blocked until review is complete: {error}")
     with evaluation_tab:
