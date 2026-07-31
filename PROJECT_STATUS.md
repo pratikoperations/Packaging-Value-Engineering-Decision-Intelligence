@@ -81,3 +81,20 @@ PVE-0.7 remains the original interview-release identity required by repository C
 
 ## Current State
 PVE 1.2 is the latest stable governance-closed release on `main`. It is 100% complete at 74 of 74 planned hours, with 0 hours and 0% pending and 0 of 2 contingency hours used. PR #26 is squash-merged, and post-merge PVE CI #896 validated commit `8c5511e096b4526a85630e38ef939db371b307b1` with 300 tests, 0 failures, and 0 errors. PVE 1.3 has not started and must branch only from the final validated governance-closure state after this closure PR is merged and final `main` CI passes.
+
+## E1 Development Programme — Current Governed State
+
+### E1.7 — Governed Approved Specification Consumption Contract
+- Status: completed, verified, merge-committed into `e1-development`, and governance-closed.
+- Business purpose: prepare deterministic governed approved-specification consumption envelopes and immutable purpose-specific authorization records from the E1.6 approved-snapshot boundary.
+- Feature branch: `e1/governed-approved-specification-consumption` retained.
+- Final feature SHA: `b08bf9d92dcda173ce4ecd2f913e0d3f9f1b5940`.
+- Pull request: PR #68 merged and closed.
+- Merge method: merge commit.
+- Merge commit and final `e1-development` SHA: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
+- Scope statistics: 10 commits; 15 changed files; 2,907 additions; 0 deletions.
+- Validation: workflow run `30628727103`, job `91149911990`; 656 tests passed; 0 failures; 0 errors.
+- Retained evidence: artifact `8792456475`, SHA-256 `69635bdcf5125aed1e1e5e4c846cd31ccf8fad866daed4d2a5d702b3b62bd771`.
+- Frozen `main` remains unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- Claim boundary: E1.7 does not execute cost, scenario, risk, material, sourcing, recommendation, or award engines and does not approve a downstream business decision.
+- Next permitted stage: a separately authorized E1 release-candidate audit or later governed consumer slice; no promotion to `main` is implied by this closure.
