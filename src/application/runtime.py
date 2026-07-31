@@ -2,11 +2,18 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from src.application.approved_specification_read_model import ApprovedSpecificationReadModel
+from src.application.approved_specification_snapshot_service import (
+    ApprovedSpecificationSnapshotService,
+)
 from src.application.persistent_specification_review_service import PersistentSpecificationReviewService
 from src.application.project_service import ProjectService
 from src.application.specification_review_read_model import SpecificationReviewReadModel
 from src.application.specification_review_service import SpecificationReviewService
 from src.decision_snapshots.service import DecisionSnapshotService
+from src.persistence.approved_specification_repository import (
+    ApprovedSpecificationSnapshotRepository,
+)
 from src.persistence.database import Database
 from src.persistence.dataset_repository import DatasetRepository
 from src.persistence.decision_repository import DecisionRepository
@@ -71,6 +78,36 @@ def build_persistent_specification_review_service(
     return PersistentSpecificationReviewService(
         SpecificationReviewService(),
         SpecificationReviewRepository(database),
+    )
+
+
+def build_approved_specification_snapshot_repository(
+    database_path: str | Path,
+) -> ApprovedSpecificationSnapshotRepository:
+    """Create the immutable E1.6 approved-specification snapshot repository."""
+    database = _initialized_database(database_path)
+    return ApprovedSpecificationSnapshotRepository(database)
+
+
+def build_approved_specification_snapshot_service(
+    database_path: str | Path,
+) -> ApprovedSpecificationSnapshotService:
+    """Compose the governed E1.6 snapshot creation service on one database."""
+    database = _initialized_database(database_path)
+    return ApprovedSpecificationSnapshotService(
+        SpecificationReviewRepository(database),
+        ApprovedSpecificationSnapshotRepository(database),
+        DatasetRepository(database),
+    )
+
+
+def build_approved_specification_read_model(
+    database_path: str | Path,
+) -> ApprovedSpecificationReadModel:
+    """Create the project-scoped read-only E1.6 approved snapshot boundary."""
+    database = _initialized_database(database_path)
+    return ApprovedSpecificationReadModel(
+        ApprovedSpecificationSnapshotRepository(database)
     )
 
 
