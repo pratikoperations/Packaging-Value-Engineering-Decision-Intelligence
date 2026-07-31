@@ -2,6 +2,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from src.application.approved_specification_consumption_read_model import (
+    ApprovedSpecificationConsumptionReadModel,
+)
+from src.application.approved_specification_consumption_service import (
+    ApprovedSpecificationConsumptionService,
+)
 from src.application.approved_specification_read_model import ApprovedSpecificationReadModel
 from src.application.approved_specification_snapshot_service import (
     ApprovedSpecificationSnapshotService,
@@ -11,6 +17,9 @@ from src.application.project_service import ProjectService
 from src.application.specification_review_read_model import SpecificationReviewReadModel
 from src.application.specification_review_service import SpecificationReviewService
 from src.decision_snapshots.service import DecisionSnapshotService
+from src.persistence.approved_specification_consumption_repository import (
+    ApprovedSpecificationConsumptionRepository,
+)
 from src.persistence.approved_specification_repository import (
     ApprovedSpecificationSnapshotRepository,
 )
@@ -108,6 +117,36 @@ def build_approved_specification_read_model(
     database = _initialized_database(database_path)
     return ApprovedSpecificationReadModel(
         ApprovedSpecificationSnapshotRepository(database)
+    )
+
+
+def build_approved_specification_consumption_repository(
+    database_path: str | Path,
+) -> ApprovedSpecificationConsumptionRepository:
+    """Create the immutable E1.7 governed-consumption repository."""
+    database = _initialized_database(database_path)
+    return ApprovedSpecificationConsumptionRepository(database)
+
+
+def build_approved_specification_consumption_service(
+    database_path: str | Path,
+) -> ApprovedSpecificationConsumptionService:
+    """Compose E1.7 handoff creation from the E1.6 approved read boundary."""
+    database = _initialized_database(database_path)
+    snapshot_read_model = ApprovedSpecificationReadModel(
+        ApprovedSpecificationSnapshotRepository(database)
+    )
+    repository = ApprovedSpecificationConsumptionRepository(database)
+    return ApprovedSpecificationConsumptionService(snapshot_read_model, repository)
+
+
+def build_approved_specification_consumption_read_model(
+    database_path: str | Path,
+) -> ApprovedSpecificationConsumptionReadModel:
+    """Create the project-scoped E1.7 consumption read boundary."""
+    database = _initialized_database(database_path)
+    return ApprovedSpecificationConsumptionReadModel(
+        ApprovedSpecificationConsumptionRepository(database)
     )
 
 
