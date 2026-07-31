@@ -1,22 +1,44 @@
 # Changelog
 
-## [e1-release-candidate-governance-baseline] — Frozen
+## [showcase-build-1-post-promotion-governance-closure] — Pending Integration
+
+### Changed
+- Reconciled six canonical governance records after successful E1 promotion to `main`.
+- Established `a6803b6156b591ec1fe9587469f6fe7c00ed97f4` as the current promoted and validated `main` source baseline.
+- Recorded PR #71 as merged and closed through a merge commit.
+- Recorded retained `e1-development` SHA `9a3379b0e0cf64b4761c2a8dffac671c41d94f98`.
+- Recorded exact post-merge validation run `30656143928`, job `91240891645`, 4 focused tests passed, 656 complete-suite tests passed, 0 failures, and 0 errors.
+- Recorded artifact `8803331290` with SHA-256 `943cad0adb2f8f4d20c5c9b0f2e1520655043c2224cfb079ee67d4e5d28e2d39`.
+- Preserved historical pre-promotion statements as dated milestone evidence while making clear that they no longer describe the current `main` state.
+
+### Historical Lineage Preserved
+- Original rollback `main`: `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- E1.7 implementation lineage: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
+- Governed E1 product baseline: `45f795370a60654050b5dca1ff4789487b3f049e`.
+- Final pre-promotion and retained `e1-development`: `9a3379b0e0cf64b4761c2a8dffac671c41d94f98`.
+- Promoted `main`: `a6803b6156b591ec1fe9587469f6fe7c00ed97f4`.
+
+### Governance Boundaries Preserved
+- No source code, UI, tests, workflows, dependencies, or data changed.
+- No deployment, release, tagging, branch deletion, live-data use, production use, or production-readiness claim is authorized.
+- Human authorization remains mandatory and autonomous approval remains prohibited.
+
+## [e1-release-candidate-governance-baseline] — Frozen Historical Record
 
 ### Completed
 - E1.1 through E1.7 completed on the governed E1 development line.
 - E1.7 implementation PR #68 and governance-closure PR #69 merged and closed.
-- Final E1 merge SHA and governed release-candidate baseline: `45f795370a60654050b5dca1ff4789487b3f049e`.
-- The earlier SHA `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7` remains the E1.7 implementation merge lineage and is superseded as the current RC recovery point.
+- Final E1 governed product baseline: `45f795370a60654050b5dca1ff4789487b3f049e`.
+- The earlier SHA `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7` remains the E1.7 implementation lineage.
 - Exact-SHA validation run `30640190796`, job `91187867871`, succeeded.
 - Focused report tests: 4 passed.
 - Complete repository suite: 656 passed; 0 failures; 0 errors.
 - Artifact `8797098203`; SHA-256 `5697d07b0b4664810bbad29615e04892528aa232ff18353d1e00f611b023b384`.
-- `main` remained unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- At this historical milestone, `main` remained at `300054cceb255e8e1273e8012a3ba0c0a236556d` and promotion still required separate authorization.
 
 ### Governance Boundaries Preserved
-- RC freeze records qualification and recovery lineage only.
-- No promotion to `main`, deployment, release, tagging, production use, or another E1 development slice is authorized.
-- E1 non-execution, human-approval, non-autonomous-approval, non-deployment, and non-production boundaries remain mandatory.
+- RC freeze recorded qualification and recovery lineage only.
+- E1 non-execution, human-approval, non-autonomous-approval, non-deployment, and non-production boundaries remained mandatory.
 
 ## [e1.7-governed-approved-specification-consumption] — Governance Closed
 
@@ -28,11 +50,11 @@
 - Feature branch retained: `e1/governed-approved-specification-consumption`.
 - Final feature SHA: `b08bf9d92dcda173ce4ecd2f913e0d3f9f1b5940`.
 - PR #68 merged and closed by merge commit.
-- Merge commit and final `e1-development` SHA: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
+- Historical E1.7 implementation SHA: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
 - Scope: 10 commits; 15 changed files; 2,907 additions; 0 deletions.
 - Workflow run `30628727103`, job `91149911990`: 656 tests passed; 0 failures; 0 errors.
 - Artifact `8792456475`; SHA-256 `69635bdcf5125aed1e1e5e4c846cd31ccf8fad866daed4d2a5d702b3b62bd771`.
-- `main` remained unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- At this historical milestone, `main` remained at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
 - E1.7 marked completed, verified, merged, and governance-closed.
 
 ### Mandatory Controls Preserved
@@ -46,7 +68,7 @@
 - Supplier selection or award.
 - Engineering, commercial, sourcing, production, or autonomous approval.
 - Workflow or dependency changes.
-- Deployment, release, tagging, branch deletion, or modification of `main`.
+- Deployment, release, tagging, branch deletion, or modification of `main` at the E1.7 milestone.
 
 ## [1.1-all-category-intake-validation-readiness] — Completed
 
@@ -84,7 +106,7 @@
 - Project isolation remains enforced.
 
 ### Excluded
-- PVE 1.2 development.
+- PVE 1.2 development at the PVE 1.1 milestone.
 - Power BI and PostgreSQL reporting integration.
 - Deployment, activation, pilot, and production.
 - ERP integration, OCR, and AI document reading.
@@ -113,7 +135,7 @@
 - Cumulative effort: 89.5 hours
 - Remaining program budget: 0.5 hours
 - Post-merge governance closure completed
-- No next build started
+- No next build started at that milestone
 
 ### Mandatory Controls Preserved
 - Engineering validation required
@@ -163,7 +185,7 @@
 ## [1.0.1-foundation-persistence] — Completed
 - PR #17 merged and closed
 - Merge commit: `3ad821c33f382f6f58e954ce0efbc3d50a1836a0`
-- Tests: 85 passed, 0 failed, 0 errors
+- Tests: 85 passed
 
 ## [0.7.2-live-demo-streamlit-compatibility] — Completed
 - PR #16 merged and closed

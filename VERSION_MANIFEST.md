@@ -97,11 +97,8 @@
 - Archived projects read-only
 - Project isolation enforced
 
-## Scope Boundary
-No PVE 1.2, Power BI, PostgreSQL reporting integration, deployment, activation, pilot, production, ERP integration, OCR, AI document reading, authentication, cloud database, supplier ranking or allocation, machine learning, live pricing, autonomous approval, or full all-category technical-feasibility claim is authorized.
-
-## Final State
-PVE 1.1 is the current completed and governance-closed release on `main`. No new development build has started.
+## Historical Scope Boundary
+At the PVE 1.1 milestone, PVE 1.2, Power BI, PostgreSQL reporting integration, deployment, activation, pilot, production, ERP integration, OCR, AI document reading, authentication, cloud database, supplier ranking or allocation, machine learning, live pricing, autonomous approval, and full all-category technical-feasibility claims remained unauthorized.
 
 ## E1 Development Completion Record
 
@@ -113,25 +110,54 @@ PVE 1.1 is the current completed and governance-closed release on `main`. No new
 - Final feature SHA: `b08bf9d92dcda173ce4ecd2f913e0d3f9f1b5940`.
 - Pull request: PR #68 merged and closed.
 - Merge method: merge commit.
-- Merge commit and final `e1-development` SHA: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
+- Historical E1.7 implementation SHA: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
 - Scope: 10 commits; 15 changed files; 2,907 additions; 0 deletions.
 - Validation: workflow run `30628727103`, job `91149911990`; 656 tests passed; 0 failures; 0 errors.
 - Artifact: `8792456475`; SHA-256 `69635bdcf5125aed1e1e5e4c846cd31ccf8fad866daed4d2a5d702b3b62bd771`.
-- Frozen `main`: unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- At this historical milestone, `main` remained at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
 - Claim boundary: no cost, scenario, risk, material, sourcing, recommendation, or award engine executed and no downstream business decision was approved.
-- Promotion, release-candidate status, deployment, release, and tagging remain separately unauthorized.
 
-## E1 Release-Candidate Version Record
+## E1 Release-Candidate Version Record — Historical
 - Version identity: `e1-release-candidate-governance-baseline`.
 - Status: E1.1 through E1.7 completed; final E1 merge exact-SHA validated and technically qualified as the governed release candidate.
 - E1.7 implementation PR #68 and governance-closure PR #69 are merged and closed.
-- Governed RC baseline and recovery SHA: `45f795370a60654050b5dca1ff4789487b3f049e`.
-- The earlier SHA `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7` remains the E1.7 implementation merge record and is not the current RC recovery baseline.
+- Governed product baseline SHA: `45f795370a60654050b5dca1ff4789487b3f049e`.
+- The earlier SHA `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7` remains the E1.7 implementation record.
 - Exact-SHA validation run: `30640190796`.
 - Validation job: `91187867871`.
 - Focused report tests: 4 passed.
 - Complete repository suite: 656 passed; 0 failures; 0 errors.
 - Artifact: `8797098203`; SHA-256 `5697d07b0b4664810bbad29615e04892528aa232ff18353d1e00f611b023b384`.
-- Frozen `main`: unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
-- RC status does not authorize promotion to `main`, deployment, release, tagging, production use, or another E1 development slice.
-- E1 non-execution, human-approval, non-autonomous-approval, non-deployment, and non-production boundaries remain mandatory.
+- At this historical milestone, `main` remained at `300054cceb255e8e1273e8012a3ba0c0a236556d` and promotion still required separate authorization.
+
+## E1 Promoted Stable Source Baseline
+- Version identity: `e1-promoted-stable-source-baseline`.
+- Promotion PR: #71 merged and closed.
+- Merge method: merge commit.
+- Original pre-E1 rollback `main` SHA: `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- E1.7 implementation lineage: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
+- Governed E1 product baseline: `45f795370a60654050b5dca1ff4789487b3f049e`.
+- Final pre-promotion and retained `e1-development` SHA: `9a3379b0e0cf64b4761c2a8dffac671c41d94f98`.
+- Promoted `main` SHA: `a6803b6156b591ec1fe9587469f6fe7c00ed97f4`.
+- Post-merge validation run: `30656143928`.
+- Validation job: `91240891645`.
+- Focused report tests: 4 passed.
+- Complete repository suite: 656 passed; 0 failures; 0 errors.
+- Artifact: `8803331290`.
+- Artifact SHA-256: `943cad0adb2f8f4d20c5c9b0f2e1520655043c2224cfb079ee67d4e5d28e2d39`.
+- Status: promoted, exact-SHA validated on `main`, and governance-closed.
+
+## Current Version State
+The current governed stable source-code baseline is `main` at `a6803b6156b591ec1fe9587469f6fe7c00ed97f4`. Historical statements that `main` remained at `300054cceb255e8e1273e8012a3ba0c0a236556d` or that promotion remained unauthorized describe pre-promotion milestones and are not current-state instructions.
+
+## Current Scope Boundary
+Deployment, release, tagging, live organizational data, pilot, activation, production use, production-readiness claims, autonomous approval, and autonomous execution of engineering, commercial, sourcing, supplier-award, deployment, release, or production decisions remain separately unauthorized.
+
+## Showcase and Handoff Release
+- Programme identity: `pve-showcase-handoff-release-1.0`.
+- Integration branch: `showcase-handoff-development` at the initial baseline `a6803b6156b591ec1fe9587469f6fe7c00ed97f4`.
+- Build 1 feature branch: `showcase/build-1-governance-closure`.
+- Build 1 status: pending validation and separate merge authorization.
+- Build 1 maximum authorized effort: 5 hours.
+- Total programme budget: 50 hours.
+- Builds 2–6 remain separately unauthorized.

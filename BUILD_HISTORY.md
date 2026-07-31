@@ -74,7 +74,7 @@ Eight packaging categories, category-specific Excel templates, validated Excel n
 - Remaining: 0 hours.
 
 ### Final State
-PVE 1.1 is fully completed, validated, merged, and governance-closed. No PVE 1.2, deployment, activation, pilot, production, Power BI, PostgreSQL reporting, ERP, OCR, or AI document-reading work has started.
+PVE 1.1 is fully completed, validated, merged, and governance-closed.
 
 ## E1.7 — Governed Approved Specification Consumption Contract
 **Status:** Completed, verified, merge-committed into `e1-development`, and governance-closed.
@@ -89,26 +89,23 @@ PVE 1.1 is fully completed, validated, merged, and governance-closed. No PVE 1.2
 - Final feature SHA: `b08bf9d92dcda173ce4ecd2f913e0d3f9f1b5940`.
 - Pull request: PR #68 merged and closed.
 - Merge method: merge commit.
-- Merge commit and final `e1-development` SHA: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
+- Historical E1.7 implementation SHA: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
 - Scope statistics: 10 commits; 15 changed files; 2,907 additions; 0 deletions.
 - Validation: workflow run `30628727103`, job `91149911990`; 656 tests passed; 0 failures; 0 errors.
 - Artifact: `8792456475`; SHA-256 `69635bdcf5125aed1e1e5e4c846cd31ccf8fad866daed4d2a5d702b3b62bd771`.
-- `main` unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- At this historical milestone, `main` remained at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
 
 ### Mandatory Claim Boundary
 E1.7 prepares governed approved-specification consumption envelopes and records purpose-specific authorizations. It does not execute cost, scenario, risk, material, sourcing, recommendation, or award engines and does not approve a downstream business decision.
 
-### Final State
-E1.7 is frozen as completed, verified, merged, and governance-closed on the E1 development line. Any downstream analytical consumer, release-candidate activity, or promotion toward `main` requires separate authorization.
-
-## E1 Release-Candidate Governance Freeze
+## E1 Release-Candidate Governance Freeze — Historical Record
 **Status:** E1.1 through E1.7 completed; final E1 merge exact-SHA validated and technically qualified as the governed release candidate.
 
 ### Completion and Lineage
 - E1.7 implementation PR #68 merged and closed.
 - E1.7 governance-closure PR #69 merged and closed.
-- Final E1 merge SHA and governed RC baseline: `45f795370a60654050b5dca1ff4789487b3f049e`.
-- The earlier SHA `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7` remains the E1.7 implementation merge lineage and is superseded as the current RC recovery point.
+- Governed E1 product baseline: `45f795370a60654050b5dca1ff4789487b3f049e`.
+- The earlier SHA `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7` remains the E1.7 implementation lineage.
 
 ### Final Validation
 - Workflow run: `30640190796`.
@@ -117,7 +114,41 @@ E1.7 is frozen as completed, verified, merged, and governance-closed on the E1 d
 - Complete repository suite: 656 passed; 0 failures; 0 errors.
 - Artifact: `8797098203`.
 - Artifact SHA-256: `5697d07b0b4664810bbad29615e04892528aa232ff18353d1e00f611b023b384`.
-- `main` remained unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- At this historical milestone, `main` remained at `300054cceb255e8e1273e8012a3ba0c0a236556d` and promotion still required separate authorization.
+
+## E1 Promotion to Main
+**Status:** Completed, merge-committed into `main`, exact-SHA validated, and governance-closed.
+
+### Completion Record
+- Pull request: PR #71 merged and closed.
+- Merge method: merge commit.
+- Original pre-E1 rollback `main` SHA: `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- E1.7 implementation lineage: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
+- Governed E1 product baseline: `45f795370a60654050b5dca1ff4789487b3f049e`.
+- Final pre-promotion and retained `e1-development` SHA: `9a3379b0e0cf64b4761c2a8dffac671c41d94f98`.
+- Merge commit and promoted `main` SHA: `a6803b6156b591ec1fe9587469f6fe7c00ed97f4`.
+- Promotion scope: 33 commits; 55 changed files; 8,774 additions; 4 deletions.
+
+### Exact Post-Merge Validation
+- Workflow run: `30656143928`.
+- Job: `91240891645`.
+- Focused report tests: 4 passed.
+- Complete repository suite: 656 passed; 0 failures; 0 errors.
+- Artifact: `8803331290`.
+- Artifact SHA-256: `943cad0adb2f8f4d20c5c9b0f2e1520655043c2224cfb079ee67d4e5d28e2d39`.
 
 ### Governance Boundary
-The RC freeze records a validated E1 baseline only. It does not authorize promotion to `main`, deployment, release, tagging, production use, or another E1 development slice. Human authorization remains mandatory, autonomous approval remains prohibited, and all E1 non-execution, non-deployment, and non-production claim boundaries remain in force.
+Promotion establishes a stable source-code baseline only. It does not authorize deployment, release, tagging, live organizational data, production use, production-readiness claims, autonomous approval, or autonomous execution of engineering, commercial, sourcing, supplier-award, cost, scenario, risk, material, recommendation, deployment, release, or production decisions.
+
+## Showcase and Handoff Release — Build 1
+**Status:** Implemented on `showcase/build-1-governance-closure` and pending PR validation and separate merge authorization.
+
+### Scope
+- Reconciles the six canonical governance and recovery records after PR #71 promotion.
+- Preserves detailed historical build records and explicitly labels pre-promotion statements as historical milestone evidence.
+- No source code, UI, tests, workflows, dependencies, or data are modified.
+
+### Budget
+- Build 1 authorized maximum: 5 hours.
+- Total programme budget: 50 hours.
+- Builds 2–6 remain separately unauthorized.
