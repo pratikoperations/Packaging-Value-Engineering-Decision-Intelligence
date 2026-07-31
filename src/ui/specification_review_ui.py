@@ -6,6 +6,7 @@ from collections.abc import Callable, Mapping, MutableMapping
 from dataclasses import dataclass
 from typing import Any, TypeVar
 
+from src.application.specification_review_read_model import SpecificationReviewSummary
 from src.application.specification_review_service import AssignedDataset, ReviewableField
 from src.domain.specification_review import DatasetRole
 from src.persistence.specification_review_repository import PersistedSpecificationReview
@@ -40,10 +41,7 @@ def discover_reviewable_fields(*datasets: AssignedDataset) -> tuple[ReviewableFi
     paths: set[tuple[str, ...]] = set()
     for dataset in datasets:
         paths.update(_scalar_paths(dataset.canonical_data))
-    return tuple(
-        ReviewableField(field_key=".".join(path), path=path, mandatory=True)
-        for path in sorted(paths)
-    )
+    return tuple(ReviewableField(field_key=".".join(path), path=path, mandatory=True) for path in sorted(paths))
 
 
 def _scalar_paths(value: object, prefix: tuple[str, ...] = ()) -> set[tuple[str, ...]]:
@@ -55,6 +53,31 @@ def _scalar_paths(value: object, prefix: tuple[str, ...] = ()) -> set[tuple[str,
     if isinstance(value, (list, tuple, set)) or not prefix:
         return set()
     return {prefix}
+
+
+def review_summary_label(summary: SpecificationReviewSummary) -> str:
+    eligibility = "eligible" if summary.eligible else "blocked"
+    return (
+        f"{summary.review_id} — revision {summary.latest_revision_number} — "
+        f"{eligibility} — {summary.pending_candidate_count} pending"
+    )
+
+
+def history_rows(history: list[PersistedSpecificationReview]) -> list[dict[str, object]]:
+    return [
+        {
+            "Revision": item.revision_number,
+            "Action": item.action_type,
+            "Field": item.action_field_key,
+            "Actor": item.actor_reference,
+            "Rationale": item.action_reason,
+            "Eligibility": "eligible" if item.state.eligibility and item.state.eligibility.eligible else "blocked",
+            "Created": item.created_at,
+            "Parent revision": item.parent_revision_id,
+            "Content hash": item.content_hash,
+        }
+        for item in history
+    ]
 
 
 def action_token(request: ReviewActionRequest) -> str:
@@ -70,11 +93,7 @@ def action_token(request: ReviewActionRequest) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-def execute_once(
-    session: MutableMapping[str, Any],
-    request: ReviewActionRequest,
-    operation: Callable[[], T],
-) -> tuple[bool, T | None]:
+def execute_once(session: MutableMapping[str, Any], request: ReviewActionRequest, operation: Callable[[], T]) -> tuple[bool, T | None]:
     token = action_token(request)
     committed_key = "specification_review_committed_action_token"
     pending_key = "specification_review_pending_action_token"
