@@ -9,105 +9,45 @@ Packaging Value Engineering & Decision Intelligence
 ## Historical Build Identity
 PVE-0.7 remains the original interview-release identity required by repository CI and is preserved as historical release evidence.
 
-## Stable Releases
+## Stable Release Lineage
+- PVE 1.0.6: completed and governance-closed.
+- PVE 1.1: completed, validated, merged, and governance-closed.
+- PVE 1.2: completed, validated, merged, and governance-closed.
+- E1.1 through E1.7: completed, exact-SHA validated, promoted to `main`, and governance-closed.
 
-### PVE 1.0.6
-- Status: complete and governance-closed on `main`.
-- Final PR: #22.
-- Tests: 179 passed, 0 failed, 0 errors.
-- Cumulative effort: 89.5 hours.
+## E1 Historical Lineage
+- Original pre-E1 rollback `main` SHA: `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- E1.7 implementation lineage: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
+- Governed E1 product baseline: `45f795370a60654050b5dca1ff4789487b3f049e`.
+- Final pre-promotion `e1-development` SHA: `9a3379b0e0cf64b4761c2a8dffac671c41d94f98`.
+- Promoted and validated `main` SHA: `a6803b6156b591ec1fe9587469f6fe7c00ed97f4`.
 
-### PVE 1.1 — All-Category Project Intake and Validation Readiness
-- Status: complete, validated, merged, and governance-closed.
-- Final PR: #25.
-- Squash merge commit: `37f4ae58e0d57c4531293371e423d771ada7ae50`.
-- Final CI: PVE CI #735, run `29302903427`, success.
-- Total test executions: 225; failures: 0; errors: 0.
-- Total consumed: 80 of 80 hours.
+## E1 Promotion Closure
+- Promotion pull request: PR #71.
+- PR state: merged and closed.
+- Merge method: merge commit.
+- Merge commit and current governed `main` SHA: `a6803b6156b591ec1fe9587469f6fe7c00ed97f4`.
+- Retained `e1-development` branch SHA: `9a3379b0e0cf64b4761c2a8dffac671c41d94f98`.
+- Post-merge validation run: `30656143928`.
+- Post-merge validation job: `91240891645`.
+- Focused report tests: 4 passed.
+- Complete repository suite: 656 passed; 0 failures; 0 errors.
+- Retained artifact: `8803331290`.
+- Artifact SHA-256: `943cad0adb2f8f4d20c5c9b0f2e1520655043c2224cfb079ee67d4e5d28e2d39`.
+- Result: E1 promotion is complete, exact-SHA validated on `main`, and governance-closed.
 
-### PVE 1.2 — Corrugated Packaging Engineering and Validation Intelligence
-- Status: complete, validated, squash-merged through PR #26, and governance-closed after post-merge validation.
-- Final feature branch: `feature/pve-1.2-corrugated-engineering`.
-- Final feature head: `20b60393eb21c75e56676ec119fb2c1818d33db0`.
-- Squash merge commit on `main`: `8c5511e096b4526a85630e38ef939db371b307b1`.
-- Planned effort: 74 hours.
-- Completed effort: 74 of 74 planned hours.
-- Release completion: 100%.
-- Pending planned work: 0 hours, 0%.
-- Controlled contingency used: 0 of 2 hours.
-- Controlled contingency remaining: 2 hours.
-- Absolute cap: 76 hours.
-- Functional Build 8 head: `9465d9d6292a9d65834cfc11f27d1f056b9408a4`.
-- Functional validation: PVE CI #849, run `29309701227`, success.
-- Final documented head: `edf517c308cb204c683169d66f47e5b23fd3b0b5`.
-- Final documented-head validation: PVE CI #865, run `29309867905`, success.
-- Final closure head: `6a2c372238a531c3ca6977753ff2d90d69e07b5f`.
-- Final closure validation: PVE CI #875, run `29309985760`, success.
-- Final feature-head validation: PVE CI #883, run `29313538879`, success.
-- Post-merge validation on `main`: PVE CI #896, run `29317676780`, job `87035353112`, `workflow_dispatch`, success.
-- Post-merge tested commit: `8c5511e096b4526a85630e38ef939db371b307b1`.
-- Post-merge tests: 300 passed, 0 failures, 0 errors.
-- Diagnostic artifact: `pve-full-test-output`, artifact ID `8304598530`.
+## Current Governed State
+`main` at `a6803b6156b591ec1fe9587469f6fe7c00ed97f4` is the current promoted stable source-code baseline. Earlier statements that `main` remained at `300054cceb255e8e1273e8012a3ba0c0a236556d` or that E1 promotion remained unauthorized are historical pre-promotion records and are not the current state.
 
-## Completed PVE 1.2 Builds
-- Build 1 — Architecture, Governance and Engineering Boundary Lock — 8 hours — validated by PVE CI #753.
-- Build 2 — Corrugated Specification, Style and Tolerance Model — 11 hours — validated by PVE CI #771.
-- Build 3 — Technical Requirements, Evidence and Supplier Capability — 10 hours — validated by PVE CI #785.
-- Build 4 — Compression, Stacking, Environment and Packing-Line Screening — 12 hours — validated by PVE CI #797.
-- Build 5 — Material, Pallet, Logistics and Physical Sustainability Analysis — 11 hours — validated by PVE CI #809.
-- Build 6 — Should-Cost, Failure Cost and Implementation Economics — 9 hours — validated by PVE CI #823.
-- Build 7 — Engineering Recommendation, Evidence Confidence and Immutable Technical-Assessment Persistence — 7 hours — validated by PVE CI #843.
-- Build 8 — Demonstration Cases, Full Regression and Release QA — 6 hours — validated by PVE CI #849, #865, #875, #883, and post-merge CI #896.
-
-## Release Evidence
-- Eight governed synthetic corrugated cases are stored in `data/pve_1_2_corrugated_demonstration_cases.json`.
-- Every case is explicitly labelled synthetic demonstration data.
-- End-to-end release QA covers intake, specifications, tolerances, evidence, supplier capability, technical screening, material, pallet, logistics, physical sustainability, economics, recommendation, and immutable technical-assessment persistence.
-- Additive migration is tested from schema versions 1, 2, and 3 to schema version 4.
-- Update/delete rejection remains validated for all immutable record families.
-- Archived-project protection and cross-project isolation remain validated.
-- JSON and CSV-compatible normalization and Excel-template regressions remain validated.
-- `Approved`, `Rejected`, and `Conditional` are never generated automatically.
-
-## Governance
+## Mandatory Governance Boundaries
 - Engineering validation and explicit human approval remain mandatory.
 - Autonomous approval remains prohibited.
-- Evidence confidence is not probability of technical success.
-- Technical and evidence blockers override commercial, economic, material, logistics, and sustainability benefits.
-- Technical assessments are append-only, immutable, and project-scoped.
-- Historical records remain preserved.
-- PVE 1.2 is frozen as a governance-closed release after successful validation on `main`.
-- Deployment, pilot, activation, publication as production software, and production use remain separately unauthorized.
+- Approved-specification consumption prepares governed envelopes and authorization records; it does not autonomously execute or approve cost, scenario, risk, material, sourcing, recommendation, supplier-award, engineering, commercial, deployment, release, or production decisions.
+- Deployment, release, tagging, live organizational data, pilot, activation, production use, and production-readiness claims remain separately unauthorized.
+- Historical branches, records, recovery points, and evidence remain preserved until separate deletion authorization.
 
-## Current State
-PVE 1.2 is the latest stable governance-closed release on `main`. It is 100% complete at 74 of 74 planned hours, with 0 hours and 0% pending and 0 of 2 contingency hours used. PR #26 is squash-merged, and post-merge PVE CI #896 validated commit `8c5511e096b4526a85630e38ef939db371b307b1` with 300 tests, 0 failures, and 0 errors. PVE 1.3 has not started and must branch only from the final validated governance-closure state after this closure PR is merged and final `main` CI passes.
-
-## E1 Development Programme — Current Governed State
-
-### E1.7 — Governed Approved Specification Consumption Contract
-- Status: completed, verified, merge-committed into `e1-development`, and governance-closed.
-- Business purpose: prepare deterministic governed approved-specification consumption envelopes and immutable purpose-specific authorization records from the E1.6 approved-snapshot boundary.
-- Feature branch: `e1/governed-approved-specification-consumption` retained.
-- Final feature SHA: `b08bf9d92dcda173ce4ecd2f913e0d3f9f1b5940`.
-- Pull request: PR #68 merged and closed.
-- Merge method: merge commit.
-- Merge commit and final `e1-development` SHA: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
-- Scope statistics: 10 commits; 15 changed files; 2,907 additions; 0 deletions.
-- Validation: workflow run `30628727103`, job `91149911990`; 656 tests passed; 0 failures; 0 errors.
-- Retained evidence: artifact `8792456475`, SHA-256 `69635bdcf5125aed1e1e5e4c846cd31ccf8fad866daed4d2a5d702b3b62bd771`.
-- Frozen `main` remains unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
-- Claim boundary: E1.7 does not execute cost, scenario, risk, material, sourcing, recommendation, or award engines and does not approve a downstream business decision.
-- Next permitted stage: a separately authorized E1 release-candidate audit or later governed consumer slice; no promotion to `main` is implied by this closure.
-
-## E1 Release-Candidate Governance Baseline
-- Status: E1.1 through E1.7 completed; final E1 merge validated and technically qualified as the governed release candidate.
-- E1.7 implementation PR #68 and governance-closure PR #69 are merged and closed.
-- Governed E1 release-candidate baseline and recovery SHA: `45f795370a60654050b5dca1ff4789487b3f049e`.
-- The earlier SHA `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7` remains the E1.7 implementation merge record; it is superseded as the current E1 recovery baseline by `45f795370a60654050b5dca1ff4789487b3f049e`.
-- Exact-SHA validation: workflow run `30640190796`, job `91187867871`, success.
-- Focused report tests: 4 passed.
-- Full repository suite: 656 passed; 0 failures; 0 errors.
-- Retained evidence: artifact `8797098203`, SHA-256 `5697d07b0b4664810bbad29615e04892528aa232ff18353d1e00f611b023b384`.
-- Frozen `main` remains unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
-- RC qualification does not authorize promotion to `main`, deployment, release, tagging, production use, or another E1 development slice.
-- E1 does not autonomously execute or approve engineering, commercial, sourcing, supplier-award, deployment, release, or production decisions; human authorization and all established claim boundaries remain mandatory.
+## Showcase and Handoff Release
+- Programme status: Build 1 in progress on a separately governed development line.
+- Authorized total programme budget: 50 hours.
+- Build 1 budget: maximum 5 hours.
+- No deployment, release, tagging, or production authorization is implied by this programme.
