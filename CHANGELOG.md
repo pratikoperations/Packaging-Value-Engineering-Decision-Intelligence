@@ -1,5 +1,23 @@
 # Changelog
 
+## [e1-release-candidate-governance-baseline] — Frozen
+
+### Completed
+- E1.1 through E1.7 completed on the governed E1 development line.
+- E1.7 implementation PR #68 and governance-closure PR #69 merged and closed.
+- Final E1 merge SHA and governed release-candidate baseline: `45f795370a60654050b5dca1ff4789487b3f049e`.
+- The earlier SHA `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7` remains the E1.7 implementation merge lineage and is superseded as the current RC recovery point.
+- Exact-SHA validation run `30640190796`, job `91187867871`, succeeded.
+- Focused report tests: 4 passed.
+- Complete repository suite: 656 passed; 0 failures; 0 errors.
+- Artifact `8797098203`; SHA-256 `5697d07b0b4664810bbad29615e04892528aa232ff18353d1e00f611b023b384`.
+- `main` remained unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+
+### Governance Boundaries Preserved
+- RC freeze records qualification and recovery lineage only.
+- No promotion to `main`, deployment, release, tagging, production use, or another E1 development slice is authorized.
+- E1 non-execution, human-approval, non-autonomous-approval, non-deployment, and non-production boundaries remain mandatory.
+
 ## [e1.7-governed-approved-specification-consumption] — Governance Closed
 
 ### Added

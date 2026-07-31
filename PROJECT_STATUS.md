@@ -98,3 +98,16 @@ PVE 1.2 is the latest stable governance-closed release on `main`. It is 100% com
 - Frozen `main` remains unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
 - Claim boundary: E1.7 does not execute cost, scenario, risk, material, sourcing, recommendation, or award engines and does not approve a downstream business decision.
 - Next permitted stage: a separately authorized E1 release-candidate audit or later governed consumer slice; no promotion to `main` is implied by this closure.
+
+## E1 Release-Candidate Governance Baseline
+- Status: E1.1 through E1.7 completed; final E1 merge validated and technically qualified as the governed release candidate.
+- E1.7 implementation PR #68 and governance-closure PR #69 are merged and closed.
+- Governed E1 release-candidate baseline and recovery SHA: `45f795370a60654050b5dca1ff4789487b3f049e`.
+- The earlier SHA `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7` remains the E1.7 implementation merge record; it is superseded as the current E1 recovery baseline by `45f795370a60654050b5dca1ff4789487b3f049e`.
+- Exact-SHA validation: workflow run `30640190796`, job `91187867871`, success.
+- Focused report tests: 4 passed.
+- Full repository suite: 656 passed; 0 failures; 0 errors.
+- Retained evidence: artifact `8797098203`, SHA-256 `5697d07b0b4664810bbad29615e04892528aa232ff18353d1e00f611b023b384`.
+- Frozen `main` remains unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- RC qualification does not authorize promotion to `main`, deployment, release, tagging, production use, or another E1 development slice.
+- E1 does not autonomously execute or approve engineering, commercial, sourcing, supplier-award, deployment, release, or production decisions; human authorization and all established claim boundaries remain mandatory.
