@@ -193,6 +193,8 @@ def _task_page(path: Path) -> tuple[int, str] | None:
         return 65, "SourceMate"
     if "calculation_evidence" in stem:
         return 67, "Calculation Evidence"
+    if "decision_evidence_ledger" in stem:
+        return 68, "Decision Evidence Ledger"
     if "capabilities_and_limits" in stem:
         return 70, "Capabilities & Limits"
     return None
