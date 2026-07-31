@@ -102,3 +102,36 @@ No PVE 1.2, Power BI, PostgreSQL reporting integration, deployment, activation, 
 
 ## Final State
 PVE 1.1 is the current completed and governance-closed release on `main`. No new development build has started.
+
+## E1 Development Completion Record
+
+### E1.7 — Governed Approved Specification Consumption Contract
+- Version identity: `e1.7-governed-approved-specification-consumption`.
+- Status: completed, verified, merge-committed into `e1-development`, and governance-closed.
+- Business purpose: prepare governed approved-specification consumption envelopes and immutable purpose-specific authorization records.
+- Feature branch: `e1/governed-approved-specification-consumption` retained.
+- Final feature SHA: `b08bf9d92dcda173ce4ecd2f913e0d3f9f1b5940`.
+- Pull request: PR #68 merged and closed.
+- Merge method: merge commit.
+- Merge commit and final `e1-development` SHA: `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7`.
+- Scope: 10 commits; 15 changed files; 2,907 additions; 0 deletions.
+- Validation: workflow run `30628727103`, job `91149911990`; 656 tests passed; 0 failures; 0 errors.
+- Artifact: `8792456475`; SHA-256 `69635bdcf5125aed1e1e5e4c846cd31ccf8fad866daed4d2a5d702b3b62bd771`.
+- Frozen `main`: unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- Claim boundary: no cost, scenario, risk, material, sourcing, recommendation, or award engine executed and no downstream business decision was approved.
+- Promotion, release-candidate status, deployment, release, and tagging remain separately unauthorized.
+
+## E1 Release-Candidate Version Record
+- Version identity: `e1-release-candidate-governance-baseline`.
+- Status: E1.1 through E1.7 completed; final E1 merge exact-SHA validated and technically qualified as the governed release candidate.
+- E1.7 implementation PR #68 and governance-closure PR #69 are merged and closed.
+- Governed RC baseline and recovery SHA: `45f795370a60654050b5dca1ff4789487b3f049e`.
+- The earlier SHA `16fe5f755546f99c59bdb67f2e1d0abf2a7908e7` remains the E1.7 implementation merge record and is not the current RC recovery baseline.
+- Exact-SHA validation run: `30640190796`.
+- Validation job: `91187867871`.
+- Focused report tests: 4 passed.
+- Complete repository suite: 656 passed; 0 failures; 0 errors.
+- Artifact: `8797098203`; SHA-256 `5697d07b0b4664810bbad29615e04892528aa232ff18353d1e00f611b023b384`.
+- Frozen `main`: unchanged at `300054cceb255e8e1273e8012a3ba0c0a236556d`.
+- RC status does not authorize promotion to `main`, deployment, release, tagging, production use, or another E1 development slice.
+- E1 non-execution, human-approval, non-autonomous-approval, non-deployment, and non-production boundaries remain mandatory.
