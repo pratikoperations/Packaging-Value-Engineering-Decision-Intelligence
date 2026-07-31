@@ -189,6 +189,10 @@ def _task_page(path: Path) -> tuple[int, str] | None:
         return 50, "Scenario Analysis"
     if "decision_history" in stem:
         return 60, "Decision Records"
+    if "sourcemate" in stem:
+        return 65, "SourceMate"
+    if "calculation_evidence" in stem:
+        return 67, "Calculation Evidence"
     if "capabilities_and_limits" in stem:
         return 70, "Capabilities & Limits"
     return None
