@@ -35,6 +35,7 @@ EXCEPTION_TEXT = (
     "Traceback (most recent call last)",
 )
 ASSUMPTION_LABEL = re.compile(r"^[A-Za-z0-9_-]+ assumptions$", re.IGNORECASE)
+CALCULATION_EVIDENCE_LABEL = re.compile(r"^Calculation Evidence(?:\s|$)", re.IGNORECASE)
 DIRECT_TITLES = ("Home", "Showcase & Handoff", "Capabilities & Limits")
 HOME_HEADING = "Packaging Value Engineering Decision Intelligence"
 
@@ -78,6 +79,28 @@ def _wait_for_first_visible(
             except PlaywrightTimeoutError as exc:
                 last_error = exc
     raise AssertionError("Expected at least one visible matching element within timeout.") from last_error
+
+
+def _wait_for_visible_calculation_evidence(page: Page) -> Locator:
+    """Resolve the rendered Calculation Evidence component without selecting hidden duplicates."""
+    candidates = (
+        page.get_by_role("button", name=CALCULATION_EVIDENCE_LABEL),
+        page.get_by_role("heading", name=CALCULATION_EVIDENCE_LABEL),
+        page.get_by_text(CALCULATION_EVIDENCE_LABEL, exact=True),
+    )
+    deadline = time.monotonic() + PAGE_TIMEOUT_MILLISECONDS / 1000
+    last_error: Exception | None = None
+    while time.monotonic() < deadline:
+        for locator in candidates:
+            visible = _visible_candidates(locator)
+            if visible:
+                return visible[0]
+        remaining = max(1, int((deadline - time.monotonic()) * 1000))
+        try:
+            candidates[-1].first.wait_for(state="attached", timeout=min(250, remaining))
+        except PlaywrightTimeoutError as exc:
+            last_error = exc
+    raise AssertionError("No visible Calculation Evidence component was rendered.") from last_error
 
 
 def _app_ready(page: Page, *, require_home_heading: bool = False) -> None:
@@ -144,12 +167,6 @@ def _ensure_group_expanded(page: Page, group: str, expected_link: str, *, physic
     else:
         control.evaluate("element => element.click()")
     _wait_for_first_visible(links)
-
-
-def _expand_all_groups(page: Page) -> None:
-    _open_sidebar_if_needed(page)
-    for group, titles in SIDEBAR_GROUPS.items():
-        _ensure_group_expanded(page, group, titles[0])
 
 
 def _sidebar_metrics(page: Page) -> dict[str, int | None]:
@@ -252,18 +269,37 @@ def _download_and_validate(page: Page, artifacts: Path) -> dict[str, str]:
     return {"json": str(json_path), "markdown": str(markdown_path)}
 
 
-def _collect_route_inventory(page: Page, base_url: str) -> dict[str, str]:
-    _goto_home(page, base_url)
-    _expand_all_groups(page)
-    routes: dict[str, str] = {"Home": base_url.rstrip("/")}
-    for title, _heading, _group in PAGE_CONTRACTS:
-        if title == "Home":
-            continue
+def _resolved_link(page: Page, base_url: str, title: str, *, group: str | None) -> str:
+    try:
         link = _wait_for_first_visible(page.get_by_role("link", name=title, exact=True))
         href = link.get_attribute("href")
         if not href:
-            raise AssertionError(f"Registered page {title} has no href.")
-        routes[title] = urljoin(base_url, href).rstrip("/")
+            raise AssertionError("link has no href")
+        return urljoin(base_url, href).rstrip("/")
+    except Exception as exc:
+        location = f"sidebar group {group!r}" if group else "direct routes"
+        raise AssertionError(f"Failed collecting route {title!r} from {location}: {exc}") from exc
+
+
+def _collect_group_routes(page: Page, base_url: str, group: str, titles: tuple[str, ...]) -> dict[str, str]:
+    if not titles:
+        return {}
+    try:
+        _ensure_group_expanded(page, group, titles[0])
+    except Exception as exc:
+        raise AssertionError(f"Failed opening sidebar group {group!r}: {exc}") from exc
+    return {title: _resolved_link(page, base_url, title, group=group) for title in titles}
+
+
+def _collect_route_inventory(page: Page, base_url: str) -> dict[str, str]:
+    _goto_home(page, base_url)
+    _open_sidebar_if_needed(page)
+    routes: dict[str, str] = {"Home": base_url.rstrip("/")}
+    for title in DIRECT_TITLES:
+        if title != "Home":
+            routes[title] = _resolved_link(page, base_url, title, group=None)
+    for group, titles in SIDEBAR_GROUPS.items():
+        routes.update(_collect_group_routes(page, base_url, group, titles))
     _validate_route_inventory(routes)
     return routes
 
@@ -325,7 +361,10 @@ def _group_desktop_inputs_and_exports(
     page.get_by_role("heading", name="Scenario Comparison", exact=True).wait_for()
     page.get_by_role("heading", name="Preferred Alternative", exact=True).wait_for()
     page.get_by_role("heading", name="Explainable Recommendation Detail", exact=True).wait_for()
-    page.get_by_text("Calculation Evidence", exact=False).first.wait_for()
+    evidence = _wait_for_visible_calculation_evidence(page)
+    result["actions"].append(
+        _action_state(page, "desktop_inputs_and_exports", "Calculation Evidence", evidence)
+    )
     result["downloads"] = _download_and_validate(page, artifacts)
     result["sidebar_adjustments_exercised"] = True
 
@@ -352,24 +391,32 @@ def _group_sidebar_group_inventory(
     page: Page, base_url: str, artifacts: Path, result: dict[str, Any]
 ) -> None:
     _goto_home(page, base_url)
-    _expand_all_groups(page)
+    _open_sidebar_if_needed(page)
     groups: dict[str, list[str]] = {}
     for group, expected in SIDEBAR_GROUPS.items():
-        visible: list[str] = []
-        for title in expected:
-            _wait_for_first_visible(page.get_by_role("link", name=title, exact=True))
-            visible.append(title)
-        groups[group] = visible
+        try:
+            _ensure_group_expanded(page, group, expected[0])
+            visible: list[str] = []
+            for title in expected:
+                _wait_for_first_visible(page.get_by_role("link", name=title, exact=True))
+                visible.append(title)
+            groups[group] = visible
+        except Exception as exc:
+            raise AssertionError(f"Sidebar group inventory failed for {group!r}: {exc}") from exc
     result["sidebar_groups"] = groups
 
 
-def _physical_click(page: Page, base_url: str, group: str, title: str | None) -> None:
+def _click_direct_link(page: Page, title: str) -> None:
     _open_sidebar_if_needed(page)
-    if group:
-        assert title is not None
-        _ensure_group_expanded(page, group, title, physical=True)
-    target = title if title is not None else group
-    link = _wait_for_first_visible(page.get_by_role("link", name=target, exact=True))
+    link = _wait_for_first_visible(page.get_by_role("link", name=title, exact=True))
+    _scroll_and_click(link)
+    _app_ready(page)
+
+
+def _click_grouped_link(page: Page, group: str, title: str) -> None:
+    _open_sidebar_if_needed(page)
+    _ensure_group_expanded(page, group, title, physical=True)
+    link = _wait_for_first_visible(page.get_by_role("link", name=title, exact=True))
     _scroll_and_click(link)
     _app_ready(page)
 
@@ -380,9 +427,9 @@ def _group_narrow_responsive_smoke(
     _goto_home(page, base_url)
     _select_second_governed_scenario(page)
     result["downloads"] = _download_and_validate(page, artifacts)
-    _physical_click(page, base_url, "Showcase & Handoff", None)
+    _click_direct_link(page, "Showcase & Handoff")
     _goto_home(page, base_url)
-    _physical_click(page, base_url, "Workspace", "Project Dashboard")
+    _click_grouped_link(page, "Workspace", "Project Dashboard")
     _goto_home(page, base_url)
     result["representative_clicks"] = ["Showcase & Handoff", "Project Dashboard", "Home"]
     result["sidebar_adjustments_exercised"] = False
