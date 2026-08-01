@@ -175,6 +175,8 @@ def render_home() -> None:
 
 def _task_page(path: Path) -> tuple[int, str] | None:
     stem = path.stem.lower()
+    if "showcase_handoff" in stem:
+        return 5, "Showcase & Handoff"
     if "project_dashboard" in stem:
         return 10, "Project Dashboard"
     if "guided_workflow" in stem:
