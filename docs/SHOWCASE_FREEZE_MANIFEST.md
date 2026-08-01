@@ -12,7 +12,8 @@ Build 6 is the final authorized showcase build. This manifest records the accept
 - Final integration branch: `showcase-handoff-development`
 - Candidate feature branch: `showcase/build-6-final-hardening-freeze`
 - Required Build 6 base SHA: `ac42a215e5a35697e8c9f0bc14eb75c3120fc0e5`
-- Accepted feature head SHA: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
+- Accepted feature head SHA before evidence closure: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
+- Evidence-closure head SHA: `PENDING FINAL EXACT-HEAD CI`
 - Final integration SHA: `PENDING MERGE`
 - Hosted preview: `https://packaging-value-engineering-decision-intelligence-build6.streamlit.app`
 
@@ -52,13 +53,17 @@ All 13 pages remain registered exactly once. No page was merged, deleted, rename
 ## Automated evidence
 
 - Validated baseline before Build 6: `730 tests`
-- Accepted exact-head test count: `746`
-- Exact-head workflow run: `30687748523`
-- Exact-head validation job: `91336808643`
-- Exact-head artifact ID: `8814551912`
-- Exact-head artifact SHA-256: `75abff464dc40b039baea31348cfb00bcadd931ae0525099e5463af4eed83096`
+- Accepted pre-closure exact-head test count: `746`
+- Pre-closure workflow run: `30687748523`
+- Pre-closure validation job: `91336808643`
+- Pre-closure artifact ID: `8814551912`
+- Pre-closure artifact SHA-256: `75abff464dc40b039baea31348cfb00bcadd931ae0525099e5463af4eed83096`
 - Failures: `0`
 - Errors: `0`
+- Evidence-closure exact-head workflow run: `PENDING`
+- Evidence-closure validation job: `PENDING`
+- Evidence-closure artifact ID: `PENDING`
+- Evidence-closure artifact SHA-256: `PENDING`
 - Post-merge workflow run: `PENDING`
 - Post-merge validation job: `PENDING`
 - Post-merge artifact ID: `PENDING`
@@ -73,7 +78,7 @@ All 13 pages remain registered exactly once. No page was merged, deleted, rename
 - Controlled page-link correction: `PASSED`
 - Markdown journey export: `PASSED`
 - JSON journey export: `PASSED`
-- Exact hosted feature commit: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
+- Accepted hosted application SHA before evidence closure: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
 - Preview startup: repository, feature branch, `app.py`, Python 3.12.13, and Streamlit 1.60.0 verified
 
 ## Frozen capabilities
@@ -137,4 +142,4 @@ A separate production programme would require real governed data, authenticated 
 
 ## Final declaration
 
-`PRE-MERGE ACCEPTANCE PASSED — FINAL FREEZE PENDING EXACT MERGE SHA, POST-MERGE CI, ARTIFACT, AND HOSTED REVALIDATION`
+`PRE-MERGE ACCEPTANCE PASSED — FINAL FREEZE PENDING EVIDENCE-CLOSURE CI, EXACT MERGE SHA, POST-MERGE CI, ARTIFACT, AND HOSTED REVALIDATION`
