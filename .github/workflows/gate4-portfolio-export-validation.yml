@@ -1,0 +1,68 @@
+name: Gate 4 Portfolio Export Validation
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-export-pack:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out selected ref
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install declared dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Verify workflow-dispatch SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          expected="${GITHUB_SHA}"
+          test "$actual" = "$expected" || {
+            echo "Expected workflow-dispatch SHA $expected but checked out $actual"
+            exit 1
+          }
+          echo "Validated SHA: $actual"
+
+      - name: Generate and validate governed export packs
+        run: PYTHONPATH=. python tools/validate_portfolio_export.py
+
+      - name: Verify repository remains unchanged
+        shell: bash
+        run: |
+          set -euo pipefail
+          git status --short
+          test -z "$(git status --short --untracked-files=no)" || {
+            echo "Tracked repository files changed during validation"
+            exit 1
+          }
+
+      - name: Upload governed export pack
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate4-governed-portfolio-export
+          path: validation-output/gate4/export-a
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Upload validation report
+        uses: actions/upload-artifact@v4
+        with:
+          name: gate4-portfolio-export-validation-report
+          path: |
+            validation-output/gate4/validation-report.json
+            validation-output/gate4/byte-comparison.txt
+            validation-output/gate4/export-a/export_manifest.json
+          if-no-files-found: error
+          retention-days: 30
