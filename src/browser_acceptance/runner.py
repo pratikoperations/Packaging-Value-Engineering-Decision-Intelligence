@@ -7,15 +7,22 @@ import re
 import sys
 import time
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
+from urllib.parse import urljoin, urlparse
 
 from playwright.sync_api import Locator, Page, sync_playwright
 
 from .contracts import (
     ACTION_TIMEOUT_MILLISECONDS,
+    APP_ROOT_SELECTOR,
+    BROWSER_TEST_GROUPS,
+    DIAGNOSTIC_FIELDS,
+    MATRIX_REQUIRED_KEYS,
     PAGE_CONTRACTS,
     PAGE_TIMEOUT_MILLISECONDS,
     SIDEBAR_GROUPS,
+    SIDEBAR_SELECTOR,
+    VIEWPORT_RESPONSIBILITIES,
     VIEWPORTS,
 )
 from .diagnostics import RuntimeDiagnostics
@@ -28,21 +35,11 @@ EXCEPTION_TEXT = (
     "Traceback (most recent call last)",
 )
 ASSUMPTION_LABEL = re.compile(r"^[A-Za-z0-9_-]+ assumptions$", re.IGNORECASE)
-
-
-def _assert_no_visible_exception(page: Page) -> None:
-    body = page.locator("body").inner_text()
-    found = [text for text in EXCEPTION_TEXT if text in body]
-    if found:
-        raise AssertionError(f"Visible Streamlit exception markers: {found}")
+DIRECT_TITLES = ("Home", "Showcase & Handoff", "Capabilities & Limits")
 
 
 def _visible_candidates(locator: Locator) -> list[Locator]:
-    return [
-        locator.nth(index)
-        for index in range(locator.count())
-        if locator.nth(index).is_visible()
-    ]
+    return [locator.nth(index) for index in range(locator.count()) if locator.nth(index).is_visible()]
 
 
 def _first_visible(locator: Locator) -> Locator:
@@ -52,76 +49,126 @@ def _first_visible(locator: Locator) -> Locator:
     return visible[0]
 
 
+def _app_ready(page: Page) -> None:
+    root = page.locator(APP_ROOT_SELECTOR)
+    root.wait_for(state="visible")
+    text = root.inner_text().strip()
+    headings = _visible_candidates(root.get_by_role("heading"))
+    if not headings and len(text) < 20:
+        raise AssertionError("Streamlit application root rendered without substantial visible content.")
+    _assert_no_visible_exception(page)
+
+
+def _assert_no_visible_exception(page: Page) -> None:
+    body = page.locator("body").inner_text()
+    found = [text for text in EXCEPTION_TEXT if text in body]
+    if found:
+        raise AssertionError(f"Visible Streamlit exception markers: {found}")
+
+
 def _open_sidebar_if_needed(page: Page) -> None:
     home_links = page.get_by_role("link", name="Home", exact=True)
     if _visible_candidates(home_links):
         return
-    sidebar_buttons = page.get_by_role(
-        "button", name=re.compile("sidebar", re.IGNORECASE)
-    )
-    _first_visible(sidebar_buttons).click()
-    _first_visible(page.get_by_role("link", name="Home", exact=True)).wait_for()
+    buttons = page.get_by_role("button", name=re.compile("sidebar", re.IGNORECASE))
+    button = _first_visible(buttons)
+    button.click()
+    _first_visible(home_links).wait_for()
 
 
-def _ensure_group_expanded(page: Page, group: str, expected_link: str) -> None:
+def _scroll_and_click(locator: Locator) -> None:
+    locator.evaluate("element => element.scrollIntoView({block: 'center', inline: 'nearest'})")
+    locator.click()
+
+
+def _ensure_group_expanded(page: Page, group: str, expected_link: str, *, physical: bool = False) -> None:
     _open_sidebar_if_needed(page)
-    target_links = page.get_by_role("link", name=expected_link, exact=True)
-    if _visible_candidates(target_links):
+    links = page.get_by_role("link", name=expected_link, exact=True)
+    if _visible_candidates(links):
         return
-    group_control = _first_visible(page.get_by_text(group, exact=True))
-    group_control.click()
-    _first_visible(
-        page.get_by_role("link", name=expected_link, exact=True)
-    ).wait_for()
+    control = _first_visible(page.get_by_text(group, exact=True))
+    if physical:
+        _scroll_and_click(control)
+    else:
+        control.evaluate("element => element.click()")
+    _first_visible(links).wait_for()
 
 
-def _ensure_assumptions_expanded(page: Page) -> None:
+def _expand_all_groups(page: Page) -> None:
     _open_sidebar_if_needed(page)
-    cost_inputs = page.get_by_role(
-        "spinbutton", name="Unit-cost adjustment (%)", exact=True
+    for group, titles in SIDEBAR_GROUPS.items():
+        _ensure_group_expanded(page, group, titles[0])
+
+
+def _sidebar_metrics(page: Page) -> dict[str, int | None]:
+    sidebar = page.locator(SIDEBAR_SELECTOR)
+    if not sidebar.count():
+        return {"sidebar_scroll_top": None, "sidebar_scroll_height": None}
+    values = sidebar.first.evaluate(
+        "element => ({scrollTop: element.scrollTop, scrollHeight: element.scrollHeight})"
     )
-    if _visible_candidates(cost_inputs):
-        return
-    assumptions = page.get_by_text(ASSUMPTION_LABEL, exact=True)
-    _first_visible(assumptions).click()
-    _first_visible(
-        page.get_by_role("spinbutton", name="Unit-cost adjustment (%)", exact=True)
+    return {
+        "sidebar_scroll_top": int(values.get("scrollTop", 0)),
+        "sidebar_scroll_height": int(values.get("scrollHeight", 0)),
+    }
+
+
+def _action_state(
+    page: Page,
+    test_group: str,
+    target_title: str,
+    locator: Locator | None = None,
+    target_href: str | None = None,
+) -> dict[str, Any]:
+    visible = False
+    bounding_box = None
+    outer_html = None
+    if locator is not None and locator.count():
+        candidate = locator.first
+        visible = candidate.is_visible()
+        bounding_box = candidate.bounding_box()
+        try:
+            outer_html = candidate.evaluate("element => element.outerHTML")
+        except Exception:
+            outer_html = None
+    state = {
+        "test_group": test_group,
+        "current_url": page.url,
+        "target_title": target_title,
+        "target_href": target_href,
+        "visible": visible,
+        "bounding_box": bounding_box,
+        "viewport": page.viewport_size,
+        "target_outer_html": outer_html,
+        **_sidebar_metrics(page),
+    }
+    missing = [field for field in DIAGNOSTIC_FIELDS if field not in state]
+    if missing:
+        raise AssertionError(f"Action diagnostics missing fields: {missing}")
+    return state
+
+
+def _failure_snapshot(page: Page, artifacts: Path, group: str, error: Exception) -> dict[str, Any]:
+    artifacts.mkdir(parents=True, exist_ok=True)
+    screenshot = artifacts / f"failure-{group}.png"
+    page.screenshot(path=str(screenshot), full_page=True)
+    return {
+        "error": f"{type(error).__name__}: {error}",
+        "current_url": page.url,
+        "visible_headings": [item.inner_text() for item in _visible_candidates(page.get_by_role("heading"))],
+        "visible_links": [item.inner_text() for item in _visible_candidates(page.get_by_role("link"))],
+        "viewport": page.viewport_size,
+        "screenshot": str(screenshot),
+        **_sidebar_metrics(page),
+    }
+
+
+def _goto_home(page: Page, base_url: str) -> None:
+    page.goto(base_url, wait_until="domcontentloaded")
+    _app_ready(page)
+    page.get_by_role(
+        "heading", name="Packaging Value Engineering Decision Intelligence", exact=True
     ).wait_for()
-
-
-def _click_page(page: Page, title: str, group: str | None) -> None:
-    _open_sidebar_if_needed(page)
-    if group:
-        _ensure_group_expanded(page, group, title)
-    link = _first_visible(page.get_by_role("link", name=title, exact=True))
-    previous_url = page.url
-    link.click()
-    main = page.locator("main")
-    main.wait_for(state="visible")
-    main.get_by_role("heading").first.wait_for(state="visible")
-    if title != "Home" and page.url == previous_url:
-        raise AssertionError(f"Navigation to {title} did not change the page URL.")
-    _assert_no_visible_exception(page)
-
-
-def _download_and_validate(page: Page, artifacts: Path) -> dict[str, str]:
-    downloads = artifacts / "downloads"
-    downloads.mkdir(parents=True, exist_ok=True)
-    with page.expect_download(timeout=15_000) as info:
-        page.get_by_role(
-            "button", name="Download machine-readable JSON", exact=True
-        ).click()
-    json_path = downloads / "pve_decision_package.json"
-    info.value.save_as(json_path)
-    validate_json_download(json_path)
-    with page.expect_download(timeout=15_000) as info:
-        page.get_by_role(
-            "button", name="Download human-readable report", exact=True
-        ).click()
-    markdown_path = downloads / "pve_decision_report.md"
-    info.value.save_as(markdown_path)
-    validate_markdown_download(markdown_path)
-    return {"json": str(json_path), "markdown": str(markdown_path)}
 
 
 def _select_second_governed_scenario(page: Page) -> None:
@@ -135,64 +182,209 @@ def _select_second_governed_scenario(page: Page) -> None:
     options = page.get_by_role("option")
     options.first.wait_for()
     if options.count() < 2:
-        raise AssertionError(
-            "Expected at least two governed synthetic scenario options."
-        )
+        raise AssertionError("Expected at least two governed synthetic scenario options.")
     options.nth(1).click()
+    _app_ready(page)
 
 
-def _home_journey(
-    page: Page,
-    artifacts: Path,
-    *,
-    exercise_sidebar_adjustments: bool,
-) -> dict[str, Any]:
-    page.get_by_role(
-        "heading",
-        name="Packaging Value Engineering Decision Intelligence",
-        exact=True,
-    ).wait_for()
-    body = page.locator("body").inner_text()
+def _download_and_validate(page: Page, artifacts: Path) -> dict[str, str]:
+    downloads = artifacts / "downloads"
+    downloads.mkdir(parents=True, exist_ok=True)
+    with page.expect_download(timeout=15_000) as info:
+        page.get_by_role("button", name="Download machine-readable JSON", exact=True).click()
+    json_path = downloads / "pve_decision_package.json"
+    info.value.save_as(json_path)
+    validate_json_download(json_path)
+    with page.expect_download(timeout=15_000) as info:
+        page.get_by_role("button", name="Download human-readable report", exact=True).click()
+    markdown_path = downloads / "pve_decision_report.md"
+    info.value.save_as(markdown_path)
+    validate_markdown_download(markdown_path)
+    return {"json": str(json_path), "markdown": str(markdown_path)}
+
+
+def _collect_route_inventory(page: Page, base_url: str) -> dict[str, str]:
+    _goto_home(page, base_url)
+    _expand_all_groups(page)
+    routes: dict[str, str] = {}
+    for title, _heading, _group in PAGE_CONTRACTS:
+        link = _first_visible(page.get_by_role("link", name=title, exact=True))
+        href = link.get_attribute("href")
+        if not href:
+            raise AssertionError(f"Registered page {title} has no href.")
+        routes[title] = urljoin(base_url, href)
+    _validate_route_inventory(routes)
+    return routes
+
+
+def _validate_route_inventory(routes: dict[str, str]) -> None:
+    expected = {title for title, _heading, _group in PAGE_CONTRACTS}
+    if set(routes) != expected:
+        raise AssertionError(f"Route inventory titles mismatch: {sorted(routes)}")
+    if len(routes) != 13 or len(set(routes.values())) != 13:
+        raise AssertionError("Expected 13 unique registered href destinations.")
+    for title, href in routes.items():
+        parsed = urlparse(href)
+        if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+            raise AssertionError(f"Route {title} has invalid href: {href}")
+
+
+def _group_startup_and_home(page: Page, base_url: str, artifacts: Path, result: dict[str, Any]) -> None:
+    _goto_home(page, base_url)
+    body = page.locator(APP_ROOT_SELECTOR).inner_text()
     if body.lower().count("synthetic") < 2:
         raise AssertionError("Required synthetic disclosures are not visible.")
-
     _select_second_governed_scenario(page)
+    result["scenario_selected"] = True
 
-    if exercise_sidebar_adjustments:
-        _open_sidebar_if_needed(page)
-        annual_volume = _first_visible(
-            page.get_by_role(
-                "spinbutton", name="Annual volume (cases)", exact=True
-            )
-        )
-        annual_volume.fill("1010000")
-        annual_volume.press("Enter")
 
-        _ensure_assumptions_expanded(page)
-        cost_adjustment = _first_visible(
-            page.get_by_role(
-                "spinbutton", name="Unit-cost adjustment (%)", exact=True
-            )
-        )
-        cost_adjustment.fill("1")
-        cost_adjustment.press("Enter")
+def _ensure_assumptions_expanded(page: Page) -> None:
+    _open_sidebar_if_needed(page)
+    cost_inputs = page.get_by_role("spinbutton", name="Unit-cost adjustment (%)", exact=True)
+    if _visible_candidates(cost_inputs):
+        return
+    control = _first_visible(page.get_by_text(ASSUMPTION_LABEL, exact=True))
+    _scroll_and_click(control)
+    _first_visible(cost_inputs).wait_for()
 
-        _ensure_assumptions_expanded(page)
-        material_adjustment = _first_visible(
-            page.get_by_role(
-                "spinbutton", name="Material-weight adjustment (%)", exact=True
-            )
-        )
-        material_adjustment.fill("-1")
-        material_adjustment.press("Enter")
 
+def _group_desktop_inputs_and_exports(
+    page: Page, base_url: str, artifacts: Path, result: dict[str, Any]
+) -> None:
+    _goto_home(page, base_url)
+    _select_second_governed_scenario(page)
+    _open_sidebar_if_needed(page)
+    annual = _first_visible(page.get_by_role("spinbutton", name="Annual volume (cases)", exact=True))
+    annual.fill("1010000")
+    annual.press("Enter")
+    _ensure_assumptions_expanded(page)
+    cost = _first_visible(page.get_by_role("spinbutton", name="Unit-cost adjustment (%)", exact=True))
+    cost.fill("1")
+    cost.press("Enter")
+    _ensure_assumptions_expanded(page)
+    material = _first_visible(
+        page.get_by_role("spinbutton", name="Material-weight adjustment (%)", exact=True)
+    )
+    material.fill("-1")
+    material.press("Enter")
     page.get_by_role("heading", name="Scenario Comparison", exact=True).wait_for()
     page.get_by_role("heading", name="Preferred Alternative", exact=True).wait_for()
-    page.get_by_role(
-        "heading", name="Explainable Recommendation Detail", exact=True
-    ).wait_for()
+    page.get_by_role("heading", name="Explainable Recommendation Detail", exact=True).wait_for()
+    page.get_by_text("Calculation Evidence", exact=False).first.wait_for()
+    result["downloads"] = _download_and_validate(page, artifacts)
+    result["sidebar_adjustments_exercised"] = True
+
+
+def _group_route_inventory(page: Page, base_url: str, artifacts: Path, result: dict[str, Any]) -> None:
+    routes = _collect_route_inventory(page, base_url)
+    checked: dict[str, dict[str, Any]] = {}
+    for title, href in routes.items():
+        result["actions"].append(_action_state(page, "route_inventory", title, target_href=href))
+        page.goto(href, wait_until="domcontentloaded")
+        _app_ready(page)
+        if page.url.rstrip("/") != href.rstrip("/"):
+            raise AssertionError(f"Route {title} resolved to unexpected URL {page.url}; expected {href}")
+        checked[title] = {
+            "href": href,
+            "visible_headings": [
+                item.inner_text() for item in _visible_candidates(page.get_by_role("heading"))
+            ],
+        }
+    result["route_inventory"] = checked
+
+
+def _group_sidebar_group_inventory(
+    page: Page, base_url: str, artifacts: Path, result: dict[str, Any]
+) -> None:
+    _goto_home(page, base_url)
+    _expand_all_groups(page)
+    groups: dict[str, list[str]] = {}
+    for group, expected in SIDEBAR_GROUPS.items():
+        visible = [
+            title
+            for title in expected
+            if _visible_candidates(page.get_by_role("link", name=title, exact=True))
+        ]
+        if tuple(visible) != tuple(expected):
+            raise AssertionError(f"Sidebar group {group} mismatch: {visible}")
+        groups[group] = visible
+    result["sidebar_groups"] = groups
+
+
+def _physical_click(page: Page, base_url: str, group: str, title: str | None) -> None:
+    _open_sidebar_if_needed(page)
+    if group:
+        assert title is not None
+        _ensure_group_expanded(page, group, title, physical=True)
+    target = title if title is not None else group
+    link = _first_visible(page.get_by_role("link", name=target, exact=True))
+    _scroll_and_click(link)
+    _app_ready(page)
+
+
+def _group_narrow_responsive_smoke(
+    page: Page, base_url: str, artifacts: Path, result: dict[str, Any]
+) -> None:
+    _goto_home(page, base_url)
+    _select_second_governed_scenario(page)
+    result["downloads"] = _download_and_validate(page, artifacts)
+    _physical_click(page, base_url, "Showcase & Handoff", None)
+    _goto_home(page, base_url)
+    _physical_click(page, base_url, "Workspace", "Project Dashboard")
+    _goto_home(page, base_url)
+    result["representative_clicks"] = ["Showcase & Handoff", "Project Dashboard", "Home"]
+    result["sidebar_adjustments_exercised"] = False
+
+
+def _group_runtime_diagnostics(
+    page: Page, base_url: str, artifacts: Path, result: dict[str, Any]
+) -> None:
+    _goto_home(page, base_url)
+    _select_second_governed_scenario(page)
     _assert_no_visible_exception(page)
-    return _download_and_validate(page, artifacts)
+    result["visible_exception_markers"] = []
+
+
+GROUP_FUNCTIONS: dict[str, Callable[[Page, str, Path, dict[str, Any]], None]] = {
+    "startup_and_home": _group_startup_and_home,
+    "desktop_inputs_and_exports": _group_desktop_inputs_and_exports,
+    "route_inventory": _group_route_inventory,
+    "sidebar_group_inventory": _group_sidebar_group_inventory,
+    "narrow_responsive_smoke": _group_narrow_responsive_smoke,
+    "runtime_diagnostics": _group_runtime_diagnostics,
+}
+
+
+def _run_group(
+    browser: Any,
+    base_url: str,
+    artifacts: Path,
+    viewport_name: str,
+    viewport: dict[str, int],
+    group: str,
+) -> dict[str, Any]:
+    if group not in VIEWPORT_RESPONSIBILITIES[viewport_name]:
+        return {"status": "skipped", "reason": f"Not assigned to {viewport_name}"}
+    group_artifacts = artifacts / viewport_name / group
+    group_artifacts.mkdir(parents=True, exist_ok=True)
+    diagnostics = RuntimeDiagnostics()
+    context = browser.new_context(viewport=viewport, accept_downloads=True)
+    page = context.new_page()
+    page.set_default_timeout(ACTION_TIMEOUT_MILLISECONDS)
+    page.set_default_navigation_timeout(PAGE_TIMEOUT_MILLISECONDS)
+    diagnostics.attach(page)
+    result: dict[str, Any] = {"status": "running", "actions": []}
+    try:
+        GROUP_FUNCTIONS[group](page, base_url, group_artifacts, result)
+        diagnostics.assert_clean()
+        result["status"] = "passed"
+    except Exception as exc:
+        result["status"] = "failed"
+        result["failure"] = _failure_snapshot(page, group_artifacts, group, exc)
+    finally:
+        result["runtime_events"] = diagnostics.canonical()
+        context.close()
+    return result
 
 
 def _run_viewport(
@@ -201,67 +393,31 @@ def _run_viewport(
     viewport_name: str,
     viewport: dict[str, int],
 ) -> dict[str, Any]:
-    diagnostics = RuntimeDiagnostics()
-    result: dict[str, Any] = {
+    matrix: dict[str, Any] = {
+        "status": "running",
         "viewport": viewport_name,
-        "pages": [],
         "groups": {},
-        "sidebar_adjustments": viewport_name == "desktop",
+        "route_inventory": {},
+        "runtime_events": {},
     }
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(headless=True)
-        context = browser.new_context(viewport=viewport, accept_downloads=True)
-        page = context.new_page()
-        page.set_default_timeout(ACTION_TIMEOUT_MILLISECONDS)
-        page.set_default_navigation_timeout(PAGE_TIMEOUT_MILLISECONDS)
-        diagnostics.attach(page)
-        page.goto(base_url, wait_until="domcontentloaded")
-        page.get_by_role(
-            "heading",
-            name="Packaging Value Engineering Decision Intelligence",
-            exact=True,
-        ).wait_for()
-
-        result["downloads"] = _home_journey(
-            page,
-            artifacts / viewport_name,
-            exercise_sidebar_adjustments=viewport_name == "desktop",
-        )
-
-        for title, _heading, group in PAGE_CONTRACTS:
-            if title != "Home":
-                _click_page(page, title, group)
-            result["pages"].append(title)
-            if title != "Home":
-                _click_page(page, "Home", None)
-
-        for group, expected in SIDEBAR_GROUPS.items():
-            _ensure_group_expanded(page, group, expected[0])
-            visible = [
-                title
-                for title in expected
-                if _visible_candidates(
-                    page.get_by_role("link", name=title, exact=True)
-                )
-            ]
-            if tuple(visible) != tuple(expected):
-                raise AssertionError(
-                    f"Sidebar group {group} mismatch: {visible}"
-                )
-            result["groups"][group] = visible
-
-        screenshot_dir = artifacts / "screenshots"
-        screenshot_dir.mkdir(parents=True, exist_ok=True)
-        page.screenshot(
-            path=str(screenshot_dir / f"{viewport_name}-home.png"),
-            full_page=True,
-        )
-        _assert_no_visible_exception(page)
-        diagnostics.assert_clean()
-        result["runtime_events"] = diagnostics.canonical()
-        context.close()
+        for group in BROWSER_TEST_GROUPS:
+            outcome = _run_group(browser, base_url, artifacts, viewport_name, viewport, group)
+            matrix["groups"][group] = outcome
+            if group == "route_inventory" and outcome.get("status") == "passed":
+                matrix["route_inventory"] = outcome.get("route_inventory", {})
+            matrix["runtime_events"][group] = outcome.get("runtime_events", {})
         browser.close()
-    return result
+    matrix["status"] = (
+        "passed"
+        if all(item.get("status") in {"passed", "skipped"} for item in matrix["groups"].values())
+        else "failed"
+    )
+    missing = [key for key in MATRIX_REQUIRED_KEYS if key not in matrix]
+    if missing:
+        raise AssertionError(f"Browser matrix missing keys: {missing}")
+    return matrix
 
 
 def _selected_viewports() -> dict[str, dict[str, int]]:
@@ -286,27 +442,16 @@ def _write_summary_markdown(summary: dict[str, Any], path: Path) -> None:
         f"- Duration seconds: {summary.get('duration_seconds', 'unknown')}",
     ]
     for result in summary.get("results", []):
-        lines.extend(
-            [
-                "",
-                f"## {result['viewport']}",
-                f"- Registered pages: {len(result.get('pages', []))}",
-                f"- Sidebar groups: {len(result.get('groups', {}))}",
-                f"- Sidebar adjustments: {result.get('sidebar_adjustments', False)}",
-                f"- Runtime events: {len(result.get('runtime_events', []))}",
-            ]
-        )
-    if "error" in summary:
-        lines.extend(["", "## Error", "", summary["error"]])
+        lines.extend(["", f"## {result['viewport']}", f"- Status: {result['status']}"])
+        for group, outcome in result.get("groups", {}).items():
+            lines.append(f"- {group}: {outcome.get('status', 'unknown')}")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def run_browser_acceptance(root: Path, artifact_dir: Path) -> dict[str, Any]:
     started = time.monotonic()
     artifact_dir.mkdir(parents=True, exist_ok=True)
-    process = StreamlitProcess(
-        root=root, artifact_dir=artifact_dir / "streamlit"
-    )
+    process = StreamlitProcess(root=root, artifact_dir=artifact_dir / "streamlit")
     summary: dict[str, Any] = {}
     try:
         base_url = process.start()
@@ -314,8 +459,9 @@ def run_browser_acceptance(root: Path, artifact_dir: Path) -> dict[str, Any]:
             _run_viewport(base_url, artifact_dir, name, viewport)
             for name, viewport in _selected_viewports().items()
         ]
+        status = "passed" if all(item["status"] == "passed" for item in results) else "failed"
         summary = {
-            "status": "passed",
+            "status": status,
             "branch": os.environ.get("GITHUB_REF_NAME", "local"),
             "sha": os.environ.get("GITHUB_SHA", "local"),
             "python": sys.version,
@@ -324,32 +470,30 @@ def run_browser_acceptance(root: Path, artifact_dir: Path) -> dict[str, Any]:
             "duration_seconds": round(time.monotonic() - started, 3),
             "results": results,
         }
+        if status != "passed":
+            raise AssertionError("One or more browser matrix groups failed; inspect run-summary.json.")
         return summary
     except Exception as exc:
-        summary = {
-            "status": "failed",
-            "branch": os.environ.get("GITHUB_REF_NAME", "local"),
-            "sha": os.environ.get("GITHUB_SHA", "local"),
-            "error": f"{type(exc).__name__}: {exc}",
-            "duration_seconds": round(time.monotonic() - started, 3),
-        }
+        if not summary:
+            summary = {
+                "status": "failed",
+                "branch": os.environ.get("GITHUB_REF_NAME", "local"),
+                "sha": os.environ.get("GITHUB_SHA", "local"),
+                "error": f"{type(exc).__name__}: {exc}",
+                "duration_seconds": round(time.monotonic() - started, 3),
+            }
         raise
     finally:
         process.stop()
-        json_path = artifact_dir / "run-summary.json"
-        markdown_path = artifact_dir / "run-summary.md"
-        json_path.write_text(
+        (artifact_dir / "run-summary.json").write_text(
             json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8"
         )
-        _write_summary_markdown(summary, markdown_path)
+        _write_summary_markdown(summary, artifact_dir / "run-summary.md")
 
 
 if __name__ == "__main__":
     repository_root = Path(__file__).resolve().parents[2]
     output = Path(
-        os.environ.get(
-            "BROWSER_ARTIFACT_DIR",
-            repository_root / "browser-artifacts",
-        )
+        os.environ.get("BROWSER_ARTIFACT_DIR", repository_root / "browser-artifacts")
     )
     run_browser_acceptance(repository_root, output)
