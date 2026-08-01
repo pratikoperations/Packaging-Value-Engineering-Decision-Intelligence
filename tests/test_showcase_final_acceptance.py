@@ -59,20 +59,22 @@ class ShowcaseFinalAcceptanceTests(unittest.TestCase):
     def test_final_acceptance_document_has_required_controls(self) -> None:
         content = (ROOT / "docs" / "SHOWCASE_FINAL_ACCEPTANCE.md").read_text(encoding="utf-8")
         for required in (
-            "PENDING MANUAL HOSTED EVIDENCE",
+            "Acceptance state: PASSED",
             "Per-page hosted acceptance",
             "Five-minute journey acceptance",
             "Responsive presentation checks",
             "Proof-versus-limit confirmation",
             "Exact-head workflow run",
             "Artifact SHA-256",
+            "30687748523",
+            "746",
         ):
             self.assertIn(required, content)
 
     def test_freeze_manifest_has_required_identity_and_evidence_fields(self) -> None:
         content = (ROOT / "docs" / "SHOWCASE_FREEZE_MANIFEST.md").read_text(encoding="utf-8")
         for required in (
-            "CANDIDATE — NOT YET FINAL",
+            "PRE-MERGE ACCEPTED",
             "showcase-handoff-development",
             "Hosted acceptance evidence",
             "Frozen capabilities",
@@ -80,6 +82,7 @@ class ShowcaseFinalAcceptanceTests(unittest.TestCase):
             "Prohibited claims",
             "Deferred production requirements",
             "no Build 7 is proposed",
+            "8814551912",
         ):
             self.assertIn(required, content)
 
