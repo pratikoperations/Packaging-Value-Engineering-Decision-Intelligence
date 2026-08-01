@@ -1,0 +1,16 @@
+{
+  "currency": [
+    {"case_id":"CUR-001","calculation_id":"CALC-COST-001","inputs":{"cost_inputs":["10.10","2.20","0.30"]},"currency":"INR","expected":"12.600000"},
+    {"case_id":"CUR-002","calculation_id":"CALC-COST-002","inputs":{"unit_cost":"12.60","annual_volume":"1000"},"currency":"INR","expected":"12600.00"},
+    {"case_id":"CUR-003","calculation_id":"CALC-COST-003","inputs":{"baseline_unit_cost":"15","alternative_unit_cost":"12.6"},"currency":"INR","expected":"2.400000"},
+    {"case_id":"CUR-004","calculation_id":"CALC-COST-004","inputs":{"unit_savings":"2.4","annual_volume":"1000"},"currency":"INR","expected":"2400.00"},
+    {"case_id":"CUR-005","calculation_id":"CALC-COST-005","inputs":{"baseline_unit_cost":"15","alternative_unit_cost":"12.6"},"currency":"INR","expected":"-16.000000"}
+  ],
+  "material": [
+    {"case_id":"MAT-001","calculation_id":"CALC-MAT-001","inputs":{"component_weights_g":["975","25"]},"expected":"1000.000000"},
+    {"case_id":"MAT-002","calculation_id":"CALC-MAT-002","inputs":{"component_total_g":"1000","case_weight_g":"995"},"expected":"5.000000"},
+    {"case_id":"MAT-003","calculation_id":"CALC-MAT-003","inputs":{"case_weight_g":"1000","annual_volume":"1200"},"expected":"1200.000000"},
+    {"case_id":"MAT-004","calculation_id":"CALC-MAT-004","inputs":{"alternative_weight_g":"900","baseline_weight_g":"1000"},"expected":"-100.000000"},
+    {"case_id":"MAT-005","calculation_id":"CALC-MAT-005","inputs":{"alternative_weight_g":"900","baseline_weight_g":"1000"},"expected":"-10.000000"}
+  ]
+}
