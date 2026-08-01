@@ -28,12 +28,58 @@ VIEWPORTS = {
     "narrow": {"width": 412, "height": 915},
 }
 
+BROWSER_TEST_GROUPS = (
+    "startup_and_home",
+    "desktop_inputs_and_exports",
+    "route_inventory",
+    "sidebar_group_inventory",
+    "narrow_responsive_smoke",
+    "runtime_diagnostics",
+)
+
+VIEWPORT_RESPONSIBILITIES = {
+    "desktop": {
+        "startup_and_home",
+        "desktop_inputs_and_exports",
+        "route_inventory",
+        "sidebar_group_inventory",
+        "runtime_diagnostics",
+    },
+    "narrow": {
+        "startup_and_home",
+        "route_inventory",
+        "sidebar_group_inventory",
+        "narrow_responsive_smoke",
+        "runtime_diagnostics",
+    },
+}
+
+APP_ROOT_SELECTOR = '[data-testid="stAppViewContainer"]'
+SIDEBAR_SELECTOR = '[data-testid="stSidebar"]'
 STARTUP_TIMEOUT_SECONDS = 60
 PAGE_TIMEOUT_MILLISECONDS = 30_000
 ACTION_TIMEOUT_MILLISECONDS = 10_000
 
-# Governed decision-package schema. Recommendation evidence is carried by the
-# executive summary and each proposed alternative's recommendation object.
+DIAGNOSTIC_FIELDS = (
+    "test_group",
+    "current_url",
+    "target_title",
+    "target_href",
+    "visible",
+    "bounding_box",
+    "viewport",
+    "sidebar_scroll_top",
+    "sidebar_scroll_height",
+)
+
+MATRIX_REQUIRED_KEYS = (
+    "status",
+    "viewport",
+    "groups",
+    "route_inventory",
+    "runtime_events",
+)
+
 REQUIRED_JSON_KEYS = (
     "metadata",
     "executive_summary",
