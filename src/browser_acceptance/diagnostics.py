@@ -5,6 +5,30 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+EXCEPTION_TEXT = (
+    "StreamlitAPIException",
+    "StreamlitPageNotFoundError",
+    "Traceback (most recent call last)",
+)
+MATERIAL_CONSOLE_PATTERNS = (
+    "uncaught",
+    "traceback",
+    "streamlitapiexception",
+    "streamlitpagenotfounderror",
+)
+
+
+def visible_exception_markers(text: str) -> list[str]:
+    return [marker for marker in EXCEPTION_TEXT if marker in text]
+
+
+def material_console_errors(values: list[str]) -> list[str]:
+    return [
+        value
+        for value in values
+        if any(pattern in value.lower() for pattern in MATERIAL_CONSOLE_PATTERNS)
+    ]
+
 
 @dataclass
 class RuntimeDiagnostics:
