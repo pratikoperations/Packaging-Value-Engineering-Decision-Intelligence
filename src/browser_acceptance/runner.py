@@ -36,6 +36,7 @@ EXCEPTION_TEXT = (
 )
 ASSUMPTION_LABEL = re.compile(r"^[A-Za-z0-9_-]+ assumptions$", re.IGNORECASE)
 DIRECT_TITLES = ("Home", "Showcase & Handoff", "Capabilities & Limits")
+HOME_HEADING = "Packaging Value Engineering Decision Intelligence"
 
 
 def _visible_candidates(locator: Locator) -> list[Locator]:
@@ -49,13 +50,34 @@ def _first_visible(locator: Locator) -> Locator:
     return visible[0]
 
 
-def _app_ready(page: Page) -> None:
+def _app_ready(page: Page, *, require_home_heading: bool = False) -> None:
     root = page.locator(APP_ROOT_SELECTOR)
-    root.wait_for(state="visible")
-    text = root.inner_text().strip()
-    headings = _visible_candidates(root.get_by_role("heading"))
-    if not headings and len(text) < 20:
-        raise AssertionError("Streamlit application root rendered without substantial visible content.")
+    root.wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)
+    if require_home_heading:
+        page.get_by_role("heading", name=HOME_HEADING, exact=True).wait_for(
+            state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS
+        )
+    else:
+        page.wait_for_function(
+            """
+            selector => {
+                const root = document.querySelector(selector);
+                if (!root) return false;
+                const text = (root.innerText || '').trim();
+                const headings = Array.from(
+                    root.querySelectorAll('h1, h2, h3, h4, h5, h6, [role="heading"]')
+                ).filter(element => {
+                    const style = window.getComputedStyle(element);
+                    const rect = element.getBoundingClientRect();
+                    return style.visibility !== 'hidden' && style.display !== 'none'
+                        && rect.width > 0 && rect.height > 0;
+                });
+                return headings.length > 0 || text.length >= 20;
+            }
+            """,
+            APP_ROOT_SELECTOR,
+            timeout=PAGE_TIMEOUT_MILLISECONDS,
+        )
     _assert_no_visible_exception(page)
 
 
@@ -165,10 +187,7 @@ def _failure_snapshot(page: Page, artifacts: Path, group: str, error: Exception)
 
 def _goto_home(page: Page, base_url: str) -> None:
     page.goto(base_url, wait_until="domcontentloaded")
-    _app_ready(page)
-    page.get_by_role(
-        "heading", name="Packaging Value Engineering Decision Intelligence", exact=True
-    ).wait_for()
+    _app_ready(page, require_home_heading=True)
 
 
 def _select_second_governed_scenario(page: Page) -> None:
