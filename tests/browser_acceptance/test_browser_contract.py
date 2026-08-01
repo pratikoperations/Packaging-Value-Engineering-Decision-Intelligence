@@ -5,9 +5,20 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.browser_acceptance.contracts import PAGE_CONTRACTS, REQUIRED_JSON_KEYS, SIDEBAR_GROUPS, VIEWPORTS
+from src.browser_acceptance.contracts import (
+    APP_ROOT_SELECTOR,
+    BROWSER_TEST_GROUPS,
+    DIAGNOSTIC_FIELDS,
+    MATRIX_REQUIRED_KEYS,
+    PAGE_CONTRACTS,
+    REQUIRED_JSON_KEYS,
+    SIDEBAR_GROUPS,
+    VIEWPORT_RESPONSIBILITIES,
+    VIEWPORTS,
+)
 from src.browser_acceptance.export_validation import validate_json_download, validate_markdown_download
 from src.browser_acceptance.process_manager import allocate_port
+from src.browser_acceptance.runner import _validate_route_inventory
 
 
 class BrowserContractTests(unittest.TestCase):
@@ -28,6 +39,62 @@ class BrowserContractTests(unittest.TestCase):
     def test_viewports_are_governed(self):
         self.assertEqual({"width": 1440, "height": 1000}, VIEWPORTS["desktop"])
         self.assertEqual({"width": 412, "height": 915}, VIEWPORTS["narrow"])
+
+    def test_browser_groups_are_isolated_and_complete(self):
+        self.assertEqual(
+            {
+                "startup_and_home",
+                "desktop_inputs_and_exports",
+                "route_inventory",
+                "sidebar_group_inventory",
+                "narrow_responsive_smoke",
+                "runtime_diagnostics",
+            },
+            set(BROWSER_TEST_GROUPS),
+        )
+        self.assertIn("desktop_inputs_and_exports", VIEWPORT_RESPONSIBILITIES["desktop"])
+        self.assertNotIn("desktop_inputs_and_exports", VIEWPORT_RESPONSIBILITIES["narrow"])
+        self.assertIn("narrow_responsive_smoke", VIEWPORT_RESPONSIBILITIES["narrow"])
+        self.assertNotIn("narrow_responsive_smoke", VIEWPORT_RESPONSIBILITIES["desktop"])
+
+    def test_streamlit_root_contract_has_no_semantic_main_dependency(self):
+        self.assertEqual('[data-testid="stAppViewContainer"]', APP_ROOT_SELECTOR)
+        runner_text = (Path(__file__).resolve().parents[2] / "src/browser_acceptance/runner.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn('locator("main")', runner_text)
+        self.assertNotIn("locator('main')", runner_text)
+
+    def test_route_inventory_requires_thirteen_unique_hrefs(self):
+        routes = {
+            title: f"http://127.0.0.1:8501/route-{index}"
+            for index, (title, _heading, _group) in enumerate(PAGE_CONTRACTS)
+        }
+        _validate_route_inventory(routes)
+        duplicate = dict(routes)
+        duplicate[PAGE_CONTRACTS[-1][0]] = duplicate[PAGE_CONTRACTS[0][0]]
+        with self.assertRaises(AssertionError):
+            _validate_route_inventory(duplicate)
+
+    def test_diagnostic_and_matrix_schemas_are_complete(self):
+        self.assertEqual(
+            {
+                "test_group",
+                "current_url",
+                "target_title",
+                "target_href",
+                "visible",
+                "bounding_box",
+                "viewport",
+                "sidebar_scroll_top",
+                "sidebar_scroll_height",
+            },
+            set(DIAGNOSTIC_FIELDS),
+        )
+        self.assertEqual(
+            {"status", "viewport", "groups", "route_inventory", "runtime_events"},
+            set(MATRIX_REQUIRED_KEYS),
+        )
 
     def test_ephemeral_port_is_allocated(self):
         port = allocate_port()
