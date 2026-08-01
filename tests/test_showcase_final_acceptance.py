@@ -59,30 +59,39 @@ class ShowcaseFinalAcceptanceTests(unittest.TestCase):
     def test_final_acceptance_document_has_required_controls(self) -> None:
         content = (ROOT / "docs" / "SHOWCASE_FINAL_ACCEPTANCE.md").read_text(encoding="utf-8")
         for required in (
-            "Acceptance state: PASSED",
+            "Acceptance state: FINAL FROZEN",
             "Per-page hosted acceptance",
             "Five-minute journey acceptance",
             "Responsive presentation checks",
             "Proof-versus-limit confirmation",
-            "Accepted runtime exact-head workflow run",
-            "Artifact SHA-256",
-            "30687748523",
-            "746",
+            "Exact post-merge validation",
+            "beda79397fdcffb38b8b42faa4766438bd349678",
+            "30689106960",
+            "91340556427",
+            "8815028245",
+            "c4719f3f4c52143a39124d9b1ca3895bb1234ef13d1620bceeb96ccceb0622ec",
+            "746 tests passed",
+            "no Build 7 is proposed or authorized",
         ):
             self.assertIn(required, content)
 
     def test_freeze_manifest_has_required_identity_and_evidence_fields(self) -> None:
         content = (ROOT / "docs" / "SHOWCASE_FREEZE_MANIFEST.md").read_text(encoding="utf-8")
         for required in (
-            "PRE-MERGE ACCEPTED",
+            "Freeze state: FINAL FROZEN",
             "showcase-handoff-development",
+            "beda79397fdcffb38b8b42faa4766438bd349678",
+            "Merged pull request: `#77`",
             "Hosted acceptance evidence",
             "Frozen capabilities",
             "Known limitations",
             "Prohibited claims",
             "Deferred production requirements",
-            "no Build 7 is proposed",
-            "8814551912",
+            "30689106960",
+            "91340556427",
+            "8815028245",
+            "c4719f3f4c52143a39124d9b1ca3895bb1234ef13d1620bceeb96ccceb0622ec",
+            "no Build 7 is proposed or authorized",
         ):
             self.assertIn(required, content)
 
