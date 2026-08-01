@@ -1,0 +1,10 @@
+[
+  {"invalid_case_id":"INV-SYN-001","defect":"missing_unit","expected_error":"UNSUPPORTED_UNIT"},
+  {"invalid_case_id":"INV-SYN-002","defect":"currency_mismatch","expected_error":"UNSUPPORTED_CURRENCY"},
+  {"invalid_case_id":"INV-SYN-003","defect":"expired_active_quotation","expected_error":"EXPIRED_QUOTATION"},
+  {"invalid_case_id":"INV-SYN-004","defect":"negative_cost","expected_error":"NEGATIVE_COST"},
+  {"invalid_case_id":"INV-SYN-005","defect":"orphan_supplier_reference","expected_error":"ORPHAN_REFERENCE"},
+  {"invalid_case_id":"INV-SYN-006","defect":"technical_result_specification_mismatch","expected_error":"ORPHAN_REFERENCE"},
+  {"invalid_case_id":"INV-SYN-007","defect":"duplicate_quotation_id","expected_error":"DUPLICATE_ID"},
+  {"invalid_case_id":"INV-SYN-008","defect":"unsupported_unit_conversion","expected_error":"UNSUPPORTED_UNIT"}
+]
