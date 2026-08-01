@@ -18,11 +18,22 @@ PAGE_PATHS = {
     "Capabilities & Limits": "pages/70_capabilities_and_limits.py",
 }
 
+LIVE_DEMO_RECOVERY = (
+    "Refresh the browser if the current page stops responding.",
+    "Return to Home and reopen Showcase & Handoff.",
+    "Select the five-minute executive journey and use the approved synthetic demonstration project.",
+    "Skip optional drill-downs if time is limited.",
+    "Close on Capabilities & Limits so governance boundaries remain explicit.",
+)
+
 
 def render_showcase_handoff_page(st, service: ShowcaseHandoffService) -> None:
     st.title("Showcase and Handoff Hub")
     st.caption("Deterministic interview journeys, proof boundaries and new-user recovery guidance")
-    st.warning("Synthetic demonstration data must be disclosed before presenting any result. This hub does not calculate, approve or persist business records.")
+    st.warning(
+        "Synthetic demonstration data must be disclosed before presenting any result. "
+        "This hub does not calculate, approve or persist business records."
+    )
 
     audiences = list(AudienceRole)
     audience = st.selectbox("Audience", audiences, format_func=lambda value: value.value)
@@ -30,15 +41,24 @@ def render_showcase_handoff_page(st, service: ShowcaseHandoffService) -> None:
     if not journeys:
         st.info("No governed journey is available for this audience.")
         return
+
     journey = st.selectbox("Journey", journeys, format_func=lambda value: value.title)
-    st.metric("Target duration", f"{journey.target_duration_minutes} min")
-    st.metric("Governed steps", len(journey.steps))
+    summary_columns = st.columns(2)
+    with summary_columns[0]:
+        st.metric("Target duration", f"{journey.target_duration_minutes} min")
+    with summary_columns[1]:
+        st.metric("Governed steps", len(journey.steps))
+
     st.write("**Business objective**")
     st.write(journey.business_objective)
     st.info(journey.opening_statement)
 
     for step in journey.steps:
-        with st.expander(f"{step.step_number}. {step.title} — {step.page_reference} ({step.expected_duration_seconds}s)"):
+        label = (
+            f"{step.step_number}. {step.title} — "
+            f"{step.page_reference} ({step.expected_duration_seconds}s)"
+        )
+        with st.expander(label):
             st.write(step.speaker_message)
             st.write("**Evidence to show**")
             for item in step.evidence_to_show:
@@ -48,21 +68,40 @@ def render_showcase_handoff_page(st, service: ShowcaseHandoffService) -> None:
                 st.write(f"- {item}")
             path = PAGE_PATHS.get(step.page_reference)
             if path:
-                st.page_link(path, label=f"Open {step.page_reference}")
+                st.page_link(path, label=f"Open {step.page_reference}", width="stretch")
 
-    left, right = st.columns(2)
-    with left:
-        st.subheader("What this proves")
-        for item in journey.proof_statements:
-            st.write(f"- {item}")
-    with right:
-        st.subheader("What this does not prove")
-        for item in journey.limitation_statements:
-            st.write(f"- {item}")
+    st.subheader("What this proves")
+    for item in journey.proof_statements:
+        st.write(f"- {item}")
+
+    st.subheader("What this does not prove")
+    for item in journey.limitation_statements:
+        st.write(f"- {item}")
 
     st.success(journey.closing_statement)
-    st.download_button("Download governed journey (Markdown)", data=service.export_markdown(journey.journey_id), file_name=f"{journey.journey_id}.md", mime="text/markdown")
-    st.download_button("Download governed journey (JSON)", data=journey.canonical_json(), file_name=f"{journey.journey_id}.json", mime="application/json")
+
+    st.download_button(
+        "Download governed journey (Markdown)",
+        data=service.export_markdown(journey.journey_id),
+        file_name=f"{journey.journey_id}.md",
+        mime="text/markdown",
+        width="stretch",
+    )
+    st.download_button(
+        "Download governed journey (JSON)",
+        data=journey.canonical_json(),
+        file_name=f"{journey.journey_id}.json",
+        mime="application/json",
+        width="stretch",
+    )
+
+    with st.expander("Live-demo recovery", expanded=False):
+        st.write(
+            "Use this short recovery path during an interview or executive review. "
+            "It does not replace technical diagnosis."
+        )
+        for item in LIVE_DEMO_RECOVERY:
+            st.write(f"- {item}")
 
     checklist = service.handoff_checklist()
     with st.expander("New-user handoff checklist"):
@@ -73,7 +112,7 @@ def render_showcase_handoff_page(st, service: ShowcaseHandoffService) -> None:
             ("Workflow", checklist.workflow_checks),
             ("Tests", checklist.test_commands),
             ("Known limitations", checklist.known_limitations),
-            ("Recovery", checklist.recovery_guidance),
+            ("Technical recovery", checklist.recovery_guidance),
         ):
             st.write(f"**{heading}**")
             for item in items:
