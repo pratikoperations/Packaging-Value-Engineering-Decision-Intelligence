@@ -221,7 +221,10 @@ def main() -> None:
     pages = list(page_registry.values())
     selected = st.navigation(pages, position="hidden")
     with st.sidebar:
+        st.page_link(home_page, label="Home")
         for title, page in page_registry.items():
+            if title == "Home":
+                continue
             st.page_link(page, label=title)
         st.divider()
     selected.run()
