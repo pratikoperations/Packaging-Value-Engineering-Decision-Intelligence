@@ -2,7 +2,18 @@
 
 ## Objective
 
-Add a Playwright-based acceptance layer that verifies hosted or locally started Streamlit behaviour without replacing the existing unit and regression suite.
+Add a Playwright-based acceptance layer that verifies Streamlit behaviour without replacing the existing unit and regression suite.
+
+## Target environments
+
+- Primary CI target: locally started Streamlit application on an ephemeral port.
+- Final smoke target: accepted hosted enhancement URL after integration authorization.
+- Browser scope: Chromium desktop plus one Android-sized browser viewport.
+- Native Android or iOS support is not claimed.
+
+## Startup and teardown
+
+CI must start Streamlit as a managed subprocess, allocate an unused port, poll a governed readiness signal until ready, record startup logs, and terminate the process in teardown even after test failure. Startup timeout must be explicit and capped at 60 seconds unless separately justified.
 
 ## Planned coverage
 
@@ -18,37 +29,33 @@ Add a Playwright-based acceptance layer that verifies hosted or locally started 
 - Android-sized viewport;
 - retained proof-versus-limit content.
 
-## Test design principles
+## Selectors and waits
 
-- use stable accessible selectors or governed labels;
-- avoid brittle pixel-perfect comparisons;
-- use explicit readiness conditions rather than arbitrary sleeps;
-- capture traces and screenshots only on failure and selected acceptance checkpoints;
-- isolate download directories per test;
-- keep tests deterministic and read-only;
-- run the existing regression suite separately.
+Use stable accessible roles, governed labels or explicit test identifiers owned by the application. Do not select by generated CSS classes or fragile DOM position. Use readiness conditions and locator assertions rather than arbitrary sleeps.
 
-## Planned test modules
+## Timeout and retry policy
 
-- startup and smoke;
-- navigation inventory;
-- sidebar grouping;
-- showcase journey;
-- export downloads;
-- governance disclosures;
-- mobile viewport;
-- runtime error detection.
+- per-action timeout: 10 seconds;
+- navigation/readiness timeout: 30 seconds;
+- application startup timeout: 60 seconds;
+- final acceptance evidence: zero automatic retries;
+- diagnostic rerun may be performed once but must be reported as instability and cannot replace a clean acceptance run.
+
+## Runtime error capture
+
+Capture browser `pageerror`, uncaught exceptions, failed network requests relevant to application operation, and console errors. Expected benign warnings must be explicitly allowlisted; unexplained errors fail the run.
+
+## Export-content validation
+
+Downloads must be more than present: Markdown must decode and contain required headings and synthetic limitations; JSON must parse, contain required keys and preserve synthetic-data disclosure. Each test uses an isolated download directory.
+
+## Reliability gate
+
+Final browser acceptance requires three consecutive clean CI runs at the same exact SHA, with no retry-dependent pass and no unexplained flaky failure.
 
 ## CI evidence
 
-A successful run must retain:
-
-- exact commit SHA;
-- browser version;
-- test result summary;
-- failure trace and screenshots when applicable;
-- downloaded export checks;
-- artifact digest.
+A successful run retains exact SHA, browser version, result summary, startup log, downloaded-file validation summary, artifact digest, and traces/screenshots on failure or selected checkpoints.
 
 ## Exclusions
 
