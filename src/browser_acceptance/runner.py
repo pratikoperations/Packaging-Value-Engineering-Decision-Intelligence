@@ -151,9 +151,51 @@ def _open_sidebar_if_needed(page: Page) -> None:
     _wait_for_first_visible(home_links)
 
 
+def _group_control(page: Page, group: str) -> Locator:
+    """Resolve the visible interactive sidebar-group control, not a nested text node."""
+    buttons = page.get_by_role("button", name=group, exact=True)
+    visible_buttons = _visible_candidates(buttons)
+    if visible_buttons:
+        return visible_buttons[0]
+
+    text = _wait_for_first_visible(page.get_by_text(group, exact=True))
+    interactive = text.locator(
+        "xpath=ancestor-or-self::*[self::button or self::summary or @role='button'][1]"
+    )
+    visible_interactive = _visible_candidates(interactive)
+    if visible_interactive:
+        return visible_interactive[0]
+    raise AssertionError(f"No visible interactive control found for sidebar group {group!r}.")
+
+
 def _scroll_and_click(locator: Locator) -> None:
-    locator.evaluate("element => element.scrollIntoView({block: 'center', inline: 'nearest'})")
-    locator.click()
+    """Bring a target inside every scrollable ancestor, then perform a real Playwright click."""
+    locator.evaluate(
+        """
+        element => {
+            const scrollable = [];
+            let ancestor = element.parentElement;
+            while (ancestor) {
+                const style = window.getComputedStyle(ancestor);
+                const overflowY = style.overflowY;
+                if ((overflowY === 'auto' || overflowY === 'scroll')
+                        && ancestor.scrollHeight > ancestor.clientHeight) {
+                    scrollable.push(ancestor);
+                }
+                ancestor = ancestor.parentElement;
+            }
+            for (const container of scrollable) {
+                const targetRect = element.getBoundingClientRect();
+                const containerRect = container.getBoundingClientRect();
+                container.scrollTop += targetRect.top - containerRect.top
+                    - Math.max(0, (container.clientHeight - targetRect.height) / 2);
+            }
+            element.scrollIntoView({block: 'center', inline: 'nearest'});
+        }
+        """
+    )
+    locator.scroll_into_view_if_needed(timeout=ACTION_TIMEOUT_MILLISECONDS)
+    locator.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
 
 
 def _ensure_group_expanded(page: Page, group: str, expected_link: str, *, physical: bool = False) -> None:
@@ -161,7 +203,7 @@ def _ensure_group_expanded(page: Page, group: str, expected_link: str, *, physic
     links = page.get_by_role("link", name=expected_link, exact=True)
     if _visible_candidates(links):
         return
-    control = _wait_for_first_visible(page.get_by_text(group, exact=True))
+    control = _group_control(page, group)
     if physical:
         _scroll_and_click(control)
     else:
