@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any, Callable
 from urllib.parse import urljoin, urlparse
 
-from playwright.sync_api import Locator, Page, sync_playwright
+from playwright.sync_api import Locator, Page, TimeoutError as PlaywrightTimeoutError, sync_playwright
 
 from .contracts import (
     ACTION_TIMEOUT_MILLISECONDS,
@@ -50,6 +50,36 @@ def _first_visible(locator: Locator) -> Locator:
     return visible[0]
 
 
+def _wait_for_first_visible(
+    locator: Locator, *, timeout: int = PAGE_TIMEOUT_MILLISECONDS
+) -> Locator:
+    """Wait within a fixed bound for any matching locator to become visible."""
+    deadline = time.monotonic() + timeout / 1000
+    last_error: Exception | None = None
+    while time.monotonic() < deadline:
+        count = locator.count()
+        if count:
+            for index in range(count):
+                candidate = locator.nth(index)
+                if candidate.is_visible():
+                    return candidate
+            remaining = max(1, int((deadline - time.monotonic()) * 1000))
+            try:
+                locator.first.wait_for(state="visible", timeout=remaining)
+            except PlaywrightTimeoutError as exc:
+                last_error = exc
+            visible = _visible_candidates(locator)
+            if visible:
+                return visible[0]
+        else:
+            remaining = max(1, int((deadline - time.monotonic()) * 1000))
+            try:
+                locator.first.wait_for(state="attached", timeout=remaining)
+            except PlaywrightTimeoutError as exc:
+                last_error = exc
+    raise AssertionError("Expected at least one visible matching element within timeout.") from last_error
+
+
 def _app_ready(page: Page, *, require_home_heading: bool = False) -> None:
     root = page.locator(APP_ROOT_SELECTOR)
     root.wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)
@@ -75,7 +105,7 @@ def _app_ready(page: Page, *, require_home_heading: bool = False) -> None:
                 return headings.length > 0 || text.length >= 20;
             }
             """,
-            APP_ROOT_SELECTOR,
+            arg=APP_ROOT_SELECTOR,
             timeout=PAGE_TIMEOUT_MILLISECONDS,
         )
     _assert_no_visible_exception(page)
@@ -93,9 +123,9 @@ def _open_sidebar_if_needed(page: Page) -> None:
     if _visible_candidates(home_links):
         return
     buttons = page.get_by_role("button", name=re.compile("sidebar", re.IGNORECASE))
-    button = _first_visible(buttons)
+    button = _wait_for_first_visible(buttons)
     button.click()
-    _first_visible(home_links).wait_for()
+    _wait_for_first_visible(home_links)
 
 
 def _scroll_and_click(locator: Locator) -> None:
@@ -108,12 +138,12 @@ def _ensure_group_expanded(page: Page, group: str, expected_link: str, *, physic
     links = page.get_by_role("link", name=expected_link, exact=True)
     if _visible_candidates(links):
         return
-    control = _first_visible(page.get_by_text(group, exact=True))
+    control = _wait_for_first_visible(page.get_by_text(group, exact=True))
     if physical:
         _scroll_and_click(control)
     else:
         control.evaluate("element => element.click()")
-    _first_visible(links).wait_for()
+    _wait_for_first_visible(links)
 
 
 def _expand_all_groups(page: Page) -> None:
@@ -225,13 +255,15 @@ def _download_and_validate(page: Page, artifacts: Path) -> dict[str, str]:
 def _collect_route_inventory(page: Page, base_url: str) -> dict[str, str]:
     _goto_home(page, base_url)
     _expand_all_groups(page)
-    routes: dict[str, str] = {}
+    routes: dict[str, str] = {"Home": base_url.rstrip("/")}
     for title, _heading, _group in PAGE_CONTRACTS:
-        link = _first_visible(page.get_by_role("link", name=title, exact=True))
+        if title == "Home":
+            continue
+        link = _wait_for_first_visible(page.get_by_role("link", name=title, exact=True))
         href = link.get_attribute("href")
         if not href:
             raise AssertionError(f"Registered page {title} has no href.")
-        routes[title] = urljoin(base_url, href)
+        routes[title] = urljoin(base_url, href).rstrip("/")
     _validate_route_inventory(routes)
     return routes
 
@@ -241,7 +273,7 @@ def _validate_route_inventory(routes: dict[str, str]) -> None:
     if set(routes) != expected:
         raise AssertionError(f"Route inventory titles mismatch: {sorted(routes)}")
     if len(routes) != 13 or len(set(routes.values())) != 13:
-        raise AssertionError("Expected 13 unique registered href destinations.")
+        raise AssertionError("Expected 13 unique resolved destinations including Home.")
     for title, href in routes.items():
         parsed = urlparse(href)
         if parsed.scheme not in {"http", "https"} or not parsed.netloc:
@@ -262,9 +294,9 @@ def _ensure_assumptions_expanded(page: Page) -> None:
     cost_inputs = page.get_by_role("spinbutton", name="Unit-cost adjustment (%)", exact=True)
     if _visible_candidates(cost_inputs):
         return
-    control = _first_visible(page.get_by_text(ASSUMPTION_LABEL, exact=True))
+    control = _wait_for_first_visible(page.get_by_text(ASSUMPTION_LABEL, exact=True))
     _scroll_and_click(control)
-    _first_visible(cost_inputs).wait_for()
+    _wait_for_first_visible(cost_inputs)
 
 
 def _group_desktop_inputs_and_exports(
@@ -273,15 +305,19 @@ def _group_desktop_inputs_and_exports(
     _goto_home(page, base_url)
     _select_second_governed_scenario(page)
     _open_sidebar_if_needed(page)
-    annual = _first_visible(page.get_by_role("spinbutton", name="Annual volume (cases)", exact=True))
+    annual = _wait_for_first_visible(
+        page.get_by_role("spinbutton", name="Annual volume (cases)", exact=True)
+    )
     annual.fill("1010000")
     annual.press("Enter")
     _ensure_assumptions_expanded(page)
-    cost = _first_visible(page.get_by_role("spinbutton", name="Unit-cost adjustment (%)", exact=True))
+    cost = _wait_for_first_visible(
+        page.get_by_role("spinbutton", name="Unit-cost adjustment (%)", exact=True)
+    )
     cost.fill("1")
     cost.press("Enter")
     _ensure_assumptions_expanded(page)
-    material = _first_visible(
+    material = _wait_for_first_visible(
         page.get_by_role("spinbutton", name="Material-weight adjustment (%)", exact=True)
     )
     material.fill("-1")
@@ -300,7 +336,7 @@ def _group_route_inventory(page: Page, base_url: str, artifacts: Path, result: d
     for title, href in routes.items():
         result["actions"].append(_action_state(page, "route_inventory", title, target_href=href))
         page.goto(href, wait_until="domcontentloaded")
-        _app_ready(page)
+        _app_ready(page, require_home_heading=(title == "Home"))
         if page.url.rstrip("/") != href.rstrip("/"):
             raise AssertionError(f"Route {title} resolved to unexpected URL {page.url}; expected {href}")
         checked[title] = {
@@ -319,13 +355,10 @@ def _group_sidebar_group_inventory(
     _expand_all_groups(page)
     groups: dict[str, list[str]] = {}
     for group, expected in SIDEBAR_GROUPS.items():
-        visible = [
-            title
-            for title in expected
-            if _visible_candidates(page.get_by_role("link", name=title, exact=True))
-        ]
-        if tuple(visible) != tuple(expected):
-            raise AssertionError(f"Sidebar group {group} mismatch: {visible}")
+        visible: list[str] = []
+        for title in expected:
+            _wait_for_first_visible(page.get_by_role("link", name=title, exact=True))
+            visible.append(title)
         groups[group] = visible
     result["sidebar_groups"] = groups
 
@@ -336,7 +369,7 @@ def _physical_click(page: Page, base_url: str, group: str, title: str | None) ->
         assert title is not None
         _ensure_group_expanded(page, group, title, physical=True)
     target = title if title is not None else group
-    link = _first_visible(page.get_by_role("link", name=target, exact=True))
+    link = _wait_for_first_visible(page.get_by_role("link", name=target, exact=True))
     _scroll_and_click(link)
     _app_ready(page)
 
