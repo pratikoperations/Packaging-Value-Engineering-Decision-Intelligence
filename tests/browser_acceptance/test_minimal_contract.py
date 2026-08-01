@@ -4,7 +4,6 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import MagicMock
 
 from src.browser_acceptance.contracts import (
     ACCEPTANCE_REPORT_KEYS,
@@ -13,13 +12,13 @@ from src.browser_acceptance.contracts import (
     SIDEBAR_GROUPS,
     VIEWPORTS,
 )
+from src.browser_acceptance.diagnostics import (
+    material_console_errors,
+    visible_exception_markers,
+)
 from src.browser_acceptance.export_validation import (
     validate_json_download,
     validate_markdown_download,
-)
-from src.browser_acceptance.minimal_runner import (
-    _assert_no_visible_exception,
-    _material_console_errors,
 )
 from src.browser_acceptance.process_manager import allocate_port
 
@@ -95,16 +94,16 @@ class MinimalBrowserContractTests(unittest.TestCase):
                 validate_markdown_download(path)
 
     def test_visible_exception_detection(self):
-        page = MagicMock()
-        page.locator.return_value.inner_text.return_value = "Traceback (most recent call last)"
-        with self.assertRaises(AssertionError):
-            _assert_no_visible_exception(page)
+        self.assertEqual(
+            ["Traceback (most recent call last)"],
+            visible_exception_markers("Traceback (most recent call last)"),
+        )
 
     def test_material_console_error_filter(self):
         values = ["harmless warning", "Uncaught TypeError", "Traceback in browser"]
         self.assertEqual(
             ["Uncaught TypeError", "Traceback in browser"],
-            _material_console_errors(values),
+            material_console_errors(values),
         )
 
     def test_ephemeral_port_allocation(self):
@@ -112,7 +111,7 @@ class MinimalBrowserContractTests(unittest.TestCase):
         self.assertGreater(port, 0)
         self.assertLess(port, 65536)
 
-    def test_single_governed_runner_entry_point(self):
+    def test_single_governed_runner_entry_point_is_lazy(self):
         from src.browser_acceptance import run_minimal_acceptance
 
         self.assertTrue(callable(run_minimal_acceptance))
