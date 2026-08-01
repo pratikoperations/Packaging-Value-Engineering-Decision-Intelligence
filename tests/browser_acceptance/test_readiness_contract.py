@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, call, patch
 
 from src.browser_acceptance import runner
 
@@ -68,20 +68,6 @@ class FakeReadyPage:
         return True
 
 
-class FakeRoutePage:
-    def __init__(self, hrefs: dict[str, str]):
-        self.hrefs = hrefs
-        self.requested_titles: list[str] = []
-
-    def get_by_role(self, role: str, *, name: str, exact: bool):
-        if role != "link":
-            raise AssertionError(f"Unexpected role: {role}")
-        self.requested_titles.append(name)
-        if name == "Home":
-            raise AssertionError("Home must not be queried for an href")
-        return FakeLocator([FakeCandidate(href=self.hrefs[name])])
-
-
 class BrowserExecutableContractTests(unittest.TestCase):
     def test_app_ready_uses_keyword_only_playwright_argument(self):
         page = FakeReadyPage()
@@ -89,9 +75,9 @@ class BrowserExecutableContractTests(unittest.TestCase):
         runner._app_ready(page)
 
         self.assertEqual(len(page.wait_for_function_calls), 1)
-        call = page.wait_for_function_calls[0]
-        self.assertEqual(call["arg"], runner.APP_ROOT_SELECTOR)
-        self.assertEqual(call["timeout"], runner.PAGE_TIMEOUT_MILLISECONDS)
+        call_details = page.wait_for_function_calls[0]
+        self.assertEqual(call_details["arg"], runner.APP_ROOT_SELECTOR)
+        self.assertEqual(call_details["timeout"], runner.PAGE_TIMEOUT_MILLISECONDS)
 
     def test_home_ready_waits_for_exact_home_heading(self):
         page = FakeReadyPage()
@@ -114,26 +100,82 @@ class BrowserExecutableContractTests(unittest.TestCase):
         self.assertTrue(candidate.visible)
         self.assertEqual(candidate.wait_calls[0]["state"], "visible")
 
-    def test_collect_route_inventory_uses_explicit_home_root(self):
+    def test_collect_route_inventory_uses_explicit_home_and_group_contracts(self):
         base_url = "http://127.0.0.1:8501/"
-        non_home_titles = [
-            title for title, _heading, _group in runner.PAGE_CONTRACTS if title != "Home"
-        ]
-        hrefs = {
-            title: f"/{index}-{title.lower().replace(' ', '-')}"
-            for index, title in enumerate(non_home_titles, start=1)
+        page = MagicMock()
+        direct_routes = {
+            "Showcase & Handoff": "http://127.0.0.1:8501/showcase",
+            "Capabilities & Limits": "http://127.0.0.1:8501/capabilities",
         }
-        page = FakeRoutePage(hrefs)
+        grouped_routes = {
+            group: {
+                title: f"http://127.0.0.1:8501/{group_index}-{title_index}"
+                for title_index, title in enumerate(titles, start=1)
+            }
+            for group_index, (group, titles) in enumerate(
+                runner.SIDEBAR_GROUPS.items(), start=1
+            )
+        }
 
-        with patch.object(runner, "_goto_home"), patch.object(
-            runner, "_expand_all_groups"
-        ):
+        def resolve_direct(_page, _base_url, title, *, group):
+            self.assertIsNone(group)
+            return direct_routes[title]
+
+        def collect_group(_page, _base_url, group, titles):
+            self.assertEqual(tuple(titles), runner.SIDEBAR_GROUPS[group])
+            return grouped_routes[group]
+
+        with patch.object(runner, "_goto_home") as goto_home, patch.object(
+            runner, "_open_sidebar_if_needed"
+        ) as open_sidebar, patch.object(
+            runner, "_resolved_link", side_effect=resolve_direct
+        ) as resolved_link, patch.object(
+            runner, "_collect_group_routes", side_effect=collect_group
+        ) as collect_group_routes:
             routes = runner._collect_route_inventory(page, base_url)
 
         self.assertEqual(routes["Home"], "http://127.0.0.1:8501")
-        self.assertNotIn("Home", page.requested_titles)
         self.assertEqual(len(routes), 13)
         self.assertEqual(len(set(routes.values())), 13)
+        goto_home.assert_called_once_with(page, base_url)
+        open_sidebar.assert_called_once_with(page)
+        self.assertEqual(
+            resolved_link.call_args_list,
+            [
+                call(page, base_url, "Showcase & Handoff", group=None),
+                call(page, base_url, "Capabilities & Limits", group=None),
+            ],
+        )
+        self.assertEqual(collect_group_routes.call_count, len(runner.SIDEBAR_GROUPS))
+        self.assertNotIn("_expand_all_groups", vars(runner))
+
+    def test_scroll_and_click_scrolls_nested_container_before_physical_click(self):
+        locator = MagicMock()
+
+        runner._scroll_and_click(locator)
+
+        locator.evaluate.assert_called_once()
+        locator.scroll_into_view_if_needed.assert_called_once_with(
+            timeout=runner.ACTION_TIMEOUT_MILLISECONDS
+        )
+        locator.click.assert_called_once_with(timeout=runner.ACTION_TIMEOUT_MILLISECONDS)
+
+    def test_group_control_prefers_visible_accessible_button(self):
+        page = MagicMock()
+        button_locator = MagicMock()
+        button = MagicMock()
+        button_locator.count.return_value = 1
+        button_locator.nth.return_value = button
+        button.is_visible.return_value = True
+        page.get_by_role.return_value = button_locator
+
+        selected = runner._group_control(page, "Workspace")
+
+        self.assertIs(selected, button)
+        page.get_by_role.assert_called_once_with(
+            "button", name="Workspace", exact=True
+        )
+        page.get_by_text.assert_not_called()
 
     def test_route_inventory_rejects_duplicate_resolved_destination(self):
         routes = {
