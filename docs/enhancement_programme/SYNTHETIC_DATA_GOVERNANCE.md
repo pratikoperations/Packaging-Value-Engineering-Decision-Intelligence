@@ -6,13 +6,28 @@ Define realistic but fictional procurement data that exercises the application w
 
 ## Mandatory controls
 
-Every dataset and record must include or inherit:
+Every dataset must provide a manifest containing:
 
+- `dataset_id`;
+- `dataset_version`;
+- `schema_version`;
 - `dataset_type: synthetic_demo`;
+- `generated_at`;
+- deterministic `generation_method` and seed where applicable;
+- `assumption_basis` and assumption-provenance category;
+- `currency_basis`;
+- `scenario_period`;
+- `record_count`;
+- `disclosure_version`;
+- permitted use and prohibited commercial use.
+
+Every record must include or inherit:
+
+- deterministic governed identifier;
 - fictional supplier identity;
 - explicit unit and currency;
 - scenario purpose;
-- assumption category;
+- assumption category and provenance;
 - effective or scenario date;
 - permitted use;
 - prohibited commercial use.
@@ -51,6 +66,14 @@ The disclosure must appear in dataset manifests, relevant UI surfaces and export
 - duplicate quotation;
 - unsupported unit conversion.
 
+## Referential-integrity controls
+
+Tests must detect duplicate IDs, orphaned supplier/specification/quotation/test references, unsupported currencies and units, cross-file count mismatches, invalid effective dates and non-deterministic fixture regeneration.
+
+## Accidental real-data controls
+
+A governed denylist and review step must detect accidental use of real company names, copied quotation identifiers, identifiable contacts, current-market claims or externally sourced certificates. Detection blocks acceptance until the record is removed or explicitly proven fictional.
+
 ## Prohibited content
 
 - actual supplier names or identifiable quotations;
@@ -62,4 +85,4 @@ The disclosure must appear in dataset manifests, relevant UI surfaces and export
 
 ## Acceptance evidence
 
-Schema validation, disclosure tests, scenario completeness tests and export checks must demonstrate continued synthetic status throughout the workflow.
+Schema validation, manifest validation, disclosure tests, deterministic-regeneration checks, referential-integrity checks, accidental-real-name checks, scenario completeness tests and export checks must demonstrate continued synthetic status throughout the workflow.
