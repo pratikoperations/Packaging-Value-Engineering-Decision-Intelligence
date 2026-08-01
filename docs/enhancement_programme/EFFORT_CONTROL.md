@@ -2,10 +2,13 @@
 
 ## Programme ceiling
 
-- Planned effort: 94 hours
+- Planned total programme effort: 94 hours
 - Contingency: 6 hours
 - Absolute maximum: 100 hours
-- Implementation status: not started
+- Planning/governance effort consumed: record actual separately; do not infer from allocation
+- Feature implementation effort consumed: 0 hours at this planning stage
+
+All programme work, including planning, corrections, implementation, verification and closure, counts toward the 100-hour maximum unless separately reauthorized.
 
 ## Phase budgets
 
@@ -22,30 +25,35 @@
 
 ## Effort accounting rules
 
-- record actual time by phase and task;
+- record actual planning and implementation time separately by task;
+- report combined actual and estimate-to-complete at every gate;
 - do not automatically consume the full allocation;
 - use contingency only for defects blocking mandatory acceptance;
-- optional polish must be deferred before contingency is used;
+- defer optional polish before using contingency;
 - update forecast after every accepted feature PR;
-- stop and seek authorization if forecast exceeds 100 hours.
+- stop and seek authorization if the combined forecast exceeds 100 hours.
+
+## Cumulative forecast gates
+
+| Gate | Deliverable state | Maximum cumulative forecast |
+|---|---|---:|
+| Gate 0 | Corrected planning accepted | 7 h |
+| Gate 1 | Governed synthetic data accepted | 30 h |
+| Gate 2 | Independent reconciliation accepted | 68 h |
+| Gate 3 | Browser acceptance completed | 90 h |
+| Gate 4 | Integrated acceptance and closure | 100 h |
+
+Crossing a gate threshold triggers immediate scope reduction before further implementation. It does not automatically authorize contingency use.
 
 ## Scope-reduction order
 
-If effort pressure develops, reduce scope in this order:
-
 1. visual browser assertions and nonessential screenshots;
-2. additional synthetic scenarios beyond the required three;
+2. synthetic scenarios beyond the required three;
 3. optional Calculation Evidence formulas outside the core whitelist;
-4. presentation polish not required for acceptance.
+4. presentation polish not required for acceptance;
+5. browser coverage beyond Chromium desktop and one Android-sized viewport.
 
-Do not reduce:
-
-- synthetic-data disclosure;
-- evidence-engine independence;
-- core reconciliation states;
-- existing regression protection;
-- exact-SHA and artifact evidence;
-- desktop and Android-sized smoke coverage.
+Do not reduce synthetic disclosure, evidence-engine independence, core reconciliation states, existing regression protection, exact-SHA/artifact evidence, export-content validation, or desktop and Android-sized smoke coverage.
 
 ## Decision gates
 
@@ -55,4 +63,4 @@ Do not reduce:
 - Gate 3: browser acceptance;
 - Gate 4: integrated hosted acceptance and final freeze.
 
-No feature implementation begins until Gate 0 is explicitly authorized.
+No feature implementation or feature-branch creation begins until Gate 0 is explicitly authorized. PR #79 remains draft and must close without merge after planning acceptance.
