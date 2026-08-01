@@ -109,7 +109,10 @@ def _home_journey(page: Page, artifacts: Path) -> dict[str, Any]:
     annual_volume.fill("1010000")
     annual_volume.press("Enter")
 
-    assumptions = page.get_by_role("button", name=re.compile("assumptions$", re.IGNORECASE))
+    assumptions = page.get_by_text(
+        re.compile(r"^[A-Za-z0-9_-]+ assumptions$", re.IGNORECASE), exact=True
+    )
+    assumptions.first.wait_for()
     if assumptions.count() < 1:
         raise AssertionError("No governed alternative-assumption expander is available.")
     assumptions.first.click()
