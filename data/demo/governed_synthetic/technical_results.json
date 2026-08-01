@@ -1,0 +1,10 @@
+[
+  {"technical_result_id":"TST-SYN-001","specification_id":"SPC-SYN-001","requirement_id":"REQ-BCT","status":"qualified","measured_value":610,"unit":"kgf","assumption_provenance":"synthetic_technical_assumption"},
+  {"technical_result_id":"TST-SYN-002","specification_id":"SPC-SYN-001","requirement_id":"REQ-STACK","status":"qualified","measured_value":5,"unit":"unitless","assumption_provenance":"synthetic_technical_assumption"},
+  {"technical_result_id":"TST-SYN-003","specification_id":"SPC-SYN-002","requirement_id":"REQ-BCT","status":"insufficient_data","measured_value":510,"unit":"kgf","assumption_provenance":"synthetic_technical_assumption"},
+  {"technical_result_id":"TST-SYN-004","specification_id":"SPC-SYN-002","requirement_id":"REQ-STACK","status":"not_assessed","measured_value":null,"unit":"unitless","assumption_provenance":"synthetic_technical_assumption"},
+  {"technical_result_id":"TST-SYN-005","specification_id":"SPC-SYN-003","requirement_id":"REQ-BCT","status":"not_assessed","measured_value":null,"unit":"kgf","assumption_provenance":"synthetic_technical_assumption"},
+  {"technical_result_id":"TST-SYN-006","specification_id":"SPC-SYN-003","requirement_id":"REQ-STACK","status":"insufficient_data","measured_value":4,"unit":"unitless","assumption_provenance":"synthetic_technical_assumption"},
+  {"technical_result_id":"TST-SYN-007","specification_id":"SPC-SYN-004","requirement_id":"REQ-BCT","status":"qualified","measured_value":565,"unit":"kgf","assumption_provenance":"synthetic_technical_assumption"},
+  {"technical_result_id":"TST-SYN-008","specification_id":"SPC-SYN-004","requirement_id":"REQ-STACK","status":"qualified","measured_value":5,"unit":"unitless","assumption_provenance":"synthetic_technical_assumption"}
+]

@@ -1,0 +1,6 @@
+[
+  {"supplier_id":"SUP-SYN-001","name":"Supplier Alpha","lead_time_days":14,"unit":"days","assumption_provenance":"synthetic_logistics_assumption"},
+  {"supplier_id":"SUP-SYN-002","name":"Supplier Beta","lead_time_days":28,"unit":"days","assumption_provenance":"synthetic_logistics_assumption"},
+  {"supplier_id":"SUP-SYN-003","name":"Supplier Gamma","lead_time_days":18,"unit":"days","assumption_provenance":"synthetic_logistics_assumption"},
+  {"supplier_id":"SUP-SYN-004","name":"Supplier Delta","lead_time_days":12,"unit":"days","assumption_provenance":"synthetic_logistics_assumption"}
+]

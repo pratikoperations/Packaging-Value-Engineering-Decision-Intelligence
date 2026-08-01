@@ -1,0 +1,6 @@
+[
+  {"quotation_id":"QTE-SYN-001","supplier_id":"SUP-SYN-001","specification_id":"SPC-SYN-001","unit_price":52.4,"unit":"INR_per_case","currency":"INR","valid_until":"2026-12-31","assumption_provenance":"synthetic_cost_assumption"},
+  {"quotation_id":"QTE-SYN-002","supplier_id":"SUP-SYN-002","specification_id":"SPC-SYN-002","unit_price":45.8,"unit":"INR_per_case","currency":"INR","valid_until":"2026-12-31","assumption_provenance":"synthetic_cost_assumption"},
+  {"quotation_id":"QTE-SYN-003","supplier_id":"SUP-SYN-003","specification_id":"SPC-SYN-003","unit_price":43.5,"unit":"INR_per_case","currency":"INR","valid_until":"2026-12-31","assumption_provenance":"synthetic_cost_assumption"},
+  {"quotation_id":"QTE-SYN-004","supplier_id":"SUP-SYN-004","specification_id":"SPC-SYN-004","unit_price":49.1,"unit":"INR_per_case","currency":"INR","valid_until":"2026-12-31","assumption_provenance":"synthetic_cost_assumption"}
+]

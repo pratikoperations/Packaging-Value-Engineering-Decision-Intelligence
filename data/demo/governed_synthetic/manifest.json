@@ -1,0 +1,32 @@
+{
+  "dataset_id": "DST-SYN-001",
+  "dataset_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "dataset_type": "synthetic_demo",
+  "generated_at": "2026-08-01T00:00:00Z",
+  "generation_method": "deterministic_curated_fixture",
+  "generation_seed": "PVE-SYNTH-001",
+  "assumption_basis": "Illustrative corrugated-packaging procurement scenarios",
+  "assumption_provenance": [
+    "synthetic_cost_assumption",
+    "synthetic_technical_assumption",
+    "synthetic_logistics_assumption",
+    "synthetic_volume_assumption",
+    "synthetic_risk_assumption"
+  ],
+  "currency_basis": {"currency": "INR", "exchange_rates_used": false},
+  "scenario_period": {"start": "2026-01-01", "end": "2026-12-31"},
+  "record_counts": {
+    "suppliers": 4,
+    "specifications": 4,
+    "quotations": 4,
+    "technical_results": 8,
+    "risk_events": 6,
+    "scenarios": 3,
+    "invalid_cases": 8
+  },
+  "synthetic_disclosure": "Synthetic demonstration data. Not sourced from actual suppliers. Not suitable for negotiation, supplier award, engineering approval, regulatory approval or realized-savings claims.",
+  "disclosure_version": "1.0",
+  "permitted_use": ["testing", "training", "interview demonstration", "portfolio demonstration"],
+  "prohibited_use": ["supplier negotiation", "supplier award", "engineering approval", "regulatory approval", "realized savings claim"]
+}

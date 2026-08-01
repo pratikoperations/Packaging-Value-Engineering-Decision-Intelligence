@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -14,13 +13,19 @@ from src.exports import (
 from src.recommendation import recommend_alternatives
 from src.risk_engine import evaluate_risks
 from src.scenario_engine import ScenarioInputs, evaluate_scenario
+from src.synthetic_data import SYNTHETIC_DISCLOSURE, build_legacy_dataset, load_governed_package
 from src.technical_qualification import evaluate_technical_qualification
 from src.ui.showcase_handoff_ui import PAGE_REGISTRY_SESSION_KEY
 
 
 ROOT = Path(__file__).resolve().parent
-DEMO_PATH = ROOT / "data" / "demo" / "corrugated_shipping_cases.json"
+GOVERNED_DEMO_PATH = ROOT / "data" / "demo" / "governed_synthetic"
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
+LEGACY_SYNTHETIC_NOTICE = (
+    "This application uses synthetic demonstration data only. "
+    "It must not be treated as validated supplier, laboratory, production, "
+    "engineering-trial, or commercial data."
+)
 SIDEBAR_GROUPS = (
     ("Workspace", ("Project Dashboard", "Guided Workflow")),
     (
@@ -36,21 +41,28 @@ SIDEBAR_GROUPS = (
 
 
 @st.cache_data
-def load_demo() -> dict:
-    return json.loads(DEMO_PATH.read_text(encoding="utf-8"))
+def load_governed_demo() -> dict:
+    return load_governed_package(GOVERNED_DEMO_PATH)
 
 
 def render_home() -> None:
     st.set_page_config(page_title="PVE Decision Intelligence", layout="wide")
     st.title("Packaging Value Engineering Decision Intelligence")
     st.caption("Deterministic scenario comparison, explainable recommendation, and read-only decision export")
-    st.warning(
-        "This application uses synthetic demonstration data only. "
-        "It must not be treated as validated supplier, laboratory, production, "
-        "engineering-trial, or commercial data."
-    )
+    st.warning(LEGACY_SYNTHETIC_NOTICE)
+    st.warning(SYNTHETIC_DISCLOSURE)
 
-    dataset = load_demo()
+    governed_package = load_governed_demo()
+    scenario_options = {
+        item["scenario_id"]: item["title"] for item in governed_package["scenarios"]
+    }
+    selected_scenario_id = st.selectbox(
+        "Governed synthetic procurement scenario",
+        tuple(scenario_options),
+        format_func=lambda value: scenario_options[value],
+        help="All scenario records are deterministic fictional fixtures for testing and demonstration.",
+    )
+    dataset = build_legacy_dataset(governed_package, selected_scenario_id)
     alternatives = dataset["packaging_alternatives"]
     project = dataset["packaging_project"]
 
@@ -73,7 +85,7 @@ def render_home() -> None:
                 max_value=100.0,
                 value=0.0,
                 step=1.0,
-                key=f"cost-{alternative_id}",
+                key=f"cost-{selected_scenario_id}-{alternative_id}",
             )
             material_adjustments[alternative_id] = st.number_input(
                 "Material-weight adjustment (%)",
@@ -81,7 +93,7 @@ def render_home() -> None:
                 max_value=100.0,
                 value=0.0,
                 step=1.0,
-                key=f"material-{alternative_id}",
+                key=f"material-{selected_scenario_id}-{alternative_id}",
             )
 
     inputs = ScenarioInputs(
@@ -95,6 +107,7 @@ def render_home() -> None:
     recommendation = recommend_alternatives(dataset, scenario, qualifications, risks)
 
     st.subheader("Scenario Comparison")
+    st.warning(SYNTHETIC_DISCLOSURE)
     comparison_rows = []
     names = {item["alternative_id"]: item["name"] for item in alternatives}
     for alternative_id, result in scenario.alternatives.items():
@@ -129,22 +142,17 @@ def render_home() -> None:
             for item in result.rationale:
                 st.write(f"- {item}")
             st.write("**Constraints**")
-            if result.constraints:
-                for item in result.constraints:
-                    st.write(f"- {item}")
-            else:
-                st.write("- None")
+            for item in result.constraints or ("None",):
+                st.write(f"- {item}")
             st.write("**Validation required**")
-            if result.validation_required:
-                for item in result.validation_required:
-                    st.write(f"- {item}")
-            else:
-                st.write("- None")
+            for item in result.validation_required or ("None",):
+                st.write(f"- {item}")
 
     st.subheader("Decision Package Export")
+    st.warning(SYNTHETIC_DISCLOSURE)
     source_commit = st.text_input(
         "Source commit or version reference",
-        value="LOCAL-DEMO",
+        value="GOVERNED-SYNTHETIC-DEMO",
         help="Provide the Git commit or version reference represented by this export.",
     )
     generated_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
@@ -157,8 +165,20 @@ def render_home() -> None:
         source_commit=source_commit,
         generated_at=generated_at,
     )
+    package["metadata"].update(
+        {
+            "dataset_id": dataset["dataset_id"],
+            "dataset_version": dataset["dataset_version"],
+            "synthetic_disclosure": SYNTHETIC_DISCLOSURE,
+        }
+    )
     json_export = render_decision_package_json(package)
-    markdown_export = render_decision_package_markdown(package)
+    markdown_export = (
+        "# Synthetic Data Disclosure\n\n"
+        + SYNTHETIC_DISCLOSURE
+        + "\n\n"
+        + render_decision_package_markdown(package)
+    )
 
     left, right = st.columns(2)
     with left:
@@ -235,13 +255,11 @@ def main() -> None:
     with st.sidebar:
         st.page_link(home_page, label="Home")
         st.page_link(page_registry["Showcase & Handoff"], label="Showcase & Handoff")
-
         for group_title, page_titles in SIDEBAR_GROUPS:
             with st.expander(group_title, expanded=False):
                 for title in page_titles:
                     page = page_registry[title]
                     st.page_link(page, label=title)
-
         st.page_link(page_registry["Capabilities & Limits"], label="Capabilities & Limits")
         st.divider()
     selected.run()
