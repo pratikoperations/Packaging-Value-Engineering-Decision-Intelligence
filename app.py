@@ -21,7 +21,11 @@ from src.ui.showcase_handoff_ui import PAGE_REGISTRY_SESSION_KEY
 ROOT = Path(__file__).resolve().parent
 GOVERNED_DEMO_PATH = ROOT / "data" / "demo" / "governed_synthetic"
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
-LEGACY_SYNTHETIC_NOTICE = "This application uses synthetic demonstration data only."
+LEGACY_SYNTHETIC_NOTICE = (
+    "This application uses synthetic demonstration data only. "
+    "It must not be treated as validated supplier, laboratory, production, "
+    "engineering-trial, or commercial data."
+)
 SIDEBAR_GROUPS = (
     ("Workspace", ("Project Dashboard", "Guided Workflow")),
     (
@@ -45,7 +49,8 @@ def render_home() -> None:
     st.set_page_config(page_title="PVE Decision Intelligence", layout="wide")
     st.title("Packaging Value Engineering Decision Intelligence")
     st.caption("Deterministic scenario comparison, explainable recommendation, and read-only decision export")
-    st.warning(f"{LEGACY_SYNTHETIC_NOTICE} {SYNTHETIC_DISCLOSURE}")
+    st.warning(LEGACY_SYNTHETIC_NOTICE)
+    st.warning(SYNTHETIC_DISCLOSURE)
 
     governed_package = load_governed_demo()
     scenario_options = {
