@@ -16,13 +16,17 @@ Planning only. Feature implementation is not yet authorized.
 
 This branch was created directly from the frozen source SHA and is the integration point for the controlled enhancement programme.
 
+## Planning PR disposition
+
+PR #79 is a planning-review comparison only. It must never merge into `showcase-handoff-development`. After planning acceptance, PR #79 must close without merge while the programme branch is retained as the accepted planning baseline.
+
 ## Planned feature branches
 
 1. `enhancement/governed-synthetic-data`
 2. `enhancement/calculation-evidence-reconciliation`
 3. `enhancement/browser-acceptance`
 
-Each feature branch must start from the accepted programme-branch SHA current at authorization time.
+No feature branch may be created until separately authorized. Each feature branch must start from the accepted programme-branch SHA current at authorization time.
 
 ## Planned merge order
 
@@ -44,7 +48,7 @@ Each feature branch must start from the accepted programme-branch SHA current at
 
 ## Publication strategy
 
-The original frozen showcase branch should remain unchanged. If the programme is accepted, publish through a distinct branch such as `showcase-enhanced-v2` rather than moving the historical frozen branch.
+The original frozen showcase branch remains unchanged. If the programme is accepted, publish through a distinct branch such as `showcase-enhanced-v2` rather than moving the historical frozen branch.
 
 ## Stop conditions
 
@@ -54,6 +58,7 @@ Stop work if:
 - `main` changes unexpectedly;
 - scope exceeds the authorized capability;
 - projected effort exceeds 100 hours;
+- a cumulative forecast gate is exceeded without immediate scope reduction;
 - synthetic data loses mandatory labelling;
 - evidence-engine independence cannot be demonstrated;
 - existing business-engine outputs change without explicit authorization.
