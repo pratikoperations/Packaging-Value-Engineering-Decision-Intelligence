@@ -21,6 +21,18 @@ from src.ui.showcase_handoff_ui import PAGE_REGISTRY_SESSION_KEY
 ROOT = Path(__file__).resolve().parent
 DEMO_PATH = ROOT / "data" / "demo" / "corrugated_shipping_cases.json"
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
+SIDEBAR_GROUPS = (
+    ("Workspace", ("Project Dashboard", "Guided Workflow")),
+    (
+        "Inputs & Governance",
+        ("Specification Review", "Data Upload", "Business Rules & Thresholds"),
+    ),
+    ("Analysis & Decision", ("Scenario Analysis", "Decision Records")),
+    (
+        "Evidence & Explanation",
+        ("SourceMate", "Calculation Evidence", "Decision Evidence Ledger"),
+    ),
+)
 
 
 @st.cache_data
@@ -222,10 +234,15 @@ def main() -> None:
     selected = st.navigation(pages, position="hidden")
     with st.sidebar:
         st.page_link(home_page, label="Home")
-        for title, page in page_registry.items():
-            if title == "Home":
-                continue
-            st.page_link(page, label=title)
+        st.page_link(page_registry["Showcase & Handoff"], label="Showcase & Handoff")
+
+        for group_title, page_titles in SIDEBAR_GROUPS:
+            with st.expander(group_title, expanded=False):
+                for title in page_titles:
+                    page = page_registry[title]
+                    st.page_link(page, label=title)
+
+        st.page_link(page_registry["Capabilities & Limits"], label="Capabilities & Limits")
         st.divider()
     selected.run()
 
