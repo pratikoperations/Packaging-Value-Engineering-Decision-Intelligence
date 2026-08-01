@@ -34,6 +34,10 @@ Gate 3A verifies that the exact integrated programme version can start, render, 
 - no autonomous procurement or technical approval;
 - no Power BI validation.
 
+## Dependency isolation
+
+Playwright is an optional browser-validation dependency. The package root uses a lazy runner import and the standard repository contract tests import only dependency-free contracts, diagnostics, export validators and process-management helpers. Standard repository validation therefore does not require Playwright merely to discover the Gate 3A tests.
+
 ## Workflow
 
 Workflow: `Gate 3A Minimal Interview Browser Acceptance`
@@ -50,6 +54,10 @@ Runtime:
 - zero automatic retries;
 - twenty-minute timeout;
 - read-only repository permission.
+
+## Workflow visibility
+
+GitHub manual-dispatch visibility is governed by the workflow definition present on the repository default branch. The feature-branch workflow must not be assumed to be dispatchable from the Actions user interface until an independently authorized default-branch visibility bridge or equivalent governed registration mechanism exists. That bridge is outside this implementation candidate.
 
 ## Evidence artifact
 
