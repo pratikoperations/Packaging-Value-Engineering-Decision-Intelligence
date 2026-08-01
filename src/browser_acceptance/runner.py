@@ -28,6 +28,7 @@ EXCEPTION_TEXT = (
     "Traceback (most recent call last)",
 )
 PAGE_BY_TITLE = {title: (heading, group) for title, heading, group in PAGE_CONTRACTS}
+ASSUMPTION_LABEL = re.compile(r"^[A-Za-z0-9_-]+ assumptions$", re.IGNORECASE)
 
 
 def _assert_no_visible_exception(page: Page) -> None:
@@ -37,29 +38,50 @@ def _assert_no_visible_exception(page: Page) -> None:
         raise AssertionError(f"Visible Streamlit exception markers: {found}")
 
 
+def _visible_candidates(locator: Locator) -> list[Locator]:
+    return [locator.nth(index) for index in range(locator.count()) if locator.nth(index).is_visible()]
+
+
 def _first_visible(locator: Locator) -> Locator:
-    for index in range(locator.count()):
-        candidate = locator.nth(index)
-        if candidate.is_visible():
-            return candidate
-    raise AssertionError("Expected at least one visible matching element.")
+    visible = _visible_candidates(locator)
+    if not visible:
+        raise AssertionError("Expected at least one visible matching element.")
+    return visible[0]
 
 
 def _open_sidebar_if_needed(page: Page) -> None:
     home_links = page.get_by_role("link", name="Home", exact=True)
-    if any(home_links.nth(index).is_visible() for index in range(home_links.count())):
+    if _visible_candidates(home_links):
         return
-    sidebar_button = page.get_by_role("button", name=re.compile("sidebar", re.IGNORECASE))
-    visible_toggle = _first_visible(sidebar_button)
-    visible_toggle.click()
+    sidebar_buttons = page.get_by_role("button", name=re.compile("sidebar", re.IGNORECASE))
+    _first_visible(sidebar_buttons).click()
     _first_visible(page.get_by_role("link", name="Home", exact=True)).wait_for()
+
+
+def _ensure_group_expanded(page: Page, group: str, expected_link: str) -> None:
+    _open_sidebar_if_needed(page)
+    target_links = page.get_by_role("link", name=expected_link, exact=True)
+    if _visible_candidates(target_links):
+        return
+    group_control = _first_visible(page.get_by_text(group, exact=True))
+    group_control.click()
+    _first_visible(page.get_by_role("link", name=expected_link, exact=True)).wait_for()
+
+
+def _ensure_assumptions_expanded(page: Page) -> None:
+    _open_sidebar_if_needed(page)
+    cost_inputs = page.get_by_role("spinbutton", name="Unit-cost adjustment (%)", exact=True)
+    if _visible_candidates(cost_inputs):
+        return
+    assumptions = page.get_by_text(ASSUMPTION_LABEL, exact=True)
+    _first_visible(assumptions).click()
+    _first_visible(page.get_by_role("spinbutton", name="Unit-cost adjustment (%)", exact=True)).wait_for()
 
 
 def _click_page(page: Page, title: str, group: str | None) -> None:
     _open_sidebar_if_needed(page)
     if group:
-        group_control = _first_visible(page.get_by_text(group, exact=True))
-        group_control.click()
+        _ensure_group_expanded(page, group, title)
     link = _first_visible(page.get_by_role("link", name=title, exact=True))
     link.click()
     heading, _ = PAGE_BY_TITLE[title]
@@ -107,6 +129,7 @@ def _home_journey(page: Page, artifacts: Path) -> dict[str, Any]:
         raise AssertionError("Required synthetic disclosures are not visible.")
 
     _select_second_governed_scenario(page)
+
     _open_sidebar_if_needed(page)
     annual_volume = _first_visible(
         page.get_by_role("spinbutton", name="Annual volume (cases)", exact=True)
@@ -114,19 +137,19 @@ def _home_journey(page: Page, artifacts: Path) -> dict[str, Any]:
     annual_volume.fill("1010000")
     annual_volume.press("Enter")
 
-    assumptions = page.get_by_text(
-        re.compile(r"^[A-Za-z0-9_-]+ assumptions$", re.IGNORECASE), exact=True
-    )
-    visible_assumptions = _first_visible(assumptions)
-    visible_assumptions.click()
+    # Streamlit reruns can collapse the narrow sidebar and reset expander visibility.
+    _ensure_assumptions_expanded(page)
     cost_adjustment = _first_visible(
         page.get_by_role("spinbutton", name="Unit-cost adjustment (%)", exact=True)
     )
+    cost_adjustment.fill("1")
+    cost_adjustment.press("Enter")
+
+    # Re-establish responsive sidebar and expander state after the cost-input rerun.
+    _ensure_assumptions_expanded(page)
     material_adjustment = _first_visible(
         page.get_by_role("spinbutton", name="Material-weight adjustment (%)", exact=True)
     )
-    cost_adjustment.fill("1")
-    cost_adjustment.press("Enter")
     material_adjustment.fill("-1")
     material_adjustment.press("Enter")
 
@@ -167,18 +190,11 @@ def _run_viewport(
                 _click_page(page, "Home", None)
 
         for group, expected in SIDEBAR_GROUPS.items():
-            _open_sidebar_if_needed(page)
-            group_control = _first_visible(page.get_by_text(group, exact=True))
-            group_control.click()
+            _ensure_group_expanded(page, group, expected[0])
             visible = [
                 title
                 for title in expected
-                if any(
-                    page.get_by_role("link", name=title, exact=True).nth(index).is_visible()
-                    for index in range(
-                        page.get_by_role("link", name=title, exact=True).count()
-                    )
-                )
+                if _visible_candidates(page.get_by_role("link", name=title, exact=True))
             ]
             if tuple(visible) != tuple(expected):
                 raise AssertionError(f"Sidebar group {group} mismatch: {visible}")
