@@ -32,8 +32,17 @@ STARTUP_TIMEOUT_SECONDS = 60
 PAGE_TIMEOUT_MILLISECONDS = 30_000
 ACTION_TIMEOUT_MILLISECONDS = 10_000
 
+# Governed decision-package schema. Recommendation evidence is carried by the
+# executive summary and each proposed alternative's recommendation object.
 REQUIRED_JSON_KEYS = (
-    "metadata", "project", "scenario", "alternatives", "recommendation", "calculation_evidence"
+    "metadata",
+    "executive_summary",
+    "project",
+    "scenario",
+    "baseline",
+    "alternatives",
+    "decision_controls",
+    "calculation_evidence",
 )
 REQUIRED_MARKDOWN_TEXT = (
     "# Synthetic Data Disclosure",
