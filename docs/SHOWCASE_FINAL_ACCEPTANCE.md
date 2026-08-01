@@ -2,17 +2,20 @@
 
 ## Status
 
-**Acceptance state: PASSED — EXACT-HEAD CI AND HOSTED DESKTOP/ANDROID EVIDENCE RECORDED**
+**Acceptance state: FINAL FROZEN — EXACT POST-MERGE CI AND HOSTED DESKTOP/ANDROID EVIDENCE RECORDED**
 
-This document records final pre-merge acceptance of Build 6 against the accepted runtime feature commit. Evidence-only documentation closure creates a later documentation head that must receive its own exact-head CI before PR acceptance. Post-merge validation remains required against the resulting integration merge SHA before final freeze.
+This document records final acceptance of Build 6 and the Showcase and Handoff programme. PR #77 was merged into `showcase-handoff-development` using merge commit `beda79397fdcffb38b8b42faa4766438bd349678`. Exact post-merge CI passed, hosted desktop and Android acceptance passed, and no Build 7 is proposed or authorized.
 
 ## Repository identity
 
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
-- Candidate branch: `showcase/build-6-final-hardening-freeze`
-- Required base SHA: `ac42a215e5a35697e8c9f0bc14eb75c3120fc0e5`
+- Frozen integration branch: `showcase-handoff-development`
+- Frozen integration SHA: `beda79397fdcffb38b8b42faa4766438bd349678`
+- Merged pull request: `#77`
 - Accepted runtime and hosted SHA: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
-- Evidence-closure head SHA: `PENDING FINAL EXACT-HEAD CI`
+- Final evidence-closure SHA: `18fe34461026f0cbb5e4c9ddfb516248dd71b98e`
+- Retained feature branch: `showcase/build-6-final-hardening-freeze`
+- Unchanged main SHA: `a6803b6156b591ec1fe9587469f6fe7c00ed97f4`
 - Hosted preview: `https://packaging-value-engineering-decision-intelligence-build6.streamlit.app`
 
 ## Page inventory
@@ -117,16 +120,38 @@ The exports preserve synthetic-data disclosure, proof-versus-limit boundaries, h
 
 ## Automated validation evidence
 
-- Accepted runtime exact-head workflow run: `30687748523`
-- Accepted runtime validation job: `91336808643`
-- Accepted runtime test count: `746`
+### Accepted hosted-runtime validation
+
+- Workflow run: `30687748523`
+- Validation job: `91336808643`
+- Exact tested runtime SHA: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
+- Test result: `746 tests passed`
 - Failures: `0`
 - Errors: `0`
 - Artifact ID: `8814551912`
 - Artifact SHA-256: `75abff464dc40b039baea31348cfb00bcadd931ae0525099e5463af4eed83096`
-- Evidence-closure exact-head workflow run: `PENDING`
-- Evidence-closure validation job: `PENDING`
-- Evidence-closure artifact: `PENDING`
+
+### Final evidence-closure validation
+
+- Workflow run: `30688745028`
+- Validation job: `91339574328`
+- Exact tested evidence-closure SHA: `18fe34461026f0cbb5e4c9ddfb516248dd71b98e`
+- Test result: `746 tests passed`
+- Failures: `0`
+- Errors: `0`
+- Artifact ID: `8814899214`
+- Artifact SHA-256: `9aa2a1323f5288a69432bffa63fc66a7fc34ad8e3ef976655ae307fa5d79be41`
+
+### Exact post-merge validation
+
+- Workflow run: `30689106960`
+- Validation job: `91340556427`
+- Exact tested integration SHA: `beda79397fdcffb38b8b42faa4766438bd349678`
+- Test result: `746 tests passed`
+- Failures: `0`
+- Errors: `0`
+- Artifact ID: `8815028245`
+- Artifact SHA-256: `c4719f3f4c52143a39124d9b1ca3895bb1234ef13d1620bceeb96ccceb0622ec`
 
 ## Remaining limitations
 
@@ -144,4 +169,4 @@ The showcase proves deterministic decision support, governed explanation, calcul
 
 ## Final acceptance rule
 
-Hosted and runtime acceptance is **PASSED** against exact feature SHA `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`. PR acceptance requires exact-head CI against the evidence-only documentation closure head. Final freeze then requires merge into `showcase-handoff-development`, exact post-merge CI, artifact evidence, and repeated hosted acceptance against the exact integration merge SHA.
+Build 6 is accepted and the Showcase and Handoff programme is frozen at integration SHA `beda79397fdcffb38b8b42faa4766438bd349678`. Exact post-merge CI passed with 746 tests, zero failures, and zero errors. Hosted desktop and Android acceptance passed. The retained feature branch remains available, `main` remains unchanged, and no Build 7 is proposed or authorized.
