@@ -4,6 +4,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 from src.browser_acceptance.contracts import (
     APP_ROOT_SELECTOR,
@@ -18,7 +19,49 @@ from src.browser_acceptance.contracts import (
 )
 from src.browser_acceptance.export_validation import validate_json_download, validate_markdown_download
 from src.browser_acceptance.process_manager import allocate_port
-from src.browser_acceptance.runner import _validate_route_inventory
+from src.browser_acceptance.runner import (
+    _click_direct_link,
+    _click_grouped_link,
+    _collect_group_routes,
+    _validate_route_inventory,
+    _wait_for_visible_calculation_evidence,
+)
+
+
+class _Candidate:
+    def __init__(self, visible: bool):
+        self.visible = visible
+
+    def is_visible(self) -> bool:
+        return self.visible
+
+
+class _Locator:
+    def __init__(self, candidates: list[_Candidate]):
+        self.candidates = candidates
+        self.first = self
+
+    def count(self) -> int:
+        return len(self.candidates)
+
+    def nth(self, index: int) -> _Candidate:
+        return self.candidates[index]
+
+    def wait_for(self, **_kwargs) -> None:
+        return None
+
+
+class _EvidencePage:
+    def __init__(self):
+        self.hidden_text = _Locator([_Candidate(False), _Candidate(False)])
+        self.visible_heading = _Locator([_Candidate(False), _Candidate(True)])
+        self.empty_button = _Locator([])
+
+    def get_by_role(self, role: str, **_kwargs):
+        return self.empty_button if role == "button" else self.visible_heading
+
+    def get_by_text(self, *_args, **_kwargs):
+        return self.hidden_text
 
 
 class BrowserContractTests(unittest.TestCase):
@@ -64,6 +107,92 @@ class BrowserContractTests(unittest.TestCase):
         )
         self.assertNotIn('locator("main")', runner_text)
         self.assertNotIn("locator('main')", runner_text)
+
+    def test_calculation_evidence_prefers_visible_semantic_candidate(self):
+        candidate = _wait_for_visible_calculation_evidence(_EvidencePage())
+        self.assertTrue(candidate.is_visible())
+
+    @patch("src.browser_acceptance.runner._app_ready")
+    @patch("src.browser_acceptance.runner._scroll_and_click")
+    @patch("src.browser_acceptance.runner._wait_for_first_visible")
+    @patch("src.browser_acceptance.runner._open_sidebar_if_needed")
+    def test_direct_link_helper_has_explicit_call_path(
+        self, open_sidebar, wait_visible, scroll_click, app_ready
+    ):
+        page = MagicMock()
+        link = MagicMock()
+        wait_visible.return_value = link
+        _click_direct_link(page, "Showcase & Handoff")
+        open_sidebar.assert_called_once_with(page)
+        page.get_by_role.assert_called_once_with(
+            "link", name="Showcase & Handoff", exact=True
+        )
+        scroll_click.assert_called_once_with(link)
+        app_ready.assert_called_once_with(page)
+
+    @patch("src.browser_acceptance.runner._app_ready")
+    @patch("src.browser_acceptance.runner._scroll_and_click")
+    @patch("src.browser_acceptance.runner._wait_for_first_visible")
+    @patch("src.browser_acceptance.runner._ensure_group_expanded")
+    @patch("src.browser_acceptance.runner._open_sidebar_if_needed")
+    def test_grouped_link_helper_has_explicit_call_path(
+        self, open_sidebar, ensure_group, wait_visible, scroll_click, app_ready
+    ):
+        page = MagicMock()
+        link = MagicMock()
+        wait_visible.return_value = link
+        _click_grouped_link(page, "Workspace", "Project Dashboard")
+        open_sidebar.assert_called_once_with(page)
+        ensure_group.assert_called_once_with(
+            page, "Workspace", "Project Dashboard", physical=True
+        )
+        page.get_by_role.assert_called_once_with(
+            "link", name="Project Dashboard", exact=True
+        )
+        scroll_click.assert_called_once_with(link)
+        app_ready.assert_called_once_with(page)
+
+    @patch("src.browser_acceptance.runner._resolved_link")
+    @patch("src.browser_acceptance.runner._ensure_group_expanded")
+    def test_group_routes_are_collected_immediately_after_group_expansion(
+        self, ensure_group, resolved_link
+    ):
+        page = MagicMock()
+        resolved_link.side_effect = [
+            "http://127.0.0.1:8501/dashboard",
+            "http://127.0.0.1:8501/register",
+        ]
+        routes = _collect_group_routes(
+            page,
+            "http://127.0.0.1:8501",
+            "Workspace",
+            ("Project Dashboard", "Project Register"),
+        )
+        ensure_group.assert_called_once_with(page, "Workspace", "Project Dashboard")
+        self.assertEqual(
+            {
+                "Project Dashboard": "http://127.0.0.1:8501/dashboard",
+                "Project Register": "http://127.0.0.1:8501/register",
+            },
+            routes,
+        )
+        self.assertEqual(
+            [
+                unittest.mock.call(
+                    page,
+                    "http://127.0.0.1:8501",
+                    "Project Dashboard",
+                    group="Workspace",
+                ),
+                unittest.mock.call(
+                    page,
+                    "http://127.0.0.1:8501",
+                    "Project Register",
+                    group="Workspace",
+                ),
+            ],
+            resolved_link.call_args_list,
+        )
 
     def test_route_inventory_requires_thirteen_unique_hrefs(self):
         routes = {
