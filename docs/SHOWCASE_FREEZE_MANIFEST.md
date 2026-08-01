@@ -2,19 +2,20 @@
 
 ## Freeze status
 
-**Freeze state: PRE-MERGE ACCEPTED — FINAL FREEZE PENDING MERGE AND POST-MERGE VALIDATION**
+**Freeze state: FINAL FROZEN**
 
-Build 6 is the final authorized showcase build. This manifest records the accepted feature-branch evidence. It becomes final only after PR #77 is merged into `showcase-handoff-development`, exact post-merge CI passes, and hosted acceptance is repeated against the resulting integration merge SHA.
+Build 6 is the final authorized showcase build. PR #77 has been merged into `showcase-handoff-development`, the exact integration merge SHA has passed post-merge validation, hosted desktop and Android acceptance has passed, and the Showcase and Handoff programme is frozen. No Build 7 is proposed or authorized.
 
 ## Repository identity
 
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
-- Final integration branch: `showcase-handoff-development`
-- Candidate feature branch: `showcase/build-6-final-hardening-freeze`
-- Required Build 6 base SHA: `ac42a215e5a35697e8c9f0bc14eb75c3120fc0e5`
-- Accepted feature head SHA before evidence closure: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
-- Evidence-closure head SHA: `PENDING FINAL EXACT-HEAD CI`
-- Final integration SHA: `PENDING MERGE`
+- Frozen integration branch: `showcase-handoff-development`
+- Frozen integration SHA: `beda79397fdcffb38b8b42faa4766438bd349678`
+- Merged pull request: `#77`
+- Retained feature branch: `showcase/build-6-final-hardening-freeze`
+- Retained feature SHA: `18fe34461026f0cbb5e4c9ddfb516248dd71b98e`
+- Accepted hosted runtime SHA: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
+- Unchanged main SHA: `a6803b6156b591ec1fe9587469f6fe7c00ed97f4`
 - Hosted preview: `https://packaging-value-engineering-decision-intelligence-build6.streamlit.app`
 
 ## Frozen page inventory
@@ -52,22 +53,38 @@ All 13 pages remain registered exactly once. No page was merged, deleted, rename
 
 ## Automated evidence
 
-- Validated baseline before Build 6: `730 tests`
-- Accepted pre-closure exact-head test count: `746`
-- Pre-closure workflow run: `30687748523`
-- Pre-closure validation job: `91336808643`
-- Pre-closure artifact ID: `8814551912`
-- Pre-closure artifact SHA-256: `75abff464dc40b039baea31348cfb00bcadd931ae0525099e5463af4eed83096`
+### Accepted hosted-runtime validation
+
+- Workflow run: `30687748523`
+- Validation job: `91336808643`
+- Exact tested runtime SHA: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
+- Test result: `746 tests passed`
 - Failures: `0`
 - Errors: `0`
-- Evidence-closure exact-head workflow run: `PENDING`
-- Evidence-closure validation job: `PENDING`
-- Evidence-closure artifact ID: `PENDING`
-- Evidence-closure artifact SHA-256: `PENDING`
-- Post-merge workflow run: `PENDING`
-- Post-merge validation job: `PENDING`
-- Post-merge artifact ID: `PENDING`
-- Post-merge artifact SHA-256: `PENDING`
+- Artifact ID: `8814551912`
+- Artifact SHA-256: `75abff464dc40b039baea31348cfb00bcadd931ae0525099e5463af4eed83096`
+
+### Final evidence-closure validation
+
+- Workflow run: `30688745028`
+- Validation job: `91339574328`
+- Exact tested evidence-closure SHA: `18fe34461026f0cbb5e4c9ddfb516248dd71b98e`
+- Test result: `746 tests passed`
+- Failures: `0`
+- Errors: `0`
+- Artifact ID: `8814899214`
+- Artifact SHA-256: `9aa2a1323f5288a69432bffa63fc66a7fc34ad8e3ef976655ae307fa5d79be41`
+
+### Exact post-merge validation
+
+- Workflow run: `30689106960`
+- Validation job: `91340556427`
+- Exact tested integration SHA: `beda79397fdcffb38b8b42faa4766438bd349678`
+- Test result: `746 tests passed`
+- Failures: `0`
+- Errors: `0`
+- Artifact ID: `8815028245`
+- Artifact SHA-256: `c4719f3f4c52143a39124d9b1ca3895bb1234ef13d1620bceeb96ccceb0622ec`
 
 ## Hosted acceptance evidence
 
@@ -78,7 +95,7 @@ All 13 pages remain registered exactly once. No page was merged, deleted, rename
 - Controlled page-link correction: `PASSED`
 - Markdown journey export: `PASSED`
 - JSON journey export: `PASSED`
-- Accepted hosted application SHA before evidence closure: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
+- Prior `streamlit.errors.StreamlitPageNotFoundError`: corrected and absent in accepted hosted evidence
 - Preview startup: repository, feature branch, `app.py`, Python 3.12.13, and Streamlit 1.60.0 verified
 
 ## Frozen capabilities
@@ -132,14 +149,15 @@ A separate production programme would require real governed data, authenticated 
 
 ## Freeze controls
 
+- Build 6 lifecycle is complete;
+- the Showcase and Handoff programme is frozen at integration SHA `beda79397fdcffb38b8b42faa4766438bd349678`;
 - Build 6 is the final showcase build;
 - no Build 7 is proposed or authorized;
-- no additional showcase feature development is permitted after final freeze;
+- no additional showcase feature development is permitted without a new programme authorization;
 - enterprise capability must be scoped in a separate production programme;
-- the feature branch must remain retained unless deletion is separately authorized;
-- `main` must remain unchanged during the Showcase and Handoff programme;
-- the final integration SHA and post-merge evidence must replace the remaining pending fields.
+- the retained feature branch must not be deleted unless separately authorized;
+- `main` remains unchanged at `a6803b6156b591ec1fe9587469f6fe7c00ed97f4`.
 
 ## Final declaration
 
-`PRE-MERGE ACCEPTANCE PASSED — FINAL FREEZE PENDING EVIDENCE-CLOSURE CI, EXACT MERGE SHA, POST-MERGE CI, ARTIFACT, AND HOSTED REVALIDATION`
+`FINAL FROZEN — BUILD 6 COMPLETE, PR #77 MERGED, EXACT POST-MERGE CI PASSED, HOSTED DESKTOP/ANDROID ACCEPTANCE PASSED, NO BUILD 7 AUTHORIZED OR PROPOSED`
