@@ -1,0 +1,8 @@
+[
+  {"risk_event_id":"RSK-SYN-001","supplier_id":"SUP-SYN-002","specification_id":"SPC-SYN-002","risk_type":"quality","level":"high","probability_percent":55,"unit":"percent","assumption_provenance":"synthetic_risk_assumption"},
+  {"risk_event_id":"RSK-SYN-002","supplier_id":"SUP-SYN-002","specification_id":"SPC-SYN-002","risk_type":"supply","level":"high","probability_percent":50,"unit":"percent","assumption_provenance":"synthetic_risk_assumption"},
+  {"risk_event_id":"RSK-SYN-003","supplier_id":"SUP-SYN-003","specification_id":"SPC-SYN-003","risk_type":"quality","level":"high","probability_percent":60,"unit":"percent","assumption_provenance":"synthetic_risk_assumption"},
+  {"risk_event_id":"RSK-SYN-004","supplier_id":"SUP-SYN-003","specification_id":"SPC-SYN-003","risk_type":"implementation","level":"medium","probability_percent":40,"unit":"percent","assumption_provenance":"synthetic_risk_assumption"},
+  {"risk_event_id":"RSK-SYN-005","supplier_id":"SUP-SYN-004","specification_id":"SPC-SYN-004","risk_type":"quality","level":"low","probability_percent":15,"unit":"percent","assumption_provenance":"synthetic_risk_assumption"},
+  {"risk_event_id":"RSK-SYN-006","supplier_id":"SUP-SYN-004","specification_id":"SPC-SYN-004","risk_type":"supply","level":"low","probability_percent":20,"unit":"percent","assumption_provenance":"synthetic_risk_assumption"}
+]
