@@ -4,14 +4,15 @@
 
 **Acceptance state: PASSED — EXACT-HEAD CI AND HOSTED DESKTOP/ANDROID EVIDENCE RECORDED**
 
-This document records final pre-merge acceptance of Build 6 against one exact feature-branch commit. Post-merge validation remains required against the resulting integration merge SHA before the showcase can be declared frozen.
+This document records final pre-merge acceptance of Build 6 against the accepted runtime feature commit. Evidence-only documentation closure creates a later documentation head that must receive its own exact-head CI before PR acceptance. Post-merge validation remains required against the resulting integration merge SHA before final freeze.
 
 ## Repository identity
 
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 - Candidate branch: `showcase/build-6-final-hardening-freeze`
 - Required base SHA: `ac42a215e5a35697e8c9f0bc14eb75c3120fc0e5`
-- Exact tested SHA: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
+- Accepted runtime and hosted SHA: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
+- Evidence-closure head SHA: `PENDING FINAL EXACT-HEAD CI`
 - Hosted preview: `https://packaging-value-engineering-decision-intelligence-build6.streamlit.app`
 
 ## Page inventory
@@ -116,13 +117,16 @@ The exports preserve synthetic-data disclosure, proof-versus-limit boundaries, h
 
 ## Automated validation evidence
 
-- Exact-head workflow run: `30687748523`
-- Validation job: `91336808643`
-- Exact test count: `746`
+- Accepted runtime exact-head workflow run: `30687748523`
+- Accepted runtime validation job: `91336808643`
+- Accepted runtime test count: `746`
 - Failures: `0`
 - Errors: `0`
 - Artifact ID: `8814551912`
 - Artifact SHA-256: `75abff464dc40b039baea31348cfb00bcadd931ae0525099e5463af4eed83096`
+- Evidence-closure exact-head workflow run: `PENDING`
+- Evidence-closure validation job: `PENDING`
+- Evidence-closure artifact: `PENDING`
 
 ## Remaining limitations
 
@@ -140,4 +144,4 @@ The showcase proves deterministic decision support, governed explanation, calcul
 
 ## Final acceptance rule
 
-Pre-merge Build 6 acceptance is **PASSED** against exact feature SHA `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`. Final freeze requires merge into `showcase-handoff-development`, exact post-merge CI, artifact evidence, and repeated hosted acceptance against the exact integration merge SHA.
+Hosted and runtime acceptance is **PASSED** against exact feature SHA `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`. PR acceptance requires exact-head CI against the evidence-only documentation closure head. Final freeze then requires merge into `showcase-handoff-development`, exact post-merge CI, artifact evidence, and repeated hosted acceptance against the exact integration merge SHA.
