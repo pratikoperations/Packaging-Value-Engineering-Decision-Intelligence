@@ -6,6 +6,7 @@ from src.showcase_handoff import AudienceRole, ShowcaseHandoffService
 
 
 ROOT = Path(__file__).resolve().parents[2]
+PAGE_REGISTRY_SESSION_KEY = "_pve_page_registry"
 PAGE_TOKENS = (
     ("Showcase & Handoff", "showcase_handoff"),
     ("Project Dashboard", "project_dashboard"),
@@ -69,6 +70,7 @@ def render_showcase_handoff_page(st, service: ShowcaseHandoffService) -> None:
     st.write(journey.business_objective)
     st.info(journey.opening_statement)
 
+    page_registry = getattr(st, "session_state", {}).get(PAGE_REGISTRY_SESSION_KEY, {})
     for step in journey.steps:
         label = (
             f"{step.step_number}. {step.title} — "
@@ -82,9 +84,9 @@ def render_showcase_handoff_page(st, service: ShowcaseHandoffService) -> None:
             st.write("**Do not claim**")
             for item in step.avoid_claiming:
                 st.write(f"- {item}")
-            path = PAGE_PATHS.get(step.page_reference)
-            if path:
-                st.page_link(path, label=f"Open {step.page_reference}", width="stretch")
+            target_page = page_registry.get(step.page_reference)
+            if target_page is not None:
+                st.page_link(target_page, label=f"Open {step.page_reference}", width="stretch")
 
     st.subheader("What this proves")
     for item in journey.proof_statements:
