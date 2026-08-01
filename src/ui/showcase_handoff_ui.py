@@ -1,27 +1,43 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from src.showcase_handoff import AudienceRole, ShowcaseHandoffService
 
-PAGE_PATHS = {
-    "Home": "app.py",
-    "Showcase & Handoff": "pages/05_showcase_handoff.py",
-    "Project Dashboard": "pages/10_project_dashboard.py",
-    "Guided Workflow": "pages/20_guided_workflow.py",
-    "Specification Review": "pages/25_specification_review.py",
-    "Data Upload": "pages/30_data_upload.py",
-    "Business Rules & Thresholds": "pages/40_business_thresholds.py",
-    "Scenario Analysis": "pages/50_controlled_scenarios.py",
-    "Decision Records": "pages/60_decision_history.py",
-    "SourceMate": "pages/27_sourcemate.py",
-    "Calculation Evidence": "pages/28_calculation_evidence.py",
-    "Decision Evidence Ledger": "pages/29_decision_evidence_ledger.py",
-    "Capabilities & Limits": "pages/70_capabilities_and_limits.py",
-}
+
+ROOT = Path(__file__).resolve().parents[2]
+PAGE_TOKENS = (
+    ("Showcase & Handoff", "showcase_handoff"),
+    ("Project Dashboard", "project_dashboard"),
+    ("Guided Workflow", "guided_workflow"),
+    ("Specification Review", "specification_review"),
+    ("Data Upload", "data_upload"),
+    ("Business Rules & Thresholds", "business_thresholds"),
+    ("Scenario Analysis", "controlled_scenarios"),
+    ("Decision Records", "decision_history"),
+    ("SourceMate", "sourcemate"),
+    ("Calculation Evidence", "calculation_evidence"),
+    ("Decision Evidence Ledger", "decision_evidence_ledger"),
+    ("Capabilities & Limits", "capabilities_and_limits"),
+)
+
+
+def _build_page_paths() -> dict[str, str]:
+    paths: dict[str, str] = {"Home": "app.py"}
+    page_files = tuple(sorted((ROOT / "pages").glob("*.py")))
+    for title, token in PAGE_TOKENS:
+        matches = [path for path in page_files if token in path.stem.lower()]
+        if len(matches) == 1:
+            paths[title] = matches[0].relative_to(ROOT).as_posix()
+    return paths
+
+
+PAGE_PATHS = _build_page_paths()
 
 LIVE_DEMO_RECOVERY = (
     "Refresh the browser if the current page stops responding.",
     "Return to Home and reopen Showcase & Handoff.",
-    "Select the five-minute executive journey and use the approved synthetic demonstration project.",
+    "Select the five-minute executive journey and use the designated synthetic demonstration project.",
     "Skip optional drill-downs if time is limited.",
     "Close on Capabilities & Limits so governance boundaries remain explicit.",
 )
