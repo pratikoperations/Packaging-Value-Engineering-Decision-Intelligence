@@ -1,0 +1,12 @@
+{
+  "policy_version": "1.0.0",
+  "combined_rule": "max(absolute_tolerance, abs(independent_result) * relative_percent / 100)",
+  "policies": [
+    {"policy_id":"TOL-UNIT-CURRENCY-001","absolute":"0.000001","relative_percent":"0.000001","unit":"INR_per_case"},
+    {"policy_id":"TOL-ANNUAL-CURRENCY-001","absolute":"0.01","relative_percent":"0.000001","unit":"INR_per_year"},
+    {"policy_id":"TOL-WEIGHT-001","absolute":"0.000001","relative_percent":"0.000001","unit":"g_per_case"},
+    {"policy_id":"TOL-MATERIAL-001","absolute":"0.000001","relative_percent":"0.000001","unit":"kg_per_year"},
+    {"policy_id":"TOL-PERCENT-001","absolute":"0.000001","relative_percent":"0.000001","unit":"percentage_points"},
+    {"policy_id":"TOL-FACTOR-001","absolute":"0.000001","relative_percent":"0.000001","unit":"factor"}
+  ]
+}
