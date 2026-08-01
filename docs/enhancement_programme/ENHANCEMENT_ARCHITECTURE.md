@@ -11,7 +11,7 @@ Planning only. No implementation is authorized by this document.
 - Frozen source SHA: `2954c293ca09882cadd7f23b5862f50334170a11`
 - Programme branch: `enhancement/browser-data-calculation-programme`
 
-The frozen branch must not move during programme development.
+The frozen branch must not move during programme development. Planning PR #79 is a review comparison only and must never merge into `showcase-handoff-development`; after planning acceptance it must close without merge.
 
 ## Programme objective
 
@@ -25,17 +25,17 @@ Improve interview and portfolio credibility through three bounded capabilities:
 
 ### Browser acceptance layer
 
-A separate browser-test layer starts or targets the Streamlit application and verifies registered navigation, governed warnings, exports, desktop behaviour and Android-sized viewport behaviour. Browser tests supplement rather than replace the existing regression suite.
+A separate browser-test layer starts the Streamlit application locally at an ephemeral port for CI acceptance and may target the hosted application only for final smoke validation. Tests supplement rather than replace the existing regression suite.
 
 ### Synthetic data layer
 
-Synthetic scenarios remain isolated under a dedicated data namespace. Every dataset and record must declare `dataset_type: synthetic_demo`, use fictional suppliers and prohibit commercial, engineering, negotiation, award and realized-savings claims.
+Synthetic scenarios remain isolated under a dedicated namespace. Every dataset and record must declare or inherit `dataset_type: synthetic_demo`, deterministic governed identifiers, schema and dataset versions, generation method, assumption provenance, explicit units and currency, and prohibited commercial-use metadata.
 
 ### Independent Calculation Evidence layer
 
-A separate evidence engine independently maps inputs, applies separately defined and versioned formulas, normalizes units, calculates supported results and reconciles them against primary-engine outputs.
+A separate evidence engine independently maps raw inputs, applies separately owned and versioned formulas, normalizes units, calculates supported results using decimal arithmetic, and reconciles them against primary-engine outputs.
 
-The evidence engine must not import or call primary calculation functions. It may consume primary outputs only after independent calculation is complete.
+The evidence engine must not import or call primary calculation functions, calculation helpers, rounding helpers, precomputed intermediates or normalized values from the primary engine when raw inputs are available. It may share immutable input models, governed enumerations and transport objects. Primary outputs may be consumed only after independent calculation completes.
 
 ## Core calculation scope
 
