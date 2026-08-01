@@ -15,11 +15,24 @@ from src.recommendation import recommend_alternatives
 from src.risk_engine import evaluate_risks
 from src.scenario_engine import ScenarioInputs, evaluate_scenario
 from src.technical_qualification import evaluate_technical_qualification
+from src.ui.showcase_handoff_ui import PAGE_REGISTRY_SESSION_KEY
 
 
 ROOT = Path(__file__).resolve().parent
 DEMO_PATH = ROOT / "data" / "demo" / "corrugated_shipping_cases.json"
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
+SIDEBAR_GROUPS = (
+    ("Workspace", ("Project Dashboard", "Guided Workflow")),
+    (
+        "Inputs & Governance",
+        ("Specification Review", "Data Upload", "Business Rules & Thresholds"),
+    ),
+    ("Analysis & Decision", ("Scenario Analysis", "Decision Records")),
+    (
+        "Evidence & Explanation",
+        ("SourceMate", "Calculation Evidence", "Decision Evidence Ledger"),
+    ),
+)
 
 
 @st.cache_data
@@ -213,14 +226,23 @@ def main() -> None:
 
     home_page = st.Page(render_home, title="Home", default=True)
     ordered_task_pages = sorted(task_pages, key=lambda item: item[0])
-    pages = [home_page]
-    pages.extend(page for _, _, page in ordered_task_pages)
+    page_registry = {"Home": home_page}
+    page_registry.update({title: page for _, title, page in ordered_task_pages})
+    st.session_state[PAGE_REGISTRY_SESSION_KEY] = page_registry
 
+    pages = list(page_registry.values())
     selected = st.navigation(pages, position="hidden")
     with st.sidebar:
         st.page_link(home_page, label="Home")
-        for _, title, page in ordered_task_pages:
-            st.page_link(page, label=title)
+        st.page_link(page_registry["Showcase & Handoff"], label="Showcase & Handoff")
+
+        for group_title, page_titles in SIDEBAR_GROUPS:
+            with st.expander(group_title, expanded=False):
+                for title in page_titles:
+                    page = page_registry[title]
+                    st.page_link(page, label=title)
+
+        st.page_link(page_registry["Capabilities & Limits"], label="Capabilities & Limits")
         st.divider()
     selected.run()
 

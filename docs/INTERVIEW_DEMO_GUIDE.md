@@ -116,9 +116,21 @@ streamlit run app.py
 8. Run the complete test suite.
 9. Review Capabilities & Limits before closing the handoff.
 
+## Live-demo recovery
+
+Use this short path during an interview or executive review:
+
+1. Refresh the browser if the current page stops responding.
+2. Return to Home and reopen Showcase & Handoff.
+3. Select the five-minute executive journey and use the approved synthetic demonstration project.
+4. Skip optional drill-downs when time is limited.
+5. Close on Capabilities & Limits so governance boundaries remain explicit.
+
+This live-demo path does not replace technical diagnosis and does not modify any governed record.
+
 ## Demo Recovery
 
-If the demonstration fails:
+If technical recovery is required:
 
 1. Return to Home.
 2. Confirm Python 3.12.
