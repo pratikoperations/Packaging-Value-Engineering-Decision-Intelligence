@@ -1,0 +1,23 @@
+{
+  "registry_version": "1.0.0",
+  "currency_scope": ["INR"],
+  "rounding_mode": "ROUND_HALF_EVEN",
+  "formulas": [
+    {"calculation_id":"CALC-COST-001","version":"1.0.0","expression":"sum(cost_inputs)","output_unit":"INR_per_case","quantum":"0.000001","tolerance_policy_id":"TOL-UNIT-CURRENCY-001"},
+    {"calculation_id":"CALC-COST-002","version":"1.0.0","expression":"unit_cost * annual_volume","output_unit":"INR_per_year","quantum":"0.01","tolerance_policy_id":"TOL-ANNUAL-CURRENCY-001"},
+    {"calculation_id":"CALC-COST-003","version":"1.0.0","expression":"baseline_unit_cost - alternative_unit_cost","output_unit":"INR_per_case","quantum":"0.000001","tolerance_policy_id":"TOL-UNIT-CURRENCY-001"},
+    {"calculation_id":"CALC-COST-004","version":"1.0.0","expression":"unit_savings * annual_volume","output_unit":"INR_per_year","quantum":"0.01","tolerance_policy_id":"TOL-ANNUAL-CURRENCY-001"},
+    {"calculation_id":"CALC-COST-005","version":"1.0.0","expression":"(alternative_unit_cost - baseline_unit_cost) / baseline_unit_cost * 100","output_unit":"percent","quantum":"0.000001","tolerance_policy_id":"TOL-PERCENT-001"},
+    {"calculation_id":"CALC-MAT-001","version":"1.0.0","expression":"sum(component_weights_g)","output_unit":"g_per_case","quantum":"0.000001","tolerance_policy_id":"TOL-WEIGHT-001"},
+    {"calculation_id":"CALC-MAT-002","version":"1.0.0","expression":"component_total_g - case_weight_g","output_unit":"g_per_case","quantum":"0.000001","tolerance_policy_id":"TOL-WEIGHT-001"},
+    {"calculation_id":"CALC-MAT-003","version":"1.0.0","expression":"case_weight_g * annual_volume / 1000","output_unit":"kg_per_year","quantum":"0.000001","tolerance_policy_id":"TOL-MATERIAL-001"},
+    {"calculation_id":"CALC-MAT-004","version":"1.0.0","expression":"alternative_weight_g - baseline_weight_g","output_unit":"g_per_case","quantum":"0.000001","tolerance_policy_id":"TOL-WEIGHT-001"},
+    {"calculation_id":"CALC-MAT-005","version":"1.0.0","expression":"(alternative_weight_g - baseline_weight_g) / baseline_weight_g * 100","output_unit":"percent","quantum":"0.000001","tolerance_policy_id":"TOL-PERCENT-001"},
+    {"calculation_id":"CALC-SCN-001","version":"1.0.0","expression":"1 + adjustment_percent / 100","output_unit":"factor","quantum":"0.000001","tolerance_policy_id":"TOL-FACTOR-001"},
+    {"calculation_id":"CALC-SCN-002","version":"1.0.0","expression":"raw_cost * adjustment_factor","output_unit":"INR_per_case","quantum":"0.000001","tolerance_policy_id":"TOL-UNIT-CURRENCY-001"},
+    {"calculation_id":"CALC-SCN-003","version":"1.0.0","expression":"raw_case_weight_g * adjustment_factor","output_unit":"g_per_case","quantum":"0.000001","tolerance_policy_id":"TOL-WEIGHT-001"},
+    {"calculation_id":"CALC-SCN-004","version":"1.0.0","expression":"raw_component_weight_g * adjustment_factor","output_unit":"g_per_case","quantum":"0.000001","tolerance_policy_id":"TOL-WEIGHT-001"},
+    {"calculation_id":"CALC-ADP-001","version":"1.0.0","expression":"case_weight_g - adhesive_ink_weight_g","output_unit":"g_per_case","quantum":"0.000001","tolerance_policy_id":"TOL-WEIGHT-001"},
+    {"calculation_id":"CALC-ADP-002","version":"1.0.0","expression":"board_weight_g + adhesive_ink_weight_g","output_unit":"g_per_case","quantum":"0.000001","tolerance_policy_id":"TOL-WEIGHT-001"}
+  ]
+}
