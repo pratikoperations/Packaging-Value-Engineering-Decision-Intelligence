@@ -26,6 +26,10 @@ The current experience includes:
 
 The Showcase & Handoff Hub provides the controlled journey, timing, speaker guidance, proof statements, limitation statements and recovery instructions. It does not calculate or persist business results.
 
+## Demo Flow
+
+The controlled demonstration routes are defined below.
+
 ## Five-minute executive route
 
 1. **Home — 40 seconds:** frame the packaging value-engineering opportunity and disclose synthetic data.
