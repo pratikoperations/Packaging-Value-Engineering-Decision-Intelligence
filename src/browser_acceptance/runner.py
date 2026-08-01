@@ -79,6 +79,20 @@ def _download_and_validate(page: Page, artifacts: Path) -> dict[str, str]:
     return {"json": str(json_path), "markdown": str(markdown_path)}
 
 
+def _select_second_governed_scenario(page: Page) -> None:
+    scenario = page.get_by_role(
+        "combobox", name="Governed synthetic procurement scenario", exact=True
+    )
+    if scenario.count() != 1:
+        raise AssertionError("Expected one governed synthetic scenario combobox.")
+    scenario.click()
+    options = page.get_by_role("option")
+    options.first.wait_for()
+    if options.count() < 2:
+        raise AssertionError("Expected at least two governed synthetic scenario options.")
+    options.nth(1).click()
+
+
 def _home_journey(page: Page, artifacts: Path) -> dict[str, Any]:
     page.get_by_role(
         "heading", name="Packaging Value Engineering Decision Intelligence", exact=True
@@ -87,8 +101,10 @@ def _home_journey(page: Page, artifacts: Path) -> dict[str, Any]:
     if body.lower().count("synthetic") < 2:
         raise AssertionError("Required synthetic disclosures are not visible.")
 
-    page.get_by_label("Governed synthetic procurement scenario").select_option(index=1)
-    annual_volume = page.get_by_label("Annual volume (cases)")
+    _select_second_governed_scenario(page)
+    annual_volume = page.get_by_role(
+        "spinbutton", name="Annual volume (cases)", exact=True
+    )
     annual_volume.fill("1010000")
     annual_volume.press("Enter")
 
@@ -96,8 +112,12 @@ def _home_journey(page: Page, artifacts: Path) -> dict[str, Any]:
     if assumptions.count() < 1:
         raise AssertionError("No governed alternative-assumption expander is available.")
     assumptions.first.click()
-    cost_adjustment = page.get_by_label("Unit-cost adjustment (%)").first
-    material_adjustment = page.get_by_label("Material-weight adjustment (%)").first
+    cost_adjustment = page.get_by_role(
+        "spinbutton", name="Unit-cost adjustment (%)", exact=True
+    ).first
+    material_adjustment = page.get_by_role(
+        "spinbutton", name="Material-weight adjustment (%)", exact=True
+    ).first
     cost_adjustment.fill("1")
     cost_adjustment.press("Enter")
     material_adjustment.fill("-1")
