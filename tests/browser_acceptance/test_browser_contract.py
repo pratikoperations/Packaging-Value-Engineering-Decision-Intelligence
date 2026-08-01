@@ -39,6 +39,27 @@ class BrowserContractTests(unittest.TestCase):
             path = Path(directory) / "export.json"
             payload = {key: {} for key in REQUIRED_JSON_KEYS}
             payload["metadata"] = {"synthetic_disclosure": "Synthetic demonstration data only."}
+            payload["executive_summary"] = {
+                "decision_status": "recommended",
+                "preferred_alternative_id": "ALT-001",
+                "summary": "Preferred packaging alternative: ALT-001.",
+            }
+            payload["baseline"] = {"alternative_id": "ALT-BASE"}
+            payload["alternatives"] = [
+                {
+                    "alternative_id": "ALT-001",
+                    "recommendation": {
+                        "status": "recommended",
+                        "rationale": ["Lowest governed evaluated cost."],
+                        "constraints": [],
+                        "validation_required": ["Engineering validation."],
+                    },
+                }
+            ]
+            payload["decision_controls"] = {
+                "engineering_validation_required": True,
+                "autonomous_technical_approval": False,
+            }
             payload["calculation_evidence"] = {"results": [{"calculation_id": "CALC-COST-001"}]}
             path.write_text(json.dumps(payload), encoding="utf-8")
             self.assertEqual(payload, validate_json_download(path))
@@ -56,7 +77,10 @@ class BrowserContractTests(unittest.TestCase):
             path.write_text(
                 "# Synthetic Data Disclosure\nSynthetic demonstration only.\n"
                 "# Packaging Value Engineering Decision Package\n"
-                "## Independent Calculation Evidence\nEngineering validation remains mandatory.\n",
+                "## Executive Summary\nPreferred packaging alternative: ALT-001.\n"
+                "## Alternative Comparison\n- Recommendation: recommended\n"
+                "## Independent Calculation Evidence\n"
+                "Engineering validation remains mandatory. No realized savings are claimed.\n",
                 encoding="utf-8",
             )
             self.assertIn("Calculation Evidence", validate_markdown_download(path))
