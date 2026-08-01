@@ -10,8 +10,18 @@ ALL_PAGE_REFERENCES = (
 )
 
 
-def _step(number: int, page: str, title: str, purpose: str, message: str, seconds: int, evidence: str, limit: str) -> ShowcaseStep:
-    return ShowcaseStep(number, page, title, purpose, message, (evidence,), (limit,), seconds, fallback_step="Capabilities & Limits")
+def _step(number: int, page: str, title: str, message: str, seconds: int, evidence: str, limit: str) -> ShowcaseStep:
+    return ShowcaseStep(
+        number,
+        page,
+        title,
+        f"Use {page} to {title.lower()}.",
+        message,
+        (evidence,),
+        (limit,),
+        seconds,
+        fallback_step="Capabilities & Limits",
+    )
 
 
 def _journey(journey_id: str, title: str, audience: AudienceRole, minutes: int, pages: tuple[str, ...]) -> ShowcaseJourney:
@@ -31,9 +41,15 @@ def _journey(journey_id: str, title: str, audience: AudienceRole, minutes: int, 
         "Showcase & Handoff": ("Select the governed route", "This hub provides a timed route, proof statements and claim limits without duplicating business logic.", "Journey duration and audience.", "Do not call the hub a second dashboard or analytical engine."),
     }
     seconds = max(35, min(90, (minutes * 60) // len(pages)))
-    steps = tuple(_step(i, page, *messages[page][:3], seconds, messages[page][2], messages[page][3]) for i, page in enumerate(pages, 1))
+    steps = tuple(
+        _step(i, page, messages[page][0], messages[page][1], seconds, messages[page][2], messages[page][3])
+        for i, page in enumerate(pages, 1)
+    )
     return ShowcaseJourney(
-        journey_id, title, audience, minutes,
+        journey_id,
+        title,
+        audience,
+        minutes,
         "Explain the governed business decision clearly, quickly and without unsupported claims.",
         "Start with the packaging business problem and disclose that the demonstration data is synthetic.",
         "Close by separating decision support from human approval, validation and value realization.",
