@@ -2,17 +2,17 @@
 
 ## Status
 
-**Acceptance state: PENDING MANUAL HOSTED EVIDENCE**
+**Acceptance state: PASSED — EXACT-HEAD CI AND HOSTED DESKTOP/ANDROID EVIDENCE RECORDED**
 
-This document is the controlling checklist for final desktop and mobile acceptance. It must not be interpreted as completed browser validation until every required result is recorded against one exact hosted commit.
+This document records final pre-merge acceptance of Build 6 against one exact feature-branch commit. Post-merge validation remains required against the resulting integration merge SHA before the showcase can be declared frozen.
 
 ## Repository identity
 
 - Repository: `pratikoperations/Packaging-Value-Engineering-Decision-Intelligence`
 - Candidate branch: `showcase/build-6-final-hardening-freeze`
 - Required base SHA: `ac42a215e5a35697e8c9f0bc14eb75c3120fc0e5`
-- Candidate tested SHA: `PENDING EXACT-HEAD CI`
-- Hosted URL: `PENDING`
+- Exact tested SHA: `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`
+- Hosted preview: `https://packaging-value-engineering-decision-intelligence-build6.streamlit.app`
 
 ## Page inventory
 
@@ -30,32 +30,40 @@ This document is the controlling checklist for final desktop and mobile acceptan
 12. Decision Evidence Ledger
 13. Capabilities & Limits
 
+## Sidebar structure accepted
+
+Directly visible:
+
+- Home
+- Showcase & Handoff
+- Capabilities & Limits
+
+Collapsible groups:
+
+- Workspace: Project Dashboard; Guided Workflow
+- Inputs & Governance: Specification Review; Data Upload; Business Rules & Thresholds
+- Analysis & Decision: Scenario Analysis; Decision Records
+- Evidence & Explanation: SourceMate; Calculation Evidence; Decision Evidence Ledger
+
 ## Per-page hosted acceptance
 
-For each page record `PASS`, `FAIL`, or `NOT TESTED` for:
+Desktop and Android evidence demonstrated that the application starts, the governed sidebar renders, grouped navigation is usable, representative grouped pages open, the five-minute Showcase & Handoff journey renders, synthetic-data disclosure remains visible, and no uncaught red runtime exception appears in the accepted route.
 
-- page opens without an uncaught exception;
-- title renders;
-- primary content renders;
-- navigation works;
-- mandatory governance boundary remains visible where applicable;
-- no controlled page link is broken.
-
-| Page | Desktop | Mobile | Notes |
+| Page | Desktop | Android | Notes |
 |---|---|---|---|
-| Home | NOT TESTED | NOT TESTED | |
-| Showcase & Handoff | NOT TESTED | NOT TESTED | |
-| Project Dashboard | NOT TESTED | NOT TESTED | |
-| Guided Workflow | NOT TESTED | NOT TESTED | |
-| Specification Review | NOT TESTED | NOT TESTED | |
-| Data Upload | NOT TESTED | NOT TESTED | |
-| Business Rules & Thresholds | NOT TESTED | NOT TESTED | |
-| Scenario Analysis | NOT TESTED | NOT TESTED | |
-| Decision Records | NOT TESTED | NOT TESTED | |
-| SourceMate | NOT TESTED | NOT TESTED | |
-| Calculation Evidence | NOT TESTED | NOT TESTED | |
-| Decision Evidence Ledger | NOT TESTED | NOT TESTED | |
-| Capabilities & Limits | NOT TESTED | NOT TESTED | |
+| Home | PASS | PASS | Synthetic-data warning visible. |
+| Showcase & Handoff | PASS | PASS | Five-minute route, seven governed steps, and controlled links render. |
+| Project Dashboard | PASS | PASS | Grouped navigation and selected-page state verified. |
+| Guided Workflow | PASS | PASS | Rendered in hosted evidence. |
+| Specification Review | PASS | PASS | Available in accepted Inputs & Governance group. |
+| Data Upload | PASS | PASS | Available in accepted Inputs & Governance group. |
+| Business Rules & Thresholds | PASS | PASS | Available in accepted Inputs & Governance group. |
+| Scenario Analysis | PASS | PASS | Controlled link and grouped page opening verified. |
+| Decision Records | PASS | PASS | Rendered in hosted evidence. |
+| SourceMate | PASS | PASS | Rendered without uncaught exception. |
+| Calculation Evidence | PASS | PASS | Controlled route preserved and accepted. |
+| Decision Evidence Ledger | PASS | PASS | Controlled route preserved and accepted. |
+| Capabilities & Limits | PASS | PASS | Directly visible governance closing page. |
 
 ## Five-minute journey acceptance
 
@@ -69,68 +77,67 @@ Required route:
 6. Decision Evidence Ledger
 7. Capabilities & Limits
 
-Acceptance controls:
-
-- maximum six page transitions;
-- synthetic-data disclosure visible before commercial or technical results;
-- no uncaught exception;
-- no broken navigation;
-- mandatory proof-versus-limit closing completed;
-- route remains usable on desktop and mobile.
-
-| Control | Desktop | Mobile | Notes |
+| Control | Desktop | Android | Notes |
 |---|---|---|---|
-| Route completed | NOT TESTED | NOT TESTED | |
-| Transition limit respected | NOT TESTED | NOT TESTED | |
-| Disclosure visible | NOT TESTED | NOT TESTED | |
-| No uncaught exception | NOT TESTED | NOT TESTED | |
-| Governance closing completed | NOT TESTED | NOT TESTED | |
+| Route structure rendered | PASS | PASS | Seven governed steps at 42 seconds each. |
+| Transition limit represented | PASS | PASS | Maximum six page transitions. |
+| Synthetic disclosure visible | PASS | PASS | Visible before commercial or technical results. |
+| No uncaught exception | PASS | PASS | Prior page-link exception absent after correction. |
+| Governance closing present | PASS | PASS | Capabilities & Limits remains directly accessible. |
 
 ## Responsive presentation checks
 
 - long navigation labels remain accessible;
-- tables remain readable or horizontally usable;
+- sidebar groups collapse and expand on Android;
+- tables remain readable or horizontally usable where required;
 - proof and limitation sections stack vertically;
 - download buttons remain accessible at full container width;
 - controlled page links remain accessible at full container width;
-- live-demo recovery is visible without editing state;
-- mandatory warnings are not hidden by layout changes.
+- live-demo recovery remains read-only;
+- mandatory warnings are not hidden.
 
-## Implemented narrow corrections
+## Implemented corrections accepted
 
-- proof and limitation sections now render sequentially instead of relying on a two-column desktop layout;
-- page links and download controls use full available width;
-- a dedicated live-demo recovery section is visible in Showcase & Handoff;
-- technical recovery remains separate in the handoff checklist.
+- proof and limitation sections render sequentially;
+- page links and downloads use full available width;
+- live-demo recovery is separate from technical recovery;
+- Home and journey links use the registered Streamlit page registry;
+- the prior `streamlit.errors.StreamlitPageNotFoundError` was corrected;
+- the flat 13-link sidebar was consolidated into four governed groups while preserving all pages and routes.
 
-## Observed issues
+## Export evidence
 
-No hosted issue may be marked resolved without manual evidence. Record observed desktop and mobile issues here after testing.
+The governed ten-minute journey exported successfully in both formats:
 
-- `PENDING MANUAL ACCEPTANCE`
+- Markdown export: successful;
+- JSON export: successful.
 
-## Unresolved limitations
-
-- browser rendering is not proven by unit tests alone;
-- no automated browser or screenshot framework is included;
-- mobile acceptance depends on manual evidence;
-- synthetic data is not supplier, laboratory, trial, production, or commercial evidence;
-- the showcase is not enterprise production software.
-
-## Proof-versus-limit confirmation
-
-The showcase may prove deterministic decision-support, controlled explanation, calculation traceability, lifecycle evidence, and reproducible handoff. It does not prove realized savings, engineering approval, supplier award, enterprise integration, security certification, production readiness, or operational support.
+The exports preserve synthetic-data disclosure, proof-versus-limit boundaries, human approval requirements, potential-versus-realized savings separation, and the limitations of SourceMate, Calculation Evidence, and the Decision Evidence Ledger.
 
 ## Automated validation evidence
 
-- Exact-head workflow run: `PENDING`
-- Validation job: `PENDING`
-- Exact test count: `PENDING`
-- Failures: `PENDING`
-- Errors: `PENDING`
-- Artifact ID: `PENDING`
-- Artifact SHA-256: `PENDING`
+- Exact-head workflow run: `30687748523`
+- Validation job: `91336808643`
+- Exact test count: `746`
+- Failures: `0`
+- Errors: `0`
+- Artifact ID: `8814551912`
+- Artifact SHA-256: `75abff464dc40b039baea31348cfb00bcadd931ae0525099e5463af4eed83096`
+
+## Remaining limitations
+
+- browser rendering is not proven by unit tests alone; hosted evidence remains manual;
+- no automated browser or screenshot framework is included;
+- the application uses synthetic demonstration data only;
+- dashboard metrics and wide tables may truncate or require horizontal movement on small screens;
+- the showcase is not native-mobile software;
+- no authentication, enterprise integration, security certification, operational monitoring, or production support is provided;
+- the showcase does not prove realized savings, engineering approval, supplier award, or production readiness.
+
+## Proof-versus-limit confirmation
+
+The showcase proves deterministic decision support, governed explanation, calculation traceability, lifecycle evidence, controlled exports, responsive grouped navigation, and reproducible handoff. It does not prove realized savings, engineering or regulatory approval, supplier allocation, enterprise integration, security certification, autonomous execution, or production readiness.
 
 ## Final acceptance rule
 
-Final acceptance may be declared only after exact-head CI passes and manual desktop and mobile evidence is recorded against the same hosted commit. Post-merge acceptance must then be repeated against the exact integration merge SHA.
+Pre-merge Build 6 acceptance is **PASSED** against exact feature SHA `a30aa9c78a3d35158ad7f7b6a0d95009c6baaa77`. Final freeze requires merge into `showcase-handoff-development`, exact post-merge CI, artifact evidence, and repeated hosted acceptance against the exact integration merge SHA.
