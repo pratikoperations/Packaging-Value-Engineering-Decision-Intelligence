@@ -3,7 +3,11 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
-from src.ui.showcase_handoff_ui import LIVE_DEMO_RECOVERY, PAGE_PATHS
+from src.ui.showcase_handoff_ui import (
+    LIVE_DEMO_RECOVERY,
+    PAGE_PATHS,
+    PAGE_REGISTRY_SESSION_KEY,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -80,6 +84,27 @@ class ShowcaseFinalAcceptanceTests(unittest.TestCase):
         self.assertGreaterEqual(source.count('width="stretch"'), 3)
         self.assertIn('st.expander("Live-demo recovery"', source)
         self.assertNotIn('st.columns(2)\n    with left:', source)
+
+    def test_home_is_registered_as_callable_streamlit_page(self) -> None:
+        source = (ROOT / "app.py").read_text(encoding="utf-8")
+        self.assertIn('home_page = st.Page(render_home, title="Home", default=True)', source)
+        self.assertIn('page_registry = {"Home": home_page}', source)
+
+    def test_sidebar_and_journey_links_share_one_page_registry(self) -> None:
+        app_source = (ROOT / "app.py").read_text(encoding="utf-8")
+        ui_source = (ROOT / "src" / "ui" / "showcase_handoff_ui.py").read_text(encoding="utf-8")
+        self.assertIn(f"st.session_state[PAGE_REGISTRY_SESSION_KEY] = page_registry", app_source)
+        self.assertIn("for title, page in page_registry.items():", app_source)
+        self.assertIn("page_registry.get(step.page_reference)", ui_source)
+
+    def test_home_string_path_is_not_passed_to_page_link(self) -> None:
+        source = (ROOT / "src" / "ui" / "showcase_handoff_ui.py").read_text(encoding="utf-8")
+        self.assertNotIn("st.page_link(path", source)
+        self.assertIn("st.page_link(target_page", source)
+
+    def test_registered_page_labels_match_governed_inventory(self) -> None:
+        self.assertEqual(PAGE_REGISTRY_SESSION_KEY, "_pve_page_registry")
+        self.assertEqual(tuple(PAGE_PATHS), EXPECTED_PAGES)
 
     def test_build_does_not_modify_analytical_or_persistence_contracts(self) -> None:
         acceptance = (ROOT / "docs" / "SHOWCASE_FINAL_ACCEPTANCE.md").read_text(encoding="utf-8")
