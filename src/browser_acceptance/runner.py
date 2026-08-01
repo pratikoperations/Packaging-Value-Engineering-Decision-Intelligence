@@ -80,11 +80,12 @@ def _download_and_validate(page: Page, artifacts: Path) -> dict[str, str]:
 
 
 def _select_second_governed_scenario(page: Page) -> None:
-    scenario = page.get_by_role(
-        "combobox", name="Governed synthetic procurement scenario", exact=True
+    scenario = page.locator(
+        'input[role="combobox"][aria-label="Governed synthetic procurement scenario"]'
     )
+    scenario.first.wait_for()
     if scenario.count() != 1:
-        raise AssertionError("Expected one governed synthetic scenario combobox.")
+        raise AssertionError("Expected one governed synthetic scenario input.")
     scenario.click()
     options = page.get_by_role("option")
     options.first.wait_for()
