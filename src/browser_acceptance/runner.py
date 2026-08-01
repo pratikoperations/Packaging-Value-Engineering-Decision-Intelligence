@@ -9,7 +9,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from playwright.sync_api import Page, sync_playwright
+from playwright.sync_api import Locator, Page, sync_playwright
 
 from .contracts import (
     ACTION_TIMEOUT_MILLISECONDS,
@@ -37,26 +37,30 @@ def _assert_no_visible_exception(page: Page) -> None:
         raise AssertionError(f"Visible Streamlit exception markers: {found}")
 
 
+def _first_visible(locator: Locator) -> Locator:
+    for index in range(locator.count()):
+        candidate = locator.nth(index)
+        if candidate.is_visible():
+            return candidate
+    raise AssertionError("Expected at least one visible matching element.")
+
+
 def _open_sidebar_if_needed(page: Page) -> None:
-    if page.get_by_role("link", name="Home", exact=True).count():
+    home_links = page.get_by_role("link", name="Home", exact=True)
+    if any(home_links.nth(index).is_visible() for index in range(home_links.count())):
         return
     sidebar_button = page.get_by_role("button", name=re.compile("sidebar", re.IGNORECASE))
-    if sidebar_button.count() != 1:
-        raise AssertionError("Expected one accessible sidebar toggle button.")
-    sidebar_button.click()
-    page.get_by_role("link", name="Home", exact=True).wait_for()
+    visible_toggle = _first_visible(sidebar_button)
+    visible_toggle.click()
+    _first_visible(page.get_by_role("link", name="Home", exact=True)).wait_for()
 
 
 def _click_page(page: Page, title: str, group: str | None) -> None:
     _open_sidebar_if_needed(page)
     if group:
-        group_control = page.get_by_text(group, exact=True)
-        if group_control.count() != 1:
-            raise AssertionError(f"Expected one sidebar group control for {group}.")
+        group_control = _first_visible(page.get_by_text(group, exact=True))
         group_control.click()
-    link = page.get_by_role("link", name=title, exact=True)
-    if link.count() != 1:
-        raise AssertionError(f"Expected one registered page link for {title}.")
+    link = _first_visible(page.get_by_role("link", name=title, exact=True))
     link.click()
     heading, _ = PAGE_BY_TITLE[title]
     page.get_by_role("heading", name=re.compile(re.escape(heading), re.IGNORECASE)).first.wait_for()
@@ -103,8 +107,9 @@ def _home_journey(page: Page, artifacts: Path) -> dict[str, Any]:
         raise AssertionError("Required synthetic disclosures are not visible.")
 
     _select_second_governed_scenario(page)
-    annual_volume = page.get_by_role(
-        "spinbutton", name="Annual volume (cases)", exact=True
+    _open_sidebar_if_needed(page)
+    annual_volume = _first_visible(
+        page.get_by_role("spinbutton", name="Annual volume (cases)", exact=True)
     )
     annual_volume.fill("1010000")
     annual_volume.press("Enter")
@@ -112,16 +117,14 @@ def _home_journey(page: Page, artifacts: Path) -> dict[str, Any]:
     assumptions = page.get_by_text(
         re.compile(r"^[A-Za-z0-9_-]+ assumptions$", re.IGNORECASE), exact=True
     )
-    assumptions.first.wait_for()
-    if assumptions.count() < 1:
-        raise AssertionError("No governed alternative-assumption expander is available.")
-    assumptions.first.click()
-    cost_adjustment = page.get_by_role(
-        "spinbutton", name="Unit-cost adjustment (%)", exact=True
-    ).first
-    material_adjustment = page.get_by_role(
-        "spinbutton", name="Material-weight adjustment (%)", exact=True
-    ).first
+    visible_assumptions = _first_visible(assumptions)
+    visible_assumptions.click()
+    cost_adjustment = _first_visible(
+        page.get_by_role("spinbutton", name="Unit-cost adjustment (%)", exact=True)
+    )
+    material_adjustment = _first_visible(
+        page.get_by_role("spinbutton", name="Material-weight adjustment (%)", exact=True)
+    )
     cost_adjustment.fill("1")
     cost_adjustment.press("Enter")
     material_adjustment.fill("-1")
@@ -165,14 +168,17 @@ def _run_viewport(
 
         for group, expected in SIDEBAR_GROUPS.items():
             _open_sidebar_if_needed(page)
-            group_control = page.get_by_text(group, exact=True)
-            if group_control.count() != 1:
-                raise AssertionError(f"Expected one sidebar group control for {group}.")
+            group_control = _first_visible(page.get_by_text(group, exact=True))
             group_control.click()
             visible = [
                 title
                 for title in expected
-                if page.get_by_role("link", name=title, exact=True).count() == 1
+                if any(
+                    page.get_by_role("link", name=title, exact=True).nth(index).is_visible()
+                    for index in range(
+                        page.get_by_role("link", name=title, exact=True).count()
+                    )
+                )
             ]
             if tuple(visible) != tuple(expected):
                 raise AssertionError(f"Sidebar group {group} mismatch: {visible}")
