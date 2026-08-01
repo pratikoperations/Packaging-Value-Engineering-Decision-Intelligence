@@ -64,7 +64,7 @@ class ShowcaseFinalAcceptanceTests(unittest.TestCase):
             "Five-minute journey acceptance",
             "Responsive presentation checks",
             "Proof-versus-limit confirmation",
-            "Exact-head workflow run",
+            "Accepted runtime exact-head workflow run",
             "Artifact SHA-256",
             "30687748523",
             "746",
