@@ -24,7 +24,7 @@ def render_calculation_evidence_page(st, *, projects: Iterable[dict[str, Any]], 
         "This page does not run, modify, or replace any analytical engine."
     )
     if not available_projects:
-        st.info("No governed projects are available for calculation evidence.")
+        st.info("No governed projects are available for legacy persisted calculation evidence.")
         _limitations(st)
         return
 
@@ -102,12 +102,66 @@ def render_calculation_evidence_page(st, *, projects: Iterable[dict[str, Any]], 
     _limitations(st)
 
 
+def render_independent_reconciliation(st, evidence: dict[str, Any]) -> None:
+    st.divider()
+    st.subheader("Independent Decimal Reconciliation")
+    st.warning(evidence["disclosure"])
+    st.caption(
+        "The evidence engine independently maps raw inputs, applies its own versioned Decimal formulas, "
+        "and only then compares results with the primary engine."
+    )
+    summary = evidence["summary"]
+    columns = st.columns(5)
+    for column, key, label in zip(
+        columns,
+        ("matched", "matched_within_tolerance", "mismatch", "insufficient_evidence", "unsupported"),
+        ("Matched", "Within tolerance", "Mismatch", "Insufficient", "Unsupported"),
+    ):
+        column.metric(label, summary[key])
+    state_filter = st.selectbox(
+        "Reconciliation state",
+        ("all", "matched", "matched_within_tolerance", "mismatch", "insufficient_evidence", "unsupported"),
+        key="independent-calculation-state-filter",
+    )
+    rows = evidence["results"]
+    if state_filter != "all":
+        rows = [item for item in rows if item["state"] == state_filter]
+    st.dataframe(
+        [
+            {
+                "Calculation": item["calculation_id"],
+                "Alternative": item["alternative_id"],
+                "Primary": item["primary_result"],
+                "Independent": item["independent_result"],
+                "Unit": item["unit"],
+                "Absolute variance": item["absolute_variance"],
+                "Tolerance": item["allowed_variance"],
+                "State": item["state"],
+            }
+            for item in rows
+        ],
+        width="stretch",
+        hide_index=True,
+    )
+    with st.expander("Formula, assumption and rule lineage"):
+        st.write(
+            {
+                "registry_version": evidence["registry_version"],
+                "numeric_formula_count": evidence["catalogue_count"],
+                "assumptions": evidence["assumptions"],
+                "rule_lineage": evidence["rule_lineage"],
+            }
+        )
+    with st.expander("Raw-input lineage and limitations"):
+        st.write(rows)
+
+
 def _limitations(st) -> None:
     with st.expander("Capabilities and limitations"):
         st.markdown(
-            "- Read-only evidence for four existing governed scenario outputs.\n"
-            "- No editable assumptions, formulas, thresholds, or user-entered expressions.\n"
-            "- No recalculation, approval, supplier ranking, allocation, or award.\n"
-            "- SourceMate explains why a status exists; this page shows how a stored numeric result was constructed.\n"
+            "- Read-only evidence for existing governed scenario outputs.\n"
+            "- Independent Decimal recalculation is available for the governed synthetic scenarios.\n"
+            "- No editable formulas, thresholds, unrestricted expressions, approval, supplier ranking, allocation, or award.\n"
+            "- A reconciliation match is not supplier, engineering, regulatory, production or realized-savings validation.\n"
             "- Engineering validation and explicit human approval remain mandatory."
         )

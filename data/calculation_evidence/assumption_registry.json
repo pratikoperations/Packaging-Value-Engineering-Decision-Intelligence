@@ -1,0 +1,10 @@
+{
+  "registry_version": "1.0.0",
+  "assumptions": [
+    {"assumption_id":"ASM-SYN-ADH-001","name":"Synthetic adhesive-and-ink weight","value":"25","unit":"g_per_case","classification":"synthetic_assumption","prohibited_claim":"measured or supplier-confirmed weight"},
+    {"assumption_id":"ASM-SYN-FRT-001","name":"Synthetic freight distance","value":"650","unit":"km","classification":"synthetic_assumption","prohibited_claim":"validated logistics lane"},
+    {"assumption_id":"ASM-CUR-INR-001","name":"INR-only currency basis","value":"INR","unit":"currency","classification":"governed_constraint"},
+    {"assumption_id":"ASM-ROUND-001","name":"Evidence rounding policy","value":"ROUND_HALF_EVEN","unit":"rounding_mode","classification":"governed_policy"},
+    {"assumption_id":"ASM-SCN-VOL-001","name":"Scenario annual volume","value":"scenario_input","unit":"cases_per_year","classification":"scenario_assumption"}
+  ]
+}

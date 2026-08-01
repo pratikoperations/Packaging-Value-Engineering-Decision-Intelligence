@@ -1,0 +1,8 @@
+{
+  "cases": [
+    {"case_id":"REC-001","independent":"100.000000","primary":"100.000000","expected_state":"matched"},
+    {"case_id":"REC-002","independent":"100.000000","primary":"100.0000005","expected_state":"matched_within_tolerance"},
+    {"case_id":"REC-003","independent":"100.000000","primary":"100.010000","expected_state":"mismatch"},
+    {"case_id":"REC-004","independent":"100.000000","primary":null,"expected_state":"insufficient_evidence"}
+  ]
+}

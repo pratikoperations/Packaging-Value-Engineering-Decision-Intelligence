@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
 
 import streamlit as st
 
+from src.calculation_evidence import IndependentCalculationEvidenceService
 from src.exports import (
     assemble_decision_package,
+    attach_calculation_evidence,
+    render_calculation_evidence_markdown,
     render_decision_package_json,
     render_decision_package_markdown,
 )
@@ -105,6 +109,15 @@ def render_home() -> None:
     qualifications = evaluate_technical_qualification(dataset)
     risks = evaluate_risks(dataset)
     recommendation = recommend_alternatives(dataset, scenario, qualifications, risks)
+    evidence_dataset = deepcopy(dataset)
+    evidence_dataset["packaging_project"]["annual_volume"] = annual_volume
+    calculation_evidence = IndependentCalculationEvidenceService().evaluate(
+        dataset=evidence_dataset,
+        scenario_id=selected_scenario_id,
+        scenario_result=scenario,
+        cost_adjustments=cost_adjustments,
+        material_adjustments=material_adjustments,
+    )
 
     st.subheader("Scenario Comparison")
     st.warning(SYNTHETIC_DISCLOSURE)
@@ -172,12 +185,15 @@ def render_home() -> None:
             "synthetic_disclosure": SYNTHETIC_DISCLOSURE,
         }
     )
+    attach_calculation_evidence(package, calculation_evidence)
     json_export = render_decision_package_json(package)
     markdown_export = (
         "# Synthetic Data Disclosure\n\n"
         + SYNTHETIC_DISCLOSURE
         + "\n\n"
         + render_decision_package_markdown(package)
+        + "\n"
+        + render_calculation_evidence_markdown(calculation_evidence)
     )
 
     left, right = st.columns(2)
