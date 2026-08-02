@@ -112,7 +112,11 @@ def _collect_routes(page: Page, base_url: str) -> dict[str, str]:
 
 
 def _select_scenario_and_adjust_inputs(page: Page) -> str:
-    select = page.get_by_label("Governed synthetic procurement scenario")
+    select = page.get_by_role(
+        "combobox",
+        name="Governed synthetic procurement scenario",
+        exact=True,
+    )
     select.wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)
     options = select.locator("option")
     if options.count() < 1:
