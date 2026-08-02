@@ -9,6 +9,10 @@ from .contracts import REQUIRED_JSON_KEYS, REQUIRED_MARKDOWN_TEXT
 _REALIZED_SAVINGS_LIMITATION_PATTERNS = (
     re.compile(r"\bno\s+realized\s+savings?\s+(?:are\s+)?claimed\b"),
     re.compile(
+        r"\bno\s+realized\s+savings?\s+claims?\s+"
+        r"(?:are\s+)?validated\b"
+    ),
+    re.compile(
         r"\bnot\s+suitable\s+for\b[^.]{0,240}"
         r"\brealized\s+savings?\s+claims?\b"
     ),
