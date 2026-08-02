@@ -116,6 +116,27 @@ class MinimalBrowserContractTests(unittest.TestCase):
 
         self.assertTrue(callable(run_minimal_acceptance))
 
+    def test_scenario_selector_targets_exact_combobox_role(self):
+        runner_path = (
+            Path(__file__).resolve().parents[2]
+            / "src"
+            / "browser_acceptance"
+            / "minimal_runner.py"
+        )
+        source = runner_path.read_text(encoding="utf-8")
+        self.assertIn(
+            'page.get_by_role(\n        "combobox",\n        name="Governed synthetic procurement scenario",\n        exact=True,\n    )',
+            source,
+        )
+        self.assertNotIn(
+            'page.get_by_label("Governed synthetic procurement scenario")',
+            source,
+        )
+        self.assertNotIn(
+            'get_by_role("button", name="Governed synthetic procurement scenario"',
+            source,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
