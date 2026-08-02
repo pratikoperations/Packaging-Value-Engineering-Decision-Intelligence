@@ -111,6 +111,27 @@ def _collect_routes(page: Page, base_url: str) -> dict[str, str]:
     return routes
 
 
+def _ensure_assumptions_open(page: Page) -> tuple[Locator, Locator]:
+    cost = page.get_by_label("Unit-cost adjustment (%)")
+    material = page.get_by_label("Material-weight adjustment (%)")
+    if _visible(cost) or _visible(material):
+        return cost, material
+
+    assumption_text = _first_visible(
+        page.get_by_text(re.compile(r"\bassumptions$", re.I))
+    )
+    summary = assumption_text.locator("xpath=ancestor-or-self::summary[1]")
+    if not _visible(summary):
+        summary = assumption_text.locator(
+            "xpath=ancestor-or-self::*[@role='button' or self::button][1]"
+        )
+    control = _first_visible(summary)
+    control.scroll_into_view_if_needed(timeout=ACTION_TIMEOUT_MILLISECONDS)
+    control.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
+    cost.first.wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)
+    return cost, material
+
+
 def _select_scenario_and_adjust_inputs(page: Page) -> str:
     select = page.get_by_role(
         "combobox",
@@ -136,21 +157,17 @@ def _select_scenario_and_adjust_inputs(page: Page) -> str:
     annual.press("Enter")
     page.wait_for_timeout(1000)
 
-    assumptions = page.get_by_role("button", name=re.compile(r"assumptions$", re.I))
-    assumption = _first_visible(assumptions)
-    assumption.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
-
-    cost = _first_visible(page.get_by_label("Unit-cost adjustment (%)"))
-    cost.fill("1")
-    cost.press("Enter")
+    cost, material = _ensure_assumptions_open(page)
+    cost_control = _first_visible(cost)
+    cost_control.fill("1")
+    cost_control.press("Enter")
     page.wait_for_timeout(800)
 
-    assumptions = page.get_by_role("button", name=re.compile(r"assumptions$", re.I))
-    if not _visible(page.get_by_label("Material-weight adjustment (%)")):
-        _first_visible(assumptions).click(timeout=ACTION_TIMEOUT_MILLISECONDS)
-    material = _first_visible(page.get_by_label("Material-weight adjustment (%)"))
-    material.fill("1")
-    material.press("Enter")
+    if not _visible(material):
+        cost, material = _ensure_assumptions_open(page)
+    material_control = _first_visible(material)
+    material_control.fill("1")
+    material_control.press("Enter")
     page.wait_for_timeout(1000)
     _assert_no_visible_exception(page)
     return scenario_id
