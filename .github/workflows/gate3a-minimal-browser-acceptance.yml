@@ -1,4 +1,4 @@
-name: Gate 3A Minimal Interview Browser Acceptance
+name: Gate 3B Governed Responsive Browser Acceptance
 
 on:
   workflow_dispatch:
@@ -16,10 +16,10 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Check out frozen Gate 3A candidate
+      - name: Check out frozen Gate 3B candidate
         uses: actions/checkout@v4
         with:
-          ref: 0f8210a50f531ee5c327c47c840e2f04e8f92639
+          ref: 80ad7fd0ccc8abcf72f05f9c7ab2f72a8ce328ac
           persist-credentials: false
           fetch-depth: 1
 
@@ -42,21 +42,21 @@ jobs:
         run: |
           set -euo pipefail
           actual="$(git rev-parse HEAD)"
-          expected="0f8210a50f531ee5c327c47c840e2f04e8f92639"
+          expected="80ad7fd0ccc8abcf72f05f9c7ab2f72a8ce328ac"
           test "$actual" = "$expected" || {
-            echo "Expected frozen Gate 3A SHA $expected but checked out $actual"
+            echo "Expected frozen Gate 3B SHA $expected but checked out $actual"
             exit 1
           }
-          echo "Validated frozen Gate 3A SHA: $actual"
+          echo "Validated frozen Gate 3B SHA: $actual"
 
-      - name: Run focused Gate 3A contract tests
+      - name: Run focused Gate 3B contract tests
         run: PYTHONPATH=. python -m unittest tests.browser_acceptance.test_minimal_contract
 
       - name: Run minimal interview browser acceptance
         env:
           BROWSER_ARTIFACT_DIR: browser-artifacts/gate3a
-          SOURCE_COMMIT: 0f8210a50f531ee5c327c47c840e2f04e8f92639
-          TESTED_BRANCH: enhancement/minimal-interview-browser-acceptance
+          SOURCE_COMMIT: 80ad7fd0ccc8abcf72f05f9c7ab2f72a8ce328ac
+          TESTED_BRANCH: enhancement/gate3b-responsive-final-closure
         run: PYTHONPATH=. python -m src.browser_acceptance.minimal_runner
 
       - name: Verify PASS disposition
