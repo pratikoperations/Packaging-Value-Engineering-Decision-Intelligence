@@ -19,7 +19,7 @@ jobs:
       - name: Check out frozen Gate 3B candidate
         uses: actions/checkout@v4
         with:
-          ref: 80ad7fd0ccc8abcf72f05f9c7ab2f72a8ce328ac
+          ref: 0221d24e554d66159f6fad9a4dafe88185cf7483
           persist-credentials: false
           fetch-depth: 1
 
@@ -42,7 +42,7 @@ jobs:
         run: |
           set -euo pipefail
           actual="$(git rev-parse HEAD)"
-          expected="80ad7fd0ccc8abcf72f05f9c7ab2f72a8ce328ac"
+          expected="0221d24e554d66159f6fad9a4dafe88185cf7483"
           test "$actual" = "$expected" || {
             echo "Expected frozen Gate 3B SHA $expected but checked out $actual"
             exit 1
@@ -55,7 +55,7 @@ jobs:
       - name: Run minimal interview browser acceptance
         env:
           BROWSER_ARTIFACT_DIR: browser-artifacts/gate3a
-          SOURCE_COMMIT: 80ad7fd0ccc8abcf72f05f9c7ab2f72a8ce328ac
+          SOURCE_COMMIT: 0221d24e554d66159f6fad9a4dafe88185cf7483
           TESTED_BRANCH: enhancement/gate3b-responsive-final-closure
         run: PYTHONPATH=. python -m src.browser_acceptance.minimal_runner
 
