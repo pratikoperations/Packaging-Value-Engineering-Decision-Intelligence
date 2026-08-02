@@ -25,7 +25,7 @@ from .export_validation import validate_json_download, validate_markdown_downloa
 from .process_manager import StreamlitProcess
 
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
-SCHEMA_VERSION = "1.1.0"
+SCHEMA_VERSION = "1.2.0"
 MATERIAL_CONSOLE_PATTERNS = (
     "uncaught",
     "traceback",
@@ -36,6 +36,7 @@ RESPONSIVE_ROUTE_PREFERENCES = (
     ("Showcase & Handoff", re.compile(r"Showcase", re.I)),
     ("Capabilities & Limits", re.compile(r"Capabilities", re.I)),
 )
+SIDEBAR_SELECTOR = '[data-testid="stSidebar"]'
 
 
 def _visible(locator: Locator) -> list[Locator]:
@@ -153,7 +154,6 @@ def _ensure_assumptions_open(page: Page) -> tuple[Locator, Locator]:
     material = page.get_by_label("Material-weight adjustment (%)")
     if _visible(cost) or _visible(material):
         return cost, material
-
     assumption_text = _first_visible(page.get_by_text(re.compile(r"\bassumptions$", re.I)))
     summary = assumption_text.locator("xpath=ancestor-or-self::summary[1]")
     if not _visible(summary):
@@ -169,9 +169,7 @@ def _ensure_assumptions_open(page: Page) -> tuple[Locator, Locator]:
 
 def _select_scenario_and_adjust_inputs(page: Page) -> str:
     select = page.get_by_role(
-        "combobox",
-        name="Governed synthetic procurement scenario",
-        exact=True,
+        "combobox", name="Governed synthetic procurement scenario", exact=True
     )
     select.wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)
     select.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
@@ -227,7 +225,6 @@ def _download_exports(page: Page, download_dir: Path) -> tuple[Path, Path]:
     json_path = download_dir / "pve_decision_package.json"
     json_info.value.save_as(json_path)
     validate_json_download(json_path)
-
     with page.expect_download(timeout=PAGE_TIMEOUT_MILLISECONDS) as markdown_info:
         _first_visible(page.get_by_role("button", name="Download human-readable report", exact=True)).click()
     markdown_path = download_dir / "pve_decision_report.md"
@@ -247,49 +244,247 @@ def _physical_calculation_navigation(page: Page) -> None:
     _assert_no_visible_exception(page)
 
 
+def _rect_intersects_viewport(rect: dict, viewport: dict) -> bool:
+    return bool(
+        rect
+        and rect["width"] > 0
+        and rect["height"] > 0
+        and rect["right"] > 0
+        and rect["bottom"] > 0
+        and rect["left"] < viewport["width"]
+        and rect["top"] < viewport["height"]
+    )
+
+
+def _centre_in_viewport(rect: dict, viewport: dict) -> bool:
+    centre_x = rect["left"] + rect["width"] / 2
+    centre_y = rect["top"] + rect["height"] / 2
+    return 0 <= centre_x <= viewport["width"] and 0 <= centre_y <= viewport["height"]
+
+
+def _candidate_geometry(locator: Locator, index: int, viewport: dict) -> dict:
+    visible = locator.is_visible()
+    box = locator.bounding_box()
+    dom = locator.evaluate(
+        """element => {
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            const ancestry = [];
+            let parent = element.parentElement;
+            let scrollOwner = null;
+            while (parent) {
+                const parentStyle = getComputedStyle(parent);
+                const parentRect = parent.getBoundingClientRect();
+                const entry = {
+                    tag: parent.tagName,
+                    id: parent.id || null,
+                    className: typeof parent.className === 'string' ? parent.className : null,
+                    role: parent.getAttribute('role'),
+                    testid: parent.getAttribute('data-testid'),
+                    rect: {left: parentRect.left, top: parentRect.top, right: parentRect.right,
+                           bottom: parentRect.bottom, width: parentRect.width, height: parentRect.height},
+                    scrollTop: parent.scrollTop,
+                    scrollHeight: parent.scrollHeight,
+                    clientHeight: parent.clientHeight,
+                    overflowX: parentStyle.overflowX,
+                    overflowY: parentStyle.overflowY,
+                    position: parentStyle.position,
+                    transform: parentStyle.transform,
+                };
+                ancestry.push(entry);
+                if (!scrollOwner && /(auto|scroll|overlay)/.test(parentStyle.overflowX + parentStyle.overflowY)
+                    && (parent.scrollHeight > parent.clientHeight || parent.scrollWidth > parent.clientWidth)) {
+                    scrollOwner = entry;
+                }
+                parent = parent.parentElement;
+            }
+            return {
+                accessibleName: element.innerText.trim(),
+                href: element.getAttribute('href') || '',
+                rect: {left: rect.left, top: rect.top, right: rect.right, bottom: rect.bottom,
+                       width: rect.width, height: rect.height},
+                computed: {display: style.display, visibility: style.visibility, opacity: style.opacity,
+                           pointerEvents: style.pointerEvents, position: style.position,
+                           transform: style.transform, overflowX: style.overflowX, overflowY: style.overflowY},
+                ancestry,
+                scrollOwner,
+            };
+        }"""
+    )
+    rect = dom["rect"]
+    return {
+        "index": index,
+        "accessible_name": dom["accessibleName"],
+        "href": dom["href"],
+        "is_visible": visible,
+        "bounding_box": box,
+        "rect": rect,
+        "computed": dom["computed"],
+        "ancestry": dom["ancestry"],
+        "scroll_owner": dom["scrollOwner"],
+        "intersects_viewport": visible and _rect_intersects_viewport(rect, viewport),
+        "centre_in_viewport": visible and _centre_in_viewport(rect, viewport),
+    }
+
+
+def _sidebar_geometry(page: Page) -> dict:
+    sidebar = page.locator(SIDEBAR_SELECTOR)
+    count = sidebar.count()
+    candidates = []
+    for index in range(count):
+        item = sidebar.nth(index)
+        if not item.is_visible():
+            continue
+        geometry = item.evaluate(
+            """element => {
+                const rect = element.getBoundingClientRect();
+                const style = getComputedStyle(element);
+                return {rect: {left: rect.left, top: rect.top, right: rect.right,
+                    bottom: rect.bottom, width: rect.width, height: rect.height},
+                    scrollTop: element.scrollTop, scrollHeight: element.scrollHeight,
+                    clientHeight: element.clientHeight, display: style.display,
+                    visibility: style.visibility, position: style.position,
+                    transform: style.transform, overflowX: style.overflowX,
+                    overflowY: style.overflowY};
+            }"""
+        )
+        candidates.append({"index": index, **geometry})
+    return {"count": count, "visible": candidates, "open": bool(candidates)}
+
+
+def _select_viewport_candidate(page: Page, title: str, artifact_dir: Path) -> tuple[Locator, dict]:
+    viewport = page.viewport_size or VIEWPORTS["narrow"]
+    global_matches = page.get_by_role("link", name=title, exact=True)
+    sidebar = page.locator(SIDEBAR_SELECTOR)
+    scoped_matches = sidebar.get_by_role("link", name=title, exact=True)
+    locator = scoped_matches if scoped_matches.count() else global_matches
+    diagnostics = {
+        "title": title,
+        "viewport": viewport,
+        "window_inner": page.evaluate(
+            "() => ({width: window.innerWidth, height: window.innerHeight})"
+        ),
+        "global_candidate_count": global_matches.count(),
+        "sidebar_candidate_count": scoped_matches.count(),
+        "selection_scope": "sidebar" if scoped_matches.count() else "global",
+        "sidebar": _sidebar_geometry(page),
+        "candidates": [],
+    }
+    qualifying: list[tuple[Locator, dict]] = []
+    for index in range(locator.count()):
+        candidate = locator.nth(index)
+        geometry = _candidate_geometry(candidate, index, viewport)
+        diagnostics["candidates"].append(geometry)
+        if geometry["intersects_viewport"]:
+            qualifying.append((candidate, geometry))
+    _write_json(artifact_dir / "narrow-candidate-geometry.json", diagnostics)
+    if len(qualifying) != 1:
+        raise AssertionError(
+            f"Expected exactly one viewport-intersecting {title!r} link; "
+            f"found {len(qualifying)} from {locator.count()} scoped candidates."
+        )
+    selected, pre_scroll = qualifying[0]
+    return selected, {"diagnostics": diagnostics, "pre_scroll": pre_scroll}
+
+
 def _responsive_physical_route(
     page: Page,
     routes: dict[str, str],
     screenshots: Path,
     artifact_dir: Path,
+    runtime_diagnostics: RuntimeDiagnostics,
 ) -> str:
     _open_sidebar(page)
-    inventory = _visible_link_inventory(page)
-    _write_json(artifact_dir / "narrow-link-inventory.json", inventory)
-
+    _write_json(artifact_dir / "narrow-link-inventory.json", _visible_link_inventory(page))
     selected_title: str | None = None
     selected_heading = None
     selected_link: Locator | None = None
-    for title, heading in RESPONSIVE_ROUTE_PREFERENCES:
-        visible = _visible(page.get_by_role("link", name=title, exact=True))
-        if visible:
-            selected_title = title
-            selected_heading = heading
-            selected_link = visible[0]
-            break
-    if selected_link is None or selected_title is None or selected_heading is None:
-        raise AssertionError(
-            "No preferred controlled responsive route is visibly exposed after sidebar opening."
+    selection_evidence: dict | None = None
+    selection_errors: list[str] = []
+
+    try:
+        for title, heading in RESPONSIVE_ROUTE_PREFERENCES:
+            if page.get_by_role("link", name=title, exact=True).count() == 0:
+                continue
+            try:
+                selected_link, selection_evidence = _select_viewport_candidate(page, title, artifact_dir)
+                selected_title = title
+                selected_heading = heading
+                break
+            except AssertionError as exc:
+                selection_errors.append(str(exc))
+        if selected_link is None or selected_title is None or selected_heading is None:
+            raise AssertionError(
+                "No preferred controlled responsive route has exactly one viewport-intersecting candidate: "
+                + "; ".join(selection_errors)
+            )
+
+        material_console = _material_console_errors(runtime_diagnostics.console_errors)
+        if runtime_diagnostics.page_errors or material_console:
+            raise AssertionError(
+                f"Responsive pre-click runtime errors: page={runtime_diagnostics.page_errors}, "
+                f"console={material_console}"
+            )
+
+        selected_link.scroll_into_view_if_needed(timeout=ACTION_TIMEOUT_MILLISECONDS)
+        viewport = page.viewport_size or VIEWPORTS["narrow"]
+        post_scroll = _candidate_geometry(
+            selected_link,
+            selection_evidence["pre_scroll"]["index"],
+            viewport,
         )
+        if not post_scroll["intersects_viewport"]:
+            raise AssertionError("Selected responsive route no longer intersects the viewport after scrolling.")
+        if not post_scroll["centre_in_viewport"]:
+            raise AssertionError("Selected responsive route centre is outside the viewport after scrolling.")
+        if not selected_link.is_visible():
+            raise AssertionError("Selected responsive route is not visible before click.")
 
-    selected_link.scroll_into_view_if_needed(timeout=ACTION_TIMEOUT_MILLISECONDS)
-    selected_link.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
-    page.get_by_role("heading", name=selected_heading).first.wait_for(
-        state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS
-    )
-    _app_ready(page)
+        evidence = selection_evidence["diagnostics"]
+        evidence.update(
+            {
+                "selected_title": selected_title,
+                "selected_candidate_index": selection_evidence["pre_scroll"]["index"],
+                "selected_href": selection_evidence["pre_scroll"]["href"],
+                "pre_scroll_bounding_rectangle": selection_evidence["pre_scroll"]["rect"],
+                "post_scroll_bounding_rectangle": post_scroll["rect"],
+            }
+        )
+        _write_json(artifact_dir / "narrow-candidate-geometry.json", evidence)
 
-    calculation_url = routes.get("Calculation Evidence")
-    if not calculation_url:
-        raise AssertionError("Resolved Calculation Evidence destination is unavailable.")
-    page.goto(calculation_url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MILLISECONDS)
-    _app_ready(page)
-    page.get_by_role("heading", name=re.compile("Calculation Evidence", re.I)).first.wait_for(
-        state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS
-    )
-    _assert_no_visible_exception(page)
-    page.screenshot(path=screenshots / "narrow-smoke.png", full_page=True)
-    return selected_title
+        selected_link.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
+        page.get_by_role("heading", name=selected_heading).first.wait_for(
+            state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS
+        )
+        evidence["destination_heading_result"] = "visible"
+        _write_json(artifact_dir / "narrow-candidate-geometry.json", evidence)
+        _app_ready(page)
+
+        calculation_url = routes.get("Calculation Evidence")
+        if not calculation_url:
+            raise AssertionError("Resolved Calculation Evidence destination is unavailable.")
+        page.goto(calculation_url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MILLISECONDS)
+        _app_ready(page)
+        page.get_by_role("heading", name=re.compile("Calculation Evidence", re.I)).first.wait_for(
+            state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS
+        )
+        _assert_no_visible_exception(page)
+        page.screenshot(path=screenshots / "narrow-smoke.png", full_page=True)
+        return selected_title
+    except Exception as exc:
+        page.screenshot(path=screenshots / "failure.png", full_page=True)
+        _write_json(artifact_dir / "narrow-link-inventory.json", _visible_link_inventory(page))
+        context = {
+            "type": type(exc).__name__,
+            "message": str(exc),
+            "viewport": page.viewport_size or VIEWPORTS["narrow"],
+            "sidebar": _sidebar_geometry(page),
+        }
+        _write_json(artifact_dir / "failure-context.json", context)
+        geometry_path = artifact_dir / "narrow-candidate-geometry.json"
+        if not geometry_path.exists():
+            _write_json(geometry_path, {"error": "candidate geometry unavailable", **context})
+        raise
 
 
 def _material_console_errors(values: list[str]) -> list[str]:
@@ -307,25 +502,23 @@ def run_minimal_acceptance() -> dict:
     logs.mkdir(parents=True, exist_ok=True)
 
     report = {key: None for key in ACCEPTANCE_REPORT_KEYS}
-    report.update(
-        {
-            "schema_version": SCHEMA_VERSION,
-            "source_repository": SOURCE_REPOSITORY,
-            "source_commit": os.environ.get("SOURCE_COMMIT", "UNSPECIFIED"),
-            "tested_branch": os.environ.get("TESTED_BRANCH", "UNSPECIFIED"),
-            "generated_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-            "python_version": platform.python_version(),
-            "desktop_viewport": VIEWPORTS["desktop"],
-            "narrow_viewport": VIEWPORTS["narrow"],
-            "json_export_valid": False,
-            "markdown_export_valid": False,
-            "calculation_evidence_visible": False,
-            "physical_navigation_passed": False,
-            "narrow_smoke_passed": False,
-            "tracked_files_unchanged": True,
-            "overall_disposition": "FAIL",
-        }
-    )
+    report.update({
+        "schema_version": SCHEMA_VERSION,
+        "source_repository": SOURCE_REPOSITORY,
+        "source_commit": os.environ.get("SOURCE_COMMIT", "UNSPECIFIED"),
+        "tested_branch": os.environ.get("TESTED_BRANCH", "UNSPECIFIED"),
+        "generated_at_utc": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+        "python_version": platform.python_version(),
+        "desktop_viewport": VIEWPORTS["desktop"],
+        "narrow_viewport": VIEWPORTS["narrow"],
+        "json_export_valid": False,
+        "markdown_export_valid": False,
+        "calculation_evidence_visible": False,
+        "physical_navigation_passed": False,
+        "narrow_smoke_passed": False,
+        "tracked_files_unchanged": True,
+        "overall_disposition": "FAIL",
+    })
     diagnostics = RuntimeDiagnostics()
     routes: dict[str, str] = {}
     active_page: Page | None = None
@@ -336,7 +529,6 @@ def run_minimal_acceptance() -> dict:
                 report["playwright_version"] = getattr(playwright, "__version__", "managed")
                 browser = playwright.chromium.launch()
                 report["chromium_version"] = browser.version
-
                 desktop_context = browser.new_context(viewport=VIEWPORTS["desktop"], accept_downloads=True)
                 page = desktop_context.new_page()
                 active_page = page
@@ -344,7 +536,6 @@ def run_minimal_acceptance() -> dict:
                 page.goto(app.base_url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MILLISECONDS)
                 _app_ready(page, require_home=True)
                 page.screenshot(path=screenshots / "home-desktop.png", full_page=True)
-
                 routes = _collect_routes(page, app.base_url)
                 report["scenario_id"] = _select_scenario_and_adjust_inputs(page)
                 _calculation_evidence_visible(page)
@@ -364,22 +555,20 @@ def run_minimal_acceptance() -> dict:
                 narrow.goto(app.base_url, wait_until="domcontentloaded", timeout=PAGE_TIMEOUT_MILLISECONDS)
                 _app_ready(narrow, require_home=True)
                 report["responsive_route"] = _responsive_physical_route(
-                    narrow, routes, screenshots, artifact_dir
+                    narrow, routes, screenshots, artifact_dir, diagnostics
                 )
                 report["narrow_smoke_passed"] = True
                 narrow_context.close()
                 browser.close()
 
         material_console = _material_console_errors(diagnostics.console_errors)
-        report.update(
-            {
-                "route_count": len(routes),
-                "unique_route_count": len(set(routes.values())),
-                "visible_exception_count": 0,
-                "page_error_count": len(diagnostics.page_errors),
-                "console_error_count": len(material_console),
-            }
-        )
+        report.update({
+            "route_count": len(routes),
+            "unique_route_count": len(set(routes.values())),
+            "visible_exception_count": 0,
+            "page_error_count": len(diagnostics.page_errors),
+            "console_error_count": len(material_console),
+        })
         required_passes = (
             report["route_count"] == 13,
             report["unique_route_count"] == 13,
@@ -400,13 +589,12 @@ def run_minimal_acceptance() -> dict:
         if active_page is not None:
             try:
                 active_page.screenshot(path=screenshots / "failure.png", full_page=True)
-                _write_json(
-                    artifact_dir / "failure-visible-links.json",
-                    _visible_link_inventory(active_page),
-                )
+                _write_json(artifact_dir / "narrow-link-inventory.json", _visible_link_inventory(active_page))
             except Exception:
                 pass
-        _write_json(artifact_dir / "failure-context.json", report["failure"])
+        failure_context = artifact_dir / "failure-context.json"
+        if not failure_context.exists():
+            _write_json(failure_context, report["failure"])
         raise
     finally:
         report["route_count"] = report.get("route_count") or len(routes)
