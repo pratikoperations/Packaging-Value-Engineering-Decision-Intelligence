@@ -166,6 +166,37 @@ class MinimalBrowserContractTests(unittest.TestCase):
         self.assertNotIn("select.select_option", scenario_source)
         self.assertNotIn("page.wait_for_timeout", scenario_source[:option_index])
 
+    def test_assumptions_discovery_checks_controls_before_semantic_summary(self):
+        runner_path = (
+            Path(__file__).resolve().parents[2]
+            / "src"
+            / "browser_acceptance"
+            / "minimal_runner.py"
+        )
+        source = runner_path.read_text(encoding="utf-8")
+        helper_start = source.index("def _ensure_assumptions_open")
+        helper_end = source.index("\ndef _select_scenario_and_adjust_inputs", helper_start)
+        helper_source = source[helper_start:helper_end]
+
+        visible_check = helper_source.index("if _visible(cost) or _visible(material):")
+        text_lookup = helper_source.index("page.get_by_text(re.compile")
+        summary_lookup = helper_source.index('ancestor-or-self::summary[1]')
+        fallback_lookup = helper_source.index("@role='button' or self::button")
+        click_index = helper_source.index("control.click(timeout=ACTION_TIMEOUT_MILLISECONDS)")
+        wait_index = helper_source.index(
+            'cost.first.wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)'
+        )
+
+        self.assertLess(visible_check, text_lookup)
+        self.assertLess(text_lookup, summary_lookup)
+        self.assertLess(summary_lookup, fallback_lookup)
+        self.assertLess(fallback_lookup, click_index)
+        self.assertLess(click_index, wait_index)
+        self.assertNotIn('get_by_role("button", name=re.compile(r"assumptions$', helper_source)
+        self.assertNotIn("data-testid", helper_source)
+        self.assertNotIn("page.wait_for_timeout", helper_source)
+        self.assertNotIn("retry", helper_source.lower())
+
 
 if __name__ == "__main__":
     unittest.main()
