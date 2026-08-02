@@ -76,16 +76,33 @@ def _open_sidebar(page: Page) -> None:
 
 def _expand_group(page: Page, group: str, expected_link: str) -> None:
     _open_sidebar(page)
-    if _visible(page.get_by_role("link", name=expected_link, exact=True)):
+    expected = page.get_by_role("link", name=expected_link, exact=True)
+    if _visible(expected):
         return
+
     controls = page.get_by_role("button", name=group, exact=True)
-    if not _visible(controls):
-        text = _first_visible(page.get_by_text(group, exact=True))
-        controls = text.locator("xpath=ancestor-or-self::*[self::button or self::summary or @role='button'][1]")
-    control = _first_visible(controls)
+    visible_controls = _visible(controls)
+    if visible_controls:
+        control = visible_controls[0]
+    else:
+        text_matches = page.get_by_text(group, exact=True)
+        visible_text_matches = _visible(text_matches)
+        if not visible_text_matches:
+            raise AssertionError(f"No visible sidebar group label found for {group!r}.")
+
+        visible_ancestors: list[Locator] = []
+        for text_match in visible_text_matches:
+            ancestors = text_match.locator(
+                "xpath=ancestor-or-self::*[self::button or self::summary or @role='button'][1]"
+            )
+            visible_ancestors.extend(_visible(ancestors))
+        if not visible_ancestors:
+            raise AssertionError(f"No visible semantic sidebar control found for {group!r}.")
+        control = visible_ancestors[0]
+
     control.scroll_into_view_if_needed(timeout=ACTION_TIMEOUT_MILLISECONDS)
     control.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
-    _first_visible(page.get_by_role("link", name=expected_link, exact=True))
+    _first_visible(expected)
 
 
 def _resolved_link(page: Page, base_url: str, title: str, group: str | None) -> str:

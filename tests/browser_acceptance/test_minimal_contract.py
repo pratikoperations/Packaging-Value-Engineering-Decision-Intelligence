@@ -279,6 +279,52 @@ class MinimalBrowserContractTests(unittest.TestCase):
         self.assertLess(open_sidebar_index, resolved_link_index)
         self.assertLess(resolved_link_index, screenshot_index)
 
+    def test_group_fallback_selects_visible_duplicate_dom_candidates(self):
+        runner_path = (
+            Path(__file__).resolve().parents[2]
+            / "src"
+            / "browser_acceptance"
+            / "minimal_runner.py"
+        )
+        source = runner_path.read_text(encoding="utf-8")
+        start = source.index("def _expand_group")
+        end = source.index("\ndef _resolved_link", start)
+        group_source = source[start:end]
+
+        semantic_index = group_source.index(
+            'page.get_by_role("button", name=group, exact=True)'
+        )
+        text_index = group_source.index('page.get_by_text(group, exact=True)')
+        visible_text_index = group_source.index(
+            "visible_text_matches = _visible(text_matches)"
+        )
+        loop_index = group_source.index("for text_match in visible_text_matches:")
+        ancestor_index = group_source.index(
+            "ancestor-or-self::*[self::button or self::summary or @role='button'][1]"
+        )
+        visible_ancestor_index = group_source.index(
+            "visible_ancestors.extend(_visible(ancestors))"
+        )
+        click_index = group_source.index(
+            "control.click(timeout=ACTION_TIMEOUT_MILLISECONDS)"
+        )
+        completion_index = group_source.index("_first_visible(expected)")
+
+        self.assertLess(semantic_index, text_index)
+        self.assertLess(text_index, visible_text_index)
+        self.assertLess(visible_text_index, loop_index)
+        self.assertLess(loop_index, ancestor_index)
+        self.assertLess(ancestor_index, visible_ancestor_index)
+        self.assertLess(visible_ancestor_index, click_index)
+        self.assertLess(click_index, completion_index)
+        self.assertNotIn("text_matches.first.wait_for", group_source)
+        self.assertNotIn("data-testid", group_source)
+        self.assertNotIn("bounding_box", group_source)
+        self.assertNotIn("evaluate(", group_source)
+        self.assertNotIn("session_state", group_source)
+        self.assertNotIn("retry", group_source.lower())
+        self.assertNotIn("page.wait_for_timeout", group_source)
+
 
 if __name__ == "__main__":
     unittest.main()
