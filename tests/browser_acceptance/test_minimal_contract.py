@@ -16,13 +16,19 @@ from src.browser_acceptance.diagnostics import material_console_errors, visible_
 from src.browser_acceptance.export_validation import validate_json_download, validate_markdown_download
 from src.browser_acceptance.process_manager import allocate_port
 
-
 RUNNER_PATH = Path(__file__).resolve().parents[2] / "src" / "browser_acceptance" / "minimal_runner.py"
 DOC_PATH = Path(__file__).resolve().parents[2] / "docs" / "enhancement_programme" / "GATE_3A_MINIMAL_BROWSER_ACCEPTANCE.md"
 
 
 def _runner_source() -> str:
     return RUNNER_PATH.read_text(encoding="utf-8")
+
+
+def _responsive_source() -> str:
+    source = _runner_source()
+    start = source.index("def _responsive_physical_route")
+    end = source.index("\ndef _material_console_errors", start)
+    return source[start:end]
 
 
 def _governed_markdown(limitation: str) -> str:
@@ -151,62 +157,102 @@ class MinimalBrowserContractTests(unittest.TestCase):
         self.assertNotIn("page.wait_for_timeout", group_source)
 
     def test_responsive_physical_route_click_is_mandatory(self):
+        responsive = _responsive_source()
+        self.assertIn("_open_sidebar(page)", responsive)
+        self.assertIn("selected_link.click(timeout=ACTION_TIMEOUT_MILLISECONDS)", responsive)
+        self.assertIn("RESPONSIVE_ROUTE_PREFERENCES", responsive)
+        self.assertIn('"Showcase & Handoff"', _runner_source())
+        self.assertIn('"Capabilities & Limits"', _runner_source())
+        self.assertNotIn("_expand_group(", responsive)
+
+    def test_responsive_selection_does_not_use_first(self):
+        responsive = _responsive_source()
+        self.assertNotIn(".first", responsive.split("selected_link.click", 1)[0])
+        self.assertIn("_select_viewport_candidate", responsive)
+
+    def test_all_candidates_are_enumerated(self):
         source = _runner_source()
-        start = source.index("def _responsive_physical_route")
-        end = source.index("\ndef _material_console_errors", start)
-        responsive_source = source[start:end]
-        self.assertIn("_open_sidebar(page)", responsive_source)
-        self.assertIn("selected_link.click(timeout=ACTION_TIMEOUT_MILLISECONDS)", responsive_source)
-        self.assertIn("RESPONSIVE_ROUTE_PREFERENCES", responsive_source)
-        self.assertIn('"Showcase & Handoff"', source)
-        self.assertIn('"Capabilities & Limits"', source)
-        self.assertNotIn("_expand_group(", responsive_source)
+        selector = source[source.index("def _select_viewport_candidate"):source.index("\ndef _responsive_physical_route")]
+        self.assertIn("for index in range(locator.count())", selector)
+        self.assertIn("global_candidate_count", selector)
+        self.assertIn("sidebar_candidate_count", selector)
+
+    def test_candidate_selection_requires_viewport_intersection(self):
+        source = _runner_source()
+        self.assertIn("def _rect_intersects_viewport", source)
+        for token in (
+            'rect["right"] > 0',
+            'rect["bottom"] > 0',
+            'rect["left"] < viewport["width"]',
+            'rect["top"] < viewport["height"]',
+        ):
+            self.assertIn(token, source)
+        self.assertIn('geometry["intersects_viewport"]', source)
+
+    def test_exactly_one_candidate_is_enforced(self):
+        source = _runner_source()
+        self.assertIn("if len(qualifying) != 1", source)
+        self.assertIn("Expected exactly one viewport-intersecting", source)
+
+    def test_post_scroll_geometry_is_revalidated(self):
+        responsive = _responsive_source()
+        self.assertIn("scroll_into_view_if_needed", responsive)
+        self.assertIn("post_scroll = _candidate_geometry", responsive)
+        self.assertIn('post_scroll["intersects_viewport"]', responsive)
+        self.assertIn('post_scroll["centre_in_viewport"]', responsive)
 
     def test_narrow_calculation_evidence_uses_governed_resolved_destination(self):
-        source = _runner_source()
-        start = source.index("def _responsive_physical_route")
-        end = source.index("\ndef _material_console_errors", start)
-        responsive_source = source[start:end]
-        self.assertIn('routes.get("Calculation Evidence")', responsive_source)
-        self.assertIn("page.goto(calculation_url", responsive_source)
-        self.assertIn('name=re.compile("Calculation Evidence", re.I)', responsive_source)
+        responsive = _responsive_source()
+        self.assertIn('routes.get("Calculation Evidence")', responsive)
+        self.assertIn("page.goto(calculation_url", responsive)
+        self.assertIn('name=re.compile("Calculation Evidence", re.I)', responsive)
 
-    def test_narrow_success_and_link_evidence_are_mandatory(self):
+    def test_narrow_success_and_failure_evidence_are_mandatory(self):
         source = _runner_source()
-        self.assertIn('artifact_dir / "narrow-link-inventory.json"', source)
-        self.assertIn('screenshots / "narrow-smoke.png"', source)
-        self.assertIn('screenshots / "failure.png"', source)
-        self.assertIn('artifact_dir / "failure-visible-links.json"', source)
+        for token in (
+            'artifact_dir / "narrow-link-inventory.json"',
+            'artifact_dir / "narrow-candidate-geometry.json"',
+            'screenshots / "narrow-smoke.png"',
+            'screenshots / "failure.png"',
+            'artifact_dir / "failure-context.json"',
+        ):
+            self.assertIn(token, source)
 
     def test_acceptance_cannot_pass_without_responsive_assertion(self):
         source = _runner_source()
-        run_start = source.index("def run_minimal_acceptance")
-        run_source = source[run_start:]
-        call_index = run_source.index("_responsive_physical_route(")
-        pass_index = run_source.index('report["narrow_smoke_passed"] = True')
-        required_index = run_source.index('report["narrow_smoke_passed"],')
-        disposition_index = run_source.index('report["overall_disposition"] = "PASS"')
-        self.assertLess(call_index, pass_index)
-        self.assertLess(pass_index, required_index)
-        self.assertLess(required_index, disposition_index)
+        run_source = source[source.index("def run_minimal_acceptance"):]
+        self.assertLess(
+            run_source.index("_responsive_physical_route("),
+            run_source.index('report["narrow_smoke_passed"] = True'),
+        )
+        self.assertLess(
+            run_source.index('report["narrow_smoke_passed"] = True'),
+            run_source.index('report["narrow_smoke_passed"],'),
+        )
+        self.assertLess(
+            run_source.index('report["narrow_smoke_passed"],'),
+            run_source.index('report["overall_disposition"] = "PASS"'),
+        )
 
     def test_static_prohibition_controls(self):
         source = _runner_source()
         prohibited = (
-            "bounding_box(",
-            ".evaluate(",
-            "session_state",
-            "retry(",
+            "force=True",
+            "dispatch_event(",
             "document.querySelector",
+            "session_state",
+            "page.mouse.click",
+            "locator.click()",
+            "retry(",
+            "time.sleep(",
         )
         for token in prohibited:
             self.assertNotIn(token, source)
-        responsive_start = source.index("def _responsive_physical_route")
-        responsive_end = source.index("\ndef _material_console_errors", responsive_start)
-        responsive_source = source[responsive_start:responsive_end]
-        self.assertNotIn("page.wait_for_timeout", responsive_source)
+        responsive = _responsive_source()
+        self.assertNotIn("page.wait_for_timeout", responsive)
+        self.assertNotIn("page.evaluate", responsive)
 
-    def test_documentation_records_responsive_semantics_decision(self):
+    def test_documentation_records_responsive_semantics_and_instance_selection(self):
         text = DOC_PATH.read_text(encoding="utf-8")
         self.assertIn(
             "The responsive contract validates user access and governed destination behavior at Android-sized width.",
@@ -216,6 +262,8 @@ class MinimalBrowserContractTests(unittest.TestCase):
             "It does not require the narrow layout to reproduce desktop sidebar grouping semantics.",
             text,
         )
+        self.assertIn("physically reachable in the active viewport", text)
+        self.assertIn("does not assume DOM order", text)
 
 
 if __name__ == "__main__":
