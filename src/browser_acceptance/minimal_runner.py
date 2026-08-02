@@ -118,12 +118,16 @@ def _select_scenario_and_adjust_inputs(page: Page) -> str:
         exact=True,
     )
     select.wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)
-    options = select.locator("option")
-    if options.count() < 1:
-        raise AssertionError("No governed scenario options were rendered.")
-    scenario_id = options.nth(0).get_attribute("value") or options.nth(0).inner_text()
-    select.select_option(index=0)
-    page.wait_for_timeout(1000)
+    select.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
+
+    listbox = page.get_by_role("listbox")
+    listbox.wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)
+    option = _first_visible(listbox.get_by_role("option"))
+    scenario_id = option.inner_text().strip()
+    if not scenario_id:
+        raise AssertionError("Rendered governed scenario option has no accessible text.")
+    option.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
+    listbox.wait_for(state="hidden", timeout=PAGE_TIMEOUT_MILLISECONDS)
 
     annual = page.get_by_label("Annual volume (cases)")
     annual.wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)
