@@ -19,7 +19,7 @@ jobs:
       - name: Check out frozen Gate 3A candidate
         uses: actions/checkout@v4
         with:
-          ref: e2377dfc3b7eafc58fb801ca73a7de9ad064f1e2
+          ref: efe6eb27ae819fb4db449c2e3aae13232d33db4d
           persist-credentials: false
           fetch-depth: 1
 
@@ -42,7 +42,7 @@ jobs:
         run: |
           set -euo pipefail
           actual="$(git rev-parse HEAD)"
-          expected="e2377dfc3b7eafc58fb801ca73a7de9ad064f1e2"
+          expected="efe6eb27ae819fb4db449c2e3aae13232d33db4d"
           test "$actual" = "$expected" || {
             echo "Expected frozen Gate 3A SHA $expected but checked out $actual"
             exit 1
@@ -55,7 +55,7 @@ jobs:
       - name: Run minimal interview browser acceptance
         env:
           BROWSER_ARTIFACT_DIR: browser-artifacts/gate3a
-          SOURCE_COMMIT: e2377dfc3b7eafc58fb801ca73a7de9ad064f1e2
+          SOURCE_COMMIT: efe6eb27ae819fb4db449c2e3aae13232d33db4d
           TESTED_BRANCH: enhancement/minimal-interview-browser-acceptance
         run: PYTHONPATH=. python -m src.browser_acceptance.minimal_runner
 
@@ -71,6 +71,7 @@ jobs:
           PY
 
       - name: Verify tracked repository files remain unchanged
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
