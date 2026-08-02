@@ -23,6 +23,16 @@ from src.browser_acceptance.export_validation import (
 from src.browser_acceptance.process_manager import allocate_port
 
 
+def _governed_markdown(limitation: str) -> str:
+    return (
+        "# Synthetic Data Disclosure\n"
+        "# Packaging Value Engineering Decision Package\n"
+        "## Independent Calculation Evidence\n"
+        "Engineering validation remains mandatory.\n"
+        f"{limitation}\n"
+    )
+
+
 class MinimalBrowserContractTests(unittest.TestCase):
     def test_exactly_thirteen_registered_routes(self):
         self.assertEqual(13, len(PAGE_CONTRACTS))
@@ -73,23 +83,59 @@ class MinimalBrowserContractTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 validate_json_download(path)
 
-    def test_markdown_validator_accepts_required_limitations(self):
-        text = (
-            "# Synthetic Data Disclosure\n"
-            "# Packaging Value Engineering Decision Package\n"
-            "## Independent Calculation Evidence\n"
-            "Engineering validation remains mandatory.\n"
-            "No realized savings are claimed.\n"
-        )
+    def _assert_markdown_accepted(self, limitation: str) -> None:
+        text = _governed_markdown(limitation)
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "export.md"
             path.write_text(text, encoding="utf-8")
             self.assertEqual(text, validate_markdown_download(path))
 
-    def test_markdown_validator_rejects_missing_limitations(self):
+    def _assert_markdown_rejected(self, limitation: str) -> None:
+        text = _governed_markdown(limitation)
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "export.md"
-            path.write_text("# Synthetic Data Disclosure", encoding="utf-8")
+            path.write_text(text, encoding="utf-8")
+            with self.assertRaises(AssertionError):
+                validate_markdown_download(path)
+
+    def test_markdown_validator_accepts_prior_exact_limitation(self):
+        self._assert_markdown_accepted("No realized savings are claimed.")
+
+    def test_markdown_validator_accepts_actual_artifact_claim_limitation(self):
+        self._assert_markdown_accepted(
+            "Not suitable for negotiation, supplier award, engineering approval, "
+            "regulatory approval or realized-savings claims."
+        )
+
+    def test_markdown_validator_accepts_actual_artifact_validation_limitation(self):
+        self._assert_markdown_accepted(
+            "A match is not supplier, engineering, regulatory, production or "
+            "realized-savings validation."
+        )
+
+    def test_markdown_validator_accepts_case_punctuation_and_hyphen_variants(self):
+        self._assert_markdown_accepted("NO REALIZED—SAVINGS CLAIMS ARE VALIDATED!")
+
+    def test_markdown_validator_accepts_line_wrapped_equivalent_limitation(self):
+        self._assert_markdown_accepted(
+            "This report is not suitable for realized-\nsavings claims."
+        )
+
+    def test_markdown_validator_rejects_generic_savings_wording(self):
+        self._assert_markdown_rejected("Savings opportunities are shown.")
+
+    def test_markdown_validator_rejects_missing_realized_savings_limitation(self):
+        self._assert_markdown_rejected(
+            "Engineering review is required before implementation."
+        )
+
+    def test_markdown_validator_rejects_positive_realized_savings_claim(self):
+        self._assert_markdown_rejected("Realized savings are claimed and validated.")
+
+    def test_markdown_validator_rejects_missing_required_sections(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "export.md"
+            path.write_text("No realized savings are claimed.", encoding="utf-8")
             with self.assertRaises(AssertionError):
                 validate_markdown_download(path)
 
@@ -196,6 +242,42 @@ class MinimalBrowserContractTests(unittest.TestCase):
         self.assertNotIn("data-testid", helper_source)
         self.assertNotIn("page.wait_for_timeout", helper_source)
         self.assertNotIn("retry", helper_source.lower())
+
+    def test_narrow_sidebar_path_uses_semantic_open_and_group_resolution(self):
+        runner_path = (
+            Path(__file__).resolve().parents[2]
+            / "src"
+            / "browser_acceptance"
+            / "minimal_runner.py"
+        )
+        source = runner_path.read_text(encoding="utf-8")
+        sidebar_start = source.index("def _open_sidebar")
+        sidebar_end = source.index("\ndef _expand_group", sidebar_start)
+        sidebar_source = source[sidebar_start:sidebar_end]
+        run_start = source.index("def run_minimal_acceptance")
+        run_source = source[run_start:]
+
+        self.assertIn('get_by_role("link", name="Home", exact=True)', sidebar_source)
+        self.assertIn('get_by_role("button", name=re.compile("sidebar", re.I))', sidebar_source)
+        self.assertIn("button.click(timeout=ACTION_TIMEOUT_MILLISECONDS)", sidebar_source)
+        self.assertNotIn("data-testid", sidebar_source)
+        self.assertNotIn("page.wait_for_timeout", sidebar_source)
+
+        narrow_context_index = run_source.index(
+            'narrow_context = browser.new_context(viewport=VIEWPORTS["narrow"])'
+        )
+        open_sidebar_index = run_source.index("_open_sidebar(narrow)", narrow_context_index)
+        resolved_link_index = run_source.index(
+            '_resolved_link(narrow, app.base_url, "Calculation Evidence", "Evidence & Explanation")',
+            open_sidebar_index,
+        )
+        screenshot_index = run_source.index(
+            'narrow.screenshot(path=screenshots / "narrow-smoke.png", full_page=True)',
+            resolved_link_index,
+        )
+        self.assertLess(narrow_context_index, open_sidebar_index)
+        self.assertLess(open_sidebar_index, resolved_link_index)
+        self.assertLess(resolved_link_index, screenshot_index)
 
 
 if __name__ == "__main__":
