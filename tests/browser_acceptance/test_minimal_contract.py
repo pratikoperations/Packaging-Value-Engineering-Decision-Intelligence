@@ -137,6 +137,35 @@ class MinimalBrowserContractTests(unittest.TestCase):
             source,
         )
 
+    def test_scenario_options_use_open_listbox_and_semantic_option_wait(self):
+        runner_path = (
+            Path(__file__).resolve().parents[2]
+            / "src"
+            / "browser_acceptance"
+            / "minimal_runner.py"
+        )
+        source = runner_path.read_text(encoding="utf-8")
+        scenario_start = source.index("def _select_scenario_and_adjust_inputs")
+        scenario_end = source.index("\ndef _calculation_evidence_visible", scenario_start)
+        scenario_source = source[scenario_start:scenario_end]
+
+        click_index = scenario_source.index("select.click(timeout=ACTION_TIMEOUT_MILLISECONDS)")
+        listbox_index = scenario_source.index('listbox = page.get_by_role("listbox")')
+        wait_index = scenario_source.index(
+            'listbox.wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)'
+        )
+        option_index = scenario_source.index('listbox.get_by_role("option")')
+        self.assertLess(click_index, listbox_index)
+        self.assertLess(listbox_index, wait_index)
+        self.assertLess(wait_index, option_index)
+        self.assertIn(
+            'listbox.wait_for(state="hidden", timeout=PAGE_TIMEOUT_MILLISECONDS)',
+            scenario_source,
+        )
+        self.assertNotIn('select.locator("option")', scenario_source)
+        self.assertNotIn("select.select_option", scenario_source)
+        self.assertNotIn("page.wait_for_timeout", scenario_source[:option_index])
+
 
 if __name__ == "__main__":
     unittest.main()
