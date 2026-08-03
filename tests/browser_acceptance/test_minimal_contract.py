@@ -38,6 +38,13 @@ def _sidebar_stage_source() -> str:
     return source[start:end]
 
 
+def _opener_source() -> str:
+    source = _runner_source()
+    start = source.index("def _ensure_responsive_sidebar_open")
+    end = source.index("\ndef _sidebar_geometry", start)
+    return source[start:end]
+
+
 def _governed_markdown(limitation: str) -> str:
     return (
         "# Synthetic Data Disclosure\n"
@@ -132,17 +139,15 @@ class MinimalBrowserContractTests(unittest.TestCase):
         group_source = source[start:end]
         self.assertIn('page.get_by_role("button", name=group, exact=True)', group_source)
         self.assertIn('page.get_by_text(group, exact=True)', group_source)
-        self.assertIn("visible_text_matches = _visible(text_matches)", group_source)
-        self.assertIn("ancestor-or-self::*[self::button or self::summary or @role='button'][1]", group_source)
         self.assertNotIn("session_state", group_source)
         self.assertNotIn("retry", group_source.lower())
         self.assertNotIn("page.wait_for_timeout", group_source)
 
-    def test_responsive_stage_does_not_call_open_sidebar(self):
+    def test_responsive_stage_does_not_call_desktop_opener(self):
         responsive = _responsive_source()
         self.assertNotIn("_open_sidebar(page)", responsive)
         self.assertIn("_capture_sidebar_evidence", responsive)
-        self.assertIn("_require_open_responsive_sidebar", responsive)
+        self.assertIn("_ensure_responsive_sidebar_open", responsive)
 
     def test_home_link_is_not_responsive_state_contract(self):
         stage = _sidebar_stage_source()
@@ -157,12 +162,81 @@ class MinimalBrowserContractTests(unittest.TestCase):
 
     def test_open_state_requires_geometry_and_viewport_intersection(self):
         stage = _sidebar_stage_source()
-        self.assertIn('item["non_zero_size"]', stage)
-        self.assertIn('item["viewport_intersection"]', stage)
-        self.assertIn('item["visible"]', stage)
-        self.assertIn('item["computed_display"]', stage)
-        self.assertIn('item["computed_visibility"]', stage)
-        self.assertIn('item["computed_opacity"]', stage)
+        for token in ('item["non_zero_size"]', 'item["viewport_intersection"]', 'item["visible"]', 'item["computed_display"]', 'item["computed_visibility"]', 'item["computed_opacity"]'):
+            self.assertIn(token, stage)
+
+    def test_random_dom_identifier_is_removed(self):
+        source = _runner_source()
+        self.assertNotIn("Math.random", source)
+        self.assertNotIn("data-gate3b-evidence-id", source)
+        self.assertNotIn("gate3bEvidenceId", source)
+
+    def test_control_inventory_is_non_mutating_and_deterministic(self):
+        source = _runner_source()
+        inventory = source[source.index("def _control_signature"):source.index("\ndef _sidebar_payload")]
+        self.assertIn("json.dumps(stable, sort_keys=True", inventory)
+        self.assertIn("records_by_signature.setdefault", inventory)
+        self.assertIn("for key in sorted(records_by_signature)", inventory)
+        self.assertNotIn("dataset", inventory)
+        self.assertNotIn("setAttribute", inventory)
+        self.assertNotIn("removeAttribute", inventory)
+        self.assertNotIn("candidate.evaluate", inventory)
+
+    def test_control_inventory_uses_nth_enumeration(self):
+        source = _runner_source()
+        inventory = source[source.index("def _inventory_sidebar_controls"):source.index("\ndef _sidebar_payload")]
+        self.assertIn("for root_index in range(root.count())", inventory)
+        self.assertIn("for index in range(scoped.count())", inventory)
+        self.assertIn("root.nth(root_index)", inventory)
+        self.assertIn("scoped.nth(index)", inventory)
+
+    def test_control_inventory_captures_required_metadata(self):
+        source = _runner_source()
+        for token in ('"computed_role"', '"accessible_name"', '"aria_label"', '"title"', '"data_testid"', '"bounding_box"', '"dom_rect"', '"viewport_intersection"', '"centre_point_in_viewport"', '"computed_pointer_events"', '"dom_ancestry"', '"nearest_scroll_owner"', '"scrollTop"', '"scrollHeight"', '"clientHeight"'):
+            self.assertIn(token, source)
+
+    def test_exact_streamlit_opener_locator_is_governed(self):
+        source = _runner_source()
+        self.assertIn("SIDEBAR_OPENER_SELECTOR = '[data-testid=\"stExpandSidebarButton\"]'", source)
+        opener = _opener_source()
+        self.assertIn("page.locator(SIDEBAR_OPENER_SELECTOR)", opener)
+        self.assertNotIn("get_by_role", opener)
+        self.assertNotIn("keyboard_double_arrow_right", opener)
+
+    def test_opener_is_used_only_for_collapsed_state(self):
+        opener = _opener_source()
+        self.assertIn('if state == "OPEN_AND_REACHABLE":', opener)
+        self.assertIn('if state != "COLLAPSED":', opener)
+        self.assertLess(opener.index('if state != "COLLAPSED":'), opener.index("page.locator(SIDEBAR_OPENER_SELECTOR)"))
+
+    def test_non_actionable_states_fail_before_locator(self):
+        opener = _opener_source()
+        self.assertIn("raise _non_open_sidebar_error", opener)
+        for state in ("PRESENT_OFF_CANVAS", "TRANSITIONING", "MISSING", "AMBIGUOUS"):
+            self.assertIn(f'"{state}"', _runner_source())
+
+    def test_opener_requires_unique_visible_enabled_intersecting_control(self):
+        opener = _opener_source()
+        self.assertIn("if match_count != 1", opener)
+        self.assertIn('opener_evidence["visible"]', opener)
+        self.assertIn('opener_evidence["enabled"]', opener)
+        self.assertIn('opener_evidence["viewport_intersection"]', opener)
+
+    def test_exact_opener_uses_one_normal_click(self):
+        opener = _opener_source()
+        self.assertEqual(1, opener.count("opener.click(timeout=ACTION_TIMEOUT_MILLISECONDS)"))
+        self.assertNotIn("force=True", opener)
+        self.assertNotIn("dispatch_event", opener)
+        self.assertNotIn("page.mouse", opener)
+        self.assertNotIn("evaluate", opener)
+
+    def test_post_open_evidence_and_state_are_required(self):
+        opener = _opener_source()
+        self.assertIn('artifact_dir / "narrow-sidebar-post-open.json"', opener)
+        self.assertIn('page.locator(SIDEBAR_SELECTOR).wait_for(state="visible"', opener)
+        self.assertIn('post_open["sidebar_state"] != "OPEN_AND_REACHABLE"', opener)
+        self.assertIn('sidebar_candidate["viewport_intersection"]', opener)
+        self.assertIn('sidebar_candidate["non_zero_size"]', opener)
 
     def test_responsive_sidebar_path_has_no_first_fallback(self):
         responsive = _responsive_source()
@@ -173,41 +247,13 @@ class MinimalBrowserContractTests(unittest.TestCase):
 
     def test_pre_action_evidence_precedes_state_gate(self):
         responsive = _responsive_source()
-        self.assertLess(responsive.index("_capture_sidebar_evidence"), responsive.index("_require_open_responsive_sidebar"))
+        self.assertLess(responsive.index("_capture_sidebar_evidence"), responsive.index("_ensure_responsive_sidebar_open"))
         self.assertIn('screenshots / "narrow-pre-action.png"', _runner_source())
         self.assertIn('artifact_dir / "narrow-sidebar-controls.json"', _runner_source())
 
-    def test_control_inventory_uses_nth_enumeration(self):
-        source = _runner_source()
-        start = source.index("def _inventory_sidebar_controls")
-        end = source.index("\ndef _capture_sidebar_evidence", start)
-        inventory = source[start:end]
-        self.assertIn("for root_index in range(root.count())", inventory)
-        self.assertIn("for index in range(scoped.count())", inventory)
-        self.assertIn("root.nth(root_index)", inventory)
-        self.assertIn("scoped.nth(index)", inventory)
-
-    def test_control_inventory_captures_required_metadata(self):
-        source = _runner_source()
-        for token in (
-            '"computed_role"', '"accessible_name"', '"aria_label"', '"title"', '"data_testid"',
-            '"bounding_box"', '"dom_rect"', '"viewport_intersection"', '"centre_point_in_viewport"',
-            '"computed_pointer_events"', '"dom_ancestry"', '"nearest_scroll_owner"',
-            '"scrollTop"', '"scrollHeight"', '"clientHeight"',
-        ):
-            self.assertIn(token, source)
-
-    def test_non_open_sidebar_fails_immediately_with_structured_message(self):
-        source = _runner_source()
-        start = source.index("def _require_open_responsive_sidebar")
-        end = source.index("\ndef _sidebar_geometry", start)
-        gate = source[start:end]
-        self.assertIn("Responsive sidebar is not OPEN_AND_REACHABLE", gate)
-        self.assertIn("total_controls=", gate)
-        self.assertIn("viewport_intersecting_controls=", gate)
-        self.assertIn("stSidebarCollapsedControl_exists=", gate)
-        self.assertNotIn("wait_for", gate)
-        self.assertNotIn("click", gate)
+    def test_route_candidate_selection_runs_after_sidebar_gate(self):
+        responsive = _responsive_source()
+        self.assertLess(responsive.index("_ensure_responsive_sidebar_open"), responsive.index('phase = "route-candidate-selection"'))
 
     def test_route_candidate_selection_remains_viewport_based(self):
         source = _runner_source()
@@ -217,6 +263,10 @@ class MinimalBrowserContractTests(unittest.TestCase):
         self.assertIn("sidebar_candidate_count", selector)
         self.assertIn("if len(qualifying) != 1", selector)
         self.assertIn("Expected exactly one viewport-intersecting", selector)
+
+    def test_route_preference_is_preserved(self):
+        source = _runner_source()
+        self.assertLess(source.index('("Showcase & Handoff"'), source.index('("Capabilities & Limits"'))
 
     def test_post_scroll_geometry_is_revalidated(self):
         responsive = _responsive_source()
@@ -234,12 +284,8 @@ class MinimalBrowserContractTests(unittest.TestCase):
 
     def test_failure_evidence_is_inside_responsive_boundary(self):
         responsive = _responsive_source()
-        for token in (
-            'screenshots / "failure.png"', 'artifact_dir / "failure-context.json"',
-            '"failing_phase"', '"evidence_write_status"', '"control_inventory_summary"',
-        ):
+        for token in ('screenshots / "failure.png"', 'artifact_dir / "failure-context.json"', '"failing_phase"', '"evidence_write_status"', '"control_inventory_summary"', '"sidebar_post_open"'):
             self.assertIn(token, responsive)
-        self.assertIn('artifact_dir / "narrow-sidebar-controls.json"', _runner_source())
         self.assertIn("raise", responsive)
 
     def test_acceptance_cannot_pass_without_responsive_assertion(self):
@@ -251,23 +297,22 @@ class MinimalBrowserContractTests(unittest.TestCase):
 
     def test_static_prohibition_controls(self):
         source = _runner_source()
-        prohibited = (
-            "force=True", "dispatch_event(", "document.querySelector", "session_state",
-            "page.mouse.click", "locator.click()", "retry(", "time.sleep(", "nth-child",
-        )
+        prohibited = ("force=True", "dispatch_event(", "document.querySelector", "session_state", "page.mouse.click", "locator.click()", "retry(", "time.sleep(", "nth-child")
         for token in prohibited:
             self.assertNotIn(token, source)
         responsive = _responsive_source()
         self.assertNotIn("page.wait_for_timeout", responsive)
         self.assertNotIn("page.evaluate", responsive)
 
-    def test_documentation_records_stage_one_boundaries(self):
+    def test_documentation_records_stage_two_boundaries(self):
         text = DOC_PATH.read_text(encoding="utf-8")
         for phrase in (
-            "latest physical failure occurred before responsive route-candidate enumeration",
-            "Home-link visibility is no longer the responsive sidebar-state contract",
-            "Stage 1 does not assume or click a new sidebar opener",
-            "fails deterministically with full evidence",
+            "Stage 1 physically established that the narrow sidebar is `COLLAPSED`",
+            "`[data-testid=\"stExpandSidebarButton\"]`",
+            "one exact evidence-backed physical opener click",
+            "removes random evidence identifiers and all evidence-only DOM mutation",
+            "new exact-head standard CI run is required",
+            "new exact-head physical Chromium run is required",
             "browser acceptance remains unpassed",
             "no production browser certification is claimed",
         ):

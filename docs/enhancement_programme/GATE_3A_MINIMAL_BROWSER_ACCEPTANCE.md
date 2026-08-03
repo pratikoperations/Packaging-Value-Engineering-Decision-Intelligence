@@ -2,15 +2,15 @@
 
 ## Status
 
-Stage 1 evidence-first diagnostics and sidebar-state classification candidate. Browser acceptance remains unpassed, and no production browser certification is claimed.
+Stage 2 exact-opener and deterministic-evidence candidate. Browser acceptance remains unpassed, and no production browser certification is claimed.
 
-The latest physical failure occurred before responsive route-candidate enumeration. The run failed inside the previous sidebar-opening helper while waiting for an unverified role/name locator. The existing viewport-intersection route-selection correction was therefore not physically exercised.
+Stage 1 physically established that the narrow sidebar is `COLLAPSED` at 412 × 915 and identified the exact visible, enabled, viewport-intersecting Streamlit opener as `[data-testid="stExpandSidebarButton"]`. The Stage 1 run stopped before responsive route-candidate enumeration, so the corrected route-selection logic has not yet been physically accepted.
 
 ## Purpose
 
 Gate 3B verifies that the exact integrated programme version can start, render, expose all registered routes, accept representative scenario inputs, display Calculation Evidence, produce governed JSON and Markdown downloads, complete desktop grouped navigation, and demonstrate meaningful responsive access at Android-sized width.
 
-Stage 1 is diagnostic and state-classification work. It improves observability and removes unsafe responsive sidebar-opening assumptions without introducing a speculative opener click strategy.
+Stage 2 implements the smallest evidence-backed correction: one exact evidence-backed physical opener click for the confirmed `COLLAPSED` state, followed by post-open state and geometry verification. It also removes random evidence identifiers and all evidence-only DOM mutation from control inventory deduplication.
 
 ## Acceptance scope
 
@@ -25,18 +25,40 @@ Stage 1 is diagnostic and state-classification work. It improves observability a
 9. Perform one physical desktop grouped-sidebar navigation to Calculation Evidence.
 10. At 412 × 915, capture pre-action sidebar and control evidence before any responsive state decision.
 11. Classify the sidebar from its container geometry, computed state and viewport intersection.
-12. Proceed only when the sidebar is already OPEN_AND_REACHABLE.
-13. Enumerate all exact semantic route matches and select exactly one visible instance whose rendered rectangle intersects the active viewport.
-14. Revalidate viewport intersection and clickable-centre geometry after scrolling the selected instance.
-15. Verify the responsive physical-click destination heading.
-16. Navigate to the already resolved governed Calculation Evidence destination at narrow width and verify its heading.
-17. Guarantee responsive failure evidence before re-raising any exception.
-18. Reject visible Streamlit exceptions, Playwright page errors and material browser-console errors.
-19. Require one successful exact-head run before acceptance.
+12. When the sidebar is already `OPEN_AND_REACHABLE`, continue without an opener click.
+13. When the sidebar is exactly `COLLAPSED`, require one unique, visible, enabled and viewport-intersecting `[data-testid="stExpandSidebarButton"]`.
+14. Physically click that exact opener once using a normal Playwright locator click.
+15. Wait for the sidebar to become visible, recapture its state and geometry, and require `OPEN_AND_REACHABLE` with positive dimensions and viewport intersection.
+16. Enumerate all exact semantic route matches and select exactly one visible instance whose rendered rectangle intersects the active viewport.
+17. Revalidate viewport intersection and clickable-centre geometry after scrolling the selected instance.
+18. Verify the responsive physical-click destination heading.
+19. Navigate to the already resolved governed Calculation Evidence destination at narrow width and verify its heading.
+20. Guarantee responsive failure evidence before re-raising any exception.
+21. Reject visible Streamlit exceptions, Playwright page errors and material browser-console errors.
+22. Require one successful exact-head run before acceptance.
 
-## Stage 1 sidebar-state decision
+## Stage 1 physical evidence
 
-Home-link visibility is no longer the responsive sidebar-state contract. A route link is downstream content, not the state primitive for the sidebar container.
+The accepted Stage 1 diagnostic run established:
+
+- viewport: `412 × 915`;
+- sidebar state: `COLLAPSED`;
+- sidebar exists in the DOM;
+- rendered width: `0`;
+- rendered height: `915`;
+- transform: `matrix(1, 0, 0, 1, -300, 0)`;
+- sidebar viewport intersection: false;
+- exact opener: `[data-testid="stExpandSidebarButton"]`;
+- opener match observed in `stHeader`;
+- opener visible, enabled and viewport-intersecting;
+- no speculative click was attempted;
+- responsive route-candidate enumeration was not reached.
+
+This evidence authorizes only the exact Stage 2 opener behavior. It does not authorize a generic role/name locator, icon-name locator, DOM-order fallback or speculative control search.
+
+## Sidebar-state decision
+
+Home-link visibility is not the responsive sidebar-state contract. A route link is downstream content, not the state primitive for the sidebar container.
 
 The responsive state model uses `[data-testid="stSidebar"]` existence, Playwright visibility, non-zero rendered geometry, computed display, visibility, opacity and viewport intersection. It records one of:
 
@@ -49,9 +71,13 @@ The responsive state model uses `[data-testid="stSidebar"]` existence, Playwrigh
 
 `OPEN_AND_REACHABLE` requires the sidebar to exist, be visibly rendered with non-zero dimensions and meaningfully intersect the 412 × 915 viewport.
 
-Stage 1 does not assume or click a new sidebar opener. If the sidebar is not already open and reachable, the harness fails deterministically with full evidence. A later opener-behaviour change requires direct evidence from the Stage 1 physical artifact.
+State handling is fail-closed:
 
-## Evidence-first controls
+- `OPEN_AND_REACHABLE`: continue without clicking;
+- `COLLAPSED`: apply the exact governed opener contract;
+- `PRESENT_OFF_CANVAS`, `TRANSITIONING`, `MISSING` and `AMBIGUOUS`: fail with evidence and do not click.
+
+## Deterministic evidence controls
 
 Before responsive sidebar-state classification, the harness writes:
 
@@ -65,15 +91,38 @@ The control inventory inspects, when present:
 - `[data-testid="stSidebarHeader"]`;
 - `[data-testid="stHeader"]`.
 
-It enumerates unique relevant controls using `nth(index)` and records accessible metadata, Playwright and DOM geometry, computed styles, viewport and centre-point intersection, DOM ancestry and nearest scroll-owner evidence.
+Control deduplication uses a deterministic metadata signature comprising discovery scope, tag, role, accessible name, title, aria-label, data-testid, id, rendered rectangle, visibility, enabled state and viewport intersection. Signatures are JSON-serialized with sorted keys and the final inventory is deterministically ordered.
 
-The responsive sidebar path does not use the generic `_first_visible()` helper, `.first.wait_for()` or `.first.click()` to discover or activate an opener.
+The inventory does not assign temporary attributes, does not use random values, does not depend on Python object identity, and does not mutate the application DOM.
+
+## Exact opener controls
+
+The responsive opener contract is limited to:
+
+`[data-testid="stExpandSidebarButton"]`
+
+Required guards:
+
+- sidebar pre-state is exactly `COLLAPSED`;
+- exactly one opener match;
+- visible;
+- enabled;
+- non-zero geometry;
+- viewport intersection;
+- one normal Playwright click;
+- no force click;
+- no JavaScript click;
+- no coordinate click;
+- no accessible-name or icon-name primary locator;
+- no `.first` selection or generic fallback.
+
+After click, the harness writes `narrow-sidebar-post-open.json`, including the locator, match count, opener evidence, click-attempt and completion flags, pre-click state, post-click state, elapsed transition time and complete post-open sidebar evidence.
+
+The route sequence continues only when the recaptured state is `OPEN_AND_REACHABLE`, the sidebar has positive rendered width and height, and its rectangle intersects the viewport.
 
 ## Responsive route-selection controls
 
 The responsive contract validates user access and governed destination behavior at Android-sized width. It does not require the narrow layout to reproduce desktop sidebar grouping semantics.
-
-The responsive harness selects the exact semantic link instance that is physically reachable in the active viewport. It does not assume DOM order or identical desktop and mobile navigation markup.
 
 Preserved controls:
 
@@ -81,26 +130,26 @@ Preserved controls:
 - collect geometry, computed-style, ancestry and scroll-owner evidence for every exact semantic match;
 - require exactly one visible, non-zero-size candidate intersecting the 412 × 915 viewport;
 - reject zero or multiple qualifying candidates;
+- prefer `Showcase & Handoff` and otherwise `Capabilities & Limits`;
 - scroll only the uniquely selected candidate;
 - recalculate geometry after scrolling;
-- require the candidate centre point to lie inside the viewport before a normal locator click;
-- prohibit DOM-order selection through `.first` for the responsive route;
-- retain a controlled fallback route only before click when the preferred route has no uniquely qualifying candidate;
+- require the candidate centre point inside the viewport before a normal locator click;
 - never substitute another route after a physical click failure.
 
 ## Failure-evidence boundary
 
-The entire responsive sequence is covered by one evidence-producing exception boundary, including pre-action capture, state classification, future opening logic, route selection, click, destination verification and narrow Calculation Evidence verification.
+The entire responsive sequence is covered by one evidence-producing exception boundary, including pre-action capture, state classification, exact opening, post-open verification, route selection, click, destination verification and narrow Calculation Evidence verification.
 
 On responsive failure, the harness attempts to preserve:
 
 - `screenshots/failure.png`;
 - `failure-context.json`;
 - `narrow-sidebar-controls.json`;
+- `narrow-sidebar-post-open.json` when opener processing begins;
 - `narrow-link-inventory.json`;
 - `narrow-candidate-geometry.json` when route selection has begun.
 
-`failure-context.json` records the exception type and message, failing phase, current URL, source commit, tested branch, sidebar classification and details, control-inventory summary, evidence filenames and evidence-write status. A detailed inner failure context is not replaced by a less detailed outer record.
+`failure-context.json` records the exception type and message, failing phase, current URL, source commit, tested branch, sidebar classification and details, control-inventory summary, evidence filenames and evidence-write status.
 
 ## Preserved acceptance controls
 
@@ -112,11 +161,11 @@ On responsive failure, the harness attempts to preserve:
 - zero material console errors;
 - zero page errors;
 - tracked-file cleanliness;
-- PASS only after the responsive route and narrow Calculation Evidence assertions succeed.
+- PASS only after responsive route and narrow Calculation Evidence assertions succeed.
 
 ## Explicit exclusions
 
-- no speculative sidebar-opener click in Stage 1;
+- Stage 2 does not itself establish browser acceptance;
 - no three-run ledger;
 - no production browser certification;
 - no cross-browser certification;
@@ -150,6 +199,7 @@ On responsive failure, the harness attempts to preserve:
 - `route-inventory.json`;
 - `runtime-events.json`;
 - `narrow-sidebar-controls.json`;
+- `narrow-sidebar-post-open.json` when the collapsed opener path is used;
 - `screenshots/narrow-pre-action.png`;
 - `narrow-link-inventory.json`;
 - `narrow-candidate-geometry.json` when route selection is reached;
@@ -162,8 +212,10 @@ On responsive failure, the harness attempts to preserve:
 - `screenshots/failure.png` and `failure-context.json` when applicable;
 - Streamlit log.
 
-## Passing claim
+## Required validation sequence
 
-A future successful exact-head run may support the claim that the portfolio prototype has a governed Chromium acceptance check covering startup, all registered routes, representative scenario-input interaction, Calculation Evidence, decision-package downloads, desktop grouped navigation and meaningful Android-sized responsive access.
+A new exact-head standard CI run is required after the Stage 2 commit.
 
-Until that run succeeds and is reviewed, browser acceptance remains unpassed and no production browser certification is claimed.
+A new exact-head physical Chromium run is required only after the Stage 2 standard CI result is reviewed and the default-branch workflow is repinned through a separate governed authorization.
+
+Until both validation steps succeed and are reviewed, browser acceptance remains unpassed and no production browser certification is claimed.

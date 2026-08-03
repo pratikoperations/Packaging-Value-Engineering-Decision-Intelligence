@@ -6,6 +6,7 @@ import platform
 import re
 from datetime import datetime, timezone
 from pathlib import Path
+from time import monotonic
 from urllib.parse import urljoin
 
 from playwright.sync_api import Locator, Page, sync_playwright
@@ -25,7 +26,7 @@ from .export_validation import validate_json_download, validate_markdown_downloa
 from .process_manager import StreamlitProcess
 
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
-SCHEMA_VERSION = "1.3.0"
+SCHEMA_VERSION = "1.4.0"
 MATERIAL_CONSOLE_PATTERNS = (
     "uncaught",
     "traceback",
@@ -37,6 +38,7 @@ RESPONSIVE_ROUTE_PREFERENCES = (
     ("Capabilities & Limits", re.compile(r"Capabilities", re.I)),
 )
 SIDEBAR_SELECTOR = '[data-testid="stSidebar"]'
+SIDEBAR_OPENER_SELECTOR = '[data-testid="stExpandSidebarButton"]'
 SIDEBAR_CONTROL_SCOPES = (
     ("stSidebarCollapsedControl", '[data-testid="stSidebarCollapsedControl"]'),
     ("stSidebarHeader", '[data-testid="stSidebarHeader"]'),
@@ -83,7 +85,7 @@ def _app_ready(page: Page, *, require_home: bool = False) -> None:
 
 
 def _open_sidebar(page: Page) -> None:
-    """Desktop-only semantic opener retained outside the Stage 1 responsive gate."""
+    """Desktop-only semantic opener retained outside the Stage 2 responsive gate."""
     if _visible(page.get_by_role("link", name="Home", exact=True)):
         return
     button = _first_visible(page.get_by_role("button", name=re.compile("sidebar", re.I)))
@@ -433,9 +435,26 @@ def _classify_sidebar_state(sidebar: dict) -> tuple[str, list[str]]:
     return "AMBIGUOUS", ["sidebar state did not satisfy a deterministic classification rule"]
 
 
+def _control_signature(evidence: dict) -> str:
+    stable = {
+        "discovery_scope": evidence["discovery_scope"],
+        "tag_name": evidence["tag_name"],
+        "computed_role": evidence["computed_role"],
+        "accessible_name": evidence["accessible_name"],
+        "title": evidence["title"],
+        "aria_label": evidence["aria_label"],
+        "data_testid": evidence["data_testid"],
+        "id": evidence["id"],
+        "dom_rect": evidence["dom_rect"],
+        "visible": evidence["visible"],
+        "enabled": evidence["enabled"],
+        "viewport_intersection": evidence["viewport_intersection"],
+    }
+    return json.dumps(stable, sort_keys=True, separators=(",", ":"))
+
+
 def _inventory_sidebar_controls(page: Page, viewport: dict) -> tuple[list[dict], dict[str, int | bool]]:
-    records: list[dict] = []
-    seen: set[str] = set()
+    records_by_signature: dict[str, dict] = {}
     collapsed_exists = page.locator('[data-testid="stSidebarCollapsedControl"]').count() > 0
     for scope, selector in SIDEBAR_CONTROL_SCOPES:
         root = page.locator(selector)
@@ -443,18 +462,12 @@ def _inventory_sidebar_controls(page: Page, viewport: dict) -> tuple[list[dict],
             scoped = root.nth(root_index).locator("button, [role='button'], [aria-label], [title]")
             for index in range(scoped.count()):
                 candidate = scoped.nth(index)
-                key = candidate.evaluate(
-                    """element => {
-                        if (!element.dataset.gate3bEvidenceId) {
-                            element.dataset.gate3bEvidenceId = 'gate3b-' + Math.random().toString(36).slice(2);
-                        }
-                        return element.dataset.gate3bEvidenceId;
-                    }"""
-                )
-                if key in seen:
-                    continue
-                seen.add(key)
-                records.append(_element_evidence(candidate, len(records), scope, viewport))
+                evidence = _element_evidence(candidate, 0, scope, viewport)
+                signature = _control_signature(evidence)
+                records_by_signature.setdefault(signature, evidence)
+    records = [records_by_signature[key] for key in sorted(records_by_signature)]
+    for index, record in enumerate(records):
+        record["candidate_index"] = index
     summary = {
         "total_inventoried_controls": len(records),
         "total_viewport_intersecting_controls": sum(1 for item in records if item["viewport_intersection"]),
@@ -463,14 +476,12 @@ def _inventory_sidebar_controls(page: Page, viewport: dict) -> tuple[list[dict],
     return records, summary
 
 
-def _capture_sidebar_evidence(page: Page, artifact_dir: Path, screenshots: Path) -> dict:
+def _sidebar_payload(page: Page, screenshot_filename: str | None = None) -> dict:
     viewport = page.viewport_size or VIEWPORTS["narrow"]
-    screenshot = screenshots / "narrow-pre-action.png"
-    page.screenshot(path=screenshot, full_page=True)
     sidebar = _sidebar_container_evidence(page, viewport)
     state, reasons = _classify_sidebar_state(sidebar)
     controls, summary = _inventory_sidebar_controls(page, viewport)
-    payload = {
+    return {
         "schema_version": SCHEMA_VERSION,
         "timestamp": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "current_url": page.url,
@@ -480,30 +491,92 @@ def _capture_sidebar_evidence(page: Page, artifact_dir: Path, screenshots: Path)
         ),
         "tested_branch": os.environ.get("TESTED_BRANCH", "UNSPECIFIED"),
         "source_commit": os.environ.get("SOURCE_COMMIT", "UNSPECIFIED"),
-        "screenshot_filename": str(screenshot.relative_to(artifact_dir)),
+        "screenshot_filename": screenshot_filename,
         "sidebar": sidebar,
         "sidebar_state": state,
         "classification_reasons": reasons,
         "controls": controls,
         "control_inventory_summary": summary,
     }
+
+
+def _capture_sidebar_evidence(page: Page, artifact_dir: Path, screenshots: Path) -> dict:
+    screenshot = screenshots / "narrow-pre-action.png"
+    page.screenshot(path=screenshot, full_page=True)
+    payload = _sidebar_payload(page, str(screenshot.relative_to(artifact_dir)))
     _write_json(artifact_dir / "narrow-sidebar-controls.json", payload)
     return payload
 
 
-def _require_open_responsive_sidebar(evidence: dict, artifact_dir: Path) -> None:
-    state = evidence["sidebar_state"]
-    if state == "OPEN_AND_REACHABLE":
-        return
+def _non_open_sidebar_error(evidence: dict, artifact_dir: Path) -> AssertionError:
     summary = evidence["control_inventory_summary"]
-    raise AssertionError(
+    return AssertionError(
         "Responsive sidebar is not OPEN_AND_REACHABLE; "
-        f"state={state}; sidebar_exists={evidence['sidebar'].get('exists')}; "
+        f"state={evidence['sidebar_state']}; sidebar_exists={evidence['sidebar'].get('exists')}; "
         f"total_controls={summary['total_inventoried_controls']}; "
         f"viewport_intersecting_controls={summary['total_viewport_intersecting_controls']}; "
         f"stSidebarCollapsedControl_exists={summary['stSidebarCollapsedControl_exists']}; "
         f"evidence={artifact_dir / 'narrow-sidebar-controls.json'}"
     )
+
+
+def _ensure_responsive_sidebar_open(page: Page, evidence: dict, artifact_dir: Path) -> dict:
+    state = evidence["sidebar_state"]
+    if state == "OPEN_AND_REACHABLE":
+        return evidence
+    if state != "COLLAPSED":
+        raise _non_open_sidebar_error(evidence, artifact_dir)
+
+    viewport = page.viewport_size or VIEWPORTS["narrow"]
+    opener_matches = page.locator(SIDEBAR_OPENER_SELECTOR)
+    match_count = opener_matches.count()
+    action = {
+        "schema_version": SCHEMA_VERSION,
+        "locator": SIDEBAR_OPENER_SELECTOR,
+        "match_count": match_count,
+        "pre_click_sidebar_state": state,
+        "click_attempted": False,
+        "click_completed": False,
+        "post_click_sidebar_state": None,
+        "elapsed_transition_milliseconds": None,
+    }
+    if match_count != 1:
+        _write_json(artifact_dir / "narrow-sidebar-post-open.json", action)
+        raise AssertionError(f"Expected exactly one responsive sidebar opener; found {match_count}.")
+
+    opener = opener_matches.nth(0)
+    opener_evidence = _element_evidence(opener, 0, "stHeader", viewport)
+    action["opener"] = opener_evidence
+    failures = []
+    if not opener_evidence["visible"]:
+        failures.append("not visible")
+    if not opener_evidence["enabled"]:
+        failures.append("not enabled")
+    if not opener_evidence["viewport_intersection"]:
+        failures.append("does not intersect viewport")
+    if failures:
+        _write_json(artifact_dir / "narrow-sidebar-post-open.json", action)
+        raise AssertionError("Responsive sidebar opener is " + ", ".join(failures) + ".")
+
+    action["click_attempted"] = True
+    started = monotonic()
+    opener.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
+    action["click_completed"] = True
+    page.locator(SIDEBAR_SELECTOR).wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)
+    post_open = _sidebar_payload(page)
+    action["elapsed_transition_milliseconds"] = round((monotonic() - started) * 1000, 3)
+    action["post_click_sidebar_state"] = post_open["sidebar_state"]
+    action["post_open_sidebar"] = post_open
+    _write_json(artifact_dir / "narrow-sidebar-post-open.json", action)
+    if post_open["sidebar_state"] != "OPEN_AND_REACHABLE":
+        raise AssertionError(
+            "Responsive sidebar did not become OPEN_AND_REACHABLE after exact opener click; "
+            f"state={post_open['sidebar_state']}; evidence={artifact_dir / 'narrow-sidebar-post-open.json'}"
+        )
+    sidebar_candidate = post_open["sidebar"]["candidates"][0]
+    if not sidebar_candidate["viewport_intersection"] or not sidebar_candidate["non_zero_size"]:
+        raise AssertionError("Post-open sidebar geometry is not viewport-reachable and non-zero.")
+    return post_open
 
 
 def _sidebar_geometry(page: Page) -> dict:
@@ -558,6 +631,7 @@ def _responsive_physical_route(
     evidence_write_status = {
         "narrow_pre_action": False,
         "narrow_sidebar_controls": False,
+        "narrow_sidebar_post_open": False,
         "failure_screenshot": False,
         "failure_context": False,
     }
@@ -566,7 +640,10 @@ def _responsive_physical_route(
         evidence_write_status["narrow_pre_action"] = True
         evidence_write_status["narrow_sidebar_controls"] = True
         phase = "sidebar-state-classification"
-        _require_open_responsive_sidebar(sidebar_evidence, artifact_dir)
+        sidebar_evidence = _ensure_responsive_sidebar_open(page, sidebar_evidence, artifact_dir)
+        evidence_write_status["narrow_sidebar_post_open"] = (
+            artifact_dir / "narrow-sidebar-post-open.json"
+        ).exists()
 
         phase = "route-inventory"
         _write_json(artifact_dir / "narrow-link-inventory.json", _visible_link_inventory(page))
@@ -669,6 +746,7 @@ def _responsive_physical_route(
                 "pre_action": "screenshots/narrow-pre-action.png",
                 "failure": "screenshots/failure.png",
                 "sidebar_controls": "narrow-sidebar-controls.json",
+                "sidebar_post_open": "narrow-sidebar-post-open.json",
                 "failure_context": "failure-context.json",
             },
             "evidence_write_status": evidence_write_status,
