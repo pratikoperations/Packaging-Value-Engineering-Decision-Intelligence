@@ -45,6 +45,20 @@ def _opener_source() -> str:
     return source[start:end]
 
 
+def _transition_source() -> str:
+    source = _runner_source()
+    start = source.index("def _transition_sample")
+    end = source.index("\ndef _select_viewport_candidate", start)
+    return source[start:end]
+
+
+def _route_selector_source() -> str:
+    source = _runner_source()
+    start = source.index("def _select_viewport_candidate")
+    end = source.index("\ndef _responsive_physical_route", start)
+    return source[start:end]
+
+
 def _governed_markdown(limitation: str) -> str:
     return (
         "# Synthetic Data Disclosure\n"
@@ -160,6 +174,9 @@ class MinimalBrowserContractTests(unittest.TestCase):
         for state in ("OPEN_AND_REACHABLE", "PRESENT_OFF_CANVAS", "COLLAPSED", "TRANSITIONING", "MISSING", "AMBIGUOUS"):
             self.assertIn(f'"{state}"', source)
 
+    def test_stage_three_schema_version_is_governed(self):
+        self.assertIn('SCHEMA_VERSION = "1.5.0"', _runner_source())
+
     def test_open_state_requires_geometry_and_viewport_intersection(self):
         stage = _sidebar_stage_source()
         for token in ('item["non_zero_size"]', 'item["viewport_intersection"]', 'item["visible"]', 'item["computed_display"]', 'item["computed_visibility"]', 'item["computed_opacity"]'):
@@ -230,11 +247,28 @@ class MinimalBrowserContractTests(unittest.TestCase):
         self.assertNotIn("page.mouse", opener)
         self.assertNotIn("evaluate", opener)
 
-    def test_post_open_evidence_and_state_are_required(self):
+    def test_transition_observer_is_temporal_and_requires_stable_open(self):
+        transition = _transition_source()
+        self.assertIn("SIDEBAR_TRANSITION_POLL_MILLISECONDS", transition)
+        self.assertIn("page.wait_for_timeout(SIDEBAR_TRANSITION_POLL_MILLISECONDS)", transition)
+        self.assertIn("if stable_open_streak >= 2", transition)
+        self.assertIn("stall_streak >= SIDEBAR_TRANSITION_STALL_SAMPLE_LIMIT", transition)
+        self.assertIn("sample[\"state\"] in {\"MISSING\", \"AMBIGUOUS\"}", transition)
+        self.assertIn("regression_detected", transition)
+
+    def test_post_open_evidence_records_transition_history(self):
         opener = _opener_source()
         self.assertIn('artifact_dir / "narrow-sidebar-post-open.json"', opener)
-        self.assertIn('page.locator(SIDEBAR_SELECTOR).wait_for(state="visible"', opener)
-        self.assertIn('post_open["sidebar_state"] != "OPEN_AND_REACHABLE"', opener)
+        self.assertIn('"observer_timeout_milliseconds"', opener)
+        self.assertIn('"polling_policy"', opener)
+        self.assertIn('"stall_policy"', opener)
+        self.assertIn('"sample_count"', opener)
+        self.assertIn('"samples"', opener)
+        self.assertIn('"first_progress_sample"', opener)
+        self.assertIn('"first_viewport_intersecting_sample"', opener)
+        self.assertIn('"first_open_and_reachable_sample"', opener)
+        self.assertIn('"second_stable_open_sample"', opener)
+        self.assertIn('"terminal_reason"', opener)
         self.assertIn('sidebar_candidate["viewport_intersection"]', opener)
         self.assertIn('sidebar_candidate["non_zero_size"]', opener)
 
@@ -255,14 +289,20 @@ class MinimalBrowserContractTests(unittest.TestCase):
         responsive = _responsive_source()
         self.assertLess(responsive.index("_ensure_responsive_sidebar_open"), responsive.index('phase = "route-candidate-selection"'))
 
-    def test_route_candidate_selection_remains_viewport_based(self):
-        source = _runner_source()
-        selector = source[source.index("def _select_viewport_candidate"):source.index("\ndef _responsive_physical_route")]
-        self.assertIn("for index in range(locator.count())", selector)
-        self.assertIn("global_candidate_count", selector)
-        self.assertIn("sidebar_candidate_count", selector)
-        self.assertIn("if len(qualifying) != 1", selector)
-        self.assertIn("Expected exactly one viewport-intersecting", selector)
+    def test_route_candidate_selection_is_semantic_unique_before_scroll(self):
+        responsive = _responsive_source()
+        self.assertIn("preferred_match_count", responsive)
+        self.assertIn("fallback_match_count", responsive)
+        self.assertIn("if preferred_count > 1", responsive)
+        self.assertIn("if preferred_count == 1", responsive)
+        self.assertIn("elif fallback_count > 1", responsive)
+        self.assertIn("elif fallback_count == 1", responsive)
+        self.assertIn("Neither preferred nor fallback responsive route exists", responsive)
+
+    def test_fallback_is_only_evaluated_when_preferred_absent(self):
+        responsive = _responsive_source()
+        self.assertIn('"fallback_evaluated": preferred_count == 0', responsive)
+        self.assertIn('candidate_evidence["fallback_reason"] = "preferred uniquely available"', responsive)
 
     def test_route_preference_is_preserved(self):
         source = _runner_source()
@@ -271,9 +311,14 @@ class MinimalBrowserContractTests(unittest.TestCase):
     def test_post_scroll_geometry_is_revalidated(self):
         responsive = _responsive_source()
         self.assertIn("scroll_into_view_if_needed", responsive)
+        self.assertIn("reacquired = page.locator(SIDEBAR_SELECTOR).nth(0).get_by_role", responsive)
+        self.assertIn("post_scroll_reacquired_match_count", responsive)
         self.assertIn("post_scroll = _candidate_geometry", responsive)
+        self.assertIn('post_scroll["non_zero_size"]', responsive)
+        self.assertIn('post_scroll["is_enabled"]', responsive)
         self.assertIn('post_scroll["intersects_viewport"]', responsive)
         self.assertIn('post_scroll["centre_in_viewport"]', responsive)
+        self.assertIn('post_scroll["computed"]["pointerEvents"] == "none"', responsive)
         self.assertIn("selected_link.click(timeout=ACTION_TIMEOUT_MILLISECONDS)", responsive)
 
     def test_narrow_calculation_evidence_uses_governed_destination(self):
@@ -284,7 +329,23 @@ class MinimalBrowserContractTests(unittest.TestCase):
 
     def test_failure_evidence_is_inside_responsive_boundary(self):
         responsive = _responsive_source()
-        for token in ('screenshots / "failure.png"', 'artifact_dir / "failure-context.json"', '"failing_phase"', '"evidence_write_status"', '"control_inventory_summary"', '"sidebar_post_open"'):
+        for token in (
+            'screenshots / "failure.png"',
+            'artifact_dir / "failure-context.json"',
+            '"failing_phase"',
+            '"evidence_write_status"',
+            '"control_inventory_summary"',
+            '"sidebar_post_open"',
+            '"latest_sidebar_state_sample"',
+            '"transition_terminal_reason"',
+            '"route_selection_reached"',
+            '"post_scroll_reacquisition_reached"',
+            '"route_click_attempted"',
+            '"route_click_completed"',
+            '"destination_verification_reached"',
+            '"narrow_link_inventory"',
+            '"narrow_candidate_geometry"',
+        ):
             self.assertIn(token, responsive)
         self.assertIn("raise", responsive)
 
@@ -307,10 +368,14 @@ class MinimalBrowserContractTests(unittest.TestCase):
     def test_documentation_records_stage_two_boundaries(self):
         text = DOC_PATH.read_text(encoding="utf-8")
         for phrase in (
-            "Stage 1 physically established that the narrow sidebar is `COLLAPSED`",
+            "Stage 2 physical run recorded `COLLAPSED → PRESENT_OFF_CANVAS`",
+            "one post-click sample was insufficient",
+            "two consecutive `OPEN_AND_REACHABLE` samples",
+            "semantic uniqueness before any responsive scroll",
+            "fallback is evaluated only when preferred is absent",
+            "reacquires the semantic locator after scrolling",
+            "latest physically observed sidebar state sample",
             "`[data-testid=\"stExpandSidebarButton\"]`",
-            "one exact evidence-backed physical opener click",
-            "removes random evidence identifiers and all evidence-only DOM mutation",
             "new exact-head standard CI run is required",
             "new exact-head physical Chromium run is required",
             "browser acceptance remains unpassed",
