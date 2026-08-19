@@ -152,3 +152,33 @@ Promotion establishes a stable source-code baseline only. It does not authorize 
 - Build 1 authorized maximum: 5 hours.
 - Total programme budget: 50 hours.
 - Builds 2–6 remain separately unauthorized.
+
+## Controlled Enhancement Programme — Final Governance Closure
+**Status:** Technical scope complete; final governance closure in progress on `governance/enhancement-programme-final-closure`.
+
+### Completed Gate Record
+- Planning / architecture baseline: accepted.
+- Gate 1 governed synthetic procurement data: completed and merged.
+- Gate 2 independent Calculation Evidence reconciliation: completed and merged.
+- Gate 4 governed standardized portfolio export validation: completed with `PASS` and deterministic ten-artifact evidence.
+- Gate 3B Stage 3 governed responsive browser acceptance: completed with exact-head CI and one physical Chromium `PASS`.
+
+### Final Gate 3B Evidence
+- Stage 3 candidate SHA: `993c8e8820f8f25495ea54f0e3322cd6c15c6462`.
+- Exact-head standard CI: run `32267843278`, job `96116618326`; 4 focused Build 8 tests and 852 complete-suite tests passed; 0 failures; 0 errors.
+- Physical Chromium run: `32285939960`, job `96175362745`; conclusion `success`.
+- Focused browser contracts: 42 passed.
+- Overall browser disposition: `PASS`.
+- Evidence artifact: `9377636828`; SHA-256 `fdbe38dffa73f941a0b8c9dfae59c0a512c9296b75224275531fa56e8bd6e59c`.
+- PR #93 merge commit and current programme SHA: `abc42640677947e0a8097c43b990268d1158f5f9`.
+
+### Superseded Browser Attempts
+PR #85 (Gate 3A) and PR #82 (original Gate 3) are retained as historical attempts only. Their failed or incomplete browser contracts are superseded by the accepted Gate 3B Stage 3 contract; they are not unresolved product defects and must not be repaired or merged as part of final programme closure.
+
+### Effort Record
+- Confirmed historical actual effort baseline: 54 hours.
+- Post-baseline correction and closure effort was not formally time-logged and is not retrospectively fabricated.
+- Final governance closure is administrative/documentation work only.
+
+### Claim Boundary
+The controlled enhancement programme is interview/portfolio technically complete. It does not establish production, enterprise, cross-browser, accessibility, load/performance, live-data, security-hardening, deployment, or operational-readiness certification.

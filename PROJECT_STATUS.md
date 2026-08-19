@@ -142,3 +142,23 @@ PVE 1.2 was the latest stable governance-closed release on `main` before E1 prom
 - Build 1 scope: six canonical governance records only.
 - Build 1 maximum authorized effort: 5 hours.
 - Builds 2–6 remain separately unauthorized.
+
+## Controlled Enhancement Programme — Final Current State
+- Programme branch: `enhancement/browser-data-calculation-programme`.
+- Pre-closure programme SHA: `abc42640677947e0a8097c43b990268d1158f5f9`.
+- Technical/functional completion: 100%.
+- Final governance closure status: authorized on `governance/enhancement-programme-final-closure`.
+- Gate 1 governed synthetic procurement data: complete.
+- Gate 2 independent Calculation Evidence reconciliation: complete.
+- Gate 4 governed standardized portfolio export: complete and exact-head validated.
+- Gate 3B Stage 3 governed responsive Chromium browser acceptance: complete and `PASS`.
+- Gate 3B exact Stage 3 candidate: `993c8e8820f8f25495ea54f0e3322cd6c15c6462`.
+- Exact-head Stage 3 CI: run `32267843278`, job `96116618326`; 4 focused tests and 852 complete-suite tests passed; 0 failures; 0 errors.
+- Physical browser run: `32285939960`, job `96175362745`; conclusion `success`; 42 focused browser contracts passed; overall disposition `PASS`.
+- Browser evidence artifact: `9377636828`; SHA-256 `fdbe38dffa73f941a0b8c9dfae59c0a512c9296b75224275531fa56e8bd6e59c`.
+- PR #93: merged and closed into the programme branch; merge commit `abc42640677947e0a8097c43b990268d1158f5f9`.
+- PR #85 and PR #82: superseded historical browser implementation attempts; not unresolved product defects; to be closed without merge after final closure CI and merge.
+- Confirmed historical effort baseline: 54 hours. Later correction effort is not retrospectively fabricated because it was not formally time-logged.
+
+## Controlled Enhancement Claim Boundary
+The enhanced programme is technically complete for interview/portfolio demonstration. It is not production or enterprise certified. It does not establish cross-browser certification, accessibility certification, performance/load certification, live-data readiness, production security hardening, deployment readiness, or autonomous procurement/engineering approval.

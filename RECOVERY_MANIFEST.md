@@ -105,3 +105,22 @@ Earlier records stating that `main` remained at `300054cceb255e8e1273e8012a3ba0c
 - Feature branch: `showcase/build-1-governance-closure`, created from the same SHA.
 - If Build 1 is rejected, retain the integration branch at the exact promoted baseline and do not merge the feature branch.
 - Builds 2–6 require separate authorization.
+
+## Controlled Enhancement Programme Recovery Point — 2026-08-19
+- Programme branch: `enhancement/browser-data-calculation-programme`.
+- Pre-final-governance-closure programme SHA: `abc42640677947e0a8097c43b990268d1158f5f9`.
+- Gate 3B exact feature SHA: `993c8e8820f8f25495ea54f0e3322cd6c15c6462`.
+- Gate 3B merge PR: #93.
+- Gate 3B merge commit: `abc42640677947e0a8097c43b990268d1158f5f9`.
+- Stage 3 exact-head standard CI: run `32267843278`, job `96116618326`, success; 4 focused Build 8 tests and 852 complete-suite tests passed; 0 failures; 0 errors.
+- Physical Chromium validation: run `32285939960`, job `96175362745`, success; 42 focused browser contracts passed; overall disposition `PASS`.
+- Browser evidence artifact: `9377636828`; SHA-256 `fdbe38dffa73f941a0b8c9dfae59c0a512c9296b75224275531fa56e8bd6e59c`.
+- Gate 4 governed export validation remains accepted at run `30744438193`, job `91487519049`, disposition `PASS`.
+
+## Controlled Enhancement Recovery Rules
+1. Use the final programme-closure merge SHA, once recorded in `docs/enhancement_programme/PROGRAMME_FINAL_CLOSURE.md`, as the authoritative recovery point for the completed enhancement programme.
+2. Retain `abc42640677947e0a8097c43b990268d1158f5f9` as the pre-closure technical-completion recovery point.
+3. Retain Stage 3 SHA `993c8e8820f8f25495ea54f0e3322cd6c15c6462` as the exact physical browser candidate lineage.
+4. PR #85 / branch `enhancement/minimal-interview-browser-acceptance` and PR #82 / branch `enhancement/automated-browser-acceptance` are superseded historical recovery evidence only; close the PRs without merge after final closure succeeds and retain the branches.
+5. Do not restart those superseded browser approaches unless a new governed decision explicitly requires historical reproduction.
+6. Any future production/pilot programme must begin from a separately authorized baseline and must not reinterpret interview/portfolio acceptance as production certification.
