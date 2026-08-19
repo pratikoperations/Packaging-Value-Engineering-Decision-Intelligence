@@ -118,9 +118,10 @@ def _find_scenario(scenario_service, project_id: str, dataset_id: str, threshold
     for record in scenario_service.scenarios.list_for_project(project_id):
         if record["scenario_name"] != DEMO_SCENARIO_NAME:
             continue
-        if record["dataset_id"] != dataset_id or record["threshold_profile_id"] != threshold_id:
-            raise PortfolioSeedConflict("Existing portfolio scenario has conflicting record references.")
-        return record
+        if record["dataset_id"] == dataset_id and record["threshold_profile_id"] == threshold_id:
+            return record
+        # A scenario with this name exists for a different dataset version — skip it so that
+        # the upgraded lineage can be created without overwriting the prior immutable record.
     return None
 
 
