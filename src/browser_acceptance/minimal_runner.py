@@ -26,7 +26,7 @@ from .export_validation import validate_json_download, validate_markdown_downloa
 from .process_manager import StreamlitProcess
 
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
-SCHEMA_VERSION = "1.4.0"
+SCHEMA_VERSION = "1.5.0"
 MATERIAL_CONSOLE_PATTERNS = (
     "uncaught",
     "traceback",
@@ -52,6 +52,15 @@ SIDEBAR_STATES = (
     "MISSING",
     "AMBIGUOUS",
 )
+SIDEBAR_TRANSITION_TIMEOUT_MILLISECONDS = PAGE_TIMEOUT_MILLISECONDS
+SIDEBAR_TRANSITION_POLL_MILLISECONDS = 75
+SIDEBAR_TRANSITION_STALL_SAMPLE_LIMIT = 4
+_SIDEBAR_PROGRESS_RANK = {
+    "COLLAPSED": 0,
+    "PRESENT_OFF_CANVAS": 1,
+    "TRANSITIONING": 2,
+    "OPEN_AND_REACHABLE": 3,
+}
 
 
 def _visible(locator: Locator) -> list[Locator]:
@@ -380,6 +389,8 @@ def _candidate_geometry(locator: Locator, index: int, viewport: dict) -> dict:
         "accessible_name": evidence["accessible_name"],
         "href": locator.get_attribute("href") or "",
         "is_visible": evidence["visible"],
+        "is_enabled": evidence["enabled"],
+        "non_zero_size": evidence["non_zero_size"],
         "bounding_box": evidence["bounding_box"],
         "rect": evidence["dom_rect"],
         "computed": {
@@ -523,6 +534,7 @@ def _non_open_sidebar_error(evidence: dict, artifact_dir: Path) -> AssertionErro
 def _ensure_responsive_sidebar_open(page: Page, evidence: dict, artifact_dir: Path) -> dict:
     state = evidence["sidebar_state"]
     if state == "OPEN_AND_REACHABLE":
+        evidence["sidebar_transition"] = None
         return evidence
     if state != "COLLAPSED":
         raise _non_open_sidebar_error(evidence, artifact_dir)
@@ -537,8 +549,22 @@ def _ensure_responsive_sidebar_open(page: Page, evidence: dict, artifact_dir: Pa
         "pre_click_sidebar_state": state,
         "click_attempted": False,
         "click_completed": False,
-        "post_click_sidebar_state": None,
-        "elapsed_transition_milliseconds": None,
+        "observer_timeout_milliseconds": SIDEBAR_TRANSITION_TIMEOUT_MILLISECONDS,
+        "polling_policy": {"mode": "deterministic_poll", "poll_interval_milliseconds": SIDEBAR_TRANSITION_POLL_MILLISECONDS},
+        "stall_policy": {"max_non_progress_samples": SIDEBAR_TRANSITION_STALL_SAMPLE_LIMIT},
+        "sample_count": 0,
+        "samples": [],
+        "first_progress_sample": None,
+        "first_viewport_intersecting_sample": None,
+        "first_open_and_reachable_sample": None,
+        "second_stable_open_sample": None,
+        "stable_open_streak": 0,
+        "stall_detected": False,
+        "timeout_reached": False,
+        "regression_detected": False,
+        "terminal_state": None,
+        "terminal_reason": None,
+        "total_elapsed_milliseconds": None,
     }
     if match_count != 1:
         _write_json(artifact_dir / "narrow-sidebar-post-open.json", action)
@@ -562,17 +588,18 @@ def _ensure_responsive_sidebar_open(page: Page, evidence: dict, artifact_dir: Pa
     started = monotonic()
     opener.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
     action["click_completed"] = True
-    page.locator(SIDEBAR_SELECTOR).wait_for(state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS)
-    post_open = _sidebar_payload(page)
-    action["elapsed_transition_milliseconds"] = round((monotonic() - started) * 1000, 3)
-    action["post_click_sidebar_state"] = post_open["sidebar_state"]
-    action["post_open_sidebar"] = post_open
+    action, latest_sidebar = _observe_sidebar_transition(page, action, started)
+    action["post_click_sidebar_state"] = action["terminal_state"]
+    action["post_open_sidebar"] = latest_sidebar
     _write_json(artifact_dir / "narrow-sidebar-post-open.json", action)
-    if post_open["sidebar_state"] != "OPEN_AND_REACHABLE":
+    if action["terminal_state"] != "OPEN_AND_REACHABLE" or action["stable_open_streak"] < 2:
         raise AssertionError(
-            "Responsive sidebar did not become OPEN_AND_REACHABLE after exact opener click; "
-            f"state={post_open['sidebar_state']}; evidence={artifact_dir / 'narrow-sidebar-post-open.json'}"
+            "Responsive sidebar did not achieve two consecutive OPEN_AND_REACHABLE samples after exact opener click; "
+            f"terminal_state={action['terminal_state']}; reason={action['terminal_reason']}; "
+            f"evidence={artifact_dir / 'narrow-sidebar-post-open.json'}"
         )
+    post_open = _sidebar_payload(page)
+    post_open["sidebar_transition"] = action
     sidebar_candidate = post_open["sidebar"]["candidates"][0]
     if not sidebar_candidate["viewport_intersection"] or not sidebar_candidate["non_zero_size"]:
         raise AssertionError("Post-open sidebar geometry is not viewport-reachable and non-zero.")
@@ -586,36 +613,206 @@ def _sidebar_geometry(page: Page) -> dict:
     return {"state": state, "reasons": reasons, **sidebar}
 
 
+def _transition_sample(page: Page, sequence: int, started: float, stable_open_streak: int) -> tuple[dict, dict]:
+    viewport = page.viewport_size or VIEWPORTS["narrow"]
+    sidebar = _sidebar_container_evidence(page, viewport)
+    state, reasons = _classify_sidebar_state(sidebar)
+    candidate = sidebar["candidates"][0] if sidebar.get("count") == 1 else None
+    rect = candidate["dom_rect"] if candidate else {}
+    sample = {
+        "sequence_number": sequence,
+        "elapsed_milliseconds": round((monotonic() - started) * 1000, 3),
+        "state": state,
+        "classification_reasons": reasons,
+        "sidebar_exists": sidebar.get("exists", False),
+        "sidebar_count": sidebar.get("count", 0),
+        "visible": candidate["visible"] if candidate else False,
+        "width": rect.get("width"),
+        "height": rect.get("height"),
+        "left": rect.get("left"),
+        "right": rect.get("right"),
+        "top": rect.get("top"),
+        "bottom": rect.get("bottom"),
+        "transform": candidate.get("computed_transform") if candidate else None,
+        "opacity": candidate.get("computed_opacity") if candidate else None,
+        "viewport_intersection": candidate.get("viewport_intersection") if candidate else False,
+        "centre_point_in_viewport": candidate.get("centre_point_in_viewport") if candidate else False,
+        "forward_progress": {"progressed": False, "reasons": []},
+        "stable_open_streak": stable_open_streak,
+    }
+    return sample, {"state": state, "reasons": reasons, **sidebar}
+
+
+def _transition_progress(previous: dict | None, current: dict) -> tuple[bool, list[str]]:
+    if previous is None:
+        return True, ["initial sample"]
+    reasons: list[str] = []
+    previous_rank = _SIDEBAR_PROGRESS_RANK.get(previous["state"], -1)
+    current_rank = _SIDEBAR_PROGRESS_RANK.get(current["state"], -1)
+    if current_rank > previous_rank:
+        reasons.append("state progressed toward OPEN_AND_REACHABLE")
+    if previous.get("viewport_intersection") is False and current.get("viewport_intersection") is True:
+        reasons.append("viewport intersection became true")
+    previous_left = previous.get("left")
+    current_left = current.get("left")
+    if isinstance(previous_left, (int, float)) and isinstance(current_left, (int, float)):
+        if abs(current_left) < abs(previous_left):
+            reasons.append("left edge moved toward viewport")
+    previous_right = previous.get("right")
+    current_right = current.get("right")
+    if isinstance(previous_right, (int, float)) and isinstance(current_right, (int, float)):
+        if current_right > previous_right:
+            reasons.append("right edge moved toward viewport")
+    previous_width = previous.get("width")
+    current_width = current.get("width")
+    if isinstance(previous_width, (int, float)) and isinstance(current_width, (int, float)):
+        if current_width > previous_width:
+            reasons.append("width increased")
+    if previous.get("transform") != current.get("transform"):
+        reasons.append("transform changed")
+    return bool(reasons), reasons
+
+
+def _observe_sidebar_transition(page: Page, action: dict, started: float) -> tuple[dict, dict]:
+    samples: list[dict] = []
+    sequence = 0
+    stable_open_streak = 0
+    stall_streak = 0
+    first_progress_sample = None
+    first_viewport_sample = None
+    first_open_sample = None
+    second_stable_open_sample = None
+    terminal_reason = "timeout"
+    terminal_state = "TRANSITIONING"
+    timeout_reached = False
+    stalled = False
+    regression_detected = False
+    saw_open_state = False
+    previous_sample: dict | None = None
+    latest_sidebar = {"exists": False, "count": 0, "candidates": []}
+
+    while True:
+        sequence += 1
+        sample, sidebar = _transition_sample(page, sequence, started, stable_open_streak)
+        latest_sidebar = sidebar
+        progressed, progress_reasons = _transition_progress(previous_sample, sample)
+        sample["forward_progress"] = {"progressed": progressed, "reasons": progress_reasons}
+        if progressed and first_progress_sample is None and sequence > 1:
+            first_progress_sample = sample
+        if sample["viewport_intersection"] and first_viewport_sample is None:
+            first_viewport_sample = sample
+        if sample["state"] == "OPEN_AND_REACHABLE":
+            if not sample.get("width"):
+                terminal_reason = "inconsistent evidence: OPEN_AND_REACHABLE without positive width"
+                terminal_state = sample["state"]
+                samples.append(sample)
+                break
+            if not sample.get("height"):
+                terminal_reason = "inconsistent evidence: OPEN_AND_REACHABLE without positive height"
+                terminal_state = sample["state"]
+                samples.append(sample)
+                break
+            if not sample["viewport_intersection"]:
+                terminal_reason = "inconsistent evidence: OPEN_AND_REACHABLE without viewport intersection"
+                terminal_state = sample["state"]
+                samples.append(sample)
+                break
+            stable_open_streak += 1
+            sample["stable_open_streak"] = stable_open_streak
+            if first_open_sample is None:
+                first_open_sample = sample
+            if stable_open_streak == 2 and second_stable_open_sample is None:
+                second_stable_open_sample = sample
+        else:
+            if stable_open_streak > 0:
+                stable_open_streak = 0
+                sample["stable_open_streak"] = stable_open_streak
+                if saw_open_state:
+                    regression_detected = True
+                    terminal_reason = "regression after open progression"
+                    terminal_state = sample["state"]
+                    samples.append(sample)
+                    break
+            if sample["state"] in {"COLLAPSED", "PRESENT_OFF_CANVAS", "TRANSITIONING"}:
+                stall_streak = 0 if progressed else stall_streak + 1
+            else:
+                stall_streak = 0
+        saw_open_state = saw_open_state or sample["state"] == "OPEN_AND_REACHABLE"
+        samples.append(sample)
+        previous_sample = sample
+
+        if sample["state"] in {"MISSING", "AMBIGUOUS"}:
+            terminal_reason = f"non-actionable state: {sample['state']}"
+            terminal_state = sample["state"]
+            break
+        if stable_open_streak >= 2:
+            terminal_reason = "two consecutive OPEN_AND_REACHABLE samples observed"
+            terminal_state = sample["state"]
+            break
+        if stall_streak >= SIDEBAR_TRANSITION_STALL_SAMPLE_LIMIT:
+            stalled = True
+            terminal_reason = "bounded stall while sidebar remained non-open"
+            terminal_state = sample["state"]
+            break
+        elapsed = round((monotonic() - started) * 1000, 3)
+        if elapsed >= SIDEBAR_TRANSITION_TIMEOUT_MILLISECONDS:
+            timeout_reached = True
+            terminal_reason = "observer timeout before stable OPEN_AND_REACHABLE"
+            terminal_state = sample["state"]
+            break
+        page.wait_for_timeout(SIDEBAR_TRANSITION_POLL_MILLISECONDS)
+
+    action.update({
+        "sample_count": len(samples),
+        "samples": samples,
+        "first_progress_sample": first_progress_sample,
+        "first_viewport_intersecting_sample": first_viewport_sample,
+        "first_open_and_reachable_sample": first_open_sample,
+        "second_stable_open_sample": second_stable_open_sample,
+        "stable_open_streak": stable_open_streak,
+        "stall_detected": stalled,
+        "timeout_reached": timeout_reached,
+        "regression_detected": regression_detected,
+        "terminal_state": terminal_state,
+        "terminal_reason": terminal_reason,
+        "total_elapsed_milliseconds": round((monotonic() - started) * 1000, 3),
+    })
+    return action, latest_sidebar
+
+
 def _select_viewport_candidate(page: Page, title: str, artifact_dir: Path) -> tuple[Locator, dict]:
     viewport = page.viewport_size or VIEWPORTS["narrow"]
-    global_matches = page.get_by_role("link", name=title, exact=True)
     sidebar = page.locator(SIDEBAR_SELECTOR)
-    scoped_matches = sidebar.get_by_role("link", name=title, exact=True)
-    locator = scoped_matches if scoped_matches.count() else global_matches
+    sidebar_count = sidebar.count()
+    if sidebar_count != 1:
+        raise AssertionError(f"Expected one open sidebar scope for responsive route selection; found {sidebar_count}.")
+    scoped_sidebar = sidebar.nth(0)
+    locator = scoped_sidebar.get_by_role("link", name=title, exact=True)
+    candidate_count = locator.count()
+    if candidate_count != 1:
+        raise AssertionError(
+            f"Expected exactly one semantic {title!r} link in the open sidebar before scroll; found {candidate_count}."
+        )
+    selected = locator.nth(0)
+    pre_scroll = _candidate_geometry(selected, 0, viewport)
     diagnostics = {
+        "schema_version": SCHEMA_VERSION,
         "title": title,
         "viewport": viewport,
-        "window_inner": page.evaluate("() => ({width: window.innerWidth, height: window.innerHeight})"),
-        "global_candidate_count": global_matches.count(),
-        "sidebar_candidate_count": scoped_matches.count(),
-        "selection_scope": "sidebar" if scoped_matches.count() else "global",
+        "semantic_scope": SIDEBAR_SELECTOR,
+        "post_scroll_reacquired_match_count": None,
+        "visible": None,
+        "enabled": None,
+        "intersects_viewport": None,
+        "centre_in_viewport": None,
+        "pointer_events_enabled": None,
+        "click_attempted": False,
+        "click_completed": False,
         "sidebar": _sidebar_geometry(page),
-        "candidates": [],
+        "pre_scroll": pre_scroll,
+        "post_scroll": None,
     }
-    qualifying: list[tuple[Locator, dict]] = []
-    for index in range(locator.count()):
-        candidate = locator.nth(index)
-        geometry = _candidate_geometry(candidate, index, viewport)
-        diagnostics["candidates"].append(geometry)
-        if geometry["intersects_viewport"]:
-            qualifying.append((candidate, geometry))
     _write_json(artifact_dir / "narrow-candidate-geometry.json", diagnostics)
-    if len(qualifying) != 1:
-        raise AssertionError(
-            f"Expected exactly one viewport-intersecting {title!r} link; "
-            f"found {len(qualifying)} from {locator.count()} scoped candidates."
-        )
-    selected, pre_scroll = qualifying[0]
     return selected, {"diagnostics": diagnostics, "pre_scroll": pre_scroll}
 
 
@@ -628,10 +825,23 @@ def _responsive_physical_route(
 ) -> str:
     phase = "pre-action-evidence"
     sidebar_evidence: dict | None = None
+    latest_sidebar_state_sample: dict | None = None
+    transition_terminal_reason = None
+    transition_sample_count = 0
+    transition_stable_open_streak = 0
+    route_selection_reached = False
+    selected_title: str | None = None
+    pre_scroll_reached = False
+    post_scroll_reacquisition_reached = False
+    route_click_attempted = False
+    route_click_completed = False
+    destination_verification_reached = False
     evidence_write_status = {
         "narrow_pre_action": False,
         "narrow_sidebar_controls": False,
         "narrow_sidebar_post_open": False,
+        "narrow_link_inventory": False,
+        "narrow_candidate_geometry": False,
         "failure_screenshot": False,
         "failure_context": False,
     }
@@ -644,30 +854,89 @@ def _responsive_physical_route(
         evidence_write_status["narrow_sidebar_post_open"] = (
             artifact_dir / "narrow-sidebar-post-open.json"
         ).exists()
+        transition = sidebar_evidence.get("sidebar_transition") if isinstance(sidebar_evidence, dict) else None
+        if transition:
+            samples = transition.get("samples", [])
+            latest_sidebar_state_sample = samples[-1] if samples else None
+            transition_terminal_reason = transition.get("terminal_reason")
+            transition_sample_count = transition.get("sample_count", 0)
+            transition_stable_open_streak = transition.get("stable_open_streak", 0)
+        else:
+            latest_sidebar_state_sample = {
+                "state": sidebar_evidence.get("sidebar_state"),
+                "classification_reasons": sidebar_evidence.get("classification_reasons", []),
+            }
 
         phase = "route-inventory"
         _write_json(artifact_dir / "narrow-link-inventory.json", _visible_link_inventory(page))
-        selected_title: str | None = None
+        evidence_write_status["narrow_link_inventory"] = True
+        route_selection_reached = True
         selected_heading = None
         selected_link: Locator | None = None
         selection_evidence: dict | None = None
-        selection_errors: list[str] = []
+        preferred_title, preferred_heading = RESPONSIVE_ROUTE_PREFERENCES[0]
+        fallback_title, fallback_heading = RESPONSIVE_ROUTE_PREFERENCES[1]
+        sidebar_scope = page.locator(SIDEBAR_SELECTOR)
+        scope_count = sidebar_scope.count()
+        if scope_count != 1:
+            raise AssertionError(f"Expected one open sidebar scope for route enumeration; found {scope_count}.")
+        sidebar_scope = sidebar_scope.nth(0)
+
+        preferred_matches = sidebar_scope.get_by_role("link", name=preferred_title, exact=True)
+        preferred_count = preferred_matches.count()
+        fallback_matches = sidebar_scope.get_by_role("link", name=fallback_title, exact=True)
+        fallback_count = fallback_matches.count()
+        candidate_evidence = {
+            "schema_version": SCHEMA_VERSION,
+            "preference_order": [preferred_title, fallback_title],
+            "preferred_title": preferred_title,
+            "preferred_match_count": preferred_count,
+            "fallback_title": fallback_title,
+            "fallback_match_count": fallback_count,
+            "fallback_evaluated": preferred_count == 0,
+            "fallback_reason": "preferred absent" if preferred_count == 0 else "preferred available",
+            "selected_title": None,
+            "semantic_scope": SIDEBAR_SELECTOR,
+            "pre_scroll_geometry": None,
+            "post_scroll_reacquired_match_count": None,
+            "post_scroll_geometry": None,
+            "visible": None,
+            "enabled": None,
+            "intersects_viewport": None,
+            "centre_in_viewport": None,
+            "pointer_events_enabled": None,
+            "click_attempted": False,
+            "click_completed": False,
+            "destination_heading_result": None,
+            "sidebar": _sidebar_geometry(page),
+        }
         phase = "route-candidate-selection"
-        for title, heading in RESPONSIVE_ROUTE_PREFERENCES:
-            if page.get_by_role("link", name=title, exact=True).count() == 0:
-                continue
-            try:
-                selected_link, selection_evidence = _select_viewport_candidate(page, title, artifact_dir)
-                selected_title = title
-                selected_heading = heading
-                break
-            except AssertionError as exc:
-                selection_errors.append(str(exc))
-        if selected_link is None or selected_title is None or selected_heading is None:
-            raise AssertionError(
-                "No preferred controlled responsive route has exactly one viewport-intersecting candidate: "
-                + "; ".join(selection_errors)
-            )
+        if preferred_count > 1:
+            _write_json(artifact_dir / "narrow-candidate-geometry.json", candidate_evidence)
+            evidence_write_status["narrow_candidate_geometry"] = True
+            raise AssertionError(f"Preferred responsive route {preferred_title!r} is ambiguous; found {preferred_count} matches.")
+        if preferred_count == 1:
+            selected_title = preferred_title
+            selected_heading = preferred_heading
+            selected_link, selection_evidence = _select_viewport_candidate(page, preferred_title, artifact_dir)
+            evidence_write_status["narrow_candidate_geometry"] = True
+            candidate_evidence["fallback_evaluated"] = False
+            candidate_evidence["fallback_reason"] = "preferred uniquely available"
+        elif fallback_count > 1:
+            _write_json(artifact_dir / "narrow-candidate-geometry.json", candidate_evidence)
+            evidence_write_status["narrow_candidate_geometry"] = True
+            raise AssertionError(f"Fallback responsive route {fallback_title!r} is ambiguous; found {fallback_count} matches.")
+        elif fallback_count == 1:
+            selected_title = fallback_title
+            selected_heading = fallback_heading
+            selected_link, selection_evidence = _select_viewport_candidate(page, fallback_title, artifact_dir)
+            evidence_write_status["narrow_candidate_geometry"] = True
+        else:
+            _write_json(artifact_dir / "narrow-candidate-geometry.json", candidate_evidence)
+            evidence_write_status["narrow_candidate_geometry"] = True
+            raise AssertionError("Neither preferred nor fallback responsive route exists in the open sidebar.")
+        candidate_evidence["selected_title"] = selected_title
+        candidate_evidence["pre_scroll_geometry"] = selection_evidence["pre_scroll"]
 
         material_console = _material_console_errors(runtime_diagnostics.console_errors)
         if runtime_diagnostics.page_errors or material_console:
@@ -676,32 +945,55 @@ def _responsive_physical_route(
             )
 
         phase = "route-scroll-and-click"
+        pre_scroll_reached = True
         selected_link.scroll_into_view_if_needed(timeout=ACTION_TIMEOUT_MILLISECONDS)
+        reacquired = page.locator(SIDEBAR_SELECTOR).nth(0).get_by_role("link", name=selected_title, exact=True)
+        post_scroll_reacquisition_reached = True
+        reacquired_count = reacquired.count()
+        candidate_evidence["post_scroll_reacquired_match_count"] = reacquired_count
+        if reacquired_count != 1:
+            _write_json(artifact_dir / "narrow-candidate-geometry.json", candidate_evidence)
+            raise AssertionError(
+                f"Post-scroll responsive route reacquisition must remain unique; found {reacquired_count} matches."
+            )
+        selected_link = reacquired.nth(0)
         viewport = page.viewport_size or VIEWPORTS["narrow"]
-        post_scroll = _candidate_geometry(selected_link, selection_evidence["pre_scroll"]["index"], viewport)
+        post_scroll = _candidate_geometry(selected_link, 0, viewport)
         if not post_scroll["intersects_viewport"]:
             raise AssertionError("Selected responsive route no longer intersects the viewport after scrolling.")
         if not post_scroll["centre_in_viewport"]:
             raise AssertionError("Selected responsive route centre is outside the viewport after scrolling.")
-        if not selected_link.is_visible():
+        if not post_scroll["is_visible"]:
             raise AssertionError("Selected responsive route is not visible before click.")
-        evidence = selection_evidence["diagnostics"]
-        evidence.update({
-            "selected_title": selected_title,
-            "selected_candidate_index": selection_evidence["pre_scroll"]["index"],
-            "selected_href": selection_evidence["pre_scroll"]["href"],
-            "pre_scroll_bounding_rectangle": selection_evidence["pre_scroll"]["rect"],
-            "post_scroll_bounding_rectangle": post_scroll["rect"],
+        if not post_scroll["is_enabled"]:
+            raise AssertionError("Selected responsive route is not enabled before click.")
+        if not post_scroll["non_zero_size"]:
+            raise AssertionError("Selected responsive route has non-positive geometry before click.")
+        if post_scroll["computed"]["pointerEvents"] == "none":
+            raise AssertionError("Selected responsive route pointer events are disabled before click.")
+        candidate_evidence.update({
+            "post_scroll_geometry": post_scroll,
+            "visible": post_scroll["is_visible"],
+            "enabled": post_scroll["is_enabled"],
+            "intersects_viewport": post_scroll["intersects_viewport"],
+            "centre_in_viewport": post_scroll["centre_in_viewport"],
+            "pointer_events_enabled": post_scroll["computed"]["pointerEvents"] != "none",
         })
-        _write_json(artifact_dir / "narrow-candidate-geometry.json", evidence)
+        _write_json(artifact_dir / "narrow-candidate-geometry.json", candidate_evidence)
+        route_click_attempted = True
+        candidate_evidence["click_attempted"] = True
         selected_link.click(timeout=ACTION_TIMEOUT_MILLISECONDS)
+        route_click_completed = True
+        candidate_evidence["click_completed"] = True
+        _write_json(artifact_dir / "narrow-candidate-geometry.json", candidate_evidence)
 
         phase = "destination-heading"
         page.get_by_role("heading", name=selected_heading).first.wait_for(
             state="visible", timeout=PAGE_TIMEOUT_MILLISECONDS
         )
-        evidence["destination_heading_result"] = "visible"
-        _write_json(artifact_dir / "narrow-candidate-geometry.json", evidence)
+        destination_verification_reached = True
+        candidate_evidence["destination_heading_result"] = "visible"
+        _write_json(artifact_dir / "narrow-candidate-geometry.json", candidate_evidence)
         _app_ready(page)
 
         phase = "narrow-calculation-evidence"
@@ -730,8 +1022,26 @@ def _responsive_physical_route(
                 sidebar_evidence = {"sidebar_state": "AMBIGUOUS", "sidebar": {}, "control_inventory_summary": {}}
         try:
             _write_json(artifact_dir / "narrow-link-inventory.json", _visible_link_inventory(page))
+            evidence_write_status["narrow_link_inventory"] = True
         except Exception:
             pass
+        post_open_path = artifact_dir / "narrow-sidebar-post-open.json"
+        if post_open_path.exists():
+            evidence_write_status["narrow_sidebar_post_open"] = True
+            if latest_sidebar_state_sample is None:
+                try:
+                    payload = json.loads(post_open_path.read_text(encoding="utf-8"))
+                    transition = payload.get("samples", [])
+                    if transition:
+                        latest_sidebar_state_sample = transition[-1]
+                    transition_terminal_reason = payload.get("terminal_reason", transition_terminal_reason)
+                    transition_sample_count = payload.get("sample_count", transition_sample_count)
+                    transition_stable_open_streak = payload.get("stable_open_streak", transition_stable_open_streak)
+                except Exception:
+                    pass
+        geometry_path = artifact_dir / "narrow-candidate-geometry.json"
+        if geometry_path.exists():
+            evidence_write_status["narrow_candidate_geometry"] = True
         context = {
             "exception_type": type(exc).__name__,
             "exception_message": str(exc),
@@ -739,6 +1049,18 @@ def _responsive_physical_route(
             "current_url": page.url,
             "source_commit": os.environ.get("SOURCE_COMMIT", "UNSPECIFIED"),
             "tested_branch": os.environ.get("TESTED_BRANCH", "UNSPECIFIED"),
+            "latest_sidebar_state_sample": latest_sidebar_state_sample,
+            "latest_sidebar_state": latest_sidebar_state_sample.get("state") if isinstance(latest_sidebar_state_sample, dict) else sidebar_evidence.get("sidebar_state"),
+            "transition_terminal_reason": transition_terminal_reason,
+            "transition_sample_count": transition_sample_count,
+            "stable_open_streak": transition_stable_open_streak,
+            "route_selection_reached": route_selection_reached,
+            "selected_route": selected_title,
+            "pre_scroll_reached": pre_scroll_reached,
+            "post_scroll_reacquisition_reached": post_scroll_reacquisition_reached,
+            "route_click_attempted": route_click_attempted,
+            "route_click_completed": route_click_completed,
+            "destination_verification_reached": destination_verification_reached,
             "sidebar_classification": sidebar_evidence.get("sidebar_state"),
             "sidebar_details": sidebar_evidence.get("sidebar"),
             "control_inventory_summary": sidebar_evidence.get("control_inventory_summary"),
@@ -747,6 +1069,8 @@ def _responsive_physical_route(
                 "failure": "screenshots/failure.png",
                 "sidebar_controls": "narrow-sidebar-controls.json",
                 "sidebar_post_open": "narrow-sidebar-post-open.json",
+                "narrow_link_inventory": "narrow-link-inventory.json",
+                "narrow_candidate_geometry": "narrow-candidate-geometry.json",
                 "failure_context": "failure-context.json",
             },
             "evidence_write_status": evidence_write_status,
@@ -757,9 +1081,9 @@ def _responsive_physical_route(
             _write_json(artifact_dir / "failure-context.json", context)
         except Exception:
             evidence_write_status["failure_context"] = False
-        geometry_path = artifact_dir / "narrow-candidate-geometry.json"
         if not geometry_path.exists():
             _write_json(geometry_path, {"error": "candidate geometry unavailable", **context})
+            evidence_write_status["narrow_candidate_geometry"] = True
         raise
 
 
