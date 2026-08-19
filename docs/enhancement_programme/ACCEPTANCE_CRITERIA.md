@@ -59,6 +59,34 @@
 - enhanced version is published through a separate accepted branch;
 - production readiness is not claimed.
 
+## Final browser-acceptance supersession record — 2026-08-19
+
+The browser-acceptance bullets above are preserved as the original programme-planning contract. They are historical planning evidence and are not deleted or rewritten.
+
+A later governed decision replaced the failed Gate 3 / Gate 3A implementation path with Gate 3B — Governed Responsive Final Closure. The final accepted browser contract therefore uses the exact Gate 3B Stage 3 candidate `993c8e8820f8f25495ea54f0e3322cd6c15c6462` and one frozen-SHA physical Chromium acceptance run with zero automatic retries, exact-SHA verification, deterministic evidence capture, desktop grouped-navigation coverage, and the governed `412 × 915` responsive route contract.
+
+Accepted final browser evidence:
+
+- Gate 3B feature PR: #93;
+- exact Stage 3 candidate: `993c8e8820f8f25495ea54f0e3322cd6c15c6462`;
+- exact-head standard CI: run `32267843278`, job `96116618326`, 4 focused Build 8 tests plus 852 complete-suite tests, 0 failures, 0 errors;
+- physical Chromium workflow: `Gate 3B Governed Responsive Browser Acceptance`;
+- physical run: `32285939960`, job `96175362745`, conclusion `success`;
+- focused browser contracts: 42 passed;
+- narrow viewport: `412 × 915`;
+- 13 of 13 unique routes verified;
+- physical responsive route navigation passed;
+- narrow Calculation Evidence verification passed;
+- governed JSON and Markdown export validation passed;
+- page errors: 0;
+- material console errors: 0;
+- visible exceptions: 0;
+- tracked-file cleanliness: passed;
+- acceptance disposition: `PASS`;
+- retained browser evidence artifact: `9377636828`, SHA-256 `fdbe38dffa73f941a0b8c9dfae59c0a512c9296b75224275531fa56e8bd6e59c`.
+
+This supersession does not claim three-run repeatability, cross-browser certification, performance/load certification, accessibility certification, production certification, or enterprise production readiness. PR #85 and PR #82 are retained only as superseded historical implementation attempts.
+
 ## Stop rule
 
 Failure of any mandatory measurable criterion blocks acceptance unless a documented scope reduction is separately authorized and does not remove a non-reducible control.
