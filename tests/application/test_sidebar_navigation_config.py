@@ -27,6 +27,13 @@ class SidebarNavigationConfigTests(unittest.TestCase):
         self.assertNotIn('"PVE 2.0 AI Word Intake"', source)
         self.assertNotIn('"PVE 2.1 Digital PDF Intake"', source)
 
+    def test_mobile_sidebar_width_rule_is_bounded(self):
+        source = (ROOT / "app.py").read_text(encoding="utf-8")
+        self.assertIn('[data-testid="stSidebar"][aria-expanded="true"]', source)
+        self.assertIn("max-width: min(82vw, 320px);", source)
+        self.assertIn("min-width: min(82vw, 320px);", source)
+        self.assertIn("@media (max-width: 768px)", source)
+
 
 if __name__ == "__main__":
     unittest.main()

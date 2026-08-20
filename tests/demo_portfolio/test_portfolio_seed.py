@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -92,6 +93,38 @@ class PortfolioSeedTests(unittest.TestCase):
         )
         self.assertEqual(
             len(build_controlled_scenario_service(self.database_path).scenarios.list_for_project(first.project["project_id"])),
+            1,
+        )
+
+    def test_refresh_reuses_governed_seed_without_overwriting_stale_history(self) -> None:
+        first = seed_portfolio_demo(self.database_path)
+        scenario_service = build_controlled_scenario_service(self.database_path)
+        stale_payload = json.loads(first.dataset["canonical_json"])
+        stale_payload["packaging_project"]["project_name"] = "Stale incomplete demonstration"
+        stale = scenario_service.datasets.create_version(
+            project_id=first.project["project_id"],
+            source_type="json",
+            canonical_data=stale_payload,
+            validation_status="valid",
+            original_filename="corrugated_showcase_incomplete.json",
+        )
+
+        refreshed = seed_portfolio_demo(self.database_path)
+
+        self.assertEqual(stale["version_number"], 2)
+        self.assertEqual(refreshed.created, ())
+        self.assertEqual(refreshed.dataset["dataset_id"], first.dataset["dataset_id"])
+        self.assertNotEqual(refreshed.dataset["dataset_id"], stale["dataset_id"])
+        self.assertEqual(
+            len(scenario_service.available_datasets(first.project["project_id"])),
+            2,
+        )
+        self.assertEqual(
+            len(scenario_service.scenarios.list_for_project(first.project["project_id"])),
+            1,
+        )
+        self.assertEqual(
+            len(build_decision_snapshot_service(self.database_path).history(first.project["project_id"])),
             1,
         )
 

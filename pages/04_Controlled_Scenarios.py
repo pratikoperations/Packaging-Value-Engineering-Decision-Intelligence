@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any, MutableMapping
 
 import streamlit as st
 
@@ -10,10 +11,16 @@ from src.application.runtime import (
     build_project_service,
     build_threshold_service,
 )
+from src.demo_portfolio import PortfolioSeedConflict, seed_portfolio_demo
+from src.demo_portfolio.seeder import DEFAULT_SEED_PATH
 from src.scenario_execution import ScenarioExecutionError
 
 ROOT = Path(__file__).resolve().parents[1]
 DATABASE_PATH = ROOT / "runtime" / "pve_portfolio.sqlite3"
+DATASET_SELECT_KEY = "controlled_scenario_dataset_label"
+THRESHOLD_SELECT_KEY = "controlled_scenario_threshold_label"
+EVALUATED_SCENARIO_KEY = "evaluated_controlled_scenario"
+REFRESH_FEEDBACK_KEY = "controlled_scenario_refresh_feedback"
 
 DEMO_ADJUSTMENT_DEFAULTS = {
     "ALT-BASE": (0.0, 0.0),
@@ -51,6 +58,60 @@ def selected_profile_index(records: list[dict], active_profile_id: object, proje
         ):
             return index
     return 0
+
+
+def selected_dataset_index(records: list[dict], active_dataset_id: object, *, demo_project: bool) -> int:
+    for index, record in enumerate(records):
+        if record["dataset_id"] == active_dataset_id:
+            return index
+    if demo_project and records:
+        return len(records) - 1
+    return 0
+
+
+def selected_record_label(
+    options: dict[str, dict],
+    state: MutableMapping[str, object],
+    state_key: str,
+    default_label: str,
+) -> str:
+    selected = state.get(state_key)
+    if selected not in options:
+        state[state_key] = default_label
+        return default_label
+    return str(selected)
+
+
+def evaluated_selection_key(project_id: object, dataset_id: object, threshold_profile_id: object) -> tuple[str, str, str]:
+    return (str(project_id), str(dataset_id), str(threshold_profile_id))
+
+
+def clear_stale_evaluated_scenario(
+    state: MutableMapping[str, object],
+    selection_key: tuple[str, str, str],
+) -> bool:
+    evaluated = state.get(EVALUATED_SCENARIO_KEY)
+    if evaluated is None:
+        return False
+    if evaluated_selection_key(
+        evaluated.project_id,
+        evaluated.dataset_id,
+        evaluated.threshold_profile_id,
+    ) == selection_key:
+        return False
+    state.pop(EVALUATED_SCENARIO_KEY, None)
+    return True
+
+
+def latest_dataset_matches_seed(records: list[dict], seed_payload: dict[str, Any]) -> bool:
+    if not records:
+        return False
+    return json.loads(records[-1]["canonical_json"]) == seed_payload
+
+
+@st.cache_data
+def load_demo_seed_payload() -> dict[str, Any]:
+    return json.loads(DEFAULT_SEED_PATH.read_text(encoding="utf-8"))
 
 
 def alternative_rows(result) -> list[dict]:
@@ -140,32 +201,85 @@ def main() -> None:
 
     dataset_labels = list(dataset_options)
     demo_project = str(project.get("project_code", "")).upper().startswith("PVE-DEMO")
-    dataset_index = len(dataset_labels) - 1 if demo_project else 0
+    dataset_index = selected_dataset_index(
+        datasets,
+        st.session_state.get("controlled_scenario_dataset_id"),
+        demo_project=demo_project,
+    )
+    selected_dataset_label = selected_record_label(
+        dataset_options,
+        st.session_state,
+        DATASET_SELECT_KEY,
+        dataset_labels[dataset_index],
+    )
     selected_dataset_label = st.selectbox(
         "Immutable dataset version",
         options=dataset_labels,
-        index=dataset_index,
+        index=dataset_labels.index(selected_dataset_label),
+        key=DATASET_SELECT_KEY,
     )
     threshold_labels = list(threshold_options)
     threshold_index = selected_profile_index(
         thresholds,
-        st.session_state.get("active_threshold_profile_id"),
+        st.session_state.get("controlled_scenario_threshold_id")
+        or st.session_state.get("active_threshold_profile_id"),
         project["project_id"],
+    )
+    selected_threshold_label = selected_record_label(
+        threshold_options,
+        st.session_state,
+        THRESHOLD_SELECT_KEY,
+        threshold_labels[threshold_index],
     )
     selected_threshold_label = st.selectbox(
         "Immutable threshold profile version",
         options=threshold_labels,
-        index=threshold_index,
+        index=threshold_labels.index(selected_threshold_label),
+        key=THRESHOLD_SELECT_KEY,
     )
     dataset_record = dataset_options[selected_dataset_label]
     threshold_record = threshold_options[selected_threshold_label]
+    st.session_state["controlled_scenario_dataset_id"] = dataset_record["dataset_id"]
+    st.session_state["controlled_scenario_threshold_id"] = threshold_record["threshold_profile_id"]
     st.session_state["active_threshold_profile_id"] = threshold_record["threshold_profile_id"]
+
+    feedback = st.session_state.pop(REFRESH_FEEDBACK_KEY, None)
+    if isinstance(feedback, str):
+        st.success(feedback)
 
     dataset = json.loads(dataset_record["canonical_json"])
     alternatives = dataset.get("packaging_alternatives", [])
     if not alternatives:
         st.error("The selected dataset does not contain packaging alternatives.")
         st.stop()
+
+    latest_demo_dataset_stale = (
+        demo_project
+        and dataset_record["dataset_id"] == datasets[-1]["dataset_id"]
+        and not latest_dataset_matches_seed(datasets, load_demo_seed_payload())
+    )
+    if latest_demo_dataset_stale:
+        st.warning(
+            "The newest immutable PVE demonstration dataset is not the complete showcase seed. "
+            "Use the governed refresh action to reselect the complete synthetic demo record chain "
+            "without overwriting history."
+        )
+        if st.button("Refresh complete demonstration dataset", width="stretch"):
+            try:
+                result = seed_portfolio_demo(DATABASE_PATH)
+                st.session_state[DATASET_SELECT_KEY] = dataset_label(result.dataset)
+                st.session_state[THRESHOLD_SELECT_KEY] = threshold_label(result.threshold_profile)
+                st.session_state["controlled_scenario_dataset_id"] = result.dataset["dataset_id"]
+                st.session_state["controlled_scenario_threshold_id"] = result.threshold_profile["threshold_profile_id"]
+                st.session_state["active_threshold_profile_id"] = result.threshold_profile["threshold_profile_id"]
+                st.session_state.pop(EVALUATED_SCENARIO_KEY, None)
+                st.session_state[REFRESH_FEEDBACK_KEY] = (
+                    "Complete synthetic demonstration refreshed through the governed seed path. "
+                    "The complete immutable demo dataset is now selected."
+                )
+                st.rerun()
+            except (PortfolioSeedConflict, ScenarioExecutionError, ValueError, KeyError, OSError) as error:
+                st.error(f"The demonstration dataset was not refreshed: {error}")
 
     demo_defaults = is_synthetic_demo(project, dataset_record)
     if demo_defaults:
@@ -222,17 +336,20 @@ def main() -> None:
                 cost_adjustments=cost_adjustments,
                 material_adjustments=material_adjustments,
             )
-            st.session_state["evaluated_controlled_scenario"] = evaluated
+            st.session_state[EVALUATED_SCENARIO_KEY] = evaluated
         except (ScenarioExecutionError, ValueError, KeyError) as error:
             st.error(str(error))
 
-    evaluated = st.session_state.get("evaluated_controlled_scenario")
-    if evaluated is not None:
-        if evaluated.project_id != project["project_id"]:
-            st.session_state.pop("evaluated_controlled_scenario", None)
-            st.warning("A scenario from another project was cleared from the session.")
-            st.stop()
+    selection_key = evaluated_selection_key(
+        project["project_id"],
+        dataset_record["dataset_id"],
+        threshold_record["threshold_profile_id"],
+    )
+    if clear_stale_evaluated_scenario(st.session_state, selection_key):
+        st.info("The previously evaluated scenario was cleared because the active dataset or threshold selection changed.")
 
+    evaluated = st.session_state.get(EVALUATED_SCENARIO_KEY)
+    if evaluated is not None:
         st.subheader("Explainable Scenario Results")
         st.dataframe(alternative_rows(evaluated), width="stretch", hide_index=True)
 
@@ -263,7 +380,7 @@ def main() -> None:
             try:
                 saved = scenario_service.save(evaluated)
                 st.success(f"Scenario saved: {saved['scenario_id']}")
-                st.session_state.pop("evaluated_controlled_scenario", None)
+                st.session_state.pop(EVALUATED_SCENARIO_KEY, None)
                 st.rerun()
             except (ScenarioExecutionError, ValueError, KeyError) as error:
                 st.error(str(error))
