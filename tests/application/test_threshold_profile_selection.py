@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[2]
 THRESHOLD_PAGE = ROOT / "pages" / "03_Business_Thresholds.py"
@@ -16,6 +17,15 @@ def load_selection_helper(path: Path):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module.selected_profile_index
+
+
+def load_scenario_module():
+    spec = importlib.util.spec_from_file_location(f"selection_{SCENARIO_PAGE.stem}", SCENARIO_PAGE)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Cannot load {SCENARIO_PAGE}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class ThresholdProfileSelectionTests(unittest.TestCase):
@@ -53,6 +63,48 @@ class ThresholdProfileSelectionTests(unittest.TestCase):
             helper = load_selection_helper(path)
             self.assertEqual(helper(self.records, "missing", "project-demo"), 0)
             self.assertEqual(helper(self.records, "other-1", "project-demo"), 0)
+
+    def test_demo_dataset_defaults_to_latest_version(self) -> None:
+        module = load_scenario_module()
+        records = [
+            {"dataset_id": "dataset-1"},
+            {"dataset_id": "dataset-2"},
+            {"dataset_id": "dataset-3"},
+        ]
+        self.assertEqual(module.selected_dataset_index(records, None, demo_project=True), 2)
+        self.assertEqual(module.selected_dataset_index(records, None, demo_project=False), 0)
+        self.assertEqual(module.selected_dataset_index(records, "dataset-2", demo_project=True), 1)
+
+    def test_stale_evaluated_scenario_is_cleared_when_selection_changes(self) -> None:
+        module = load_scenario_module()
+        session_state = {
+            module.EVALUATED_SCENARIO_KEY: SimpleNamespace(
+                project_id="project-demo",
+                dataset_id="dataset-1",
+                threshold_profile_id="threshold-1",
+            )
+        }
+        changed = module.clear_stale_evaluated_scenario(
+            session_state,
+            module.evaluated_selection_key("project-demo", "dataset-2", "threshold-1"),
+        )
+        self.assertTrue(changed)
+        self.assertNotIn(module.EVALUATED_SCENARIO_KEY, session_state)
+
+    def test_matching_selection_preserves_evaluated_scenario(self) -> None:
+        module = load_scenario_module()
+        evaluated = SimpleNamespace(
+            project_id="project-demo",
+            dataset_id="dataset-1",
+            threshold_profile_id="threshold-1",
+        )
+        session_state = {module.EVALUATED_SCENARIO_KEY: evaluated}
+        changed = module.clear_stale_evaluated_scenario(
+            session_state,
+            module.evaluated_selection_key("project-demo", "dataset-1", "threshold-1"),
+        )
+        self.assertFalse(changed)
+        self.assertIs(session_state[module.EVALUATED_SCENARIO_KEY], evaluated)
 
 
 if __name__ == "__main__":

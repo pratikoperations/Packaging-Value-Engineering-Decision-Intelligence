@@ -219,6 +219,8 @@ class ControlledScenarioTestCase(unittest.TestCase):
             "Immutable threshold profile version",
             "Run deterministic scenario",
             "Save immutable scenario record",
+            "Refresh complete demonstration dataset",
+            "seed_portfolio_demo(DATABASE_PATH)",
             "Engineering validation",
             "autonomous approval is prohibited",
         ):
