@@ -18,7 +18,7 @@ from src.technical_qualification import evaluate_technical_qualification
 
 
 ROOT = Path(__file__).resolve().parent
-DEMO_PATH = ROOT / "data" / "demo" / "corrugated_shipping_cases.json"
+DEMO_PATH = ROOT / "data" / "demo" / "corrugated_showcase_complete.json"
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
 
 
