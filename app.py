@@ -194,31 +194,7 @@ def _task_page(path: Path) -> tuple[int, str] | None:
     return None
 
 
-def _apply_responsive_sidebar_width() -> None:
-    st.markdown(
-        """
-        <style>
-        @media (max-width: 768px) {
-            [data-testid="stSidebar"][aria-expanded="true"] {
-                width: clamp(180px, 46vw, 200px) !important;
-                flex-basis: clamp(180px, 46vw, 200px) !important;
-                min-width: 180px !important;
-                max-width: 200px !important;
-            }
-            [data-testid="stSidebar"][aria-expanded="true"] > div {
-                width: 100% !important;
-                max-width: 100% !important;
-                box-sizing: border-box !important;
-            }
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
 def main() -> None:
-    _apply_responsive_sidebar_width()
     task_pages: list[tuple[int, str, st.Page]] = []
     for path in (ROOT / "pages").glob("*.py"):
         navigation = _task_page(path)
