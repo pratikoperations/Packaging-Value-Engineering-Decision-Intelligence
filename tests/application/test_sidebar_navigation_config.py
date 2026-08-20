@@ -30,8 +30,12 @@ class SidebarNavigationConfigTests(unittest.TestCase):
     def test_mobile_sidebar_width_rule_is_bounded(self):
         source = (ROOT / "app.py").read_text(encoding="utf-8")
         self.assertIn('[data-testid="stSidebar"][aria-expanded="true"]', source)
-        self.assertIn("max-width: min(82vw, 320px);", source)
-        self.assertIn("min-width: min(82vw, 320px);", source)
+        self.assertIn("width: clamp(240px, 72vw, 280px) !important;", source)
+        self.assertIn("flex-basis: clamp(240px, 72vw, 280px) !important;", source)
+        self.assertIn("max-width: 280px !important;", source)
+        self.assertIn("min-width: 240px !important;", source)
+        self.assertIn('[data-testid="stSidebar"][aria-expanded="true"] > div', source)
+        self.assertIn("max-width: 100% !important;", source)
         self.assertIn("@media (max-width: 768px)", source)
 
 

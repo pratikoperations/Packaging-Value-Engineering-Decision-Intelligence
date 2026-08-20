@@ -221,10 +221,19 @@ class ControlledScenarioTestCase(unittest.TestCase):
             "Save immutable scenario record",
             "Refresh complete demonstration dataset",
             "seed_portfolio_demo(DATABASE_PATH)",
+            "queue_pending_refresh_selection(",
+            "consume_pending_record_label(",
+            "controlled_scenario_pending_dataset_label",
+            "controlled_scenario_pending_threshold_label",
             "Engineering validation",
             "autonomous approval is prohibited",
         ):
             self.assertIn(marker, page)
+
+    def test_refresh_path_avoids_direct_widget_key_mutation(self):
+        page = PAGE.read_text(encoding="utf-8")
+        self.assertNotIn("st.session_state[DATASET_SELECT_KEY] = dataset_label", page)
+        self.assertNotIn("st.session_state[THRESHOLD_SELECT_KEY] = threshold_label", page)
 
     def test_page_excludes_unapproved_scope(self):
         page = PAGE.read_text(encoding="utf-8")
