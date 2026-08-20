@@ -17,7 +17,10 @@
     {"evidence_id":"EV-003","evidence_type":"supplier_quote","reference":"SYNTH-QUOTE-A"},
     {"evidence_id":"EV-004","evidence_type":"assumption","reference":"SYNTH-LOGISTICS-BASIS"},
     {"evidence_id":"EV-005","evidence_type":"benchmark","reference":"SYNTH-BOARD-BENCHMARK"},
-    {"evidence_id":"EV-006","evidence_type":"test_report","reference":"SYNTH-BCT-BASE"}
+    {"evidence_id":"EV-006","evidence_type":"test_report","reference":"SYNTH-BCT-BASE"},
+    {"evidence_id":"EV-007","evidence_type":"test_report","reference":"SYNTH-BCT-ALT-A-LAB-001"},
+    {"evidence_id":"EV-010","evidence_type":"test_report","reference":"SYNTH-STACK-ALT-A-LAB-001"},
+    {"evidence_id":"EV-011","evidence_type":"test_report","reference":"SYNTH-STACK-BASE-001"}
   ],
   "baseline_specification": {
     "baseline_id": "BASE-001",
@@ -58,12 +61,19 @@
   ],
   "technical_qualification_results": [
     {"qualification_id":"QUAL-BASE-BCT","alternative_id":"ALT-BASE","requirement_id":"REQ-BCT","status":"qualified","evidence_id":"EV-006"},
-    {"qualification_id":"QUAL-A-BCT","alternative_id":"ALT-A","requirement_id":"REQ-BCT","status":"not_assessed","evidence_id":null},
+    {"qualification_id":"QUAL-BASE-STACK","alternative_id":"ALT-BASE","requirement_id":"REQ-STACK","status":"qualified","evidence_id":"EV-011"},
+    {"qualification_id":"QUAL-A-BCT","alternative_id":"ALT-A","requirement_id":"REQ-BCT","status":"conditionally_qualified","evidence_id":"EV-007"},
+    {"qualification_id":"QUAL-A-STACK","alternative_id":"ALT-A","requirement_id":"REQ-STACK","status":"conditionally_qualified","evidence_id":"EV-010"},
     {"qualification_id":"QUAL-B-BCT","alternative_id":"ALT-B","requirement_id":"REQ-BCT","status":"insufficient_data","evidence_id":null},
     {"qualification_id":"QUAL-C-BCT","alternative_id":"ALT-C","requirement_id":"REQ-BCT","status":"not_assessed","evidence_id":null}
   ],
   "risk_records": [
+    {"risk_id":"RISK-BASE-QUAL","alternative_id":"ALT-BASE","risk_type":"quality","level":"low","probability_percent":10},
+    {"risk_id":"RISK-BASE-SUPPLY","alternative_id":"ALT-BASE","risk_type":"supply","level":"low","probability_percent":10},
+    {"risk_id":"RISK-BASE-IMPL","alternative_id":"ALT-BASE","risk_type":"implementation","level":"low","probability_percent":5},
     {"risk_id":"RISK-A","alternative_id":"ALT-A","risk_type":"implementation","level":"medium","probability_percent":35},
+    {"risk_id":"RISK-A-QUAL","alternative_id":"ALT-A","risk_type":"quality","level":"low","probability_percent":10},
+    {"risk_id":"RISK-A-SUPPLY","alternative_id":"ALT-A","risk_type":"supply","level":"low","probability_percent":15},
     {"risk_id":"RISK-B","alternative_id":"ALT-B","risk_type":"quality","level":"high","probability_percent":55},
     {"risk_id":"RISK-C","alternative_id":"ALT-C","risk_type":"supply","level":"medium","probability_percent":30}
   ],
@@ -81,7 +91,7 @@
   "decision_recommendation": {
     "recommendation_id": "REC-PLACEHOLDER-001",
     "status": "insufficient_data",
-    "rationale": "PVE-0.2 stores a placeholder only. Recommendation scoring and cost calculations are intentionally deferred. Proposed alternatives lack completed technical validation."
+    "rationale": "Stored placeholder only. The live application computes deterministic recommendation status from the synthetic scenario, technical qualification, risk, savings, material change, and validation requirements. Engineering validation and human approval remain mandatory."
   },
   "export_metadata": {
     "contract_version": "PVE-CONTRACT-v1.0-DRAFT",
