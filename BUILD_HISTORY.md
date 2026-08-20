@@ -154,7 +154,7 @@ Promotion establishes a stable source-code baseline only. It does not authorize 
 - Builds 2–6 remain separately unauthorized.
 
 ## Controlled Enhancement Programme — Final Governance Closure
-**Status:** Technical scope complete; final governance closure in progress on `governance/enhancement-programme-final-closure`.
+**Status:** Technical scope complete; synthetic showcase gate completed; final governance closure in progress on `governance/enhancement-programme-final-closure`.
 
 ### Completed Gate Record
 - Planning / architecture baseline: accepted.
@@ -171,6 +171,13 @@ Promotion establishes a stable source-code baseline only. It does not authorize 
 - Overall browser disposition: `PASS`.
 - Evidence artifact: `9377636828`; SHA-256 `fdbe38dffa73f941a0b8c9dfae59c0a512c9296b75224275531fa56e8bd6e59c`.
 - PR #93 merge commit and current programme SHA: `abc42640677947e0a8097c43b990268d1158f5f9`.
+
+### Completed Synthetic Showcase Gate
+- Complete Synthetic Showcase Data Upgrade: completed and squash-merged through PR #102.
+- Exact validated feature head: `a1714be605e8c1b2f2b4c7be996e931cf5a38ef4`.
+- Authoritative PVE CI: run `32326891499`, job `96299864560`; 4 focused Build 8 tests and 863 complete-suite tests passed; 0 failures; 0 errors.
+- Resulting programme implementation SHA: `213755e14049462abaf70b1119e8527e3e4eb728`.
+- Scope remained synthetic interview/portfolio showcase evidence only; no production authority changed.
 
 ### Superseded Browser Attempts
 PR #85 (Gate 3A) and PR #82 (original Gate 3) are retained as historical attempts only. Their failed or incomplete browser contracts are superseded by the accepted Gate 3B Stage 3 contract; they are not unresolved product defects and must not be repaired or merged as part of final programme closure.

@@ -106,21 +106,28 @@ Earlier records stating that `main` remained at `300054cceb255e8e1273e8012a3ba0c
 - If Build 1 is rejected, retain the integration branch at the exact promoted baseline and do not merge the feature branch.
 - Builds 2–6 require separate authorization.
 
-## Controlled Enhancement Programme Recovery Point — 2026-08-19
+## Controlled Enhancement Programme Recovery Point — 2026-08-20
 - Programme branch: `enhancement/browser-data-calculation-programme`.
-- Pre-final-governance-closure programme SHA: `abc42640677947e0a8097c43b990268d1158f5f9`.
+- Post-showcase programme implementation SHA: `213755e14049462abaf70b1119e8527e3e4eb728`.
+- Pre-showcase programme SHA: `abc42640677947e0a8097c43b990268d1158f5f9`.
+- Synthetic showcase feature branch: `enhancement/complete-synthetic-showcase-data`.
+- Synthetic showcase PR: #102.
+- Synthetic showcase exact validated feature head: `a1714be605e8c1b2f2b4c7be996e931cf5a38ef4`.
+- Synthetic showcase authoritative PVE CI: run `32326891499`, job `96299864560`, success; 4 focused Build 8 tests and 863 complete-suite tests passed; 0 failures; 0 errors.
+- Synthetic showcase retained artifact: `9391683419`; SHA-256 `ce145a88165c076339e1a69fc15723586c5007d28503683a96d55e566826f455`.
 - Gate 3B exact feature SHA: `993c8e8820f8f25495ea54f0e3322cd6c15c6462`.
 - Gate 3B merge PR: #93.
-- Gate 3B merge commit: `abc42640677947e0a8097c43b990268d1158f5f9`.
+- Gate 3B merge commit / pre-showcase programme SHA: `abc42640677947e0a8097c43b990268d1158f5f9`.
 - Stage 3 exact-head standard CI: run `32267843278`, job `96116618326`, success; 4 focused Build 8 tests and 852 complete-suite tests passed; 0 failures; 0 errors.
 - Physical Chromium validation: run `32285939960`, job `96175362745`, success; 42 focused browser contracts passed; overall disposition `PASS`.
 - Browser evidence artifact: `9377636828`; SHA-256 `fdbe38dffa73f941a0b8c9dfae59c0a512c9296b75224275531fa56e8bd6e59c`.
 - Gate 4 governed export validation remains accepted at run `30744438193`, job `91487519049`, disposition `PASS`.
 
 ## Controlled Enhancement Recovery Rules
-1. Use the final programme-closure merge SHA, once recorded in `docs/enhancement_programme/PROGRAMME_FINAL_CLOSURE.md`, as the authoritative recovery point for the completed enhancement programme.
-2. Retain `abc42640677947e0a8097c43b990268d1158f5f9` as the pre-closure technical-completion recovery point.
-3. Retain Stage 3 SHA `993c8e8820f8f25495ea54f0e3322cd6c15c6462` as the exact physical browser candidate lineage.
-4. PR #85 / branch `enhancement/minimal-interview-browser-acceptance` and PR #82 / branch `enhancement/automated-browser-acceptance` are superseded historical recovery evidence only; close the PRs without merge after final closure succeeds and retain the branches.
-5. Do not restart those superseded browser approaches unless a new governed decision explicitly requires historical reproduction.
-6. Any future production/pilot programme must begin from a separately authorized baseline and must not reinterpret interview/portfolio acceptance as production certification.
+1. Use `213755e14049462abaf70b1119e8527e3e4eb728` as the authoritative post-showcase implementation recovery point for the completed synthetic showcase upgrade on `enhancement/browser-data-calculation-programme`.
+2. Retain `abc42640677947e0a8097c43b990268d1158f5f9` as the pre-showcase technical-completion recovery point.
+3. Retain feature head `a1714be605e8c1b2f2b4c7be996e931cf5a38ef4`, PR #102, run `32326891499`, and job `96299864560` as the exact synthetic-showcase implementation and validation lineage.
+4. Retain Stage 3 SHA `993c8e8820f8f25495ea54f0e3322cd6c15c6462` as the exact physical browser candidate lineage.
+5. PR #85 / branch `enhancement/minimal-interview-browser-acceptance` and PR #82 / branch `enhancement/automated-browser-acceptance` are superseded historical recovery evidence only; close the PRs without merge after final closure succeeds and retain the branches.
+6. Do not restart those superseded browser approaches unless a new governed decision explicitly requires historical reproduction.
+7. Any future production/pilot programme must begin from a separately authorized baseline and must not reinterpret interview/portfolio acceptance as production certification.
