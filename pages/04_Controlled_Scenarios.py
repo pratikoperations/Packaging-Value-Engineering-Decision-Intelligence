@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DATABASE_PATH = ROOT / "runtime" / "pve_portfolio.sqlite3"
 DATASET_SELECT_KEY = "controlled_scenario_dataset_label"
 THRESHOLD_SELECT_KEY = "controlled_scenario_threshold_label"
+PENDING_DATASET_SELECT_KEY = "controlled_scenario_pending_dataset_label"
+PENDING_THRESHOLD_SELECT_KEY = "controlled_scenario_pending_threshold_label"
 EVALUATED_SCENARIO_KEY = "evaluated_controlled_scenario"
 REFRESH_FEEDBACK_KEY = "controlled_scenario_refresh_feedback"
 
@@ -80,6 +82,30 @@ def selected_record_label(
         state[state_key] = default_label
         return default_label
     return str(selected)
+
+
+def consume_pending_record_label(
+    options: dict[str, dict],
+    state: MutableMapping[str, object],
+    state_key: str,
+    pending_state_key: str,
+    default_label: str,
+) -> str:
+    pending = state.pop(pending_state_key, None)
+    if isinstance(pending, str) and pending in options:
+        state[state_key] = pending
+        return pending
+    return selected_record_label(options, state, state_key, default_label)
+
+
+def queue_pending_refresh_selection(
+    state: MutableMapping[str, object],
+    *,
+    dataset: dict[str, object],
+    threshold_profile: dict[str, object],
+) -> None:
+    state[PENDING_DATASET_SELECT_KEY] = dataset_label(dataset)
+    state[PENDING_THRESHOLD_SELECT_KEY] = threshold_label(threshold_profile)
 
 
 def evaluated_selection_key(project_id: object, dataset_id: object, threshold_profile_id: object) -> tuple[str, str, str]:
@@ -206,10 +232,11 @@ def main() -> None:
         st.session_state.get("controlled_scenario_dataset_id"),
         demo_project=demo_project,
     )
-    selected_dataset_label = selected_record_label(
+    selected_dataset_label = consume_pending_record_label(
         dataset_options,
         st.session_state,
         DATASET_SELECT_KEY,
+        PENDING_DATASET_SELECT_KEY,
         dataset_labels[dataset_index],
     )
     selected_dataset_label = st.selectbox(
@@ -225,10 +252,11 @@ def main() -> None:
         or st.session_state.get("active_threshold_profile_id"),
         project["project_id"],
     )
-    selected_threshold_label = selected_record_label(
+    selected_threshold_label = consume_pending_record_label(
         threshold_options,
         st.session_state,
         THRESHOLD_SELECT_KEY,
+        PENDING_THRESHOLD_SELECT_KEY,
         threshold_labels[threshold_index],
     )
     selected_threshold_label = st.selectbox(
@@ -267,8 +295,11 @@ def main() -> None:
         if st.button("Refresh complete demonstration dataset", width="stretch"):
             try:
                 result = seed_portfolio_demo(DATABASE_PATH)
-                st.session_state[DATASET_SELECT_KEY] = dataset_label(result.dataset)
-                st.session_state[THRESHOLD_SELECT_KEY] = threshold_label(result.threshold_profile)
+                queue_pending_refresh_selection(
+                    st.session_state,
+                    dataset=result.dataset,
+                    threshold_profile=result.threshold_profile,
+                )
                 st.session_state["controlled_scenario_dataset_id"] = result.dataset["dataset_id"]
                 st.session_state["controlled_scenario_threshold_id"] = result.threshold_profile["threshold_profile_id"]
                 st.session_state["active_threshold_profile_id"] = result.threshold_profile["threshold_profile_id"]
