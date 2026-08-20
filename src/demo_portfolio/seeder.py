@@ -18,8 +18,8 @@ DEMO_PROJECT_NAME = "Corrugated Shipper Value Engineering — Synthetic Demonstr
 DEMO_PROJECT_OBJECTIVE = "Cost reduction"
 DEMO_PROJECT_CHANGE_TYPE = "Size optimization"
 DEMO_THRESHOLD_NAME = "Portfolio Demonstration Thresholds"
-DEMO_SCENARIO_NAME = "Balanced Cost and Evidence Review"
-DEFAULT_SEED_PATH = Path(__file__).resolve().parents[2] / "data" / "demo" / "pve_portfolio_project.json"
+DEMO_SCENARIO_NAME = "Complete Evidence Review"
+DEFAULT_SEED_PATH = Path(__file__).resolve().parents[2] / "data" / "demo" / "corrugated_showcase_complete.json"
 DEMO_THRESHOLD_PROFILE: dict[str, Any] = {
     "minimum_annual_savings": 2_500_000.0,
     "minimum_material_reduction_percent": 5.0,
@@ -182,7 +182,7 @@ def seed_portfolio_demo(
 
     prepared = upload_service.prepare_json(
         content=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
-        filename="pve_portfolio_project.json",
+        filename="corrugated_showcase_complete.json",
         project=project,
     )
     if not prepared.validation.is_valid:

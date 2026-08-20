@@ -138,7 +138,14 @@ def main() -> None:
     dataset_options = {dataset_label(record): record for record in datasets}
     threshold_options = {threshold_label(record): record for record in thresholds}
 
-    selected_dataset_label = st.selectbox("Immutable dataset version", options=list(dataset_options))
+    dataset_labels = list(dataset_options)
+    demo_project = str(project.get("project_code", "")).upper().startswith("PVE-DEMO")
+    dataset_index = len(dataset_labels) - 1 if demo_project else 0
+    selected_dataset_label = st.selectbox(
+        "Immutable dataset version",
+        options=dataset_labels,
+        index=dataset_index,
+    )
     threshold_labels = list(threshold_options)
     threshold_index = selected_profile_index(
         thresholds,
