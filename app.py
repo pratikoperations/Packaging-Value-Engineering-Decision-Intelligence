@@ -200,10 +200,10 @@ def _apply_responsive_sidebar_width() -> None:
         <style>
         @media (max-width: 768px) {
             [data-testid="stSidebar"][aria-expanded="true"] {
-                width: clamp(210px, 62vw, 240px) !important;
-                flex-basis: clamp(210px, 62vw, 240px) !important;
-                min-width: 210px !important;
-                max-width: 240px !important;
+                width: clamp(180px, 46vw, 200px) !important;
+                flex-basis: clamp(180px, 46vw, 200px) !important;
+                min-width: 180px !important;
+                max-width: 200px !important;
             }
             [data-testid="stSidebar"][aria-expanded="true"] > div {
                 width: 100% !important;
