@@ -145,7 +145,7 @@ PVE 1.2 was the latest stable governance-closed release on `main` before E1 prom
 
 ## Controlled Enhancement Programme — Final Current State
 - Programme branch: `enhancement/browser-data-calculation-programme`.
-- Pre-closure programme SHA: `abc42640677947e0a8097c43b990268d1158f5f9`.
+- Pre-showcase programme SHA: `abc42640677947e0a8097c43b990268d1158f5f9`.
 - Technical/functional completion: 100%.
 - Final governance closure status: authorized on `governance/enhancement-programme-final-closure`.
 - Gate 1 governed synthetic procurement data: complete.
@@ -156,7 +156,11 @@ PVE 1.2 was the latest stable governance-closed release on `main` before E1 prom
 - Exact-head Stage 3 CI: run `32267843278`, job `96116618326`; 4 focused tests and 852 complete-suite tests passed; 0 failures; 0 errors.
 - Physical browser run: `32285939960`, job `96175362745`; conclusion `success`; 42 focused browser contracts passed; overall disposition `PASS`.
 - Browser evidence artifact: `9377636828`; SHA-256 `fdbe38dffa73f941a0b8c9dfae59c0a512c9296b75224275531fa56e8bd6e59c`.
-- PR #93: merged and closed into the programme branch; merge commit `abc42640677947e0a8097c43b990268d1158f5f9`.
+- Complete Synthetic Showcase Data Upgrade: completed and merged through PR #102.
+- Synthetic showcase exact validated feature head: `a1714be605e8c1b2f2b4c7be996e931cf5a38ef4`.
+- Synthetic showcase authoritative PVE CI: run `32326891499`, job `96299864560`; 4 focused Build 8 tests and 863 complete-suite tests passed; 0 failures; 0 errors.
+- Resulting programme implementation SHA: `213755e14049462abaf70b1119e8527e3e4eb728`.
+- PR #93 remains the pre-showcase browser-closure merge commit `abc42640677947e0a8097c43b990268d1158f5f9`.
 - PR #85 and PR #82: superseded historical browser implementation attempts; not unresolved product defects; to be closed without merge after final closure CI and merge.
 - Confirmed historical effort baseline: 54 hours. Later correction effort is not retrospectively fabricated because it was not formally time-logged.
 
