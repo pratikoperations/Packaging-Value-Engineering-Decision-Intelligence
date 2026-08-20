@@ -396,7 +396,54 @@ class PortfolioSeedUpgradeTests(unittest.TestCase):
         self.assertAlmostEqual(alts["ALT-BASE"]["case_weight_g"], 980.0, places=1)
         self.assertAlmostEqual(alts["ALT-A"]["case_weight_g"], 880.0, places=1)
 
-    # --- test 13: no business-engine files were changed by this upgrade ---
+    # --- test 13: decision snapshot selects ALT-A as preferred conditional alternative ---
+
+    def test_decision_snapshot_selects_alt_a_as_preferred_conditional_alternative(self) -> None:
+        """Governed decision snapshot must deterministically select ALT-A with full risk/tech coverage."""
+        result = seed_portfolio_demo(self.database_path)
+        snapshot = result.decision_snapshot
+
+        recommendation = json.loads(snapshot["recommendation_json"])
+        gate = json.loads(snapshot["gate_results_json"])
+        self.assertFalse(recommendation["autonomous_approval"], "Autonomous approval must be False")
+        self.assertTrue(recommendation["engineering_validation_required"], "Engineering validation must be required")
+        self.assertTrue(recommendation["human_approval_required"], "Human approval must be required")
+
+        # Preferred alternative
+        self.assertEqual(
+            recommendation["preferred_alternative_id"],
+            "ALT-A",
+            f"Expected ALT-A as preferred; got {recommendation['preferred_alternative_id']}",
+        )
+
+        # Recommendation status is conditional or eligible engineering review
+        eligible_statuses = {
+            "conditionally_recommended_for_engineering_review",
+            "recommended_for_engineering_review",
+        }
+        self.assertIn(
+            recommendation["status"],
+            eligible_statuses,
+            f"Unexpected recommendation status: {recommendation['status']}",
+        )
+
+        # Governed control status is not insufficient_data or blocked
+        self.assertNotIn(
+            gate["selected_control_status"],
+            {"insufficient_data", "blocked"},
+            f"Control status must not be insufficient_data/blocked; got {gate['selected_control_status']}",
+        )
+
+        # ALT-A risk and technical status from scenario results
+        alt_a = gate["alternatives"]["ALT-A"]
+        self.assertTrue(alt_a["risk_data_complete"], "ALT-A risk_data_complete must be True")
+        self.assertNotEqual(
+            alt_a["technical_status"],
+            "insufficient_data",
+            "ALT-A technical_status must not be insufficient_data",
+        )
+
+    # --- test 14: no business-engine files were changed by this upgrade ---
 
     def test_no_business_engine_or_workflow_files_were_modified(self) -> None:
         """Guard that the upgrade touched only the data, seeder, and test layers."""

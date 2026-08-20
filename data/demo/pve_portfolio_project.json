@@ -58,6 +58,22 @@
             "evidence_id": "EV-009",
             "evidence_type": "laboratory_report",
             "reference": "SYNTH-LAB-REPORT-001"
+        },
+        {
+            "evidence_id": "EV-010",
+            "evidence_type": "test_report",
+            "reference": "SYNTH-STACK-ALT-A-LAB-001",
+            "title": "ALT-A Stack Compression Test Report — Synthetic Non-Production Demo Only",
+            "synthetic_notice": "SYNTHETIC DATA — generated for PVE 1.1 showcase only; not laboratory, production, or supplier evidence.",
+            "supports_alternative_id": "ALT-A",
+            "supports_requirement_id": "REQ-STACK",
+            "test_method": "ASTM D4169 / equivalent compression cycle",
+            "result_value": 12500,
+            "result_unit": "N",
+            "pass_threshold": 11000,
+            "outcome": "CONDITIONAL_PASS",
+            "conditions": "Two-pallet-high trial stacking to be confirmed during production trial before final approval.",
+            "validation_status": "pending_field_trial"
         }
     ],
     "baseline_specification": {
@@ -263,6 +279,13 @@
             "evidence_id": "EV-007"
         },
         {
+            "qualification_id": "QUAL-A-STACK",
+            "alternative_id": "ALT-A",
+            "requirement_id": "REQ-STACK",
+            "status": "conditionally_qualified",
+            "evidence_id": "EV-010"
+        },
+        {
             "qualification_id": "QUAL-B-BCT",
             "alternative_id": "ALT-B",
             "requirement_id": "REQ-BCT",
@@ -284,6 +307,22 @@
             "risk_type": "implementation",
             "level": "medium",
             "probability_percent": 35
+        },
+        {
+            "risk_id": "RISK-A-QUAL",
+            "alternative_id": "ALT-A",
+            "risk_type": "quality",
+            "level": "low",
+            "probability_percent": 10,
+            "description": "SYNTHETIC — Low residual quality risk: BCT and stack compression conditionally qualified; minor field-trial conditions outstanding."
+        },
+        {
+            "risk_id": "RISK-A-SUPPLY",
+            "alternative_id": "ALT-A",
+            "risk_type": "supply",
+            "level": "low",
+            "probability_percent": 15,
+            "description": "SYNTHETIC — Low supply risk: approved corrugated converter with demonstrated capacity; lead-time within programme window."
         },
         {
             "risk_id": "RISK-B",
