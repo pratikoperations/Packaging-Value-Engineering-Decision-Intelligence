@@ -27,16 +27,14 @@ class SidebarNavigationConfigTests(unittest.TestCase):
         self.assertNotIn('"PVE 2.0 AI Word Intake"', source)
         self.assertNotIn('"PVE 2.1 Digital PDF Intake"', source)
 
-    def test_mobile_sidebar_width_rule_is_bounded(self):
+    def test_sidebar_uses_native_streamlit_responsive_sizing(self):
         source = (ROOT / "app.py").read_text(encoding="utf-8")
-        self.assertIn('[data-testid="stSidebar"][aria-expanded="true"]', source)
-        self.assertIn("width: clamp(180px, 46vw, 200px) !important;", source)
-        self.assertIn("flex-basis: clamp(180px, 46vw, 200px) !important;", source)
-        self.assertIn("max-width: 200px !important;", source)
-        self.assertIn("min-width: 180px !important;", source)
-        self.assertIn('[data-testid="stSidebar"][aria-expanded="true"] > div', source)
-        self.assertIn("max-width: 100% !important;", source)
-        self.assertIn("@media (max-width: 768px)", source)
+        self.assertNotIn('[data-testid="stSidebar"][aria-expanded="true"]', source)
+        self.assertNotIn("flex-basis:", source)
+        self.assertNotIn("width: clamp(", source)
+        self.assertNotIn("min-width:", source)
+        self.assertNotIn("max-width:", source)
+        self.assertNotIn("_apply_responsive_sidebar_width", source)
 
 
 if __name__ == "__main__":
