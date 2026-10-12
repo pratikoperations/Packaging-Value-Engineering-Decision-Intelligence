@@ -37,6 +37,10 @@ class SidebarNavigationConfigTests(unittest.TestCase):
         self.assertIn("min-width: 180px !important;", source)
         self.assertIn("max-width: 200px !important;", source)
         self.assertIn('[data-testid="stSidebar"] > div:first-child', source)
+        self.assertIn("overflow-x: hidden !important;", source)
+        self.assertIn('[data-testid="stSidebar"] a {', source)
+        self.assertIn("white-space: normal !important;", source)
+        self.assertIn("overflow-wrap: break-word !important;", source)
         self.assertIn("@media (max-width: 768px)", source)
         self.assertIn("with st.sidebar:", source)
 
