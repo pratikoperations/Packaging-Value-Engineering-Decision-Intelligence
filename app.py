@@ -212,6 +212,17 @@ def _apply_mobile_sidebar_width() -> None:
                 width: 100% !important;
                 max-width: 100% !important;
                 box-sizing: border-box !important;
+                overflow-x: hidden !important;
+            }
+            [data-testid="stSidebar"] a {
+                min-width: 0 !important;
+                max-width: 100% !important;
+                white-space: normal !important;
+            }
+            [data-testid="stSidebar"] a * {
+                white-space: normal !important;
+                overflow-wrap: break-word !important;
+                text-overflow: clip !important;
             }
         }
         </style>
