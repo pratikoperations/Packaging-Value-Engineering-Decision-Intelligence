@@ -157,6 +157,18 @@ def main() -> None:
                 assert link_box["x"] >= narrow["left"] - 1, (label, link_box, narrow)
                 assert link_box["x"] + link_box["width"] <= narrow["right"] + 1, (label, link_box, narrow)
 
+            nav_page = browser.new_page(viewport=VIEWPORT)
+            wait_ready(nav_page)
+            open_once(nav_page)
+            navigation = nav_page.get_by_role("link", name="Project Dashboard", exact=True)
+            navigation.wait_for(state="visible", timeout=10_000)
+            navigation.click()
+            nav_page.get_by_role("heading", name="Packaging Value Engineering Project Dashboard", exact=True).wait_for(
+                state="visible", timeout=15_000
+            )
+            report["navigation_passed"] = True
+            nav_page.close()
+
             scenario_header = page.get_by_role("heading", name="Scenario Inputs", exact=True)
             scenario_header.scroll_into_view_if_needed()
             assert scenario_header.is_visible()
@@ -175,15 +187,6 @@ def main() -> None:
             report["reopened_sidebar"] = reopened
             assert abs(reopened["width"] - narrow["width"]) < 1.0, (narrow, reopened)
 
-            page.mouse.move(reopened["width"] / 2, VIEWPORT["height"] / 2)
-            page.mouse.wheel(0, -2500)
-            navigation = page.get_by_role("link", name="Project Dashboard", exact=True)
-            navigation.wait_for(state="visible", timeout=10_000)
-            navigation.click()
-            page.get_by_role("heading", name="Packaging Value Engineering Project Dashboard", exact=True).wait_for(
-                state="visible", timeout=15_000
-            )
-            report["navigation_passed"] = True
             report["sidebar_scroll_passed"] = True
 
             desktop = browser.new_page(viewport=DESKTOP)
