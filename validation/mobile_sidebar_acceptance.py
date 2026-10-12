@@ -95,10 +95,16 @@ def open_once(page: Page) -> None:
 
 
 def close_sidebar(page: Page) -> None:
-    button = visible_sidebar_button(page)
-    if button is None:
-        raise AssertionError("No visible semantic sidebar close/collapse button found.")
-    button.click()
+    collapse = page.locator('[data-testid="stSidebarCollapseButton"]')
+    if collapse.count() == 0:
+        raise AssertionError("Streamlit sidebar collapse control was not found.")
+    target = collapse.first
+    if not target.is_visible():
+        button = target.locator("button")
+        if button.count() == 0 or not button.first.is_visible():
+            raise AssertionError("Streamlit sidebar collapse control is not visible.")
+        target = button.first
+    target.click()
     page.locator(OPENER).wait_for(state="visible", timeout=10_000)
 
 
