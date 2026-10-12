@@ -1,7 +1,10 @@
-name: Gate 3B Governed Responsive Browser Acceptance
+name: PVE Mobile Sidebar Exact-Candidate Browser Acceptance
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - "feature/pve-mobile-sidebar-browser-acceptance"
 
 permissions:
   contents: read
@@ -19,7 +22,7 @@ jobs:
       - name: Check out frozen Gate 3B candidate
         uses: actions/checkout@v4
         with:
-          ref: 993c8e8820f8f25495ea54f0e3322cd6c15c6462
+          ref: b52e4f68cec9efab6a72f65a46c3fb3be948dc22
           persist-credentials: false
           fetch-depth: 1
 
@@ -42,7 +45,7 @@ jobs:
         run: |
           set -euo pipefail
           actual="$(git rev-parse HEAD)"
-          expected="993c8e8820f8f25495ea54f0e3322cd6c15c6462"
+          expected="b52e4f68cec9efab6a72f65a46c3fb3be948dc22"
           test "$actual" = "$expected" || {
             echo "Expected frozen Gate 3B SHA $expected but checked out $actual"
             exit 1
@@ -55,8 +58,8 @@ jobs:
       - name: Run minimal interview browser acceptance
         env:
           BROWSER_ARTIFACT_DIR: browser-artifacts/gate3a
-          SOURCE_COMMIT: 993c8e8820f8f25495ea54f0e3322cd6c15c6462
-          TESTED_BRANCH: enhancement/gate3b-responsive-final-closure
+          SOURCE_COMMIT: b52e4f68cec9efab6a72f65a46c3fb3be948dc22
+          TESTED_BRANCH: fix/pve-mobile-sidebar-stable-selector
         run: PYTHONPATH=. python -m src.browser_acceptance.minimal_runner
 
       - name: Verify PASS disposition
