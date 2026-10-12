@@ -157,6 +157,14 @@ def main() -> None:
                 assert link_box["x"] >= narrow["left"] - 1, (label, link_box, narrow)
                 assert link_box["x"] + link_box["width"] <= narrow["right"] + 1, (label, link_box, narrow)
 
+            navigation = page.get_by_role("link", name="Project Dashboard", exact=True)
+            navigation.scroll_into_view_if_needed()
+            navigation = page.get_by_role("link", name="Project Dashboard", exact=True)
+            navigation.click()
+            page.get_by_role("heading", name="Project Dashboard", exact=True).wait_for(state="visible", timeout=15_000)
+            report["navigation_passed"] = True
+            open_once(page)
+
             scenario_header = page.get_by_role("heading", name="Scenario Inputs", exact=True)
             scenario_header.scroll_into_view_if_needed()
             assert scenario_header.is_visible()
@@ -174,12 +182,6 @@ def main() -> None:
             reopened = box(page)
             report["reopened_sidebar"] = reopened
             assert abs(reopened["width"] - narrow["width"]) < 1.0, (narrow, reopened)
-
-            capabilities = page.get_by_role("link", name="Capabilities & Limits", exact=True)
-            capabilities.scroll_into_view_if_needed()
-            capabilities.click()
-            page.get_by_role("heading", name="Capabilities & Limits", exact=True).wait_for(state="visible", timeout=15_000)
-            report["navigation_passed"] = True
 
             desktop = browser.new_page(viewport=DESKTOP)
             wait_ready(desktop)
