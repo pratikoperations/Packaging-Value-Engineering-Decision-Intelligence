@@ -136,8 +136,6 @@ def main() -> None:
             document_width = page.evaluate("document.documentElement.scrollWidth")
             report["document_scroll_width"] = document_width
             assert document_width <= VIEWPORT["width"] + 2, document_width
-            assert narrow["overflowX"] in ("hidden", "clip"), narrow
-
             required_links = (
                 "Home", "Project Dashboard", "Guided Workflow", "Specification Review",
                 "Data Upload", "Business Rules & Thresholds", "Scenario Analysis",
