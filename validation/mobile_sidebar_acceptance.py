@@ -54,7 +54,7 @@ def box(page: Page) -> dict[str, float]:
                 left: r.left, right: r.right, top: r.top, bottom: r.bottom,
                 width: r.width, height: r.height,
                 computedWidth: s.width, minWidth: s.minWidth, maxWidth: s.maxWidth,
-                flexBasis: s.flexBasis, transform: s.transform,
+                flexBasis: s.flexBasis, transform: s.transform, overflowX: s.overflowX,
                 clientWidth: el.clientWidth, scrollWidth: el.scrollWidth
             };
         }"""
@@ -133,7 +133,10 @@ def main() -> None:
 
             assert 179 <= narrow["width"] <= 201, narrow
             assert narrow["width"] / VIEWPORT["width"] <= 0.50, narrow
-            assert narrow["scrollWidth"] <= narrow["clientWidth"] + 2, narrow
+            document_width = page.evaluate("document.documentElement.scrollWidth")
+            report["document_scroll_width"] = document_width
+            assert document_width <= VIEWPORT["width"] + 2, document_width
+            assert narrow["overflowX"] in ("hidden", "clip"), narrow
 
             required_links = (
                 "Home", "Project Dashboard", "Guided Workflow", "Specification Review",
@@ -145,6 +148,10 @@ def main() -> None:
                 assert locator.count() == 1, f"Expected one {label!r} link, got {locator.count()}"
                 locator.scroll_into_view_if_needed()
                 assert locator.is_visible(), f"{label!r} is not visible"
+                link_box = locator.bounding_box()
+                assert link_box is not None, f"{label!r} has no box"
+                assert link_box["x"] >= narrow["left"] - 1, (label, link_box, narrow)
+                assert link_box["x"] + link_box["width"] <= narrow["right"] + 1, (label, link_box, narrow)
 
             scenario_header = page.get_by_role("heading", name="Scenario Inputs", exact=True)
             scenario_header.scroll_into_view_if_needed()
@@ -152,6 +159,9 @@ def main() -> None:
             annual = page.get_by_label("Annual volume (cases)", exact=True)
             annual.scroll_into_view_if_needed()
             assert annual.is_visible() and annual.is_enabled()
+            annual_box = annual.bounding_box()
+            assert annual_box is not None
+            assert annual_box["x"] + annual_box["width"] <= narrow["right"] + 1, (annual_box, narrow)
             annual.focus()
 
             close_sidebar(page)
