@@ -6,6 +6,7 @@ import re
 import subprocess
 import sys
 import time
+import urllib.request
 from pathlib import Path
 
 from playwright.sync_api import Page, sync_playwright
@@ -18,6 +19,22 @@ SIDEBAR = '[data-testid="stSidebar"]'
 OPENER = '[data-testid="stExpandSidebarButton"]'
 VIEWPORT = {"width": 412, "height": 915}
 DESKTOP = {"width": 1440, "height": 1000}
+
+
+def wait_server(proc: subprocess.Popen[str]) -> None:
+    deadline = time.monotonic() + 60
+    last_error: Exception | None = None
+    while time.monotonic() < deadline:
+        if proc.poll() is not None:
+            raise RuntimeError(f"Streamlit exited before becoming ready with code {proc.returncode}")
+        try:
+            with urllib.request.urlopen(URL, timeout=2) as response:
+                if response.status < 500:
+                    return
+        except Exception as exc:
+            last_error = exc
+        time.sleep(0.25)
+    raise RuntimeError(f"Streamlit did not become reachable: {last_error!r}")
 
 
 def wait_ready(page: Page) -> None:
@@ -100,6 +117,7 @@ def main() -> None:
     )
     report: dict[str, object] = {"candidate_sha": os.environ.get("SOURCE_COMMIT"), "narrow_viewport": VIEWPORT}
     try:
+        wait_server(proc)
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
             page = browser.new_page(viewport=VIEWPORT)
