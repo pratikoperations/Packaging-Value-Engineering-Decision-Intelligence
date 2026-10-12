@@ -161,7 +161,7 @@ def main() -> None:
             navigation.scroll_into_view_if_needed()
             navigation = page.get_by_role("link", name="Project Dashboard", exact=True)
             navigation.click()
-            page.get_by_role("heading", name="Project Dashboard", exact=True).wait_for(state="visible", timeout=15_000)
+            page.get_by_role("heading", name="Packaging Value Engineering Project Dashboard", exact=True).wait_for(state="visible", timeout=15_000)
             report["navigation_passed"] = True
             open_once(page)
 
