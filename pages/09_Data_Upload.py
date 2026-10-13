@@ -334,6 +334,7 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
         "Upload the approved Existing specification and the Proposed specification separately. "
         "Roles are fixed by the upload slot so they cannot be accidentally reversed."
     )
+    st.info("Exactly two specification documents are required: one Existing and one Proposed.")
 
     existing_upload = st.file_uploader(
         "Existing specification — approved baseline",
