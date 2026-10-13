@@ -27,12 +27,21 @@ class SidebarNavigationConfigTests(unittest.TestCase):
         self.assertNotIn('"PVE 2.0 AI Word Intake"', source)
         self.assertNotIn('"PVE 2.1 Digital PDF Intake"', source)
 
-    def test_mobile_sidebar_uses_native_streamlit_sizing(self):
+    def test_mobile_sidebar_width_uses_stable_streamlit_selector(self):
         source = (ROOT / "app.py").read_text(encoding="utf-8")
-        self.assertNotIn('_apply_responsive_sidebar_width', source)
+        self.assertIn("_apply_mobile_sidebar_width", source)
+        self.assertIn('[data-testid="stSidebar"] {', source)
         self.assertNotIn('[data-testid="stSidebar"][aria-expanded="true"]', source)
-        self.assertNotIn("flex-basis:", source)
-        self.assertNotIn("@media (max-width: 768px)", source)
+        self.assertIn("width: clamp(180px, 46vw, 200px) !important;", source)
+        self.assertIn("flex-basis: clamp(180px, 46vw, 200px) !important;", source)
+        self.assertIn("min-width: 180px !important;", source)
+        self.assertIn("max-width: 200px !important;", source)
+        self.assertIn('[data-testid="stSidebar"] > div:first-child', source)
+        self.assertIn("overflow-x: hidden !important;", source)
+        self.assertIn('[data-testid="stSidebar"] a {', source)
+        self.assertIn("white-space: normal !important;", source)
+        self.assertIn("overflow-wrap: break-word !important;", source)
+        self.assertIn("@media (max-width: 768px)", source)
         self.assertIn("with st.sidebar:", source)
 
 

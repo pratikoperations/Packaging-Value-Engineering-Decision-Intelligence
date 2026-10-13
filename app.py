@@ -194,7 +194,44 @@ def _task_page(path: Path) -> tuple[int, str] | None:
     return None
 
 
+
+def _apply_mobile_sidebar_width() -> None:
+    """Constrain the expanded Streamlit sidebar at narrow viewports only."""
+    st.markdown(
+        """
+        <style>
+        @media (max-width: 768px) {
+            [data-testid="stSidebar"] {
+                width: clamp(180px, 46vw, 200px) !important;
+                min-width: 180px !important;
+                max-width: 200px !important;
+                flex: 0 0 clamp(180px, 46vw, 200px) !important;
+                flex-basis: clamp(180px, 46vw, 200px) !important;
+            }
+            [data-testid="stSidebar"] > div:first-child {
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+                overflow-x: hidden !important;
+            }
+            [data-testid="stSidebar"] a {
+                min-width: 0 !important;
+                max-width: 100% !important;
+                white-space: normal !important;
+            }
+            [data-testid="stSidebar"] a * {
+                white-space: normal !important;
+                overflow-wrap: break-word !important;
+                text-overflow: clip !important;
+            }
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
 def main() -> None:
+    _apply_mobile_sidebar_width()
     task_pages: list[tuple[int, str, st.Page]] = []
     for path in (ROOT / "pages").glob("*.py"):
         navigation = _task_page(path)
