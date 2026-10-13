@@ -270,6 +270,25 @@ def render_specification_snapshot(pair, views):
     except ValueError as error:
         st.error(str(error))
         return
+    st.subheader("Project Feasibility Gate")
+    if canonical.is_valid:
+        st.success(
+            "READY FOR DOWNSTREAM FEASIBILITY ASSESSMENT — the reviewed Existing-versus-Proposed "
+            "specification pair has passed the canonical data-readiness gate."
+        )
+        st.caption(
+            "This status means the specification comparison is data-ready for downstream commercial, "
+            "risk and technical assessment. It is not engineering approval, supplier approval or a production-release decision."
+        )
+    else:
+        st.warning(
+            "FEASIBILITY ASSESSMENT BLOCKED — the reviewed specification pair is not yet complete enough "
+            "to pass the canonical data-readiness gate."
+        )
+        st.caption(
+            "Resolve the listed validation gaps before using the specification pair for downstream project assessment."
+        )
+
     st.subheader("Confirmed-only canonical dataset draft")
     if canonical.is_valid:
         st.success("Canonical validation passed.")
@@ -293,80 +312,191 @@ def render_specification_snapshot(pair, views):
 
 st.set_page_config(page_title="Data Upload", layout="wide")
 st.title("Data Upload")
-st.caption("Upload project data or packaging specifications. File type and intended workflow are detected automatically.")
-st.info("Structured files reuse existing validation. Reviewed DOCX and searchable PDF values can create immutable unified specification snapshots.")
-uploaded_files = st.file_uploader("Upload files", type=["xlsx", "csv", "json", "docx", "pdf"], accept_multiple_files=True, help="Supported: XLSX, CSV, JSON, DOCX and searchable PDF.")
+st.caption("Compare Existing and Proposed packaging specifications or upload structured project data.")
+st.info(
+    "The specification workflow uses exactly one Existing approved baseline and one Proposed candidate. "
+    "Reviewed DOCX and searchable PDF values can create immutable unified specification snapshots."
+)
 
-if uploaded_files:
-    detections = [detect_upload(upload.name, upload.type, upload.getvalue()) for upload in uploaded_files]
-    st.subheader("Detection and routing")
-    st.dataframe([{"File": detection.filename, "Detected format": detection.file_format.value.upper() if detection.file_format else "Rejected", "Intended workflow": detection.workflow.value.replace("_", " ").title() if detection.workflow else "None", "Status": detection.status.value.replace("_", " ").title(), "Role confirmation": "Required" if detection.requires_document_role else "Not required", "Reason": detection.reason_code or ""} for detection in detections], width="stretch", hide_index=True)
-    rejected = [item for item in detections if item.status is DetectionStatus.REJECTED]
-    if rejected:
-        for item in rejected:
-            st.error(f"{item.filename}: {item.detail or item.reason_code}")
+workflow_mode = st.radio(
+    "Choose upload workflow",
+    [
+        "Compare Existing vs Proposed specifications",
+        "Upload structured project data",
+    ],
+    horizontal=True,
+    key="data_upload.workflow_mode",
+)
+
+if workflow_mode == "Compare Existing vs Proposed specifications":
+    st.subheader("Existing vs Proposed Specification Comparison")
+    st.caption(
+        "Upload the approved Existing specification and the Proposed specification separately. "
+        "Roles are fixed by the upload slot so they cannot be accidentally reversed."
+    )
+
+    existing_upload = st.file_uploader(
+        "Existing specification — approved baseline",
+        type=["docx", "pdf"],
+        key="data_upload.existing_specification",
+        help="Upload one approved Existing specification in DOCX or searchable PDF format.",
+    )
+    proposed_upload = st.file_uploader(
+        "Proposed specification — candidate change",
+        type=["docx", "pdf"],
+        key="data_upload.proposed_specification",
+        help="Upload one Proposed specification in DOCX or searchable PDF format.",
+    )
+
+    if existing_upload is None or proposed_upload is None:
+        st.info("Upload exactly one Existing specification and one Proposed specification to begin the governed comparison.")
     else:
-        structured_files = [StructuredUploadFile(upload.name, upload.getvalue(), detection) for upload, detection in zip(uploaded_files, detections) if detection.workflow is WorkflowKind.STRUCTURED_PROJECT_DATA]
-        specification_items = [(upload, detection) for upload, detection in zip(uploaded_files, detections) if detection.workflow is WorkflowKind.SPECIFICATION_COMPARISON]
-        if structured_files and specification_items:
-            st.warning("This batch contains project data and specification documents. Process one workflow group at a time.")
-        elif specification_items:
-            if len(specification_items) != 2:
-                st.error("Exactly two specification documents are required: one Existing and one Proposed.")
-            else:
-                st.subheader("Specification roles")
-                role_by_hash = {}
-                for upload, detection in specification_items:
-                    selected = st.selectbox(f"Role for {upload.name}", [role.value for role in DocumentRole], key=f"data_upload.role.{detection.sha256}", format_func=str.title)
-                    role_by_hash[detection.sha256] = DocumentRole(selected)
-                if set(role_by_hash.values()) != {DocumentRole.EXISTING, DocumentRole.PROPOSED}:
-                    st.error("Assign exactly one Existing and one Proposed specification.")
-                else:
-                    inputs = tuple(SpecificationUploadInput(filename=upload.name, mime_type=upload.type, content=upload.getvalue(), detection=detection, role=role_by_hash[detection.sha256]) for upload, detection in specification_items)
-                    invalidate_specification_state_on_change(st.session_state, inputs)
-                    st.success("Specification pair ready: " + " + ".join(item.detection.file_format.value.upper() for item in inputs))
-                    baseline_confirmed = st.checkbox("I confirm that the Existing specification is the approved baseline and may be used as read-only reference evidence.", key=BASELINE_CONFIRMATION_KEY)
-                    roles_confirmed = st.checkbox("Confirm roles and run governed extraction", key=SPEC_CONFIRMATION_KEY)
-                    if roles_confirmed and not baseline_confirmed:
-                        st.warning("Confirm the approved Existing baseline before running governed extraction.")
-                    if roles_confirmed and baseline_confirmed:
-                        try:
-                            pair = parse_specification_pair(inputs)
-                            with st.expander("Source document evidence"):
-                                st.dataframe(source_block_rows(pair), width="stretch", hide_index=True)
-                            if SPEC_REVIEWS_KEY not in st.session_state:
-                                st.session_state[SPEC_REVIEWS_KEY] = confirm_existing_baseline(build_common_review_views(pair))
-                            else:
-                                st.session_state[SPEC_REVIEWS_KEY] = confirm_existing_baseline(st.session_state[SPEC_REVIEWS_KEY])
-                            views, resolved = render_reviews(st.session_state[SPEC_REVIEWS_KEY])
-                            if resolved:
-                                render_specification_snapshot(pair, views)
-                        except (ValueError, ReviewError) as error:
-                            st.error(str(error))
-        elif structured_files:
-            invalidate_structured_state_on_change(st.session_state, structured_files)
-            try:
-                detected_format = validate_structured_batch(structured_files)
-                st.success(f"Detected structured project-data workflow: {detected_format.value.upper()}.")
-                if st.checkbox("Confirm that these files should be processed as structured project data", key=STRUCTURED_CONFIRMATION_KEY):
-                    project_service, upload_service, _ = services()
-                    active_project_id = st.session_state.get("active_project_id")
-                    if not active_project_id:
-                        st.info("Select an active workspace from the Project Dashboard before validating project data.")
+        specification_uploads = (
+            (existing_upload, DocumentRole.EXISTING),
+            (proposed_upload, DocumentRole.PROPOSED),
+        )
+        detections = [
+            detect_upload(upload.name, upload.type, upload.getvalue())
+            for upload, _ in specification_uploads
+        ]
+        st.subheader("Detection and routing")
+        st.dataframe(
+            [
+                {
+                    "Role": role.value.title(),
+                    "File": detection.filename,
+                    "Detected format": detection.file_format.value.upper() if detection.file_format else "Rejected",
+                    "Intended workflow": detection.workflow.value.replace("_", " ").title() if detection.workflow else "None",
+                    "Status": detection.status.value.replace("_", " ").title(),
+                    "Reason": detection.reason_code or "",
+                }
+                for (upload, role), detection in zip(specification_uploads, detections)
+            ],
+            width="stretch",
+            hide_index=True,
+        )
+
+        rejected = [
+            detection
+            for detection in detections
+            if detection.status is DetectionStatus.REJECTED
+            or detection.workflow is not WorkflowKind.SPECIFICATION_COMPARISON
+        ]
+        if rejected:
+            for item in rejected:
+                st.error(f"{item.filename}: {item.detail or item.reason_code or 'File is not eligible for specification comparison.'}")
+        else:
+            inputs = tuple(
+                SpecificationUploadInput(
+                    filename=upload.name,
+                    mime_type=upload.type,
+                    content=upload.getvalue(),
+                    detection=detection,
+                    role=role,
+                )
+                for (upload, role), detection in zip(specification_uploads, detections)
+            )
+            invalidate_specification_state_on_change(st.session_state, inputs)
+            st.success(
+                "Specification pair ready: "
+                + " + ".join(item.detection.file_format.value.upper() for item in inputs)
+            )
+            baseline_confirmed = st.checkbox(
+                "I confirm that the Existing specification is the approved baseline and may be used as read-only reference evidence.",
+                key=BASELINE_CONFIRMATION_KEY,
+            )
+            roles_confirmed = st.checkbox(
+                "Confirm files and run governed extraction",
+                key=SPEC_CONFIRMATION_KEY,
+            )
+            if roles_confirmed and not baseline_confirmed:
+                st.warning("Confirm the approved Existing baseline before running governed extraction.")
+            if roles_confirmed and baseline_confirmed:
+                try:
+                    pair = parse_specification_pair(inputs)
+                    with st.expander("Source document evidence"):
+                        st.dataframe(source_block_rows(pair), width="stretch", hide_index=True)
+                    if SPEC_REVIEWS_KEY not in st.session_state:
+                        st.session_state[SPEC_REVIEWS_KEY] = confirm_existing_baseline(
+                            build_common_review_views(pair)
+                        )
                     else:
-                        try:
-                            project = project_service.get_project(str(active_project_id))
-                            if project["archived_at"] is not None:
-                                st.error("Archived projects are read-only and cannot receive new uploads.")
-                            else:
-                                prepared = prepare_structured_upload(upload_service, project, structured_files)
-                                render_prepared_upload(upload_service, project, prepared)
-                        except (KeyError, UploadParseError) as error:
-                            st.error(str(error))
-            except UploadParseError as error:
-                st.error(str(error))
+                        st.session_state[SPEC_REVIEWS_KEY] = confirm_existing_baseline(
+                            st.session_state[SPEC_REVIEWS_KEY]
+                        )
+                    views, resolved = render_reviews(st.session_state[SPEC_REVIEWS_KEY])
+                    if resolved:
+                        render_specification_snapshot(pair, views)
+                except (ValueError, ReviewError) as error:
+                    st.error(str(error))
+
 else:
-    st.write("No files uploaded.")
+    st.subheader("Structured Project Data")
+    st.caption("Upload XLSX, JSON, or the governed two-file CSV project-data contract.")
+    uploaded_files = st.file_uploader(
+        "Upload structured project data",
+        type=["xlsx", "csv", "json"],
+        accept_multiple_files=True,
+        key="data_upload.structured_project_data",
+        help="Supported: XLSX, JSON, or the governed project.csv + alternatives.csv pair.",
+    )
+
+    if uploaded_files:
+        detections = [detect_upload(upload.name, upload.type, upload.getvalue()) for upload in uploaded_files]
+        st.subheader("Detection and routing")
+        st.dataframe(
+            [
+                {
+                    "File": detection.filename,
+                    "Detected format": detection.file_format.value.upper() if detection.file_format else "Rejected",
+                    "Intended workflow": detection.workflow.value.replace("_", " ").title() if detection.workflow else "None",
+                    "Status": detection.status.value.replace("_", " ").title(),
+                    "Reason": detection.reason_code or "",
+                }
+                for detection in detections
+            ],
+            width="stretch",
+            hide_index=True,
+        )
+        rejected = [item for item in detections if item.status is DetectionStatus.REJECTED]
+        if rejected:
+            for item in rejected:
+                st.error(f"{item.filename}: {item.detail or item.reason_code}")
+        else:
+            structured_files = [
+                StructuredUploadFile(upload.name, upload.getvalue(), detection)
+                for upload, detection in zip(uploaded_files, detections)
+                if detection.workflow is WorkflowKind.STRUCTURED_PROJECT_DATA
+            ]
+            if len(structured_files) != len(uploaded_files):
+                st.error("This workflow accepts structured project data only. Use the specification comparison workflow for DOCX or PDF files.")
+            else:
+                invalidate_structured_state_on_change(st.session_state, structured_files)
+                try:
+                    detected_format = validate_structured_batch(structured_files)
+                    st.success(f"Detected structured project-data workflow: {detected_format.value.upper()}.")
+                    if st.checkbox(
+                        "Confirm that these files should be processed as structured project data",
+                        key=STRUCTURED_CONFIRMATION_KEY,
+                    ):
+                        project_service, upload_service, _ = services()
+                        active_project_id = st.session_state.get("active_project_id")
+                        if not active_project_id:
+                            st.info("Select an active workspace from the Project Dashboard before validating project data.")
+                        else:
+                            try:
+                                project = project_service.get_project(str(active_project_id))
+                                if project["archived_at"] is not None:
+                                    st.error("Archived projects are read-only and cannot receive new uploads.")
+                                else:
+                                    prepared = prepare_structured_upload(upload_service, project, structured_files)
+                                    render_prepared_upload(upload_service, project, prepared)
+                            except (KeyError, UploadParseError) as error:
+                                st.error(str(error))
+                except UploadParseError as error:
+                    st.error(str(error))
+    else:
+        st.write("No structured project data uploaded.")
 
 with st.expander("Build U6 scope and limitations"):
     st.write("- Unified snapshots preserve document formats, hashes, parser versions and typed source locations")
