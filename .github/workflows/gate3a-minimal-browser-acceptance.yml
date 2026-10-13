@@ -1,4 +1,4 @@
-name: PVE Mobile Sidebar Exact-Candidate Browser Acceptance
+name: PVE Mobile Sidebar Live Post-Merge Acceptance
 
 on:
   workflow_dispatch:
@@ -10,15 +10,15 @@ permissions:
   contents: read
 
 concurrency:
-  group: pve-mobile-sidebar-browser-acceptance-v2
+  group: pve-live-mobile-sidebar-post-merge-acceptance
   cancel-in-progress: false
 
 jobs:
-  validate-mobile-sidebar:
+  validate-live-mobile-sidebar:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - name: Check out validation bridge
+      - name: Check out validation branch
         uses: actions/checkout@v4
         with:
           persist-credentials: false
@@ -27,50 +27,43 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Verify candidate application is unchanged
+      - name: Verify authoritative main merge
         shell: bash
         run: |
           set -euo pipefail
-          candidate="a7774c6fe365c999fe29e0a0b79df52956790595"
-          git cat-file -e "$candidate^{commit}"
-          git diff --exit-code "$candidate"..HEAD -- app.py tests/application/test_sidebar_navigation_config.py
-      - name: Install declared dependencies
-        run: python -m pip install -r requirements.txt
+          git fetch --depth=1 origin main
+          test "$(git rev-parse FETCH_HEAD)" = "4959fe2cf90b4493091b48acd307cb60eecf22b1"
       - name: Install Playwright
         run: python -m pip install playwright==1.54.0
       - name: Install Playwright Chromium
         run: python -m playwright install --with-deps chromium
-      - name: Run focused physical mobile sidebar acceptance
+      - name: Run live physical mobile sidebar acceptance
         env:
-          BROWSER_ARTIFACT_DIR: browser-artifacts/mobile-sidebar
-          SOURCE_COMMIT: a7774c6fe365c999fe29e0a0b79df52956790595
+          BROWSER_ARTIFACT_DIR: browser-artifacts/live-mobile-sidebar
+          SOURCE_COMMIT: 4959fe2cf90b4493091b48acd307cb60eecf22b1
+          TARGET_URL: https://packaging-value-engineering-decision-intelligence.streamlit.app/
         run: PYTHONPATH=. python validation/mobile_sidebar_acceptance.py
-      - name: Verify PASS disposition
+      - name: Verify PASS disposition and deployed CSS fingerprint
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           import json
           from pathlib import Path
-          report = json.loads(Path("browser-artifacts/mobile-sidebar/acceptance-report.json").read_text(encoding="utf-8"))
-          assert report["candidate_sha"] == "a7774c6fe365c999fe29e0a0b79df52956790595", report
+          report = json.loads(Path("browser-artifacts/live-mobile-sidebar/acceptance-report.json").read_text(encoding="utf-8"))
+          assert report["candidate_sha"] == "4959fe2cf90b4493091b48acd307cb60eecf22b1", report
+          assert report["target_url"] == "https://packaging-value-engineering-decision-intelligence.streamlit.app/", report
           assert report["overall_disposition"] == "PASS", report
           width = report["narrow_sidebar"]["width"]
           assert 179 <= width <= 201, report
+          assert report["narrow_sidebar"]["minWidth"] == "180px", report
+          assert report["narrow_sidebar"]["maxWidth"] == "200px", report
           PY
-      - name: Verify candidate application files remain unchanged
-        if: always()
-        shell: bash
-        run: |
-          set -euo pipefail
-          candidate="a7774c6fe365c999fe29e0a0b79df52956790595"
-          git diff --exit-code "$candidate"..HEAD -- app.py tests/application/test_sidebar_navigation_config.py
-          test -z "$(git status --short --untracked-files=no)"
-      - name: Upload mobile sidebar evidence
+      - name: Upload live mobile sidebar evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pve-mobile-sidebar-browser-evidence-v2
-          path: browser-artifacts/mobile-sidebar
+          name: pve-live-mobile-sidebar-post-merge-evidence
+          path: browser-artifacts/live-mobile-sidebar
           if-no-files-found: error
           retention-days: 30

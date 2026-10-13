@@ -14,7 +14,7 @@ from playwright.sync_api import Page, sync_playwright
 ROOT = Path(__file__).resolve().parents[1]
 ARTIFACT_DIR = Path(os.environ.get("BROWSER_ARTIFACT_DIR", "browser-artifacts/mobile-sidebar"))
 ARTIFACT_DIR.mkdir(parents=True, exist_ok=True)
-URL = "http://127.0.0.1:8501"
+URL = os.environ.get("TARGET_URL", "http://127.0.0.1:8501")
 SIDEBAR = '[data-testid="stSidebar"]'
 OPENER = '[data-testid="stExpandSidebarButton"]'
 VIEWPORT = {"width": 412, "height": 915}
@@ -114,16 +114,22 @@ def assert_no_material_console(errors: list[str]) -> None:
 
 
 def main() -> None:
-    proc = subprocess.Popen(
-        [sys.executable, "-m", "streamlit", "run", "app.py", "--server.headless=true", "--server.address=127.0.0.1", "--server.port=8501"],
-        cwd=ROOT,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        text=True,
-    )
-    report: dict[str, object] = {"candidate_sha": os.environ.get("SOURCE_COMMIT"), "narrow_viewport": VIEWPORT}
-    try:
+    proc: subprocess.Popen[str] | None = None
+    if URL.startswith("http://127.0.0.1") or URL.startswith("http://localhost"):
+        proc = subprocess.Popen(
+            [sys.executable, "-m", "streamlit", "run", "app.py", "--server.headless=true", "--server.address=127.0.0.1", "--server.port=8501"],
+            cwd=ROOT,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+        )
         wait_server(proc)
+    report: dict[str, object] = {
+        "candidate_sha": os.environ.get("SOURCE_COMMIT"),
+        "target_url": URL,
+        "narrow_viewport": VIEWPORT,
+    }
+    try:
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True)
             page = browser.new_page(viewport=VIEWPORT)
@@ -211,13 +217,14 @@ def main() -> None:
         raise
     finally:
         (ARTIFACT_DIR / "acceptance-report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
-        proc.terminate()
-        try:
-            proc.wait(timeout=5)
-        except subprocess.TimeoutExpired:
-            proc.kill()
-        if proc.stdout:
-            (ARTIFACT_DIR / "streamlit.log").write_text(proc.stdout.read(), encoding="utf-8")
+        if proc is not None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+            if proc.stdout:
+                (ARTIFACT_DIR / "streamlit.log").write_text(proc.stdout.read(), encoding="utf-8")
 
 
 if __name__ == "__main__":
