@@ -197,7 +197,7 @@ def classify_triage_source_support(
     Only an exact selected block from the same uploaded document is eligible.
     Numeric comparison, inferred units and semantic equivalence are not attempted.
     """
-    matching = [block for block in document.source_blocks if block.block_id == source_block_id]
+    matching = [block for block in document.source_blocks if block.block_id == source_block_id and block.document_role == document.document_role and block.document_format == document.document_format]
     if len(matching) != 1:
         return "invalid_source_reference"
     value = " ".join(str(proposed_value).casefold().split())
