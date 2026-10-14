@@ -231,6 +231,74 @@ def build_common_review_views(pair: SpecificationPair) -> tuple[CommonReviewView
     return tuple(views)
 
 
+
+def build_manual_source_candidate(
+    *, document: UnifiedSpecificationDocument, field_name: str,
+    source_block_id: str, literal_value: str,
+) -> CommonReviewView:
+    """Create a pending, traceable candidate from literal text in an uploaded block.
+
+    This is reviewer-assisted extraction, not independent engineering evidence.
+    The reviewer must explicitly confirm the candidate in the normal workflow.
+    """
+    from src.application.specification_upload import classify_triage_source_support
+
+    if field_name not in load_field_registry():
+        raise ReviewError("Unknown governed specification parameter.")
+    block_matches = [
+        block for block in document.source_blocks
+        if block.block_id == source_block_id
+        and block.document_role == document.document_role
+        and block.document_format == document.document_format
+    ]
+    if len(block_matches) != 1:
+        raise ReviewError("Source block does not belong to the selected document.")
+    if classify_triage_source_support(
+        document=document, source_block_id=source_block_id, proposed_value=literal_value
+    ) != "literal_value_present":
+        raise ReviewError("Entered value must appear literally in the selected source block.")
+    block = block_matches[0]
+    parsed, unit = _parse_value(field_name, literal_value)
+    if field_name in _NUMERIC and not isinstance(parsed, (int, float)):
+        raise ReviewError("Manual numeric parameter requires a valid numeric source value.")
+    candidate = ExtractionCandidate(
+        field_name=field_name,
+        document_role=_legacy_role(document.document_role),
+        raw_value=literal_value.strip(),
+        normalized_value=parsed,
+        unit=unit,
+        confidence=0.0,
+        confidence_band=ConfidenceBand.LOW,
+        source_block_id=block.block_id,
+        source_excerpt=block.normalized_text,
+        ambiguity_codes=(),
+    )
+    reviews = build_candidate_reviews((candidate,), (to_legacy_document(document),))
+    if len(reviews) != 1:
+        raise ReviewError("Unable to establish unique manual candidate source evidence.")
+    review = reviews[0]
+    return CommonReviewView(
+        review_id=f"{document.document_role.value}:{field_name}:{block.block_id}",
+        field_name=field_name,
+        document_role=document.document_role,
+        document_format=document.document_format.value,
+        filename=document.filename,
+        raw_value=candidate.raw_value,
+        normalized_value=candidate.normalized_value,
+        unit=candidate.unit,
+        confidence=0.0,
+        confidence_band="low",
+        ambiguity_codes=(),
+        source_block_id=block.block_id,
+        source_excerpt=block.normalized_text,
+        source_location=dict(block.source_location),
+        parser_name=block.parser_name,
+        parser_version=block.parser_version,
+        warnings=("Reviewer-assisted source extraction; not engineering validation.",),
+        review=review,
+    )
+
+
 def apply_review_action(
     view: CommonReviewView,
     action: ReviewState,
