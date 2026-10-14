@@ -208,6 +208,13 @@ def render_specification_workspace() -> None:
                 active_project = candidate
         except KeyError:
             st.session_state.pop("active_project_id", None)
+    # Provisional triage notes are session-local and must not cross project boundaries.
+    project_scope = active_project["project_id"] if active_project is not None else None
+    if st.session_state.get("data_upload.triage_project_scope") != project_scope:
+        for key in tuple(st.session_state):
+            if key.startswith(("triage_value_", "triage_evidence_")):
+                st.session_state.pop(key, None)
+        st.session_state["data_upload.triage_project_scope"] = project_scope
     if active_project is not None:
         st.success(
             f"Active project: {active_project['project_code']} — {active_project['project_name']}"
