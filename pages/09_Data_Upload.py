@@ -15,6 +15,7 @@ from src.application.specification_upload import (
     restore_session_specifications,
     serialize_provisional_triage,
     restore_provisional_triage,
+    classify_triage_source_support,
     invalidate_specification_state_on_change,
     parse_specification_pair,
     source_block_rows,
@@ -403,6 +404,26 @@ def render_missing_field_triage(rows, pair) -> None:
                             options=[""] + [block_id for block_id, _, _ in source_rows],
                             key=f"triage_source_select_{key}",
                         )
+                        if chosen_block:
+                            classification = classify_triage_source_support(
+                                document=document,
+                                source_block_id=chosen_block,
+                                proposed_value=st.session_state.get(f"triage_value_{key}", ""),
+                            )
+                            if classification == "literal_value_present":
+                                st.info(
+                                    "The entered value appears literally in the selected source block. "
+                                    "Reviewer confirmation and technical validation are still required."
+                                )
+                            elif classification == "source_block_requires_manual_verification":
+                                st.warning(
+                                    "The entered value is not an exact text match in this block. "
+                                    "Confirm against the original specification before correction."
+                                )
+                            elif classification == "value_missing":
+                                st.warning("Enter the provisional value before assessing source support.")
+                            else:
+                                st.error("The selected source block is not valid for this document.")
                         st.button(
                             "Use selected source reference",
                             key=f"triage_attach_{key}",
