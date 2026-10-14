@@ -8,7 +8,7 @@ from src.specification_intake.comparison_presentation import FIELD_CRITICALITY, 
 from src.specification_intake.models import DocumentRole
 
 
-def make_view(field_name, role, value, unit=None, state=ReviewState.PENDING, corrected=None, corrected_unit=None):
+def make_view(field_name, role, value, unit=None, state=ReviewState.CONFIRMED, corrected=None, corrected_unit=None):
     return SimpleNamespace(
         field_name=field_name,
         document_role=role,
@@ -45,6 +45,18 @@ class ComparisonPresentationTests(unittest.TestCase):
         ))
         filtered = filter_comparison_rows(rows, statuses=("Changed",), criticalities=("Critical",))
         self.assertEqual([row["Parameter"] for row in filtered], ["Box Weight"])
+
+    def test_pending_and_rejected_are_not_valid_source_values(self):
+        for state in (ReviewState.PENDING, ReviewState.REJECTED, ReviewState.INTENTIONALLY_OMITTED):
+            with self.subTest(state=state):
+                rows = comparison_rows((
+                    make_view("box_weight", DocumentRole.EXISTING, 980, "g"),
+                    make_view("box_weight", DocumentRole.PROPOSED, 820, "g", state=state),
+                ))
+                row = next(item for item in rows if item["Parameter"] == "Box Weight")
+                self.assertEqual(row["Proposed"], "Not provided")
+                self.assertEqual(row["Comparison Status"], "Incomplete")
+                self.assertIn("Box Weight", missing_priority_summary(rows).critical)
 
     def test_missing_summary_groups_priority(self):
         rows = comparison_rows((
