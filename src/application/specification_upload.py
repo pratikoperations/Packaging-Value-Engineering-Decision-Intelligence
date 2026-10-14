@@ -130,6 +130,10 @@ def restore_session_specifications(state: MutableMapping[str, object], existing,
             SessionSpecificationFile(existing.name, existing.type, existing.getvalue()),
             SessionSpecificationFile(proposed.name, proposed.type, proposed.getvalue()),
         )
+        # A file uploader may retain its old contents when the active project
+        # changes. Never silently rebind the previous project's evidence pair.
+        if cached and cached[0] != project_id and files == cached[1]:
+            return None, False
         state[SESSION_SPEC_CACHE] = (project_id, files)
         return files, False
     if existing is None and proposed is None and cached and cached[0] == project_id:
