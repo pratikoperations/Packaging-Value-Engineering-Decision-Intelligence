@@ -1,0 +1,35 @@
+{
+  "schema_version": "pve-org-simulation-r6-v1",
+  "execution_mode": "SYNTHETIC_ORGANIZATIONAL_PILOT_SIMULATION",
+  "claim_state": "ESTIMATE",
+  "modeled_kpis": {
+    "decision_preparation_effort_reduction_pct": 45.45,
+    "executive_summary_time_reduction_pct": 50,
+    "manual_transfer_reduction_pct": 54.84,
+    "rework_reduction_pct": 50,
+    "evidence_traceability_pct": 100
+  },
+  "business_value_interpretation": "SYNTHETIC_VALUE_HYPOTHESIS_SUPPORTED_ONLY",
+  "finance_validated": false,
+  "realized_value": false,
+  "real_user_validation": false,
+  "organizational_acceptance": false,
+  "enterprise_readiness": "NOT_APPROVED",
+  "production_deployment_authorization": "NOT_GRANTED",
+  "enterprise_controls": {
+    "identity_authentication": "PENDING",
+    "rbac": "PENDING",
+    "organizational_tenancy": "PARTIAL",
+    "enterprise_storage": "PENDING",
+    "backup_restore": "PENDING",
+    "privacy_legal": "PENDING",
+    "data_retention_deletion": "PENDING",
+    "monitoring_support": "PENDING",
+    "integration_architecture": "PENDING",
+    "deployment_authority": "PENDING"
+  },
+  "recommendation": "CONTINUE_ONLY_TO_SYNTHETIC_PHASE_CLOSURE; REAL_ORGANIZATIONAL_EVIDENCE_REQUIRED_FOR_ANY GO",
+  "hours_completed_after_r6": 28,
+  "phase_hours": 30,
+  "completion_pct_after_r6": 93.3
+}
