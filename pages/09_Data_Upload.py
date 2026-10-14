@@ -342,7 +342,7 @@ def render_baseline_views(views, visible_fields: set[str]) -> None:
                 st.write(f"**Confidence:** {view.confidence:.1f} ({view.confidence_band.title()})")
 
 
-def render_missing_field_triage(rows) -> None:
+def render_missing_field_triage(rows, pair) -> None:
     """Collect provisional missing-field evidence without changing canonical values."""
     missing = [row for row in rows if row["Comparison Status"] == "Incomplete"]
     if not missing:
@@ -368,13 +368,50 @@ def render_missing_field_triage(rows) -> None:
                     f"{role} evidence reference or follow-up — {name}",
                     key=f"triage_evidence_{key}",
                 )
+                document = pair.existing if role == "Existing" else pair.proposed
+                source_rows = [
+                    (block.block_id, block.normalized_text, block.source_location)
+                    for block in document.source_blocks
+                    if block.normalized_text.strip()
+                ]
+                with st.expander("Inspect actual source blocks for this missing value"):
+                    st.caption(
+                        "Use these exact extracted blocks to find a missed value. "
+                        "A block reference does not validate the numerical or technical claim."
+                    )
+                    if source_rows:
+                        st.dataframe([
+                            {
+                                "Block ID": block_id,
+                                "Source text": text,
+                                "Location": str(location),
+                            }
+                            for block_id, text, location in source_rows
+                        ], width="stretch", hide_index=True)
+                        chosen_block = st.selectbox(
+                            "Attach source block reference",
+                            options=[""] + [block_id for block_id, _, _ in source_rows],
+                            key=f"triage_source_select_{key}",
+                        )
+                        if st.button("Use selected source reference", key=f"triage_attach_{key}"):
+                            if not chosen_block:
+                                st.warning("Select an actual source block first.")
+                            else:
+                                current = st.session_state.get(f"triage_evidence_{key}", "")
+                                st.session_state[f"triage_evidence_{key}"] = (
+                                    f"Source block {chosen_block}; reviewer verification required"
+                                    + (f"; {current}" if current else "")
+                                )
+                                st.rerun()
+                    else:
+                        st.info("No searchable text blocks were extracted from this document.")
                 st.warning(
                     "Unverified entry only. Correct source extraction or supply "
                     "an approved specification revision before feasibility assessment."
                 )
 
 
-def render_reviews(views):
+def render_reviews(views, pair):
     updated = list(views)
     rows = comparison_rows(updated)
     st.subheader("Specification comparison")
@@ -384,7 +421,7 @@ def render_reviews(views):
     filtered_rows = filter_comparison_rows(rows, statuses=selected_statuses, criticalities=selected_criticalities)
     st.dataframe(filtered_rows, width="stretch", hide_index=True)
     render_missing_priority_alerts(rows)
-    render_missing_field_triage(rows)
+    render_missing_field_triage(rows, pair)
     visible_fields = {row["Parameter"] for row in filtered_rows}
     render_baseline_views(updated, visible_fields)
 
@@ -658,7 +695,7 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
                         except (ValueError, ReviewError, KeyError) as error:
                             st.error(f"Saved review could not be restored safely: {error}")
                             st.stop()
-                    views, resolved = render_reviews(st.session_state[SPEC_REVIEWS_KEY])
+                    views, resolved = render_reviews(st.session_state[SPEC_REVIEWS_KEY], pair)
                     active_for_draft = st.session_state.get("active_project_id")
                     if active_for_draft:
                         render_draft_controls(active_for_draft, recovered_files, views)
