@@ -13,6 +13,8 @@ from src.application.specification_upload import (
     SESSION_SPEC_CACHE,
     SessionSpecificationFile,
     restore_session_specifications,
+    serialize_provisional_triage,
+    restore_provisional_triage,
     invalidate_specification_state_on_change,
     parse_specification_pair,
     source_block_rows,
@@ -183,7 +185,10 @@ def render_draft_controls(project_id, files, views):
     repository = build_specification_draft_repository(DATABASE_PATH)
     if st.button("Save draft to project", key="save-specification-draft"):
         try:
-            draft = repository.save(project_id, files[0], files[1], save_draft_review_state(views))
+            draft = repository.save(
+                project_id, files[0], files[1],
+                save_draft_review_state(views) + serialize_provisional_triage(st.session_state),
+            )
         except (ValueError, KeyError) as error:
             st.error(str(error))
         else:
@@ -630,7 +635,8 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
                     if restored_review is not None:
                         try:
                             st.session_state[SPEC_REVIEWS_KEY] = restore_draft_review_state(
-                                st.session_state[SPEC_REVIEWS_KEY], restored_review
+                                st.session_state[SPEC_REVIEWS_KEY],
+                                restore_provisional_triage(st.session_state, restored_review),
                             )
                         except (ValueError, ReviewError, KeyError) as error:
                             st.error(f"Saved review could not be restored safely: {error}")
