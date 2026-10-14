@@ -1,0 +1,45 @@
+{
+  "schema_version": "pve-org-simulation-r7-v1",
+  "original_phase_name": "PVE Real-User / Organizational Pilot Preparation & Validation",
+  "executed_phase_name": "PVE Synthetic Organizational Pilot Simulation",
+  "execution_mode": "SYNTHETIC_ORGANIZATIONAL_PILOT_SIMULATION",
+  "final_recommendation": "DECISION DEFERRED",
+  "phase_planned_hours": 30,
+  "phase_completed_hours": 30,
+  "phase_completion_pct": 100,
+  "remaining_hours": 0,
+  "claim_state": "ESTIMATE",
+  "real_user_validation": false,
+  "organizational_acceptance": false,
+  "independent_engineering_approval": false,
+  "finance_validated_benefit": false,
+  "enterprise_readiness": "NOT_APPROVED",
+  "production_deployment_authorization": "NOT_GRANTED",
+  "synthetic_simulation_conclusion": "COMPLETE",
+  "reasons_for_deferred": [
+    "No observed real-user baseline or PVE-assisted execution.",
+    "No genuine organizational sponsor or approval authority participated.",
+    "No independent Packaging Engineering approval was performed.",
+    "No Finance/value validation was performed.",
+    "Synthetic role archetypes have SIMULATED_ONLY authority.",
+    "Critical enterprise controls remain pending or partial."
+  ],
+  "next_real_evidence_required": [
+    "named organizational sponsor",
+    "real Procurement Lead",
+    "real Packaging Engineer reviewer",
+    "real Finance/Value reviewer",
+    "approved Data Owner for non-synthetic evidence",
+    "real UAT participants",
+    "observed manual baseline",
+    "observed PVE-assisted run"
+  ],
+  "prohibited_auto_progression": [
+    "production deployment",
+    "enterprise production-readiness certification",
+    "live integrations",
+    "confidential data use",
+    "supplier award/allocation",
+    "autonomous engineering approval"
+  ]
+}
