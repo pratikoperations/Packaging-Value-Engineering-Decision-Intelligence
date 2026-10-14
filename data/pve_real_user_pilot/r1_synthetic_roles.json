@@ -1,0 +1,70 @@
+{
+  "schema_version": "pve-org-simulation-r1-v1",
+  "execution_mode": "SYNTHETIC_ORGANIZATIONAL_PILOT_SIMULATION",
+  "organization": "Synthetic Manufacturing Enterprise — Packaging Procurement & Engineering",
+  "evidence_type": "SYNTHETIC-ONLY",
+  "roles": [
+    {
+      "role": "Organizational Pilot Sponsor",
+      "persona": "Procurement Excellence Director",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "role": "Procurement Lead",
+      "persona": "Category Manager, Packaging",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "role": "Packaging Engineer Reviewer",
+      "persona": "Senior Packaging Engineer",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "role": "Finance / Value Reviewer",
+      "persona": "FP&A / Value Assurance Manager",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "role": "Data Owner",
+      "persona": "Procurement Data Steward",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "role": "UAT Owner",
+      "persona": "Procurement Excellence Lead",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "role": "UAT Participant 1",
+      "persona": "Strategic Sourcing Manager",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "role": "UAT Participant 2",
+      "persona": "Packaging Development Manager",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "role": "Security / Technology Reviewer",
+      "persona": "Enterprise Applications Lead",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "role": "Deployment Authority",
+      "persona": "IT Service Owner",
+      "authority": "SIMULATED_ONLY"
+    }
+  ],
+  "prohibited_claims": [
+    "real-user validation",
+    "organizational acceptance",
+    "independent engineering sign-off",
+    "finance-validated benefit",
+    "realized savings",
+    "production readiness",
+    "deployment authorization"
+  ],
+  "hours_completed_after_r1": 6,
+  "phase_hours": 30,
+  "completion_pct_after_r1": 20
+}
