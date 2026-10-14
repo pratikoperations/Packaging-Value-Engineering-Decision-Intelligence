@@ -468,7 +468,9 @@ def render_specification_snapshot(pair, views):
         st.error(str(error))
         return
     st.subheader("Project Feasibility Gate")
-    if canonical.is_valid:
+    priority_gaps = missing_priority_summary(comparison_rows(views))
+    data_ready = canonical.is_valid and not priority_gaps.has_high_priority_gap
+    if data_ready:
         st.success(
             "READY FOR DOWNSTREAM FEASIBILITY ASSESSMENT — the reviewed Existing-versus-Proposed "
             "specification pair has passed the canonical data-readiness gate."
@@ -482,8 +484,14 @@ def render_specification_snapshot(pair, views):
             "FEASIBILITY ASSESSMENT BLOCKED — the reviewed specification pair is not yet complete enough "
             "to pass the canonical data-readiness gate."
         )
+        if priority_gaps.has_high_priority_gap:
+            st.error(
+                "Unresolved critical/major source parameters: "
+                + ", ".join(priority_gaps.critical + priority_gaps.major)
+                + ". Provisional triage notes do not satisfy source evidence requirements."
+            )
         st.caption(
-            "Resolve the listed validation gaps before using the specification pair for downstream project assessment."
+            "Resolve source-parameter gaps and canonical validation issues before downstream feasibility assessment."
         )
 
     st.subheader("Confirmed-only canonical dataset draft")
@@ -495,8 +503,10 @@ def render_specification_snapshot(pair, views):
             st.dataframe(list(canonical.validation_issues), width="stretch", hide_index=True)
     render_canonical_summary(canonical.canonical_data, "Canonical dataset draft summary")
     st.subheader("Immutable specification snapshot")
+    if priority_gaps.has_high_priority_gap:
+        st.warning("Snapshot creation is blocked until critical and major parameters are present in both source specifications.")
     st.dataframe([{"Snapshot ID": snapshot.snapshot_id, "Pair format": snapshot.pair_format.replace("_", " + ").upper(), "Existing": f"{snapshot.existing_document.format.upper()} — {snapshot.existing_document.filename}", "Proposed": f"{snapshot.proposed_document.format.upper()} — {snapshot.proposed_document.filename}", "Confirmed fields": len(snapshot.confirmed_fields), "Canonical valid": snapshot.canonical_validation_valid, "Content hash": snapshot.content_hash}], width="stretch", hide_index=True)
-    if st.button("Create immutable specification snapshot", width="stretch"):
+    if st.button("Create immutable specification snapshot", width="stretch", disabled=priority_gaps.has_high_priority_gap):
         try:
             saved = snapshot_repository.create(snapshot)
             st.success(f"Immutable specification snapshot {saved['specification_snapshot_id']} created.")
