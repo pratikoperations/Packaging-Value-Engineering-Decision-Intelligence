@@ -1,0 +1,27 @@
+{
+  "schema_version": "pve-org-simulation-r3-v1",
+  "execution_mode": "SYNTHETIC_ORGANIZATIONAL_PILOT_SIMULATION",
+  "evidence_status": "MODELED_BASELINE_REUSED_FROM_GOVERNED_SYNTHETIC_BENCHMARK",
+  "source_record": "data/pve_pilot/p3_synthetic_benchmark.json",
+  "simulated_participant": "Strategic Sourcing Manager persona",
+  "manual_baseline": {
+    "elapsed_minutes": 52,
+    "hands_on_minutes": 44,
+    "source_document_count": 2,
+    "manual_transfer_count": 31,
+    "reconciliation_count": 9,
+    "clarification_loops": 6,
+    "calculation_rework_events": 4,
+    "minutes_to_first_high_priority_blocker": 18,
+    "executive_summary_minutes": 12,
+    "material_claim_count": 8,
+    "claims_with_explicit_evidence": 6,
+    "unresolved_assumptions": 4
+  },
+  "empirical_evidence_added": false,
+  "human_observation_added": false,
+  "claim_state": "ESTIMATE",
+  "hours_completed_after_r3": 14,
+  "phase_hours": 30,
+  "completion_pct_after_r3": 46.7
+}
