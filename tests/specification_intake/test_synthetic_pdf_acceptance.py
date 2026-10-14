@@ -69,6 +69,49 @@ def synthetic_searchable_pdf(fields: dict[str, str]) -> bytes:
 
 
 class SyntheticPdfWorkflowAcceptanceTests(unittest.TestCase):
+    def test_complete_25_parameter_specifications_compare_with_no_missing_fields(self):
+        existing = dict(COMMON)
+        existing.update({
+            "Supplier Name": "Synthetic Packaging Supplier A",
+            "Effective Date": "2026-10-01",
+        })
+        proposed = dict(existing)
+        proposed.update({
+            "Specification Revision": "2",
+            "Supplier Name": "Synthetic Packaging Supplier B",
+            "Effective Date": "2026-10-14",
+            "External Length": "412",
+            "External Width": "312",
+            "External Height": "262",
+            "Liner GSM": "160",
+            "Medium GSM": "130",
+            "Total Board GSM": "700",
+            "Box Weight": "0.79",
+            "Compression Requirement": "3400",
+        })
+        pair = build_pair((
+            adapt_pdf("existing_complete.pdf", synthetic_searchable_pdf(existing), DocumentRole.EXISTING),
+            adapt_pdf("proposed_complete.pdf", synthetic_searchable_pdf(proposed), DocumentRole.PROPOSED),
+        ))
+        views = build_common_review_views(pair)
+        self.assertEqual(len(views), 50, "All 25 governed fields should be extracted from each PDF")
+        self.assertEqual(len({(view.document_role, view.field_name) for view in views}), 50)
+        self.assertTrue(all(view.source_block_id and view.source_excerpt for view in views))
+        reviewed = tuple(
+            apply_review_action(view, ReviewState.CONFIRMED, reviewer_note="Synthetic-only reviewer acceptance")
+            for view in views
+        )
+        rows = comparison_rows(reviewed)
+        self.assertEqual(len(rows), 25)
+        self.assertFalse(any(row["Comparison Status"] == "Incomplete" for row in rows))
+        self.assertFalse(missing_priority_summary(rows).has_high_priority_gap)
+        by_name = {row["Parameter"]: row for row in rows}
+        self.assertEqual(by_name["Internal Length"]["Comparison Status"], "Unchanged")
+        self.assertEqual(by_name["External Length"]["Comparison Status"], "Changed")
+        self.assertEqual(by_name["Box Weight"]["Existing"], "0.92")
+        self.assertEqual(by_name["Box Weight"]["Proposed"], "0.79")
+        self.assertEqual(by_name["Compression Requirement"]["Proposed"], "3400")
+
     def test_existing_proposed_pdf_parse_review_and_priority_readiness(self):
         old = dict(COMMON)
         proposed = dict(COMMON, **{"Box Weight": "0.79", "Compression Requirement": "3400", "Total Board GSM": "675"})
