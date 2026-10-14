@@ -354,9 +354,9 @@ def attach_triage_source_reference(key: str, block_id: str) -> None:
         )
 
 
-def register_proposed_manual_source(key: str, document, block_id: str) -> None:
+def register_manual_source(key: str, document, block_id: str) -> None:
     value = str(st.session_state.get(f"triage_value_{key}", "")).strip()
-    field_name = key.removesuffix("_proposed")
+    field_name = key.rsplit("_", 1)[0]
     build_manual_source_candidate(
         document=document, field_name=field_name,
         source_block_id=block_id, literal_value=value,
@@ -369,27 +369,37 @@ def register_proposed_manual_source(key: str, document, block_id: str) -> None:
 
 
 def add_manual_source_reviews(pair, views):
-    """Rebuild only source-grounded Proposed candidates for current document hash."""
+    """Rebuild source-grounded candidates for matching document roles and hashes."""
     result = list(views)
     known = {(view.document_role, view.field_name) for view in result}
     for key in tuple(st.session_state):
-        if not key.startswith("manual_source_") or not key.endswith("_proposed"):
+        if not key.startswith("manual_source_"):
             continue
-        field_name = key[len("manual_source_"):-len("_proposed")]
-        if (DocumentRole.PROPOSED, field_name) in known:
+        suffix = key[len("manual_source_"):]
+        if not suffix.endswith(("_existing", "_proposed")):
             continue
+        field_name, role_name = suffix.rsplit("_", 1)
+        role = DocumentRole(role_name)
+        if (role, field_name) in known:
+            continue
+        document = pair.existing if role is DocumentRole.EXISTING else pair.proposed
         mapping = st.session_state[key]
-        if not isinstance(mapping, dict) or mapping.get("sha256") != pair.proposed.sha256:
+        if not isinstance(mapping, dict) or mapping.get("sha256") != document.sha256:
             continue
         try:
             candidate = build_manual_source_candidate(
-                document=pair.proposed, field_name=field_name,
+                document=document, field_name=field_name,
                 source_block_id=mapping["block_id"], literal_value=mapping["value"],
             )
+            if role is DocumentRole.EXISTING:
+                candidate = apply_review_action(
+                    candidate, ReviewState.CONFIRMED,
+                    reviewer_note="Reviewer explicitly confirmed source value from approved Existing baseline.",
+                )
         except (KeyError, ReviewError, ValueError):
             continue
         result.append(candidate)
-        known.add((DocumentRole.PROPOSED, field_name))
+        known.add((role, field_name))
     return tuple(result)
 
 
@@ -464,17 +474,17 @@ def render_missing_field_triage(rows, pair) -> None:
                                 st.warning("Enter the provisional value before assessing source support.")
                             else:
                                 st.error("The selected source block is not valid for this document.")
-                        if role == "Proposed" and chosen_block and classification == "literal_value_present":
+                        if chosen_block and classification == "literal_value_present":
                             if st.button(
-                                "Create pending review candidate from this source",
+                                "Confirm missing approved-baseline source value" if role == "Existing" else "Create pending Proposed review candidate",
                                 key=f"manual_create_{key}",
                             ):
                                 try:
-                                    register_proposed_manual_source(key, document, chosen_block)
+                                    register_manual_source(key, document, chosen_block)
                                 except (ReviewError, ValueError) as error:
                                     st.error(str(error))
                                 else:
-                                    st.success("Pending source-backed candidate created; explicit review still required.")
+                                    st.success("Source-backed value recorded. Existing uses approved-baseline confirmation; Proposed remains pending review.")
                                     st.rerun()
                         st.button(
                             "Use selected source reference",
