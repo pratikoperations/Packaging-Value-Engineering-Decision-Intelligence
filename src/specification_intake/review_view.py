@@ -143,25 +143,40 @@ def _field_for_label(label: str, registry: dict[str, tuple[str, ...]]) -> str | 
     return next((field for field, aliases in registry.items() if normalized in aliases), None)
 
 
+def _split_label_value(text: str, registry: dict[str, tuple[str, ...]]) -> tuple[str, str] | None:
+    """Recognize explicit labels in colon-delimited and whitespace-delimited rows."""
+    if ":" in text:
+        label, value = text.split(":", 1)
+        field = _field_for_label(label, registry)
+        if field and value.strip():
+            return field, value.strip()
+    # Searchable PDFs can flatten a table row into 'Box Weight    0.92'.
+    parts = re.split(r"\s{2,}|\t+", text, maxsplit=1)
+    if len(parts) == 2:
+        field = _field_for_label(parts[0], registry)
+        if field and parts[1].strip():
+            return field, parts[1].strip()
+    return None
+
+
 def deterministic_candidates(document: UnifiedSpecificationDocument) -> tuple[ExtractionCandidate, ...]:
     registry = load_field_registry()
     candidates: list[ExtractionCandidate] = []
     blocks = document.source_blocks
     for index, block in enumerate(blocks):
         text = block.normalized_text.strip()
-        if ":" in text:
-            label, raw = text.split(":", 1)
-            field = _field_for_label(label, registry)
-            if field and raw.strip():
-                value, unit = _parse_value(field, raw)
-                candidates.append(ExtractionCandidate(
-                    field_name=field,
-                    document_role=_legacy_role(document.document_role),
-                    raw_value=raw.strip(), normalized_value=value, unit=unit,
-                    confidence=99.0, confidence_band=ConfidenceBand.HIGH,
-                    source_block_id=block.block_id, source_excerpt=text,
-                    ambiguity_codes=(),
-                ))
+        labeled_value = _split_label_value(text, registry)
+        if labeled_value is not None:
+            field, raw = labeled_value
+            value, unit = _parse_value(field, raw)
+            candidates.append(ExtractionCandidate(
+                field_name=field,
+                document_role=_legacy_role(document.document_role),
+                raw_value=raw, normalized_value=value, unit=unit,
+                confidence=99.0, confidence_band=ConfidenceBand.HIGH,
+                source_block_id=block.block_id, source_excerpt=text,
+                ambiguity_codes=(),
+            ))
         field = _field_for_label(text, registry)
         if field and index + 1 < len(blocks):
             value_block = blocks[index + 1]
