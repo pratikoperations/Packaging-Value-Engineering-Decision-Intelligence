@@ -67,6 +67,8 @@ def display_value(value: Any, unit: str | None = None) -> str:
 
 def effective_display(view: Any) -> str:
     review = view.review
+    if review.state not in {ReviewState.CONFIRMED, ReviewState.CORRECTED_CONFIRMED}:
+        return "Not provided"
     if review.state is ReviewState.CORRECTED_CONFIRMED:
         return display_value(review.corrected_value, review.corrected_unit)
     return display_value(view.normalized_value, view.unit)
@@ -84,7 +86,7 @@ def comparison_rows(views: Iterable[Any]) -> list[dict[str, str]]:
         proposed = pair.get(DocumentRole.PROPOSED.value)
         existing_value = effective_display(existing) if existing else "Not provided"
         proposed_value = effective_display(proposed) if proposed else "Not provided"
-        if existing is None or proposed is None:
+        if existing_value == "Not provided" or proposed_value == "Not provided":
             status = "Incomplete"
         elif existing_value == proposed_value:
             status = "Unchanged"
