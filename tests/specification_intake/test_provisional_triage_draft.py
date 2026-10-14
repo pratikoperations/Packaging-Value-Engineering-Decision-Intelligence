@@ -80,15 +80,18 @@ class ProvisionalTriageDraftTests(unittest.TestCase):
                 },
             },))
 
-    def test_manual_mapping_not_allowed_on_existing_baseline(self):
-        with self.assertRaises(ValueError):
-            restore_provisional_triage({}, ({
-                "review_id": "provisional-triage:box_weight_existing",
-                "state": "provisional", "value": "790 g", "evidence": "",
-                "manual_source": {
-                    "block_id": "block-2", "sha256": "b" * 64, "value": "790 g",
-                },
-            },))
+    def test_source_backed_existing_mapping_can_be_restored(self):
+        state = {}
+        record = {
+            "review_id": "provisional-triage:box_weight_existing",
+            "state": "provisional", "value": "790 g", "evidence": "Approved baseline block",
+            "manual_source": {
+                "block_id": "block-2", "sha256": "b" * 64, "value": "790 g",
+            },
+        }
+        self.assertEqual(restore_provisional_triage(state, (record,)), ())
+        self.assertEqual(state["manual_source_box_weight_existing"]["block_id"], "block-2")
+
 
     def test_empty_values_do_not_create_evidence(self):
         self.assertEqual(serialize_provisional_triage({"triage_value_a": "  "}), ())
