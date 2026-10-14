@@ -564,6 +564,8 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
                 for (upload, role), detection in zip(specification_uploads, detections)
             )
             invalidate_specification_state_on_change(st.session_state, inputs)
+            if DRAFT_REVIEW_RESTORE_KEY in st.session_state:
+                st.session_state[SPEC_CONFIRMATION_KEY] = True
             st.success(
                 "Specification pair ready: "
                 + " + ".join(item.detection.file_format.value.upper() for item in inputs)
