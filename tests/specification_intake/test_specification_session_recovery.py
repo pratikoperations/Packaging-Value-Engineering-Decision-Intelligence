@@ -32,6 +32,34 @@ class SessionRecoveryTests(unittest.TestCase):
         self.assertIsNone(pair)
         self.assertFalse(restored)
 
+    def test_uploaded_widget_pair_is_not_rebound_to_another_project(self):
+        state = {"active_project_id": "project-a"}
+        existing = SessionSpecificationFile("old.pdf", "application/pdf", b"old")
+        proposed = SessionSpecificationFile("new.pdf", "application/pdf", b"new")
+        restore_session_specifications(state, existing, proposed)
+        state["active_project_id"] = "project-b"
+        pair, restored = restore_session_specifications(state, existing, proposed)
+        self.assertIsNone(pair)
+        self.assertFalse(restored)
+        self.assertEqual(state[SESSION_SPEC_CACHE][0], "project-a")
+        # Explicit clearing of the previous evidence context allows re-upload.
+        state.pop(SESSION_SPEC_CACHE)
+        pair, restored = restore_session_specifications(state, existing, proposed)
+        self.assertEqual(pair[0].name, "old.pdf")
+        self.assertEqual(state[SESSION_SPEC_CACHE][0], "project-b")
+
+    def test_new_documents_in_another_project_can_be_uploaded(self):
+        state = {"active_project_id": "project-a"}
+        a = SessionSpecificationFile("old.pdf", "application/pdf", b"old")
+        b = SessionSpecificationFile("new.pdf", "application/pdf", b"new")
+        restore_session_specifications(state, a, b)
+        state["active_project_id"] = "project-b"
+        other = SessionSpecificationFile("other.pdf", "application/pdf", b"other")
+        pair, restored = restore_session_specifications(state, other, b)
+        self.assertFalse(restored)
+        self.assertEqual(pair[0].name, "other.pdf")
+        self.assertEqual(state[SESSION_SPEC_CACHE][0], "project-b")
+
     def test_partial_upload_does_not_mix_cached_and_new_documents(self):
         state = {"active_project_id": "project-a"}
         a = SessionSpecificationFile("a.pdf", "application/pdf", b"a")
