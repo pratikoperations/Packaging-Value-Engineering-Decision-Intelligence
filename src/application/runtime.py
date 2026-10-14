@@ -31,6 +31,7 @@ from src.persistence.project_repository import ProjectRepository
 from src.persistence.scenario_repository import ScenarioRepository
 from src.persistence.specification_review_repository import SpecificationReviewRepository
 from src.persistence.specification_snapshot_repository import SpecificationSnapshotRepository
+from src.persistence.specification_draft_repository import SpecificationDraftRepository
 from src.persistence.threshold_repository import ThresholdRepository
 from src.scenario_execution.service import ControlledScenarioService
 from src.thresholds.service import ThresholdService
@@ -171,3 +172,7 @@ def build_decision_snapshot_service(database_path: str | Path) -> DecisionSnapsh
         ScenarioRepository(database),
         DecisionRepository(database),
     )
+
+
+def build_specification_draft_repository(database_path: str | Path) -> SpecificationDraftRepository:
+    return SpecificationDraftRepository(_initialized_database(database_path))
