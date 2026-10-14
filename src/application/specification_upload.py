@@ -43,7 +43,10 @@ def invalidate_specification_state_on_change(
     state: MutableMapping[str, object],
     inputs: tuple[SpecificationUploadInput, ...],
 ) -> bool:
-    fingerprint = specification_batch_fingerprint(inputs)
+    project_scope = str(state.get("active_project_id") or "")
+    fingerprint = hashlib.sha256(
+        (project_scope + ":" + specification_batch_fingerprint(inputs)).encode("utf-8")
+    ).hexdigest()
     if state.get(SPEC_BATCH_KEY) == fingerprint:
         return False
     for key in tuple(state):
