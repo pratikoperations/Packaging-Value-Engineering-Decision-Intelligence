@@ -138,6 +138,77 @@ def render_prepared_upload(upload_service, project, prepared):
             st.error(str(error))
 
 
+def render_specification_workspace() -> None:
+    """Select or create the project that owns any subsequent immutable snapshot."""
+    project_service, _, snapshot_repository = services()
+    active_id = st.session_state.get("active_project_id")
+    active_project = None
+    if active_id:
+        try:
+            candidate = project_service.get_project(str(active_id))
+            if candidate["archived_at"] is None:
+                active_project = candidate
+        except KeyError:
+            st.session_state.pop("active_project_id", None)
+    if active_project is not None:
+        st.success(
+            f"Active project: {active_project['project_code']} — {active_project['project_name']}"
+        )
+        snapshots = snapshot_repository.list_for_project(active_project["project_id"])
+        if snapshots:
+            with st.expander(f"Saved specification snapshots ({len(snapshots)})"):
+                st.dataframe(
+                    [
+                        {
+                            "Snapshot": item["specification_snapshot_id"],
+                            "Created": item["created_at"],
+                            "Existing": item["existing_document"]["filename"],
+                            "Proposed": item["proposed_document"]["filename"],
+                            "Canonical valid": item["canonical_validation_valid"],
+                        }
+                        for item in snapshots
+                    ],
+                    width="stretch",
+                    hide_index=True,
+                )
+            st.caption(
+                "Saved snapshots are immutable evidence records. They do not restore "
+                "an incomplete upload or its correction controls."
+            )
+    else:
+        st.warning(
+            "No active project. You can compare files now, but an active project "
+            "is required to persist the reviewed snapshot."
+        )
+
+    with st.expander("Start a new project for this specification comparison"):
+        st.caption(
+            "Create and select a project before saving a reviewed specification snapshot. "
+            "Creating a project does not save an unfinished document review."
+        )
+        with st.form("specification-create-project", clear_on_submit=True):
+            code = st.text_input("Project code", placeholder="PVE-COR-001")
+            name = st.text_input("Project name", placeholder="Corrugated case material optimization")
+            annual_volume = st.number_input("Annual volume (boxes)", min_value=1.0, value=120000.0, step=1000.0)
+            currency = st.selectbox("Currency", ("INR", "USD", "EUR"), index=0)
+            submitted = st.form_submit_button("Create and select project")
+        if submitted:
+            try:
+                created = project_service.create_project(
+                    project_code=code,
+                    project_name=name,
+                    category="corrugated",
+                    currency=currency,
+                    annual_volume=annual_volume,
+                )
+            except ValueError as error:
+                st.error(str(error))
+            else:
+                st.session_state["active_project_id"] = created["project_id"]
+                st.success(f"Project {created['project_code']} created and selected.")
+                st.rerun()
+
+
 def render_missing_priority_alerts(rows: list[dict[str, str]]) -> None:
     gaps = missing_priority_summary(rows)
     if gaps.critical:
@@ -335,6 +406,7 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
         "Roles are fixed by the upload slot so they cannot be accidentally reversed."
     )
     st.info("Exactly two specification documents are required: one Existing and one Proposed.")
+    render_specification_workspace()
 
     existing_upload = st.file_uploader(
         "Existing specification — approved baseline",
