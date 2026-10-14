@@ -1,0 +1,57 @@
+{
+  "schema_version": "pve-pilot-p4-synthetic-value-v1",
+  "case_id": "PVE-PILOT-CORRUGATED-001",
+  "evidence_classification": "SYNTHETIC-ONLY",
+  "claim_state": "ESTIMATE",
+  "finance_validation": "NOT_PERFORMED",
+  "real_user_uat": "NOT_PERFORMED",
+  "modeled_kpis": [
+    {
+      "name": "decision_preparation_effort_reduction_pct",
+      "value": 45.45,
+      "target": 25,
+      "modeled_result": "PASS"
+    },
+    {
+      "name": "executive_summary_time_reduction_pct",
+      "value": 50,
+      "target": 30,
+      "modeled_result": "PASS"
+    },
+    {
+      "name": "manual_transfer_reduction_pct",
+      "value": 54.84,
+      "target": 40,
+      "modeled_result": "PASS"
+    },
+    {
+      "name": "rework_reduction_pct",
+      "value": 50,
+      "target": 20,
+      "modeled_result": "PASS"
+    },
+    {
+      "name": "pve_evidence_traceability_pct",
+      "value": 100,
+      "target": 95,
+      "modeled_result": "PASS"
+    }
+  ],
+  "objective_functional_evidence": {
+    "full_25_field_existing_proposed_acceptance": "PASS",
+    "source_provenance": "PASS",
+    "project_upload_isolation": "PASS",
+    "project_review_confirmation_isolation": "PASS",
+    "non_approval_boundary": "PASS",
+    "canonical_live_smoke": "PASS"
+  },
+  "human_only_measures": {
+    "workflow_clarity_rating": "NOT_MEASURED",
+    "evidence_visibility_usefulness_rating": "NOT_MEASURED",
+    "human_authority_comprehension_score": "NOT_MEASURED",
+    "independent_engineering_acceptance": "NOT_PERFORMED",
+    "independent_finance_acceptance": "NOT_PERFORMED"
+  },
+  "value_interpretation": "Modeled productivity potential only. No realized savings, ROI, pilot-measured benefit, or finance-validated benefit is claimed.",
+  "p4_gate_result": "PASS_FOR_SYNTHETIC_PATH_WITH_LIMITATIONS"
+}
