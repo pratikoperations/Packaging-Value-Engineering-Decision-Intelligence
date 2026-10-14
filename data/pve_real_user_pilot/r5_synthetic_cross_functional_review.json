@@ -1,0 +1,55 @@
+{
+  "schema_version": "pve-org-simulation-r5-v1",
+  "execution_mode": "SYNTHETIC_ORGANIZATIONAL_PILOT_SIMULATION",
+  "simulated_reviews": [
+    {
+      "function": "Procurement",
+      "persona": "Category Manager, Packaging",
+      "disposition": "SUPPORTS_CONTINUED_EVALUATION",
+      "basis": "Modeled value hypothesis and governed evidence workflow",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "function": "Packaging Engineering",
+      "persona": "Senior Packaging Engineer",
+      "disposition": "CONDITIONAL_TECHNICAL_INTEREST",
+      "basis": "Commercial/value hypothesis is insufficient for technical approval; qualification evidence remains mandatory",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "function": "Finance / Value",
+      "persona": "FP&A / Value Assurance Manager",
+      "disposition": "ESTIMATE_ACCEPTABLE_FOR_SIMULATION_ONLY",
+      "basis": "Modeled benchmark is suitable for scenario testing but not Finance-validated value",
+      "authority": "SIMULATED_ONLY"
+    },
+    {
+      "function": "UAT",
+      "persona": "Procurement Excellence Lead",
+      "disposition": "WORKFLOW_SIMULATION_COMPLETE",
+      "basis": "Governed UAT path and role handoffs can be exercised synthetically",
+      "authority": "SIMULATED_ONLY"
+    }
+  ],
+  "defects": {
+    "open_s1": 0,
+    "open_s2": 0,
+    "closed_material_defects": [
+      {
+        "id": "P3-D01",
+        "severity": "S1",
+        "summary": "Cross-project review-confirmation persistence",
+        "status": "CLOSED_WITH_REGRESSION_EVIDENCE",
+        "correction_pr": 145
+      }
+    ]
+  },
+  "real_approvals_performed": false,
+  "finance_validation_performed": false,
+  "engineering_approval_performed": false,
+  "real_user_uat_performed": false,
+  "claim_state": "ESTIMATE",
+  "hours_completed_after_r5": 25,
+  "phase_hours": 30,
+  "completion_pct_after_r5": 83.3
+}
