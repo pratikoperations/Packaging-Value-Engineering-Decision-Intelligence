@@ -199,6 +199,24 @@ def render_draft_controls(project_id, files, views):
     st.caption("Drafts are project-scoped and append-only, and do not approve feasibility.")
 
 
+def clear_specification_session_pair() -> None:
+    """Clear file widgets before next render, avoiding stale pair restoration."""
+    for key in (
+        "data_upload.existing_specification",
+        "data_upload.proposed_specification",
+        SESSION_SPEC_CACHE,
+        SPEC_REVIEWS_KEY,
+        SPEC_CONFIRMATION_KEY,
+        BASELINE_CONFIRMATION_KEY,
+        "data_upload.specification.batch_fingerprint",
+        DRAFT_REVIEW_RESTORE_KEY,
+    ):
+        st.session_state.pop(key, None)
+    for key in tuple(st.session_state):
+        if key.startswith(("triage_value_", "triage_evidence_", "manual_source_")):
+            st.session_state.pop(key, None)
+
+
 def render_specification_workspace() -> None:
     """Select or create the project that owns any subsequent immutable snapshot."""
     project_service, _, snapshot_repository = services()
@@ -285,6 +303,11 @@ def render_specification_workspace() -> None:
                             SessionSpecificationFile(draft.existing_name, draft.existing_mime, draft.existing_content),
                             SessionSpecificationFile(draft.proposed_name, draft.proposed_mime, draft.proposed_content),
                         )
+                        # Uploader widgets retain previous file bytes on reruns.
+                        # Remove them before the widgets are rendered below so the
+                        # recovered immutable draft remains authoritative.
+                        st.session_state.pop("data_upload.existing_specification", None)
+                        st.session_state.pop("data_upload.proposed_specification", None)
                         st.session_state[SESSION_SPEC_CACHE] = (active_project["project_id"], files)
                         st.session_state[DRAFT_REVIEW_RESTORE_KEY] = draft.reviews
                         st.session_state.pop(SPEC_REVIEWS_KEY, None)
@@ -731,11 +754,11 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
     recovered_files, recovered = restore_session_specifications(
         st.session_state, existing_upload, proposed_upload
     )
-    if st.button("Clear current session specification pair", key="clear-session-spec-pair"):
-        st.session_state.pop(SESSION_SPEC_CACHE, None)
-        st.session_state.pop(SPEC_REVIEWS_KEY, None)
-        st.session_state.pop("data_upload.specification.batch_fingerprint", None)
-        st.rerun()
+    st.button(
+        "Clear current session specification pair",
+        key="clear-session-spec-pair",
+        on_click=clear_specification_session_pair,
+    )
     if recovered_files is None:
         st.info("Upload exactly one Existing specification and one Proposed specification to begin the governed comparison.")
     else:
