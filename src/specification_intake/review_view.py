@@ -163,8 +163,19 @@ def deterministic_candidates(document: UnifiedSpecificationDocument) -> tuple[Ex
     registry = load_field_registry()
     candidates: list[ExtractionCandidate] = []
     blocks = document.source_blocks
-    for index, block in enumerate(blocks):
-        text = block.normalized_text.strip()
+    # The PDF parser may store an entire table/page as one block. Scan original
+    # lines while retaining the actual parent block ID and document provenance.
+    lines = [
+        (block, line.strip())
+        for block in blocks
+        for line in (
+            block.raw_text.splitlines()
+            if document.document_format.value == "pdf"
+            else (block.normalized_text,)
+        )
+        if line.strip()
+    ]
+    for index, (block, text) in enumerate(lines):
         labeled_value = _split_label_value(text, registry)
         if labeled_value is not None:
             field, raw = labeled_value
@@ -178,9 +189,12 @@ def deterministic_candidates(document: UnifiedSpecificationDocument) -> tuple[Ex
                 ambiguity_codes=(),
             ))
         field = _field_for_label(text, registry)
-        if field and index + 1 < len(blocks):
-            value_block = blocks[index + 1]
-            raw = value_block.normalized_text.strip()
+        if field and index + 1 < len(lines):
+            value_block, raw = lines[index + 1]
+            # PDF row/value pairs must originate in the same parent source block;
+            # do not infer values from the next page.
+            if document.document_format.value == "pdf" and value_block is not block:
+                continue
             if raw:
                 value, unit = _parse_value(field, raw)
                 candidates.append(ExtractionCandidate(
