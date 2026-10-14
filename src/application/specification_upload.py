@@ -168,32 +168,44 @@ def serialize_provisional_triage(state: MutableMapping[str, object]) -> tuple[di
 
 
 def restore_provisional_triage(state: MutableMapping[str, object], records) -> tuple[dict, ...]:
-    """Restore UI notes independently of governed extracted candidate reviews."""
+    """Validate the full saved draft before updating any session triage values."""
     extracted = []
     seen: set[str] = set()
+    staged: dict[str, object] = {}
     for record in records:
+        if not isinstance(record, dict):
+            raise ValueError("Invalid saved review record.")
         identifier = record.get("review_id", "")
+        if not isinstance(identifier, str):
+            raise ValueError("Invalid saved review identifier.")
         if not identifier.startswith(TRIAGE_REVIEW_PREFIX):
             extracted.append(record)
             continue
         suffix = identifier[len(TRIAGE_REVIEW_PREFIX):]
         if (not suffix or len(suffix) > 128 or suffix in seen or
-                record.get("state") != "provisional"):
+                record.get("state") != "provisional" or
+                not suffix.endswith(("_existing", "_proposed"))):
             raise ValueError("Invalid saved provisional triage record.")
-        value = str(record.get("value", ""))
-        evidence = str(record.get("evidence", ""))
-        if len(value) > 512 or len(evidence) > 1024:
-            raise ValueError("Invalid saved provisional triage length.")
+        value = record.get("value", "")
+        evidence = record.get("evidence", "")
+        if (not isinstance(value, str) or not isinstance(evidence, str) or
+                len(value) > 512 or len(evidence) > 1024):
+            raise ValueError("Invalid saved provisional triage content.")
         seen.add(suffix)
-        state["triage_value_" + suffix] = value
-        state["triage_evidence_" + suffix] = evidence
+        staged["triage_value_" + suffix] = value
+        staged["triage_evidence_" + suffix] = evidence
         manual = record.get("manual_source")
         if manual is not None:
-            if not isinstance(manual, dict) or not all(isinstance(manual.get(k), str) for k in ("block_id", "sha256", "value")):
+            if (not suffix.endswith("_proposed") or not isinstance(manual, dict) or
+                    not all(isinstance(manual.get(k), str) and manual[k] for k in
+                            ("block_id", "sha256", "value")) or
+                    len(manual["block_id"]) > 256 or len(manual["value"]) > 512 or
+                    not re.fullmatch(r"[0-9a-f]{64}", manual["sha256"]) or
+                    manual["value"] != value):
                 raise ValueError("Invalid saved manual source mapping.")
-            state["manual_source_" + suffix] = manual
+            staged["manual_source_" + suffix] = manual
+    state.update(staged)
     return tuple(extracted)
-
 
 def classify_triage_source_support(
     *, document: UnifiedSpecificationDocument, source_block_id: str,

@@ -51,6 +51,45 @@ class ProvisionalTriageDraftTests(unittest.TestCase):
                 "manual_source": {"block_id": "missing"},
             },))
 
+    def test_rejected_late_record_does_not_partially_mutate_session(self):
+        state = {"triage_value_box_weight_proposed": "original"}
+        valid = {
+            "review_id": "provisional-triage:liner_gsm_proposed",
+            "state": "provisional",
+            "value": "140",
+            "evidence": "Supplier document",
+        }
+        invalid = {
+            "review_id": "provisional-triage:box_weight_proposed",
+            "state": "provisional",
+            "value": "790 g",
+            "evidence": "",
+            "manual_source": {"block_id": "not-valid"},
+        }
+        with self.assertRaises(ValueError):
+            restore_provisional_triage(state, (valid, invalid))
+        self.assertEqual(state, {"triage_value_box_weight_proposed": "original"})
+
+    def test_manual_mapping_must_match_provisional_value(self):
+        with self.assertRaises(ValueError):
+            restore_provisional_triage({}, ({
+                "review_id": "provisional-triage:box_weight_proposed",
+                "state": "provisional", "value": "790 g", "evidence": "",
+                "manual_source": {
+                    "block_id": "block-2", "sha256": "b" * 64, "value": "900 g",
+                },
+            },))
+
+    def test_manual_mapping_not_allowed_on_existing_baseline(self):
+        with self.assertRaises(ValueError):
+            restore_provisional_triage({}, ({
+                "review_id": "provisional-triage:box_weight_existing",
+                "state": "provisional", "value": "790 g", "evidence": "",
+                "manual_source": {
+                    "block_id": "block-2", "sha256": "b" * 64, "value": "790 g",
+                },
+            },))
+
     def test_empty_values_do_not_create_evidence(self):
         self.assertEqual(serialize_provisional_triage({"triage_value_a": "  "}), ())
 
