@@ -13,6 +13,8 @@ from src.application.specification_upload import (
     SESSION_SPEC_CACHE,
     SessionSpecificationFile,
     restore_session_specifications,
+    serialize_provisional_triage,
+    restore_provisional_triage,
     invalidate_specification_state_on_change,
     parse_specification_pair,
     source_block_rows,
@@ -183,7 +185,10 @@ def render_draft_controls(project_id, files, views):
     repository = build_specification_draft_repository(DATABASE_PATH)
     if st.button("Save draft to project", key="save-specification-draft"):
         try:
-            draft = repository.save(project_id, files[0], files[1], save_draft_review_state(views))
+            draft = repository.save(
+                project_id, files[0], files[1],
+                save_draft_review_state(views) + serialize_provisional_triage(st.session_state),
+            )
         except (ValueError, KeyError) as error:
             st.error(str(error))
         else:
@@ -203,6 +208,13 @@ def render_specification_workspace() -> None:
                 active_project = candidate
         except KeyError:
             st.session_state.pop("active_project_id", None)
+    # Provisional triage notes are session-local and must not cross project boundaries.
+    project_scope = active_project["project_id"] if active_project is not None else None
+    if st.session_state.get("data_upload.triage_project_scope") != project_scope:
+        for key in tuple(st.session_state):
+            if key.startswith(("triage_value_", "triage_evidence_")):
+                st.session_state.pop(key, None)
+        st.session_state["data_upload.triage_project_scope"] = project_scope
     if active_project is not None:
         st.success(
             f"Active project: {active_project['project_code']} — {active_project['project_name']}"
@@ -630,7 +642,8 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
                     if restored_review is not None:
                         try:
                             st.session_state[SPEC_REVIEWS_KEY] = restore_draft_review_state(
-                                st.session_state[SPEC_REVIEWS_KEY], restored_review
+                                st.session_state[SPEC_REVIEWS_KEY],
+                                restore_provisional_triage(st.session_state, restored_review),
                             )
                         except (ValueError, ReviewError, KeyError) as error:
                             st.error(f"Saved review could not be restored safely: {error}")

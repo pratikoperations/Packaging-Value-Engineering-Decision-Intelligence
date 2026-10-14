@@ -134,3 +134,54 @@ def restore_session_specifications(state: MutableMapping[str, object], existing,
     if existing is None and proposed is None and cached and cached[0] == project_id:
         return cached[1], True
     return None, False
+
+
+TRIAGE_PREFIX = "triage_"
+TRIAGE_REVIEW_PREFIX = "provisional-triage:"
+
+
+def serialize_provisional_triage(state: MutableMapping[str, object]) -> tuple[dict, ...]:
+    """Persist only bounded non-authoritative triage notes, never confirmed values."""
+    entries: list[dict] = []
+    for key in sorted(state):
+        if not key.startswith("triage_value_"):
+            continue
+        suffix = key[len("triage_value_"):]
+        value = str(state.get(key) or "").strip()
+        evidence = str(state.get("triage_evidence_" + suffix) or "").strip()
+        if not value and not evidence:
+            continue
+        if len(suffix) > 128 or len(value) > 512 or len(evidence) > 1024:
+            raise ValueError("Provisional triage entry is too long.")
+        entries.append({
+            "review_id": TRIAGE_REVIEW_PREFIX + suffix,
+            "state": "provisional",
+            "value": value,
+            "evidence": evidence,
+        })
+    if len(entries) > 50:
+        raise ValueError("Too many provisional triage entries.")
+    return tuple(entries)
+
+
+def restore_provisional_triage(state: MutableMapping[str, object], records) -> tuple[dict, ...]:
+    """Restore UI notes independently of governed extracted candidate reviews."""
+    extracted = []
+    seen: set[str] = set()
+    for record in records:
+        identifier = record.get("review_id", "")
+        if not identifier.startswith(TRIAGE_REVIEW_PREFIX):
+            extracted.append(record)
+            continue
+        suffix = identifier[len(TRIAGE_REVIEW_PREFIX):]
+        if (not suffix or len(suffix) > 128 or suffix in seen or
+                record.get("state") != "provisional"):
+            raise ValueError("Invalid saved provisional triage record.")
+        value = str(record.get("value", ""))
+        evidence = str(record.get("evidence", ""))
+        if len(value) > 512 or len(evidence) > 1024:
+            raise ValueError("Invalid saved provisional triage length.")
+        seen.add(suffix)
+        state["triage_value_" + suffix] = value
+        state["triage_evidence_" + suffix] = evidence
+    return tuple(extracted)
