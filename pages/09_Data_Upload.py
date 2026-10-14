@@ -10,6 +10,8 @@ from src.application.specification_upload import (
     SPEC_CONFIRMATION_KEY,
     SPEC_REVIEWS_KEY,
     SpecificationUploadInput,
+    SESSION_SPEC_CACHE,
+    restore_session_specifications,
     invalidate_specification_state_on_change,
     parse_specification_pair,
     source_block_rows,
@@ -421,12 +423,25 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
         help="Upload one Proposed specification in DOCX or searchable PDF format.",
     )
 
-    if existing_upload is None or proposed_upload is None:
+    recovered_files, recovered = restore_session_specifications(
+        st.session_state, existing_upload, proposed_upload
+    )
+    if st.button("Clear current session specification pair", key="clear-session-spec-pair"):
+        st.session_state.pop(SESSION_SPEC_CACHE, None)
+        st.session_state.pop(SPEC_REVIEWS_KEY, None)
+        st.session_state.pop("data_upload.specification.batch_fingerprint", None)
+        st.rerun()
+    if recovered_files is None:
         st.info("Upload exactly one Existing specification and one Proposed specification to begin the governed comparison.")
     else:
+        if recovered:
+            st.info(
+                "Restored the Existing and Proposed files from this browser session. "
+                "This is not a persisted draft: create an immutable snapshot when eligible."
+            )
         specification_uploads = (
-            (existing_upload, DocumentRole.EXISTING),
-            (proposed_upload, DocumentRole.PROPOSED),
+            (recovered_files[0], DocumentRole.EXISTING),
+            (recovered_files[1], DocumentRole.PROPOSED),
         )
         detections = [
             detect_upload(upload.name, upload.type, upload.getvalue())
