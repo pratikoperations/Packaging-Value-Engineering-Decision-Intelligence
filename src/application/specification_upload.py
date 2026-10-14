@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import re
 from dataclasses import dataclass
 from typing import MutableMapping
 
@@ -203,6 +204,6 @@ def classify_triage_source_support(
     if not value:
         return "value_missing"
     source_text = " ".join(matching[0].normalized_text.casefold().split())
-    if value in source_text:
+    if re.search(r"(?<![\\w.])" + re.escape(value) + r"(?![\\w.])", source_text):
         return "literal_value_present"
     return "source_block_requires_manual_verification"
