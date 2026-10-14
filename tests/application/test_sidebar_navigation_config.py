@@ -8,16 +8,16 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 class SidebarNavigationConfigTests(unittest.TestCase):
-    def test_auto_generated_sidebar_navigation_is_disabled(self):
+    def test_sidebar_navigation_is_enabled(self):
         config = (ROOT / ".streamlit" / "config.toml").read_text(encoding="utf-8")
         self.assertIn("[client]", config)
-        self.assertIn("showSidebarNavigation = false", config)
+        self.assertIn("showSidebarNavigation = true", config)
 
-    def test_approved_task_navigation_is_rendered_explicitly(self):
+    def test_approved_task_navigation_is_visible(self):
         source = (ROOT / "app.py").read_text(encoding="utf-8")
-        self.assertIn('st.navigation(pages, position="hidden")', source)
-        self.assertIn('st.page_link(home_page, label="Home")', source)
-        self.assertIn("st.page_link(page, label=title)", source)
+        self.assertIn('st.navigation(pages, position="sidebar", expanded=True)', source)
+        self.assertIn('initial_sidebar_state="expanded"', source)
+        self.assertEqual(source.count("st.set_page_config("), 1)
         self.assertIn('return 30, "Data Upload"', source)
         self.assertIn('return 70, "Capabilities & Limits"', source)
 
@@ -42,7 +42,7 @@ class SidebarNavigationConfigTests(unittest.TestCase):
         self.assertIn("white-space: normal !important;", source)
         self.assertIn("overflow-wrap: break-word !important;", source)
         self.assertIn("@media (max-width: 768px)", source)
-        self.assertIn("with st.sidebar:", source)
+        self.assertIn("selected.run()", source)
 
 
 if __name__ == "__main__":

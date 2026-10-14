@@ -28,7 +28,6 @@ def load_demo() -> dict:
 
 
 def render_home() -> None:
-    st.set_page_config(page_title="PVE Decision Intelligence", layout="wide")
     st.title("Packaging Value Engineering Decision Intelligence")
     st.caption("Deterministic scenario comparison, explainable recommendation, and read-only decision export")
     st.warning(
@@ -231,6 +230,11 @@ def _apply_mobile_sidebar_width() -> None:
     )
 
 def main() -> None:
+    st.set_page_config(
+        page_title="PVE Decision Intelligence",
+        layout="wide",
+        initial_sidebar_state="expanded",
+    )
     _apply_mobile_sidebar_width()
     task_pages: list[tuple[int, str, st.Page]] = []
     for path in (ROOT / "pages").glob("*.py"):
@@ -245,12 +249,7 @@ def main() -> None:
     pages = [home_page]
     pages.extend(page for _, _, page in ordered_task_pages)
 
-    selected = st.navigation(pages, position="hidden")
-    with st.sidebar:
-        st.page_link(home_page, label="Home")
-        for _, title, page in ordered_task_pages:
-            st.page_link(page, label=title)
-        st.divider()
+    selected = st.navigation(pages, position="sidebar", expanded=True)
     selected.run()
 
 
