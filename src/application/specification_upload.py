@@ -105,3 +105,32 @@ def source_block_rows(pair: SpecificationPair) -> list[dict[str, object]]:
                 }
             )
     return rows
+
+
+@dataclass(frozen=True)
+class SessionSpecificationFile:
+    name: str
+    type: str
+    content: bytes
+
+    def getvalue(self) -> bytes:
+        return self.content
+
+
+SESSION_SPEC_CACHE = "data_upload.specification_session_cache"
+
+
+def restore_session_specifications(state: MutableMapping[str, object], existing, proposed):
+    """Restore the uploaded pair only within the same active project and session."""
+    project_id = state.get("active_project_id")
+    cached = state.get(SESSION_SPEC_CACHE)
+    if existing is not None and proposed is not None:
+        files = (
+            SessionSpecificationFile(existing.name, existing.type, existing.getvalue()),
+            SessionSpecificationFile(proposed.name, proposed.type, proposed.getvalue()),
+        )
+        state[SESSION_SPEC_CACHE] = (project_id, files)
+        return files, False
+    if existing is None and proposed is None and cached and cached[0] == project_id:
+        return cached[1], True
+    return None, False
