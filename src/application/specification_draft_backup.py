@@ -5,6 +5,7 @@ This does not provide server-side durable storage or prove evidence authenticity
 from __future__ import annotations
 
 import base64
+import binascii
 import hashlib
 import json
 
@@ -71,7 +72,7 @@ def import_specification_draft(repository, *, project_id: str, project_code: str
             raise ValueError("Invalid backup document metadata.")
         try:
             data = base64.b64decode(source["base64"], validate=True)
-        except (KeyError, ValueError) as error:
+        except (KeyError, ValueError, TypeError, binascii.Error) as error:
             raise ValueError("Invalid document encoding.") from error
         if hashlib.sha256(data).hexdigest() != source.get("sha256"):
             raise ValueError("Backup document checksum mismatch.")
