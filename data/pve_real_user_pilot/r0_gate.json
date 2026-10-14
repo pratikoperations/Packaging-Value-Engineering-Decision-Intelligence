@@ -1,0 +1,26 @@
+{
+  "schema_version": "pve-real-user-r0-gate-v1",
+  "phase": "PVE Real-User / Organizational Pilot Preparation & Validation",
+  "phase_planned_hours": 30,
+  "completed_hours_after_r0": 3,
+  "completion_pct_after_r0": 10,
+  "remaining_hours_after_r0": 27,
+  "authoritative_baseline": "36e37c7a7206e4f8bbdd1b4f511a8021379dc583",
+  "baseline_ci": "PASS",
+  "open_prs_at_start": 0,
+  "open_issues_at_start": 0,
+  "r0_result": "PASS_ON_ARTIFACT_ACCEPTANCE",
+  "next_gate": "R1_NAMED_ORGANIZATIONAL_ROLE_ASSIGNMENT",
+  "required_named_roles": [
+    "Organizational Pilot Sponsor",
+    "Procurement Lead",
+    "Packaging Engineer Reviewer",
+    "Finance / Value Reviewer",
+    "Data Owner if non-synthetic evidence is used",
+    "UAT Owner",
+    "UAT Participant(s)"
+  ],
+  "explicit_stop_condition": "Do not fabricate organizational authority. Stop before completing R1 until required named roles are supplied.",
+  "production_deployment_authorization": "NOT_GRANTED",
+  "enterprise_readiness": "NOT_APPROVED"
+}
