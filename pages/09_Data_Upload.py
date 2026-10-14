@@ -20,7 +20,7 @@ from src.application.specification_upload import (
     parse_specification_pair,
     source_block_rows,
 )
-from src.application.structured_upload import (
+from src.application.specification_draft_backup import export_specification_draft, import_specification_draft\nfrom src.application.structured_upload import (
     STRUCTURED_CONFIRMATION_KEY,
     StructuredUploadFile,
     invalidate_structured_state_on_change,
@@ -258,6 +258,22 @@ def render_specification_workspace() -> None:
                     for item in drafts
                 }
                 selected = st.selectbox("Saved draft", list(labels), key="specification-draft-select")
+                try:
+                    backup_draft = draft_repository.get(
+                        labels[selected], project_id=active_project["project_id"]
+                    )
+                    backup_bytes = export_specification_draft(
+                        active_project["project_code"], backup_draft
+                    )
+                    st.download_button(
+                        "Download portable draft backup",
+                        data=backup_bytes,
+                        file_name=f"{active_project['project_code']}_specification_draft.json",
+                        mime="application/json",
+                        key="specification-download-draft-backup",
+                    )
+                except (ValueError, KeyError) as error:
+                    st.error(f"Backup unavailable: {error}")
                 if st.button("Resume selected draft", key="specification-resume-draft"):
                     try:
                         draft = draft_repository.get(labels[selected], project_id=active_project["project_id"])
@@ -275,6 +291,33 @@ def render_specification_workspace() -> None:
                         st.session_state[BASELINE_CONFIRMATION_KEY] = True
                         st.session_state[SPEC_CONFIRMATION_KEY] = True
                         st.rerun()
+
+    if active_project is not None:
+        with st.expander("Restore a portable specification draft backup"):
+            st.caption(
+                "Use a previously downloaded JSON backup. Recreate and select the "
+                "same project code if server storage has been reset. Imported "
+                "evidence is untrusted until reviewed again."
+            )
+            incoming = st.file_uploader(
+                "Portable draft backup (JSON)", type=["json"],
+                key="specification-import-backup",
+            )
+            if incoming is not None and st.button(
+                "Import backup to active project", key="specification-import-submit"
+            ):
+                try:
+                    restored = import_specification_draft(
+                        build_specification_draft_repository(DATABASE_PATH),
+                        project_id=active_project["project_id"],
+                        project_code=active_project["project_code"],
+                        content=incoming.getvalue(),
+                    )
+                except (ValueError, KeyError) as error:
+                    st.error(str(error))
+                else:
+                    st.success(f"Draft imported: {restored.draft_id}. Resume and review it.")
+                    st.rerun()
 
     with st.expander("Start a new project for this specification comparison"):
         st.caption(
