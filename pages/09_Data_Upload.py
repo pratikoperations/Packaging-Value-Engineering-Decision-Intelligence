@@ -20,7 +20,8 @@ from src.application.specification_upload import (
     parse_specification_pair,
     source_block_rows,
 )
-from src.application.specification_draft_backup import export_specification_draft, import_specification_draft\nfrom src.application.structured_upload import (
+from src.application.specification_draft_backup import export_specification_draft, import_specification_draft
+from src.application.structured_upload import (
     STRUCTURED_CONFIRMATION_KEY,
     StructuredUploadFile,
     invalidate_structured_state_on_change,
