@@ -37,6 +37,7 @@ from src.specification_intake import (
     build_unified_canonical_draft,
     build_unified_snapshot,
 )
+from src.specification_intake.review_view import build_manual_source_candidate
 from src.specification_intake.comparison_presentation import (
     COMPARISON_STATUSES,
     CRITICALITY_LEVELS,
@@ -213,7 +214,7 @@ def render_specification_workspace() -> None:
     project_scope = active_project["project_id"] if active_project is not None else None
     if st.session_state.get("data_upload.triage_project_scope") != project_scope:
         for key in tuple(st.session_state):
-            if key.startswith(("triage_value_", "triage_evidence_")):
+            if key.startswith(("triage_value_", "triage_evidence_", "manual_source_")):
                 st.session_state.pop(key, None)
         st.session_state["data_upload.triage_project_scope"] = project_scope
     if active_project is not None:
@@ -353,6 +354,45 @@ def attach_triage_source_reference(key: str, block_id: str) -> None:
         )
 
 
+def register_proposed_manual_source(key: str, document, block_id: str) -> None:
+    value = str(st.session_state.get(f"triage_value_{key}", "")).strip()
+    field_name = key.removesuffix("_proposed")
+    build_manual_source_candidate(
+        document=document, field_name=field_name,
+        source_block_id=block_id, literal_value=value,
+    )
+    st.session_state["manual_source_" + key] = {
+        "block_id": block_id,
+        "sha256": document.sha256,
+        "value": value,
+    }
+
+
+def add_manual_source_reviews(pair, views):
+    """Rebuild only source-grounded Proposed candidates for current document hash."""
+    result = list(views)
+    known = {(view.document_role, view.field_name) for view in result}
+    for key in tuple(st.session_state):
+        if not key.startswith("manual_source_") or not key.endswith("_proposed"):
+            continue
+        field_name = key[len("manual_source_"):-len("_proposed")]
+        if (DocumentRole.PROPOSED, field_name) in known:
+            continue
+        mapping = st.session_state[key]
+        if not isinstance(mapping, dict) or mapping.get("sha256") != pair.proposed.sha256:
+            continue
+        try:
+            candidate = build_manual_source_candidate(
+                document=pair.proposed, field_name=field_name,
+                source_block_id=mapping["block_id"], literal_value=mapping["value"],
+            )
+        except (KeyError, ReviewError, ValueError):
+            continue
+        result.append(candidate)
+        known.add((DocumentRole.PROPOSED, field_name))
+    return tuple(result)
+
+
 def render_missing_field_triage(rows, pair) -> None:
     """Collect provisional missing-field evidence without changing canonical values."""
     missing = [row for row in rows if row["Comparison Status"] == "Incomplete"]
@@ -424,6 +464,18 @@ def render_missing_field_triage(rows, pair) -> None:
                                 st.warning("Enter the provisional value before assessing source support.")
                             else:
                                 st.error("The selected source block is not valid for this document.")
+                        if role == "Proposed" and chosen_block and classification == "literal_value_present":
+                            if st.button(
+                                "Create pending review candidate from this source",
+                                key=f"manual_create_{key}",
+                            ):
+                                try:
+                                    register_proposed_manual_source(key, document, chosen_block)
+                                except (ReviewError, ValueError) as error:
+                                    st.error(str(error))
+                                else:
+                                    st.success("Pending source-backed candidate created; explicit review still required.")
+                                    st.rerun()
                         st.button(
                             "Use selected source reference",
                             key=f"triage_attach_{key}",
@@ -713,12 +765,18 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
                         st.session_state[SPEC_REVIEWS_KEY] = confirm_existing_baseline(
                             st.session_state[SPEC_REVIEWS_KEY]
                         )
+                    st.session_state[SPEC_REVIEWS_KEY] = add_manual_source_reviews(
+                        pair, st.session_state[SPEC_REVIEWS_KEY]
+                    )
                     restored_review = st.session_state.pop(DRAFT_REVIEW_RESTORE_KEY, None)
                     if restored_review is not None:
                         try:
+                            candidate_reviews = restore_provisional_triage(
+                                st.session_state, restored_review
+                            )
                             st.session_state[SPEC_REVIEWS_KEY] = restore_draft_review_state(
-                                st.session_state[SPEC_REVIEWS_KEY],
-                                restore_provisional_triage(st.session_state, restored_review),
+                                add_manual_source_reviews(pair, st.session_state[SPEC_REVIEWS_KEY]),
+                                candidate_reviews,
                             )
                         except (ValueError, ReviewError, KeyError) as error:
                             st.error(f"Saved review could not be restored safely: {error}")
