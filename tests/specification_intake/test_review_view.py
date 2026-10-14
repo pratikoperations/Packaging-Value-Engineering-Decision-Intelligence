@@ -60,6 +60,35 @@ class CommonReviewViewTests(unittest.TestCase):
         self.assertEqual({view.normalized_value for view in views}, {780, 650})
         self.assertTrue(all(view.source_excerpt in view.review.source.excerpt for view in views))
 
+    def test_pdf_table_row_with_spaced_columns_is_extracted(self):
+        existing = document(
+            DocumentRole.EXISTING, FileFormat.PDF, "a" * 64,
+            "Box Weight                 0.92",
+            {"type": "pdf", "page_number": 1, "block_index": 3},
+        )
+        proposed = document(
+            DocumentRole.PROPOSED, FileFormat.PDF, "b" * 64,
+            "Box Weight                 0.78",
+            {"type": "pdf", "page_number": 1, "block_index": 3},
+        )
+        views = build_common_review_views(build_pair((existing, proposed)))
+        self.assertEqual(len(views), 2)
+        self.assertEqual([v.normalized_value for v in views], [0.92, 0.78])
+
+    def test_unrecognized_whitespace_row_is_not_guessed(self):
+        existing = document(
+            DocumentRole.EXISTING, FileFormat.PDF, "a" * 64,
+            "Storage Conditions                 Dry warehouse",
+            {"type": "pdf", "page_number": 1, "block_index": 4},
+        )
+        proposed = document(
+            DocumentRole.PROPOSED, FileFormat.PDF, "b" * 64,
+            "Storage Conditions                 Humid warehouse",
+            {"type": "pdf", "page_number": 1, "block_index": 4},
+        )
+        views = build_common_review_views(build_pair((existing, proposed)))
+        self.assertEqual(views, ())
+
     def test_review_actions_and_resolution_gate(self):
         existing = document(
             DocumentRole.EXISTING, FileFormat.PDF, "a" * 64,
