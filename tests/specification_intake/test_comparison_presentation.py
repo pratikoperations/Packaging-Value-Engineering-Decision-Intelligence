@@ -54,7 +54,7 @@ class ComparisonPresentationTests(unittest.TestCase):
                     make_view("box_weight", DocumentRole.PROPOSED, 820, "g", state=state),
                 ))
                 row = next(item for item in rows if item["Parameter"] == "Box Weight")
-                self.assertEqual(row["Proposed"], "Not provided")
+                self.assertEqual(row["Proposed"], "820 g" if state is ReviewState.PENDING else "Not provided")
                 self.assertEqual(row["Comparison Status"], "Incomplete")
                 self.assertIn("Box Weight", missing_priority_summary(rows).critical)
 
