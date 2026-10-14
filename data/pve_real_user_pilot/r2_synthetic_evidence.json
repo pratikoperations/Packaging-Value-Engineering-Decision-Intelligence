@@ -1,0 +1,74 @@
+{
+  "schema_version": "pve-org-simulation-r2-v1",
+  "execution_mode": "SYNTHETIC_ORGANIZATIONAL_PILOT_SIMULATION",
+  "environment": "CANONICAL_STREAMLIT_PORTFOLIO_SIMULATION_ONLY",
+  "confidential_data_allowed": false,
+  "production_data_allowed": false,
+  "live_integrations_allowed": false,
+  "evidence": [
+    {
+      "id": "E01",
+      "name": "existing_specification",
+      "classification": "SYNTHETIC",
+      "status": "APPROVED_FOR_SIMULATION"
+    },
+    {
+      "id": "E02",
+      "name": "proposed_specification",
+      "classification": "SYNTHETIC",
+      "status": "APPROVED_FOR_SIMULATION"
+    },
+    {
+      "id": "E03",
+      "name": "current_unit_cost",
+      "classification": "SYNTHETIC",
+      "status": "APPROVED_FOR_SIMULATION"
+    },
+    {
+      "id": "E04",
+      "name": "proposed_unit_cost",
+      "classification": "SYNTHETIC",
+      "status": "APPROVED_FOR_SIMULATION"
+    },
+    {
+      "id": "E05",
+      "name": "annual_demand",
+      "classification": "SYNTHETIC",
+      "status": "APPROVED_FOR_SIMULATION"
+    },
+    {
+      "id": "E06",
+      "name": "technical_requirements",
+      "classification": "SYNTHETIC",
+      "status": "APPROVED_FOR_SIMULATION"
+    },
+    {
+      "id": "E07",
+      "name": "qualification_evidence",
+      "classification": "SYNTHETIC",
+      "status": "APPROVED_FOR_SIMULATION"
+    },
+    {
+      "id": "E08",
+      "name": "manual_baseline_timings",
+      "classification": "SYNTHETIC_MODELED",
+      "status": "ESTIMATE_ONLY"
+    },
+    {
+      "id": "E09",
+      "name": "pve_assisted_timings",
+      "classification": "SYNTHETIC_MODELED",
+      "status": "ESTIMATE_ONLY"
+    },
+    {
+      "id": "E10",
+      "name": "uat_ratings",
+      "classification": "SYNTHETIC_MODELED",
+      "status": "SIMULATION_ONLY"
+    }
+  ],
+  "simulated_data_owner_authority": "SYNTHETIC_ONLY",
+  "hours_completed_after_r2": 10,
+  "phase_hours": 30,
+  "completion_pct_after_r2": 33.3
+}
