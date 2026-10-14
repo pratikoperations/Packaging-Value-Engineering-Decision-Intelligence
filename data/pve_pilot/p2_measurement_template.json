@@ -1,0 +1,51 @@
+{
+  "schema_version": "pve-pilot-p2-measurement-v1",
+  "classification": "SYNTHETIC_OR_SANITIZED_ONLY",
+  "case_id": "PVE-PILOT-CORRUGATED-001",
+  "evidence_pack_version": "TBD",
+  "runs": [
+    {
+      "run_id": "MANUAL-001",
+      "mode": "MANUAL_BASELINE",
+      "start_time": null,
+      "end_time": null,
+      "elapsed_minutes": null,
+      "hands_on_minutes": null,
+      "source_document_count": null,
+      "manual_transfer_count": null,
+      "reconciliation_count": null,
+      "clarification_loops": null,
+      "calculation_rework_events": null,
+      "minutes_to_first_high_priority_blocker": null,
+      "executive_summary_minutes": null,
+      "material_claim_count": null,
+      "claims_with_explicit_evidence": null,
+      "unresolved_assumptions": null,
+      "anomalies": [],
+      "review_status": "PENDING"
+    },
+    {
+      "run_id": "PVE-001",
+      "mode": "PVE_ASSISTED",
+      "start_time": null,
+      "end_time": null,
+      "elapsed_minutes": null,
+      "hands_on_minutes": null,
+      "source_document_count": null,
+      "manual_transfer_count": null,
+      "reconciliation_count": null,
+      "clarification_loops": null,
+      "calculation_rework_events": null,
+      "minutes_to_first_high_priority_blocker": null,
+      "executive_summary_minutes": null,
+      "material_claim_count": null,
+      "claims_with_explicit_evidence": null,
+      "unresolved_assumptions": null,
+      "anomalies": [],
+      "review_status": "PENDING"
+    }
+  ],
+  "uat_results": [],
+  "claim_state": "ESTIMATE",
+  "finance_validation": "NOT_PERFORMED"
+}
