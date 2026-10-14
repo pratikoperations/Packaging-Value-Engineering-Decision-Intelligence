@@ -330,6 +330,38 @@ def render_baseline_views(views, visible_fields: set[str]) -> None:
                 st.write(f"**Confidence:** {view.confidence:.1f} ({view.confidence_band.title()})")
 
 
+def render_missing_field_triage(rows) -> None:
+    """Collect provisional missing-field evidence without changing canonical values."""
+    missing = [row for row in rows if row["Comparison Status"] == "Incomplete"]
+    if not missing:
+        return
+    st.subheader("Missing parameter triage")
+    st.caption(
+        "Enter a provisional value and evidence note to document an extraction gap. "
+        "These entries are NOT confirmed specification values, are NOT used by "
+        "canonical mapping or feasibility, and do not replace governed review."
+    )
+    for row in missing:
+        name = row["Parameter"]
+        with st.expander(f"{name} — {row['Criticality']}"):
+            for role in ("Existing", "Proposed"):
+                if row[role] != "Not provided":
+                    continue
+                key = name.lower().replace(" ", "_") + "_" + role.lower()
+                st.text_input(
+                    f"{role} provisional value — {name}",
+                    key=f"triage_value_{key}",
+                )
+                st.text_input(
+                    f"{role} evidence reference or follow-up — {name}",
+                    key=f"triage_evidence_{key}",
+                )
+                st.warning(
+                    "Unverified entry only. Correct source extraction or supply "
+                    "an approved specification revision before feasibility assessment."
+                )
+
+
 def render_reviews(views):
     updated = list(views)
     rows = comparison_rows(updated)
@@ -340,6 +372,7 @@ def render_reviews(views):
     filtered_rows = filter_comparison_rows(rows, statuses=selected_statuses, criticalities=selected_criticalities)
     st.dataframe(filtered_rows, width="stretch", hide_index=True)
     render_missing_priority_alerts(rows)
+    render_missing_field_triage(rows)
     visible_fields = {row["Parameter"] for row in filtered_rows}
     render_baseline_views(updated, visible_fields)
 
