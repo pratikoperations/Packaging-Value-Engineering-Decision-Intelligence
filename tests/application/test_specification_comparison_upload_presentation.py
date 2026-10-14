@@ -19,8 +19,8 @@ class SpecificationComparisonUploadPresentationTests(unittest.TestCase):
         self.assertIn('"data_upload.proposed_specification"', self.source)
 
     def test_specification_roles_are_fixed_by_upload_slot(self):
-        self.assertIn("(existing_upload, DocumentRole.EXISTING)", self.source)
-        self.assertIn("(proposed_upload, DocumentRole.PROPOSED)", self.source)
+        self.assertIn("(recovered_files[0], DocumentRole.EXISTING)", self.source)
+        self.assertIn("(recovered_files[1], DocumentRole.PROPOSED)", self.source)
         self.assertNotIn('st.selectbox(f"Role for {upload.name}"', self.source)
 
     def test_project_feasibility_gate_is_visible_but_not_approval(self):
