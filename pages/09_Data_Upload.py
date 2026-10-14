@@ -5,12 +5,13 @@ from typing import Any
 
 import streamlit as st
 
-from src.application.runtime import build_project_service, build_specification_snapshot_repository, build_upload_service
+from src.application.runtime import build_project_service, build_specification_snapshot_repository, build_specification_draft_repository, build_upload_service
 from src.application.specification_upload import (
     SPEC_CONFIRMATION_KEY,
     SPEC_REVIEWS_KEY,
     SpecificationUploadInput,
     SESSION_SPEC_CACHE,
+    SessionSpecificationFile,
     restore_session_specifications,
     invalidate_specification_state_on_change,
     parse_specification_pair,
@@ -50,6 +51,7 @@ DATABASE_PATH = ROOT / "runtime" / "pve_portfolio.sqlite3"
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
 SOURCE_REFERENCE = "FINAL-WORKFLOW-CORRECTION-DRAFT"
 BASELINE_CONFIRMATION_KEY = "data_upload.approved_existing_baseline"
+DRAFT_REVIEW_RESTORE_KEY = "data_upload.restored_draft_reviews"
 
 REVIEW_STATE_HEADING = {
     ReviewState.PENDING: "🟧 ACTION REQUIRED",
@@ -140,6 +142,55 @@ def render_prepared_upload(upload_service, project, prepared):
             st.error(str(error))
 
 
+def save_draft_review_state(views) -> tuple[dict, ...]:
+    """Serialize reviewer decisions, never Python objects or executable data."""
+    return tuple({
+        "review_id": view.review_id,
+        "state": view.state.value,
+        "corrected_value": view.review.corrected_value,
+        "corrected_unit": view.review.corrected_unit,
+        "reviewer_note": view.review.reviewer_note,
+    } for view in views)
+
+
+def restore_draft_review_state(views, saved):
+    """Match decisions to the re-extracted, source-grounded candidate IDs."""
+    saved_by_id = {record["review_id"]: record for record in saved}
+    if len(saved_by_id) != len(saved):
+        raise ValueError("Duplicate draft review identifiers.")
+    known_ids = {view.review_id for view in views}
+    if not set(saved_by_id).issubset(known_ids):
+        raise ValueError("Saved draft review does not match the specification documents.")
+    updated = []
+    for view in views:
+        record = saved_by_id.get(view.review_id)
+        if record is None:
+            updated.append(view)
+            continue
+        state = ReviewState(record["state"])
+        if state is ReviewState.PENDING:
+            updated.append(view)
+        else:
+            updated.append(apply_review_action(
+                view, state, corrected_value=record.get("corrected_value"),
+                corrected_unit=record.get("corrected_unit"),
+                reviewer_note=record.get("reviewer_note"),
+            ))
+    return tuple(updated)
+
+
+def render_draft_controls(project_id, files, views):
+    repository = build_specification_draft_repository(DATABASE_PATH)
+    if st.button("Save draft to project", key="save-specification-draft"):
+        try:
+            draft = repository.save(project_id, files[0], files[1], save_draft_review_state(views))
+        except (ValueError, KeyError) as error:
+            st.error(str(error))
+        else:
+            st.success(f"Unfinished specification review saved: {draft.draft_id}")
+    st.caption("Drafts are project-scoped and append-only, and do not approve feasibility.")
+
+
 def render_specification_workspace() -> None:
     """Select or create the project that owns any subsequent immutable snapshot."""
     project_service, _, snapshot_repository = services()
@@ -182,6 +233,34 @@ def render_specification_workspace() -> None:
             "No active project. You can compare files now, but an active project "
             "is required to persist the reviewed snapshot."
         )
+
+    if active_project is not None:
+        draft_repository = build_specification_draft_repository(DATABASE_PATH)
+        drafts = draft_repository.list_for_project(active_project["project_id"])
+        if drafts:
+            with st.expander(f"Resume saved specification review ({len(drafts)} drafts)"):
+                labels = {
+                    f"{item['created_at']} — {item['existing_name']} / {item['proposed_name']} [{item['draft_id']}]": item["draft_id"]
+                    for item in drafts
+                }
+                selected = st.selectbox("Saved draft", list(labels), key="specification-draft-select")
+                if st.button("Resume selected draft", key="specification-resume-draft"):
+                    try:
+                        draft = draft_repository.get(labels[selected], project_id=active_project["project_id"])
+                    except (ValueError, KeyError) as error:
+                        st.error(str(error))
+                    else:
+                        files = (
+                            SessionSpecificationFile(draft.existing_name, draft.existing_mime, draft.existing_content),
+                            SessionSpecificationFile(draft.proposed_name, draft.proposed_mime, draft.proposed_content),
+                        )
+                        st.session_state[SESSION_SPEC_CACHE] = (active_project["project_id"], files)
+                        st.session_state[DRAFT_REVIEW_RESTORE_KEY] = draft.reviews
+                        st.session_state.pop(SPEC_REVIEWS_KEY, None)
+                        st.session_state.pop("data_upload.specification.batch_fingerprint", None)
+                        st.session_state[BASELINE_CONFIRMATION_KEY] = True
+                        st.session_state[SPEC_CONFIRMATION_KEY] = True
+                        st.rerun()
 
     with st.expander("Start a new project for this specification comparison"):
         st.caption(
@@ -485,6 +564,8 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
                 for (upload, role), detection in zip(specification_uploads, detections)
             )
             invalidate_specification_state_on_change(st.session_state, inputs)
+            if DRAFT_REVIEW_RESTORE_KEY in st.session_state:
+                st.session_state[SPEC_CONFIRMATION_KEY] = True
             st.success(
                 "Specification pair ready: "
                 + " + ".join(item.detection.file_format.value.upper() for item in inputs)
@@ -512,7 +593,19 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
                         st.session_state[SPEC_REVIEWS_KEY] = confirm_existing_baseline(
                             st.session_state[SPEC_REVIEWS_KEY]
                         )
+                    restored_review = st.session_state.pop(DRAFT_REVIEW_RESTORE_KEY, None)
+                    if restored_review is not None:
+                        try:
+                            st.session_state[SPEC_REVIEWS_KEY] = restore_draft_review_state(
+                                st.session_state[SPEC_REVIEWS_KEY], restored_review
+                            )
+                        except (ValueError, ReviewError, KeyError) as error:
+                            st.error(f"Saved review could not be restored safely: {error}")
+                            st.stop()
                     views, resolved = render_reviews(st.session_state[SPEC_REVIEWS_KEY])
+                    active_for_draft = st.session_state.get("active_project_id")
+                    if active_for_draft:
+                        render_draft_controls(active_for_draft, recovered_files, views)
                     if resolved:
                         render_specification_snapshot(pair, views)
                 except (ValueError, ReviewError) as error:
