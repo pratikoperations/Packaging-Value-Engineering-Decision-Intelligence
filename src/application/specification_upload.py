@@ -150,7 +150,8 @@ def serialize_provisional_triage(state: MutableMapping[str, object]) -> tuple[di
         suffix = key[len("triage_value_"):]
         value = str(state.get(key) or "").strip()
         evidence = str(state.get("triage_evidence_" + suffix) or "").strip()
-        if not value and not evidence:
+        manual = state.get("manual_source_" + suffix)
+        if not value and not evidence and not manual:
             continue
         if len(suffix) > 128 or len(value) > 512 or len(evidence) > 1024:
             raise ValueError("Provisional triage entry is too long.")
@@ -159,6 +160,7 @@ def serialize_provisional_triage(state: MutableMapping[str, object]) -> tuple[di
             "state": "provisional",
             "value": value,
             "evidence": evidence,
+            **({"manual_source": manual} if manual else {}),
         })
     if len(entries) > 50:
         raise ValueError("Too many provisional triage entries.")
@@ -185,6 +187,11 @@ def restore_provisional_triage(state: MutableMapping[str, object], records) -> t
         seen.add(suffix)
         state["triage_value_" + suffix] = value
         state["triage_evidence_" + suffix] = evidence
+        manual = record.get("manual_source")
+        if manual is not None:
+            if not isinstance(manual, dict) or not all(isinstance(manual.get(k), str) for k in ("block_id", "sha256", "value")):
+                raise ValueError("Invalid saved manual source mapping.")
+            state["manual_source_" + suffix] = manual
     return tuple(extracted)
 
 
