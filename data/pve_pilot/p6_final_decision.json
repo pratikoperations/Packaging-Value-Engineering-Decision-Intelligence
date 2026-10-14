@@ -1,0 +1,51 @@
+{
+  "schema_version": "pve-pilot-p6-final-decision-v1",
+  "phase": "PVE Pilot Validation & Enterprise Readiness",
+  "evidence_path": "SYNTHETIC_PORTFOLIO_VALIDATION",
+  "final_recommendation": "DECISION DEFERRED",
+  "synthetic_phase_completion_pct": 100,
+  "planned_hours": 28,
+  "completed_hours": 28,
+  "remaining_hours": 0,
+  "enterprise_readiness": "NOT_APPROVED",
+  "production_deployment_authorization": "NOT_GRANTED",
+  "claim_state": "ESTIMATE",
+  "reasons": [
+    "Synthetic benchmark supports the value hypothesis but is not observed human performance.",
+    "Real-user UAT has not been performed.",
+    "Independent packaging-engineering acceptance has not been performed.",
+    "Independent Finance/value validation has not been performed.",
+    "Critical enterprise controls including identity, RBAC, enterprise storage, recovery, privacy/legal and deployment authority remain pending.",
+    "No live integrations or confidential production data are authorized."
+  ],
+  "completed_evidence": [
+    "governed phase plan",
+    "pilot charter and RACI",
+    "synthetic/sanitized evidence inventory",
+    "frozen baseline and KPI definitions",
+    "15-scenario controlled UAT pack",
+    "25-field Existing/Proposed acceptance regression",
+    "project upload and review-confirmation isolation regression",
+    "synthetic benchmark and deterministic KPI math",
+    "live canonical app read-only smoke verification",
+    "enterprise readiness assessment across 18 domains"
+  ],
+  "next_recommended_scope": "REAL_USER_ORGANIZATIONAL_PILOT_PREPARATION",
+  "next_scope_requires": [
+    "named organizational sponsor",
+    "named packaging engineering reviewer",
+    "named Finance/value reviewer",
+    "approved data owner and evidence inventory if non-synthetic evidence is used",
+    "approved pilot environment for the permitted data class",
+    "named UAT participants",
+    "security/privacy/legal review as applicable"
+  ],
+  "prohibited_auto_progression": [
+    "production deployment",
+    "enterprise production-readiness certification",
+    "live ERP/PLM/SRM integration",
+    "confidential data use",
+    "supplier award or allocation",
+    "autonomous engineering approval"
+  ]
+}
