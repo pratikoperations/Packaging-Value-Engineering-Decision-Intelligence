@@ -342,6 +342,16 @@ def render_baseline_views(views, visible_fields: set[str]) -> None:
                 st.write(f"**Confidence:** {view.confidence:.1f} ({view.confidence_band.title()})")
 
 
+def attach_triage_source_reference(key: str, block_id: str) -> None:
+    """Streamlit callback runs before widget creation on the next rerun."""
+    current = st.session_state.get(f"triage_evidence_{key}", "")
+    reference = f"Source block {block_id}; reviewer verification required"
+    if reference not in current:
+        st.session_state[f"triage_evidence_{key}"] = (
+            reference + (f"; {current}" if current else "")
+        )
+
+
 def render_missing_field_triage(rows, pair) -> None:
     """Collect provisional missing-field evidence without changing canonical values."""
     missing = [row for row in rows if row["Comparison Status"] == "Incomplete"]
@@ -393,16 +403,13 @@ def render_missing_field_triage(rows, pair) -> None:
                             options=[""] + [block_id for block_id, _, _ in source_rows],
                             key=f"triage_source_select_{key}",
                         )
-                        if st.button("Use selected source reference", key=f"triage_attach_{key}"):
-                            if not chosen_block:
-                                st.warning("Select an actual source block first.")
-                            else:
-                                current = st.session_state.get(f"triage_evidence_{key}", "")
-                                st.session_state[f"triage_evidence_{key}"] = (
-                                    f"Source block {chosen_block}; reviewer verification required"
-                                    + (f"; {current}" if current else "")
-                                )
-                                st.rerun()
+                        st.button(
+                            "Use selected source reference",
+                            key=f"triage_attach_{key}",
+                            disabled=not chosen_block,
+                            on_click=attach_triage_source_reference,
+                            args=(key, chosen_block),
+                        )
                     else:
                         st.info("No searchable text blocks were extracted from this document.")
                 st.warning(
