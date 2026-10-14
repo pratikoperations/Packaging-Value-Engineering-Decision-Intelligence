@@ -196,7 +196,7 @@ def restore_provisional_triage(state: MutableMapping[str, object], records) -> t
         staged["triage_evidence_" + suffix] = evidence
         manual = record.get("manual_source")
         if manual is not None:
-            if (not suffix.endswith("_proposed") or not isinstance(manual, dict) or
+            if (not isinstance(manual, dict) or
                     not all(isinstance(manual.get(k), str) and manual[k] for k in
                             ("block_id", "sha256", "value")) or
                     len(manual["block_id"]) > 256 or len(manual["value"]) > 512 or
