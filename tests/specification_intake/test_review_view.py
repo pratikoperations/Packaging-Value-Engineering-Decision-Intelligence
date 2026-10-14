@@ -75,6 +75,44 @@ class CommonReviewViewTests(unittest.TestCase):
         self.assertEqual(len(views), 2)
         self.assertEqual([v.normalized_value for v in views], [0.92, 0.78])
 
+    def test_searchable_pdf_table_values_inside_one_page_block(self):
+        raw = (
+            "Specification parameter\\nValue / requirement\\n"
+            "Box Style\\nFEFCO 0201\\n"
+            "Internal Length\\n400\\nInternal Width\\n300\\n"
+            "Internal Height\\n250\\nDimension Unit\\nmm\\n"
+            "Ply Count\\n5\\nFlute Combination\\nBC double-wall\\n"
+            "Box Weight\\n0.92\\nBox Weight Unit\\nkg/box\\n"
+            "Total Board Gsm\\n810\\nPaper Grade\\nKraft mix\\n"
+            "Unregistered Vendor Marketing Claim\\nNot a governed parameter"
+        )
+        block = UnifiedSourceBlock(
+            block_id="existing-pdf-page-one",
+            document_role=DocumentRole.EXISTING,
+            document_format=FileFormat.PDF,
+            raw_text=raw,
+            normalized_text=" ".join(raw.split()),
+            extraction_order=0,
+            parser_name="pypdf",
+            parser_version="pve-pdf-parser-v1",
+            source_location={"type": "pdf", "page_number": 1, "block_index": 0},
+        )
+        existing = UnifiedSpecificationDocument(
+            filename="existing.pdf", document_role=DocumentRole.EXISTING,
+            document_format=FileFormat.PDF, sha256="a" * 64,
+            parser_name="pypdf", parser_version="pve-pdf-parser-v1",
+            source_blocks=(block,),
+        )
+        from src.specification_intake.review_view import deterministic_candidates
+        candidates = deterministic_candidates(existing)
+        values = {candidate.field_name: candidate.normalized_value for candidate in candidates}
+        self.assertEqual(values["internal_length"], 400)
+        self.assertEqual(values["box_weight"], 0.92)
+        self.assertEqual(values["box_style"], "FEFCO 0201")
+        self.assertEqual(values["ply_count"], 5)
+        self.assertEqual(len(values), 11)
+        self.assertTrue(all(candidate.source_block_id == block.block_id for candidate in candidates))
+
     def test_unrecognized_whitespace_row_is_not_guessed(self):
         existing = document(
             DocumentRole.EXISTING, FileFormat.PDF, "a" * 64,
