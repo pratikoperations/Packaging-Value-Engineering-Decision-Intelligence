@@ -1,0 +1,58 @@
+{
+  "schema_version": "pve-pilot-p3-synthetic-benchmark-v1",
+  "case_id": "PVE-PILOT-CORRUGATED-001",
+  "evidence_classification": "SYNTHETIC-ONLY",
+  "evidence_status": "MODELED_BENCHMARK_NOT_OBSERVED_HUMAN_PERFORMANCE",
+  "manual_baseline": {
+    "elapsed_minutes": 52,
+    "hands_on_minutes": 44,
+    "source_document_count": 2,
+    "manual_transfer_count": 31,
+    "reconciliation_count": 9,
+    "clarification_loops": 6,
+    "calculation_rework_events": 4,
+    "minutes_to_first_high_priority_blocker": 18,
+    "executive_summary_minutes": 12,
+    "material_claim_count": 8,
+    "claims_with_explicit_evidence": 6,
+    "unresolved_assumptions": 4,
+    "workflow_clarity_rating": null,
+    "generation_basis": "Synthetic benchmark assumptions chosen to represent a plausible manual two-specification packaging review. Not observed."
+  },
+  "pve_assisted": {
+    "elapsed_minutes": 29,
+    "hands_on_minutes": 24,
+    "source_document_count": 2,
+    "manual_transfer_count": 14,
+    "reconciliation_count": 9,
+    "clarification_loops": 2,
+    "calculation_rework_events": 2,
+    "minutes_to_first_high_priority_blocker": 6,
+    "executive_summary_minutes": 6,
+    "material_claim_count": 9,
+    "claims_with_explicit_evidence": 9,
+    "unresolved_assumptions": 2,
+    "workflow_clarity_rating": null,
+    "generation_basis": "Synthetic benchmark assumptions for modeled comparison only. Functional behavior must be supported separately by automated/live evidence."
+  },
+  "derived_kpis": {
+    "decision_preparation_effort_reduction_pct": 45.45,
+    "executive_summary_time_reduction_pct": 50,
+    "manual_transfer_reduction_pct": 54.84,
+    "rework_reduction_pct": 50,
+    "evidence_traceability_manual_pct": 75,
+    "evidence_traceability_pve_pct": 100
+  },
+  "target_interpretation": {
+    "productivity_targets": "MODELED_PASS_ONLY",
+    "governance_targets": "REQUIRE_OBJECTIVE_FUNCTIONAL_EVIDENCE",
+    "human_rating_targets": "NOT_MEASURED"
+  },
+  "prohibited_claims": [
+    "pilot-measured productivity improvement",
+    "realized savings",
+    "finance-validated benefit",
+    "real-user UAT acceptance",
+    "production readiness"
+  ]
+}
