@@ -44,6 +44,22 @@ class TriageSourceSupportTests(unittest.TestCase):
     def test_cross_document_or_forged_reference_rejected(self):
         self.assertEqual(self.classify("proposed:pdf:page1:block2", "790 g"), "invalid_source_reference")
 
+    def test_mismatched_block_role_is_not_accepted(self):
+        from dataclasses import replace
+        forged = replace(
+            self.document.source_blocks[0],
+            document_role=DocumentRole.PROPOSED,
+        )
+        document = replace(self.document, source_blocks=(forged,))
+        self.assertEqual(
+            classify_triage_source_support(
+                document=document,
+                source_block_id=forged.block_id,
+                proposed_value="790 g",
+            ),
+            "invalid_source_reference",
+        )
+
     def test_empty_value_not_supported(self):
         self.assertEqual(self.classify("existing:pdf:page1:block2", " "), "value_missing")
 
