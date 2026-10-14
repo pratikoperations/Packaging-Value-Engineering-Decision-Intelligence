@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from dataclasses import dataclass
 from typing import Any
 
 import streamlit as st
@@ -48,6 +49,7 @@ DATABASE_PATH = ROOT / "runtime" / "pve_portfolio.sqlite3"
 SOURCE_REPOSITORY = "pratikoperations/Packaging-Value-Engineering-Decision-Intelligence"
 SOURCE_REFERENCE = "FINAL-WORKFLOW-CORRECTION-DRAFT"
 BASELINE_CONFIRMATION_KEY = "data_upload.approved_existing_baseline"
+SESSION_SPEC_CACHE = "data_upload.specification_session_cache"
 
 REVIEW_STATE_HEADING = {
     ReviewState.PENDING: "🟧 ACTION REQUIRED",
@@ -56,6 +58,35 @@ REVIEW_STATE_HEADING = {
     ReviewState.INTENTIONALLY_OMITTED: "⚪ INTENTIONALLY OMITTED",
     ReviewState.REJECTED: "⛔ REJECTED",
 }
+
+
+@dataclass(frozen=True)
+class SessionSpecificationFile:
+    name: str
+    type: str
+    content: bytes
+
+    def getvalue(self) -> bytes:
+        return self.content
+
+
+def restore_session_specifications(state, existing, proposed):
+    """Recover the two-file intake across Streamlit page navigation in this session.
+
+    Cache is bound to one active project; it is not durable storage.
+    """
+    project_id = state.get("active_project_id")
+    cached = state.get(SESSION_SPEC_CACHE)
+    if existing is not None and proposed is not None:
+        files = (
+            SessionSpecificationFile(existing.name, existing.type, existing.getvalue()),
+            SessionSpecificationFile(proposed.name, proposed.type, proposed.getvalue()),
+        )
+        state[SESSION_SPEC_CACHE] = (project_id, files)
+        return files, False
+    if existing is None and proposed is None and cached and cached[0] == project_id:
+        return cached[1], True
+    return None, False
 
 
 @st.cache_resource
@@ -421,12 +452,25 @@ if workflow_mode == "Compare Existing vs Proposed specifications":
         help="Upload one Proposed specification in DOCX or searchable PDF format.",
     )
 
-    if existing_upload is None or proposed_upload is None:
+    recovered_files, recovered = restore_session_specifications(
+        st.session_state, existing_upload, proposed_upload
+    )
+    if st.button("Clear current session specification pair", key="clear-session-spec-pair"):
+        st.session_state.pop(SESSION_SPEC_CACHE, None)
+        st.session_state.pop(SPEC_REVIEWS_KEY, None)
+        st.session_state.pop("data_upload.specification.batch_fingerprint", None)
+        st.rerun()
+    if recovered_files is None:
         st.info("Upload exactly one Existing specification and one Proposed specification to begin the governed comparison.")
     else:
+        if recovered:
+            st.info(
+                "Restored the Existing and Proposed files from this browser session. "
+                "This is not a persisted draft: create an immutable snapshot when eligible."
+            )
         specification_uploads = (
-            (existing_upload, DocumentRole.EXISTING),
-            (proposed_upload, DocumentRole.PROPOSED),
+            (recovered_files[0], DocumentRole.EXISTING),
+            (recovered_files[1], DocumentRole.PROPOSED),
         )
         detections = [
             detect_upload(upload.name, upload.type, upload.getvalue())
