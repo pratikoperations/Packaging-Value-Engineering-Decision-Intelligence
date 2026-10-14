@@ -185,3 +185,24 @@ def restore_provisional_triage(state: MutableMapping[str, object], records) -> t
         state["triage_value_" + suffix] = value
         state["triage_evidence_" + suffix] = evidence
     return tuple(extracted)
+
+
+def classify_triage_source_support(
+    *, document: UnifiedSpecificationDocument, source_block_id: str,
+    proposed_value: str,
+) -> str:
+    """Classify literal source-text support without asserting engineering validity.
+
+    Only an exact selected block from the same uploaded document is eligible.
+    Numeric comparison, inferred units and semantic equivalence are not attempted.
+    """
+    matching = [block for block in document.source_blocks if block.block_id == source_block_id]
+    if len(matching) != 1:
+        return "invalid_source_reference"
+    value = " ".join(str(proposed_value).casefold().split())
+    if not value:
+        return "value_missing"
+    source_text = " ".join(matching[0].normalized_text.casefold().split())
+    if value in source_text:
+        return "literal_value_present"
+    return "source_block_requires_manual_verification"
