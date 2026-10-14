@@ -24,6 +24,33 @@ class ProvisionalTriageDraftTests(unittest.TestCase):
         self.assertEqual(restored, state)
         self.assertEqual(entries[0]["state"], "provisional")
 
+    def test_manual_source_mapping_persists_through_triage_draft(self):
+        mapping = {
+            "block_id": "proposed-block-2",
+            "sha256": "b" * 64,
+            "value": "790 g",
+        }
+        state = {
+            "triage_value_box_weight_proposed": "790 g",
+            "triage_evidence_box_weight_proposed": "Source checked by reviewer",
+            "manual_source_box_weight_proposed": mapping,
+        }
+        records = serialize_provisional_triage(state)
+        recovered = {}
+        restore_provisional_triage(recovered, records)
+        self.assertEqual(recovered["manual_source_box_weight_proposed"], mapping)
+        self.assertEqual(recovered["triage_value_box_weight_proposed"], "790 g")
+
+    def test_invalid_manual_mapping_rejected(self):
+        with self.assertRaises(ValueError):
+            restore_provisional_triage({}, ({
+                "review_id": "provisional-triage:box_weight_proposed",
+                "state": "provisional",
+                "value": "790 g",
+                "evidence": "",
+                "manual_source": {"block_id": "missing"},
+            },))
+
     def test_empty_values_do_not_create_evidence(self):
         self.assertEqual(serialize_provisional_triage({"triage_value_a": "  "}), ())
 
